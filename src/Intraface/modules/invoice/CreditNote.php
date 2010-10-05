@@ -40,12 +40,12 @@ class CreditNote extends Debtor
     function readyForState($year, $check_products = 'check_products')
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to readyForState needs to be a Year object!');
             return false;
         }
 
         if (!in_array($check_products, array('check_products', 'skip_check_products'))) {
-            trigger_error('Second paramenter in creditnote->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            throw new Exception('Second paramenter in creditnote->readyForState should be either "check_products" or "skip_check_products"');
             return false;
         }
 
@@ -98,12 +98,12 @@ class CreditNote extends Debtor
     function state($year, $voucher_number, $voucher_date, $translation)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to state needs to be a Year object!');
             return false;
         }
 
         if (!is_object($translation)) {
-            trigger_error('4th parameter to state needs to be a translation object!', E_USER_ERROR);
+            throw new Exception('4th parameter to state needs to be a translation object!');
             return false;
         }
 

@@ -47,7 +47,7 @@ class Intraface_Intranet extends Intraface_Standard
         $this->error = new Intraface_Error();
 
         if (!$this->load()) {
-            trigger_error('unknown intranet', E_USER_ERROR);
+            throw new Exception('unknown intranet');
         }
     }
 

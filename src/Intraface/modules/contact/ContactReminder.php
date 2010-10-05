@@ -130,21 +130,21 @@ class ContactReminder extends Intraface_Standard
         return $gateway->findById($id);
         /*
         if ($id == 0) {
-            trigger_error("Invalid id in ContactReminder->factory", E_USER_ERROR);
+            throw new Exception("Invalid id in ContactReminder->factory");
             return false;
         }
 
         $db = MDB2::singleton(DB_DSN);
         $result = $db->query("SELECT contact_id FROM contact_reminder_single WHERE intranet_id = ".$db->quote($kernel->intranet->get('id'), 'integer')." AND id = ".$db->quote($id, 'integer')."");
         if (PEAR::isError($result)) {
-            trigger_error('result is an error in Contact_reminder_single->factory', E_USER_ERROR);
+            throw new Exception('result is an error in Contact_reminder_single->factory');
             return false;
         }
 
         $row = $result->fetchRow();
         $contact = new Contact($kernel, $row['contact_id']);
         if ($contact->get('id') == 0) {
-            trigger_error("Invalid contact id in ContactReminder->factory", E_USER_ERROR);
+            throw new Exception("Invalid contact id in ContactReminder->factory");
         }
 
         return new self($contact, $id);
@@ -162,7 +162,7 @@ class ContactReminder extends Intraface_Standard
                 AND id = ".$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error('result is an error in Contact_reminder_single->load', E_USER_ERROR);
+            throw new Exception('result is an error in Contact_reminder_single->load');
             return false;
         }
 
@@ -196,7 +196,7 @@ class ContactReminder extends Intraface_Standard
 
         $date = new Intraface_Date($input['reminder_date']);
         if (!$date->convert2db()) {
-            trigger_error("Was not able to convert date in ContactReminder->update", E_USER_ERROR);
+            throw new Exception("Was not able to convert date in ContactReminder->update");
         }
 
         $sql = "reminder_date = ".$this->db->quote($date->get(), 'date')."," .
@@ -224,7 +224,7 @@ class ContactReminder extends Intraface_Standard
         }
 
          if (PEAR::isError($result)) {
-             trigger_error('Could not save information in ContactReminder->update' . $result->getUserInfo(), E_USER_ERROR);
+             throw new Exception('Could not save information in ContactReminder->update' . $result->getUserInfo());
              return false;
          }
          return $this->id;
@@ -244,7 +244,7 @@ class ContactReminder extends Intraface_Standard
          */
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
          if (PEAR::isError($result)) {
-             trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
+             throw new Exception('Could not postphone reminder' . $result->getUserInfo());
              return false;
          }
          $this->load();
@@ -297,7 +297,7 @@ class ContactReminder extends Intraface_Standard
 
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
          if (PEAR::isError($result)) {
-             trigger_error('Could not postphone reminder' . $result->getUserInfo(), E_USER_ERROR);
+             throw new Exception('Could not postphone reminder' . $result->getUserInfo());
              return false;
          }
          $this->load();

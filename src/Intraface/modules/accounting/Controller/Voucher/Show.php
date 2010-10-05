@@ -92,7 +92,7 @@ if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
 		header('Location: voucher.php?id='.$voucher->get('id'));
 		exit;
 	} else {
-		trigger_error('Kunne ikke slette filen');
+		throw new Exception('Kunne ikke slette filen');
 	}
 } elseif (!empty($_POST) AND !empty($_POST['state'])) {
 	$voucher = new Voucher($year, $_POST['id']);

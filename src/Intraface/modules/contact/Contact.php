@@ -260,7 +260,7 @@ class Contact extends Intraface_Standard
                     // Her b�r vel v�re et tjek p� hvor mange - og hvis mange give en fejl
                     break;
                 default:
-                    trigger_error('Contact::factory() skal bruge en type');
+                    throw new Exception('Contact::factory() skal bruge en type');
                     break;
             }
         } catch (Exception $e) {
@@ -284,7 +284,7 @@ class Contact extends Intraface_Standard
          // Her b�r vel v�re et tjek p� hvor mange - og hvis mange give en fejl
          break;
          default:
-         trigger_error('Contact::factory() skal bruge en type');
+         throw new Exception('Contact::factory() skal bruge en type');
          break;
          }
          if (!$db->nextRecord()) {
@@ -772,7 +772,7 @@ class Contact extends Intraface_Standard
 
         $result = $db->query($sql);
         if (PEAR::isError($result)) {
-            trigger_error($result->getMessage().' '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getMessage().' '.$result->getUserInfo());
         }
 
         if ($result->numRows() == 0) {

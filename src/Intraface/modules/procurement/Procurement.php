@@ -133,7 +133,7 @@ class Procurement extends Intraface_Standard
     function update($input)
     {
         if (!is_array($input)) {
-            trigger_error('Procurement->update(): $input er ikke et array', E_USER_ERROR);
+            throw new Exception('Procurement->update(): $input er ikke et array');
         }
         $db = new DB_sql;
 
@@ -372,7 +372,7 @@ class Procurement extends Intraface_Standard
     {
         $status_key = array_search($status, $this->getStatusTypes());
         if ($status_key === false) {
-            trigger_error("Ugyldigt status: ".$status, FATAL);
+            throw new Exception("Ugyldigt status: ".$status, FATAL);
         }
 
         switch($status) {
@@ -432,12 +432,12 @@ class Procurement extends Intraface_Standard
         }
 
         if (!is_object($contact)) {
-            trigger_error('The parameter to set Contact need to be a contact object!', E_USER_ERROR);
+            throw new Exception('The parameter to set Contact need to be a contact object!');
             return false;
         }
 
         if ($contact->get('id') == 0) {
-            trigger_error('The given contact is not valid!', E_USER_ERROR);
+            throw new Exception('The given contact is not valid!');
             return false;
         }
 
@@ -691,7 +691,7 @@ class Procurement extends Intraface_Standard
     function readyForState($year)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to readyForState needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to readyForState needs to be a Year object!');
             return false;
         }
 
@@ -727,17 +727,17 @@ class Procurement extends Intraface_Standard
     public function checkStateDebetAccounts($year, $debet_accounts, $skip_amount_check = 'do_amount_check')
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to checkStateDebetAccounts needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to checkStateDebetAccounts needs to be a Year object!');
             return false;
         }
 
         if (!is_array($debet_accounts)) {
-            trigger_error('Second parameter to checkStateDebetAccounts needs to be an array', E_USER_ERROR);
+            throw new Exception('Second parameter to checkStateDebetAccounts needs to be an array');
             return false;
         }
 
         if (!in_array($skip_amount_check, array('do_amount_check', 'skip_amount_check'))) {
-            trigger_error('Third parameter to checkStateDebetAccounts needs to be either do_amount_check or skip_amount_check', E_USER_ERROR);
+            throw new Exception('Third parameter to checkStateDebetAccounts needs to be either do_amount_check or skip_amount_check');
             return false;
         }
 

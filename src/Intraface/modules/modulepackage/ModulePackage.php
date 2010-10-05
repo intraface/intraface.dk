@@ -63,7 +63,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
                 "WHERE module_package.id = ".$this->db->quote($this->id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in db query in ModulePackage->load(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in db query in ModulePackage->load(): ".$result->getUserInfo());
             exit;
         }
 
@@ -98,7 +98,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
                 "WHERE module_package_module.module_package_id = ".$this->db->quote($id, 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error("Error in db query in ModulePackage->getmModules(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in db query in ModulePackage->getmModules(): ".$result->getUserInfo());
             exit;
         }
 
@@ -132,7 +132,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
 
         $limiters = unserialize($string_limiters);
         if ($limiters === false) {
-            trigger_error('Unable to unserialize string "'.$string_limiters.'" in ModulePackage->parseLimiters', E_USER_NOTICE);
+            throw new Exception('Unable to unserialize string "'.$string_limiters.'" in ModulePackage->parseLimiters', E_USER_NOTICE);
             return array();
         }
 
@@ -157,7 +157,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
                 $i++;
              }
              else {
-                trigger_error('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!', E_USER_NOTICE);
+                throw new Exception('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!', E_USER_NOTICE);
              }
         }
 
@@ -195,7 +195,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
     public function getList($list_type = 'list')
     {
         if (!in_array($list_type, array('list', 'matrix'))) {
-            trigger_error('Invalid list type '.$list_type.' in ModulePackage->getList()', E_USER_ERROR);
+            throw new Exception('Invalid list type '.$list_type.' in ModulePackage->getList()');
             exit;
         }
 
@@ -258,7 +258,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
     {
         $result = $this->db->query("SELECT id, plan FROM module_package_plan WHERE active = 1 ORDER BY plan_index");
         if (PEAR::isError($result)) {
-            trigger_error('Error in db query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in db query: '.$result->getUserInfo());
             exit;
         }
 
@@ -274,7 +274,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
     {
         $result = $this->db->query("SELECT id, group_name AS ".$this->db->quoteIdentifier('group')." FROM module_package_group WHERE active = 1 ORDER BY sorting_index");
         if (PEAR::isError($result)) {
-            trigger_error('Error in db query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in db query: '.$result->getUserInfo());
             exit;
         }
 

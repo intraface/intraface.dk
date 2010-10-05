@@ -10,7 +10,7 @@ class CMS_Stylesheet extends Intraface_Standard
     function __construct($cmssite)
     {
         if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
-            trigger_error('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite), E_USER_ERROR);
+            throw new Exception('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite));
         }
         $this->cmssite = $cmssite;
         $this->error = new Intraface_Error;
@@ -23,7 +23,7 @@ class CMS_Stylesheet extends Intraface_Standard
         /*
         $validate_string = VALIDATE_ALPHA . VALIDATE_NUM . '{}:*';
         if (!Validate::string($input['css'], array('format' => $validate_string))) {
-            $this->error->set('Der er brugt ulovlige tegn - du kan kun bruge følgende tegn '.$validate_string);
+            $this->error->set('Der er brugt ulovlige tegn - du kan kun bruge fï¿½lgende tegn '.$validate_string);
             return 0;
         }
         */

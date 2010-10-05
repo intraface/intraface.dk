@@ -114,7 +114,7 @@ class UserMaintenance extends Intraface_User
         settype($intranet_id, "integer");
         if ($intranet_id == 0) {
             if ($this->intranet_id == 0) {
-                trigger_error("Der er ikke angivet et intranet id", E_USER_ERROR);
+                throw new Exception("Der er ikke angivet et intranet id");
             } else {
                 $intranet_id = $this->intranet_id;
             }
@@ -130,7 +130,7 @@ class UserMaintenance extends Intraface_User
                 return $db->insertedId();
             }
         } else {
-            trigger_error("Ugyldig intranet id", E_USER_ERROR);
+            throw new Exception("Ugyldig intranet id");
         }
 
         return true;
@@ -150,7 +150,7 @@ class UserMaintenance extends Intraface_User
 
         if ($intranet_id == 0) {
             if ($this->intranet_id == 0) {
-                trigger_error("Der er ikke angivet et intranet id", E_USER_ERROR);
+                throw new Exception("Der er ikke angivet et intranet id");
             } else {
                 $intranet_id = $this->intranet_id;
             }
@@ -162,7 +162,7 @@ class UserMaintenance extends Intraface_User
 
             $db->query("SELECT id FROM module WHERE name =  '".$module_id."'");
             if (!$db->nextRecord()) {
-                trigger_error("Ugyldig module_id", E_USER_ERROR);
+                throw new Exception("Ugyldig module_id");
             }
             $module_id = $db->f('id');
         }
@@ -180,7 +180,7 @@ class UserMaintenance extends Intraface_User
                 return $id;
             }
         } else {
-            trigger_error("Ugyldig module_id '".$module_id."/".$module_name."'", E_USER_ERROR);
+            throw new Exception("Ugyldig module_id '".$module_id."/".$module_name."'");
         }
 
         return true;
@@ -202,7 +202,7 @@ class UserMaintenance extends Intraface_User
         if (!is_numeric($module_id)) {
             $db->query("SELECT id FROM module WHERE name =  '".$module_id."'");
             if (!$db->nextRecord()) {
-                trigger_error("Ugyldig module_id", E_USER_ERROR);
+                throw new Exception("Ugyldig module_id");
             }
             $module_id = $db->f('id');
         }
@@ -210,7 +210,7 @@ class UserMaintenance extends Intraface_User
         if (!is_numeric($sub_access_id)) {
             $db->query("SELECT id FROM module_sub_access WHERE name =  '".$sub_access_id."'");
             if (!$db->nextRecord()) {
-                trigger_error("Ugyldig module_id", E_USER_ERROR);
+                throw new Exception("Ugyldig module_id");
             }
             $sub_access_id = $db->f('id');
         }
@@ -221,7 +221,7 @@ class UserMaintenance extends Intraface_User
 
         if ($intranet_id == 0) {
             if ($this->intranet_id == 0) {
-                trigger_error("Der er ikke angivet et intranet id", E_USER_ERROR);
+                throw new Exception("Der er ikke angivet et intranet id");
             } else {
                 $intranet_id = $this->intranet_id;
             }
@@ -233,7 +233,7 @@ class UserMaintenance extends Intraface_User
             $db->query("UPDATE permission SET module_sub_access_id = ".$sub_access_id." WHERE id = ".$id);
             return $id;
         } else {
-            trigger_error("Ugyldig sub_access_id i useradmin->setSubAccess()", E_USER_ERROR);
+            throw new Exception("Ugyldig sub_access_id i useradmin->setSubAccess()");
         }
     }
 

@@ -61,7 +61,7 @@ class Intraface_Controller_Signup extends k_Component
             $db = MDB2::singleton(DB_DSN);
             $res = $db->query("SELECT id FROM user WHERE email = ".$db->quote($this->body('email'), 'text'));
             if (PEAR::isError($res)) {
-                trigger_error($res->getMessage(), E_USER_ERROR);
+                throw new Exception($res->getMessage());
             }
             if ($res->numRows() == 0) {
                 $res = $db->query("INSERT INTO user SET email = ".$db->quote($this->body('email'), 'text').", password=".$db->quote(md5($this->body('password')), 'text'));

@@ -63,7 +63,7 @@ class ProcurementItem extends Intraface_Standard
     public function __construct($procurement, $id)
     {
         if (!is_object($procurement) AND get_class($procurement) != 'Procurement') {
-            trigger_error('Procurement: Item kræver procurement', E_USER_ERROR);
+            throw new Exception('Procurement: Item krï¿½ver procurement');
         }
 
         $this->procurement = & $procurement;
@@ -235,7 +235,7 @@ class ProcurementItem extends Intraface_Standard
         $validator = new Intraface_Validator($this->error);
 
         settype($input["product_id"], 'integer');
-        if ($validator->isNumeric($input["product_id"], "Du skal vælge et produkt", "greater_than_zero")) {
+        if ($validator->isNumeric($input["product_id"], "Du skal vï¿½lge et produkt", "greater_than_zero")) {
             if (!isset($input['product_detail_id'])) {
                 $input['product_detail_id'] = 0;
             }
@@ -275,12 +275,12 @@ class ProcurementItem extends Intraface_Standard
         $validator->isNumeric($input["quantity"], "Du skal angive et antal", "greater_than_zero,integer");
         
         if (!isset($input["dk_unit_purchase_price"])) $input["dk_unit_purchase_price"] = 0;
-        $validator->isDouble($input["dk_unit_purchase_price"], "Du skal angive en indkøbspris", "zero_or_greater");
+        $validator->isDouble($input["dk_unit_purchase_price"], "Du skal angive en indkï¿½bspris", "zero_or_greater");
         $unit_purchase_price = new Intraface_Amount($input["dk_unit_purchase_price"]);
         if ($unit_purchase_price->convert2db()) {
             $input["unit_purchase_price"] = $unit_purchase_price->get();
         } else {
-            $this->error->set("Ugyldig indkøbspris");
+            $this->error->set("Ugyldig indkï¿½bspris");
         }
 
         if ($this->error->isError()) {
@@ -319,7 +319,7 @@ class ProcurementItem extends Intraface_Standard
             throw new Exception('You can only set purchase price when item has been saved');
         }
         $validator = new Intraface_Validator($this->error);
-        if ($validator->isDouble($price, "Ugyldig indkøbspris", "zero_or_greater")) {
+        if ($validator->isDouble($price, "Ugyldig indkï¿½bspris", "zero_or_greater")) {
             $unit_purchase_price = new Intraface_Amount($price);
             $unit_purchase_price->convert2db();
         }
@@ -464,7 +464,7 @@ class ProcurementItem extends Intraface_Standard
                 'ordered',
                 'delivered'
             ))) {
-            trigger_error("Ugyldig status", FATAL);
+            throw new Exception("Ugyldig status", FATAL);
         }
 
         $db = new DB_sql;
@@ -477,7 +477,7 @@ class ProcurementItem extends Intraface_Standard
                                 AND procurement_item.intranet_id = " . $this->procurement->kernel->intranet->get("id") . " AND procurement.intranet_id = " . $this->procurement->kernel->intranet->get("id") . "
                                 AND procurement_item.product_id = " . $product_id . " AND procurement.status_key = 0
                                 AND procurement_item.product_variation_id = ".$product_variation_id);
-            $db->nextRecord(); // Der vil altid være en post
+            $db->nextRecord(); // Der vil altid vï¿½re en post
             return intval($db->f("on_order"));
         } else {
             // delivered
@@ -491,7 +491,7 @@ class ProcurementItem extends Intraface_Standard
                             AND procurement_item.product_variation_id = ".$product_variation_id."
                             AND procurement.status_key = 1
                             AND procurement.date_recieved > \"" . $from_date . "\"");
-            $db->nextRecord(); // Der vil altid være en post
+            $db->nextRecord(); // Der vil altid vï¿½re en post
             return intval($db->f("stock_in"));
         }
     }

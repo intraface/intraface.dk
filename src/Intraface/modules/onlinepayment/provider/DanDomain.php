@@ -88,11 +88,11 @@ class OnlinePaymentDanDomain extends OnlinePayment
             $http_request->setURL($basis_url.$add_url.'&Capture=1');
             $result = $http_request->sendRequest();
             if (PEAR::isError($result)) {
-                trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
+                throw new Exception('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
             }
 
             if ($http_request->getResponseCode() != '200') {
-                trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
+                throw new Exception("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
                 exit;
             }
 
@@ -101,7 +101,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 if ($this->addAsPayment()) {
                     $this->setStatus("captured");
                 } else {
-                    trigger_error("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen", E_USER_ERROR);
+                    throw new Exception("Onlinebetalingen er hævet, men kunne ikke overføres som betaling til fakturaen");
                 }
                 return 1;
             } else {
@@ -114,11 +114,11 @@ class OnlinePaymentDanDomain extends OnlinePayment
             $http_request->setURL($basis_url.'&Reject=1');
             $result = $http_request->sendRequest();
             if (PEAR::isError($result)) {
-                trigger_error('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
+                throw new Exception('Error in sending request: '.$result->getMessage().' '.$result->getUserInfo());
             }
 
             if ($http_request->getResponseCode() != '200') {
-                trigger_error("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
+                throw new Exception("DanDomain serveren er nede, eller fejl i capture adresse", E_USER_WARNING);
                 exit;
             }
 
@@ -132,7 +132,7 @@ class OnlinePaymentDanDomain extends OnlinePayment
             }
 
         } else {
-            trigger_error("Ugyldig handling i Dandomain->transactionAction()", E_USER_ERROR);
+            throw new Exception("Ugyldig handling i Dandomain->transactionAction()");
         }
     }
 

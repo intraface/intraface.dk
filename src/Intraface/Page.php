@@ -53,7 +53,7 @@ class Intraface_Page
 /*
         if (!is_dir(PATH_CACHE)) {
             if (!mkdir(PATH_CACHE)) {
-                trigger_error('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE', E_USER_ERROR);
+                throw new Exception('Unable to create dir "'.PATH_CACHE.'" from constant PATH_CACHE');
                 exit;
             }
             chmod(PATH_CACHE, 644);
@@ -124,7 +124,7 @@ class Intraface_Page
                                     break;
 
                                 default:
-                                    trigger_error('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();', E_USER_ERROR);
+                                    throw new Exception('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();');
                                     break;
                             }
                         } else {
@@ -207,7 +207,7 @@ class Intraface_Page
     function includeJavascript($scope, $filename)
     {
         if (!in_array($scope, array('global', 'module'), true)) {
-            trigger_error("F�rste parameter er ikke enten 'global' eller 'module' i Page->includeJavascript", E_USER_ERROR);
+            throw new Exception("F�rste parameter er ikke enten 'global' eller 'module' i Page->includeJavascript");
         }
 
         if ($scope == 'global') {

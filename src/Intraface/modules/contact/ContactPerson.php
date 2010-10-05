@@ -35,7 +35,7 @@ class ContactPerson extends Intraface_Standard
     public function __construct($contact, $id = 0)
     {
         if (!is_object($contact) OR strtolower(get_class($contact)) != 'contact') {
-            trigger_error('ContactPerson kr�ver Contact som object');
+            throw new Exception('ContactPerson kr�ver Contact som object');
         }
         $this->contact = $contact;
         $this->id = (int)$id;
@@ -119,14 +119,14 @@ class ContactPerson extends Intraface_Standard
                 "date_changed = NOW() " . $sql_end);
 
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             exit;
         }
 
         if ($this->id == 0) {
             $id = $db->lastInsertID('contact_person', 'id');
             if (PEAR::isError($id)) {
-                trigger_error('Error in query: '.$id->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in query: '.$id->getUserInfo());
                 exit;
             }
             $this->id = $id;

@@ -55,7 +55,7 @@ class Intraface_modules_modulepackage_ActionStore {
     {
         
         if (!is_object($action) || strtolower(get_class($action)) != 'intraface_modules_modulepackage_action') {
-            trigger_error('First parameter in Intraface_modules_modulepackage_ActionStore::store should be an action object. Now it is: '.strtolower(get_class($action)), E_USER_ERROR);
+            throw new Exception('First parameter in Intraface_modules_modulepackage_ActionStore::store should be an action object. Now it is: '.strtolower(get_class($action)));
             exit;
         }
         
@@ -72,13 +72,13 @@ class Intraface_modules_modulepackage_ActionStore {
                 'active = 1');
         
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore->store(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query in Intraface_modules_modulepackage_ActionStore->store(): ".$result->getUserInfo());
             exit;
         }
         
         $id = $this->db->lastInsertID();
         if (PEAR::isError($id)) {
-            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore->store: ".$id->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query in Intraface_modules_modulepackage_ActionStore->store: ".$id->getUserInfo());
             exit;
         }
         $this->id = $id;
@@ -101,7 +101,7 @@ class Intraface_modules_modulepackage_ActionStore {
                 'active = 1 ');
         
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::restore(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query in Intraface_modules_modulepackage_ActionStore::restore(): ".$result->getUserInfo());
             return false;
         }
         
@@ -136,7 +136,7 @@ class Intraface_modules_modulepackage_ActionStore {
                 'active = 1 ');
         
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query in Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier(): ".$result->getUserInfo());
             return false;
         }
         
@@ -172,7 +172,7 @@ class Intraface_modules_modulepackage_ActionStore {
                 'id = '.$this->db->quote($this->id, 'integer'));
         
         if (PEAR::isError($result)) {
-            trigger_error("Error in query in Intraface_modules_modulepackage_ActionStore::delete(): ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query in Intraface_modules_modulepackage_ActionStore::delete(): ".$result->getUserInfo());
             return false;
         }
         

@@ -16,7 +16,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
     function visit($reminder)
     {
         if ($reminder->get('id') == 0) {
-            trigger_error("Reminder->pdf skal være loaded for at lave pdf", E_USER_ERROR);
+            throw new Exception("Reminder->pdf skal vï¿½re loaded for at lave pdf");
         }
 
         $this->doc = $this->getDocument();
@@ -52,7 +52,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $this->docinfo[0]["label"] = "Dato:";
         $this->docinfo[0]["value"] = $reminder->get("dk_this_date");
 
-        $this->addRecieverAndSender($contact , $intranet, "Påmindelse om betaling", $this->docinfo);
+        $this->addRecieverAndSender($contact , $intranet, "Pï¿½mindelse om betaling", $this->docinfo);
 
         $this->doc->setY('-20'); // mellemrum til vareoversigt
 
@@ -99,7 +99,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         //$this->doc->addText($apointX["tekst"], $this->doc->get('y'), $this->doc->get("font_size"), "Tekst");
         $this->doc->addText($apointX["invoice_date"], $this->doc->get('y'), $this->doc->get("font_size"), "Dato");
         $this->doc->addText($apointX["due_date"], $this->doc->get('y'), $this->doc->get("font_size"), "Forfaldsdato");
-        $this->doc->addText($apointX["amount"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Beløb") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Beløb");
+        $this->doc->addText($apointX["amount"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Belï¿½b") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Belï¿½b");
 
         $this->doc->setY('-'.($this->doc->get("font_spacing") - $this->doc->get("font_size")));
 
@@ -176,7 +176,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
             }
 
             $this->doc->setY('-'.($this->doc->get("font_size") + $this->doc->get("font_padding_top")));
-            $this->doc->addText($apointX["text"], $this->doc->get('y'), $this->doc->get("font_size"), "Rykkergebyr pålagt denne rykker");
+            $this->doc->addText($apointX["text"], $this->doc->get('y'), $this->doc->get("font_size"), "Rykkergebyr pï¿½lagt denne rykker");
             $this->doc->addText($apointX["amount"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($reminder->get("reminder_fee"), 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($reminder->get("reminder_fee"), 2, ",", "."));
             $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
             $total += $reminder->get("reminder_fee");

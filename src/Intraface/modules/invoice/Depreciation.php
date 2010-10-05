@@ -49,17 +49,17 @@ class Depreciation extends Payment
     public function state($year, $voucher_number, $voucher_date, $state_account_number, $translation)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to state needs to be a Year object!');
             return false;
         }
 
         if ($this->payment_for_type_id == 0) {
-            trigger_error('Invalid paymet_for_type_id in Payment->state', E_USER_ERROR);
+            throw new Exception('Invalid paymet_for_type_id in Payment->state');
             return false;
         }
 
         if (!is_object($translation)) {
-            trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
+            throw new Exception('5th parameter to state needs to be a translation object!');
             return false;
         }
 
@@ -70,7 +70,7 @@ class Depreciation extends Payment
         }
 
         $validator->isNumeric($voucher_number, 'Ugyldigt bilagsnummer', 'greater_than_zero');
-        $validator->isNumeric($state_account_number, 'Ugyldig bogføringskonto', 'greater_than_zero');
+        $validator->isNumeric($state_account_number, 'Ugyldig bogfï¿½ringskonto', 'greater_than_zero');
 
         if (!$this->readyForState()) {
             return false;
@@ -85,14 +85,14 @@ class Depreciation extends Payment
         require_once 'Intraface/modules/accounting/Account.php';
         $credit_account = new Account($year, $year->getSetting('debtor_account_id'));
         if (!$credit_account->validForState()) {
-            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogføring');
+            $this->error->set('Den gemte debitorkonto er ikke gyldig til bogfï¿½ring');
             return false;
         }
         $credit_account_number = $credit_account->get('number');
 
         $debet_account = Account::factory($year, $state_account_number);
         if (!$debet_account->validForState()) {
-            $this->error->set('Den valgte konto for bogføring er ikke gyldig');
+            $this->error->set('Den valgte konto for bogfï¿½ring er ikke gyldig');
             return false;
         }
         $debet_account_number = $debet_account->get('number');
@@ -101,7 +101,7 @@ class Depreciation extends Payment
         $voucher = Voucher::factory($year, $voucher_number);
         $amount = $this->get('amount');
 
-        // hvis beløbet er mindre end nul, skal konti byttes om og beløbet skal gøres positivt
+        // hvis belï¿½bet er mindre end nul, skal konti byttes om og belï¿½bet skal gï¿½res positivt
         if ($amount < 0) {
             $debet_account_number = $credit_account->get('number');
             $credit_account_number = $debet_account->get('number');

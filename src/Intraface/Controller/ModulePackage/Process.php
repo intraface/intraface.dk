@@ -62,7 +62,7 @@ class Intraface_Controller_ModulePackage_Process extends k_Component
             } else {
 
                 // TODO: Here we can send an e-mail that says they still need to pay some more OR?
-                throw new Exception('Failure: Not sufficient payment', E_USER_ERROR);
+                throw new Exception('Failure: Not sufficient payment');
             }
         } else {
             // @todo should throw a 401

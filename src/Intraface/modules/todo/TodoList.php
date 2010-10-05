@@ -30,7 +30,7 @@ class TodoList extends Intraface_Standard
     function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
-            trigger_error('Todo kræver Kernel', E_USER_ERROR);
+            throw new Exception('Todo krï¿½ver Kernel');
         }
 
         $this->kernel = $kernel;

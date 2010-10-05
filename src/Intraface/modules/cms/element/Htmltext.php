@@ -79,7 +79,7 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
         if (!is_dir($purifier_cache_dir)) {
             mkdir($purifier_cache_dir);
             if (!is_dir($purifier_cache_dir)) {
-                trigger_error('Unable to create HTML Purifier cache dir!', E_USER_ERROR);
+                throw new Exception('Unable to create HTML Purifier cache dir!');
                 exit;
             }
         }

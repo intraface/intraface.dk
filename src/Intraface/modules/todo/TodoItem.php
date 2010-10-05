@@ -26,7 +26,7 @@ class TodoItem extends Intraface_Standard
     public function __construct($todo, $id = 0)
     {
         if (!is_object($todo)) {
-            trigger_error('Todo kræver Kernel', E_USER_ERROR);
+            throw new Exception('Todo krï¿½ver Kernel');
         }
         $this->todo = $todo;
         $this->id = (int) $id;

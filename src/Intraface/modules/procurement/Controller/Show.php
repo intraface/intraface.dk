@@ -117,7 +117,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 $redirect->askParameter('product_id', 'multiple');
                 return new k_SeeOther($url);
             } else {
-                trigger_error('You need access to the product module to do this!', E_USER_ERROR);
+                throw new Exception('You need access to the product module to do this!');
                 exit;
             }
         } //elseif (isset($_GET['return_redirect_id'])) {
@@ -134,7 +134,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                     }
 
                 } else {
-                    trigger_error('You need access to the contact module!', E_USER_ERROR);
+                    throw new Exception('You need access to the contact module!');
                     exit;
                 }
             }
@@ -161,7 +161,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 }
 
             } else {
-                trigger_error('You need access to the contact module!', E_USER_ERROR);
+                throw new Exception('You need access to the contact module!');
                 exit;
             }
 

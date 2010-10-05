@@ -216,7 +216,7 @@ class Intraface_Controller_Restricted extends k_Component
                                 }
                                 break;
                             default:
-                                trigger_error('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();', E_USER_ERROR);
+                                throw new Exception('Der er ikke angivet om submenu skal tjekke efter sub_access eller module adgang, for undermenupunktet i Page->start();');
                                 break;
                         }
                     } else {

@@ -371,7 +371,7 @@ class Year extends Intraface_Standard
         return $gateway->getList();
         /*
         if (!is_object($this->kernel)) {
-            trigger_error('Du kan ikke k�re Year::getList() uden at have instatieret klassen', FATAL);
+            throw new Exception('Du kan ikke k�re Year::getList() uden at have instatieret klassen', FATAL);
         }
         $sql = "SELECT id, label FROM accounting_year
             WHERE intranet_id = ".$this->kernel->intranet->get('id')."
@@ -622,7 +622,7 @@ class Year extends Intraface_Standard
 
                 break;
             default:
-                    trigger_error('Der skal v�lges en m�de at lave kontoplanen p�', FATAL);
+                    throw new Exception('Der skal v�lges en m�de at lave kontoplanen p�', FATAL);
                 break;
         }
         return true;

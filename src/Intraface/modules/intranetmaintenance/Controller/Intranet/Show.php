@@ -138,7 +138,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
     	$intranet_id = intval($_POST['intranet_id']);
 
     	if (!array_key_exists($intranet_id, $allowed_delete)) {
-    		trigger_error('Du kan kun slette bambus beta og bambus - sune og lars', E_USER_ERROR);
+    		throw new Exception('Du kan kun slette bambus beta og bambus - sune og lars');
     	}
 
     	$db->query("DELETE FROM accounting_account WHERE intranet_id = " . $intranet_id);

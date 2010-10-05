@@ -122,8 +122,7 @@ class FileHandler extends Intraface_Standard
 
         if (!is_dir($this->upload_path)) {
             if (!mkdir($this->upload_path, 0755)) {
-                trigger_error("Unable to create folder '".$this->upload_path."'", E_USER_ERROR);
-                exit;
+                throw new Exception("Unable to create folder '".$this->upload_path."'");
             }
         }
 
@@ -447,7 +446,7 @@ class FileHandler extends Intraface_Standard
             $access_key = $random_key_generator->generate(50);
 
             if ($i > 50 || $access_key == '') {
-                trigger_error("Fejl under generering af access_key i FileHandler->save", E_USER_ERROR);
+                throw new Exception("Fejl under generering af access_key i FileHandler->save");
             }
             $i++;
             $db->query("SELECT id FROM file_handler WHERE access_key = '".$access_key."'");
@@ -460,8 +459,7 @@ class FileHandler extends Intraface_Standard
             // $mime_type = mime_content_type($file);
             $mime_type = MIME_Type::autoDetect($file);
             if (PEAR::isError($mime_type)) {
-                trigger_error("Error in MIME_Type::autoDetect in Filehandler->save() ".$mime_type->getMessage(), E_USER_ERROR);
-                exit;
+                throw new Exception("Error in MIME_Type::autoDetect in Filehandler->save() ".$mime_type->getMessage());
             }
         }
 
@@ -502,7 +500,7 @@ class FileHandler extends Intraface_Standard
 
             // deleting the old file
             if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
-                trigger_error("Was not able to rename file ".$this->get('file_path')." in Filehandler->save()", E_USER_NOTICE);
+                throw new Exception("Was not able to rename file ".$this->get('file_path')." in Filehandler->save()");
             }
             $this->createInstance();
             $this->instance->deleteAll();
@@ -515,17 +513,16 @@ class FileHandler extends Intraface_Standard
         $server_file_name = $id.'.'.$mime_type['extension'];
 
         if (!is_file($file)) {
-            trigger_error("Filen vi vil flytte er ikke en gyldig fil i filehandler->save", E_USER_ERROR);
+            throw new Exception("Filen vi vil flytte er ikke en gyldig fil i filehandler->save");
         }
 
         if (!rename($file, $this->upload_path.$server_file_name)) {
             $this->delete();
-            trigger_error("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_ERROR);
+            throw new Exception("Unable to move file '".$file."' to '".$this->upload_path.$server_file_name."' in Filehandler->save");
         }
 
         if (!chmod($this->upload_path.$server_file_name, 0644)) {
             // please do not stop executing here
-            trigger_error("Unable to chmod file '".$this->upload_path.$server_file_name."' in Filehandler->save", E_USER_NOTICE);
         }
 
         $db->query("UPDATE file_handler SET server_file_name = \"".$server_file_name."\" WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$id);
@@ -547,7 +544,7 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
 
         if (!is_array($input)) {
-            trigger_error("Input skal v�re et array i FileHandler->updateInstance", E_USER_ERROR);
+            throw new Exception("Input skal være et array i FileHandler->updateInstance");
         }
 
         $input = safeToDb($input);
@@ -578,7 +575,7 @@ class FileHandler extends Intraface_Standard
         if (isset($input['accessibility'])) {
             $accessibility_key = array_search($input['accessibility'], $this->accessibility_types);
             if ($accessibility_key === false) {
-                trigger_error("Ugyldig accessibility ".$input['accessibility']." i FileHandler->update", E_USER_ERROR);
+                throw new Exception("Ugyldig accessibility ".$input['accessibility']." i FileHandler->update");
             }
 
             $sql[] = 'accessibility_key = '.$accessibility_key;
@@ -616,7 +613,7 @@ class FileHandler extends Intraface_Standard
 
         if ($from == 'key') {
             if (!is_integer($key)) {
-                trigger_error("N�r der skal findes mimetype fra key (default), skal f�rste parameter til FileHandler->_getMimeType v�re en integer", E_USER_ERROR);
+                throw new Exception("Når der skal findes mimetype fra key (default), skal første parameter til FileHandler->_getMimeType være en integer");
             }
             return $this->file_types[$key];
         }

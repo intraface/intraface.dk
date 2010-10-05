@@ -81,7 +81,7 @@ class ProductDetail extends Intraface_Standard
             AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId();
         $this->db->query($sql);
         if ($this->db->numRows() > 1) {
-            trigger_error('Der er mere end en aktiv produktdetalje', E_USER_ERROR);
+            throw new Exception('Der er mere end en aktiv produktdetalje');
         } elseif ($this->db->nextRecord()) {
             // hardcoded udtr�k af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
             for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
@@ -96,7 +96,7 @@ class ProductDetail extends Intraface_Standard
 
             $unit = $this->getUnits($this->db->f('unit_key'));
             if (empty($unit)) {
-                trigger_error('invalid unit '.$this->db->f('unit_key').'!', E_USER_ERROR);
+                throw new Exception('invalid unit '.$this->db->f('unit_key').'!');
                 exit;
             }
 

@@ -32,7 +32,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         if ($redirect->get('id') != 0) {
             $this->multiple = $redirect->isMultipleParameter('product_variation_id');
         } else {
-            trigger_error("Der mangler en gyldig redirect", E_USER_ERROR);
+            throw new Exception("Der mangler en gyldig redirect");
         }
         return $redirect;
     }

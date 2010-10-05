@@ -56,7 +56,7 @@ class InstanceHandler extends Intraface_Standard
     function __construct($file_handler, $id = 0)
     {
         if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
+            throw new Exception("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)");
         }
 
         $this->file_handler = $file_handler;
@@ -67,7 +67,7 @@ class InstanceHandler extends Intraface_Standard
         $this->db = MDB2::singleton(DB_DSN);
 
         if ($this->file_handler->get('is_image') == 0) {
-            // trigger_error("InstanceHandler kan kun startes, hvis filen er et billede i IntanceHandler->InstanceHandler", E_USER_ERROR);
+            // throw new Exception("InstanceHandler kan kun startes, hvis filen er et billede i IntanceHandler->InstanceHandler");
             $this->id = 0;
         }
 
@@ -96,21 +96,21 @@ class InstanceHandler extends Intraface_Standard
     function factory($file_handler, $type_name, $param = array())
     {
         if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)", E_USER_ERROR);
+            throw new Exception("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)");
         }
 
         if ((int)$file_handler->get('id') == 0) {
-            trigger_error("Der kan kun laves instance ud en loaded fil i Instance->factory", E_USER_ERROR);
+            throw new Exception("Der kan kun laves instance ud en loaded fil i Instance->factory");
         }
 
         if ($file_handler->get('is_image') == 0) {
-            trigger_error("Filen skal v�re et billede i IntanceHandler->factory", E_USER_ERROR);
+            throw new Exception("Filen skal v�re et billede i IntanceHandler->factory");
         }
 
         $instancehandler = new InstanceHandler($file_handler);
         $type = $instancehandler->checkType($type_name);
         if ($type === false) {
-            trigger_error("Ugyldig type '".$type_name."' i InstanceHandler->factory", E_USER_ERROR);
+            throw new Exception("Ugyldig type '".$type_name."' i InstanceHandler->factory");
         }
 
         $db = new DB_sql;
@@ -134,7 +134,7 @@ class InstanceHandler extends Intraface_Standard
             $file = $file_handler->image->resize($type['max_width'], $type['max_height'], $type['resize_type']);
 
             if (!is_file($file)) {
-                trigger_error("Filen blev ikke opretett i InstanceHandler->factory", E_USER_ERROR);
+                throw new Exception("Filen blev ikke opretett i InstanceHandler->factory");
             }
 
             $file_size = filesize($file);
@@ -161,17 +161,17 @@ class InstanceHandler extends Intraface_Standard
             if (!is_dir($instancehandler->instance_path)) {
                 if (!mkdir($instancehandler->instance_path, 0755)) {
                     $this->delete();
-                    trigger_error("Kunne ikke oprette mappe i InstanceHandler->factory", E_USER_ERROR);
+                    throw new Exception("Kunne ikke oprette mappe i InstanceHandler->factory");
                 }
             }
 
             if (!rename($file, $instancehandler->instance_path.$server_file_name)) {
-                trigger_error("Det var ikke muligt at flytte fil i InstanceHandler->factory", E_USER_ERROR);
+                throw new Exception("Det var ikke muligt at flytte fil i InstanceHandler->factory");
             }
 
             if (!chmod($instancehandler->instance_path.$server_file_name, 0644)) {
                 // please do not stop executing here
-                trigger_error("Unable to chmod file '".$instancehandler->instance_path.$server_file_name."'", E_USER_NOTICE);
+                throw new Exception("Unable to chmod file '".$instancehandler->instance_path.$server_file_name."'", E_USER_NOTICE);
             }
 
             $db->query("UPDATE file_handler_instance SET server_file_name = \"".$server_file_name."\", active = 1 WHERE intranet_id = ".$file_handler->kernel->intranet->get('id')." AND id = ".$id);
@@ -252,7 +252,7 @@ class InstanceHandler extends Intraface_Standard
     function getList($show = 'visible')
     {
         if (!in_array($show, array('visible', 'include_hidden'))) {
-            trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
+            throw new Exception('First parameter to InstanceManager->getList should either be visibe or include_hidden');
             exit;
         }
 
@@ -265,7 +265,7 @@ class InstanceHandler extends Intraface_Standard
         if ($this->file_handler->get('id') != 0) {
             $result = $this->db->query("SELECT id, width, height, type_key, file_size FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1 ORDER BY type_key");
             if (PEAR::isError($result)) {
-                trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+                throw new Exception("Error in query: ".$result->getUserInfo());
                 exit;
             }
             $file_instances = $result->fetchAll(MDB2_FETCHMODE_ASSOC);
@@ -316,7 +316,7 @@ class InstanceHandler extends Intraface_Standard
     public function checkType($type, $compare = 'name')
     {
         if (!in_array($compare, array('name', 'type_key'))) {
-            trigger_error('Second parameter to InstanceHander->checkType should be either name or type_key', E_USER_ERROR);
+            throw new Exception('Second parameter to InstanceHander->checkType should be either name or type_key');
             return false;
         }
 
@@ -348,7 +348,7 @@ class InstanceHandler extends Intraface_Standard
 
         if (file_exists($this->get('file_path'))) {
             if (!rename($this->get('file_path'), $this->instance_path.'_deleted_'.$this->get('server_file_name'))) {
-                trigger_error("Kunne ikke omd�be filen i InstanceHandler->delete()", E_USER_ERROR);
+                throw new Exception("Kunne ikke omd�be filen i InstanceHandler->delete()");
             }
         }
 
@@ -363,7 +363,7 @@ class InstanceHandler extends Intraface_Standard
      */
     function deleteAll() {
         if ($this->file_handler->get('id') == 0) {
-            trigger_error('An file_handler_id is needed to delete instances in InstanceHandler->deleteAll()', E_USER_ERROR);
+            throw new Exception('An file_handler_id is needed to delete instances in InstanceHandler->deleteAll()');
         }
 
         $db = new DB_sql;
@@ -385,7 +385,7 @@ class InstanceHandler extends Intraface_Standard
      */
     public function deleteInstanceType($instance, $compare = 'name')
     {
-        trigger_error('so fare not used!', E_USER_ERROR);
+        throw new Exception('so fare not used!');
         exit;
         $type = $this->checkType($instance, $compare);
         $db = new DB_sql;

@@ -44,7 +44,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                     if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
                         return new k_SeeOther($this->url('state'));
                     }
-                    
+
                     return new k_SeeOther($this->url(null, array('flare' => 'Email has been queued')));
                 }
                 return new k_SeeOther($this->url(null, array('flare' => 'Email could not be send!')));
@@ -267,7 +267,7 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
                 $from_name = $this->getKernel()->setting->get('intranet', 'debtor.sender.name');
                 break;
             default:
-                trigger_error("Invalid sender!", E_USER_ERROR);
+                throw new Exception("Invalid sender!");
         }
 
         $email = new Email($this->getKernel());

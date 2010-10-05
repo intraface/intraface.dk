@@ -41,7 +41,7 @@ class Intraface_modules_modulepackage_AccessUpdate
     {
         $db = MDB2::singleton(DB_DSN);
         if (PEAR::isError($db)) {
-            trigger_error('Error in connecting to db: '.$db->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in connecting to db: '.$db->getUserInfo());
             exit;
         }
         $package_removed = 0;
@@ -70,7 +70,7 @@ class Intraface_modules_modulepackage_AccessUpdate
         $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND ((status_key = 2 AND end_date < NOW()) OR status_key = 3) ".$sql_extra);
         if (PEAR::isError($result)) {
             die('HER');
-            trigger_error("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo());
             exit;
         }
 
@@ -82,13 +82,13 @@ class Intraface_modules_modulepackage_AccessUpdate
             if (is_array($modules) && count($modules) > 0) {
                 foreach ($modules AS $module) {
                     if (!$intranet->removeModuleAccess($module['module'])) {
-                        trigger_error('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                        throw new Exception('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
                     }
                 }
             }
             $update = $db->exec('UPDATE intranet_module_package SET status_key = 4 WHERE id = '.$db->quote($row['id'], 'integer'));
             if (PEAR::isError($update)) {
-                trigger_error('Error in exec: '.$update->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in exec: '.$update->getUserInfo());
                 exit;
             }
             $package_removed += $update;
@@ -97,7 +97,7 @@ class Intraface_modules_modulepackage_AccessUpdate
         // then we set access to new packages.
         $result = $db->query("SELECT id, intranet_id, module_package_id FROM intranet_module_package WHERE active = 1 AND start_date <= NOW() AND status_key = 1 ".$sql_extra);
         if (PEAR::isError($result)) {
-            trigger_error("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query for removing acces in ModulePackageManagerAccessUpdate->run :".$result->getUserInfo());
             exit;
         }
 
@@ -119,20 +119,20 @@ class Intraface_modules_modulepackage_AccessUpdate
                 foreach ($modules AS $module) {
                     $module_object = ModuleMaintenance::factory($module['module']);
                     if (!$intranet->setModuleAccess($module['module'])) {
-                        trigger_error("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                        throw new Exception("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
                         $this->error->set('we could not give your intrnaet access to your modules');
                     } else {
                         // then we give access to alle the users in the intranet
                         foreach ($users AS $user) {
                             if (!$user->setModuleAccess($module['module'], $row['intranet_id'])) {
-                                trigger_error('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                throw new Exception('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
                                 $this->error->set('we could not give all users access to your modules');
                             } else {
                                 // And lastly we give all subaccess
                                 $sub_access_array = $module_object->get('sub_access');
                                 foreach ($sub_access_array AS $sub_access) {
                                     if (!$user->setSubAccess($module['module'], $sub_access['id'], $row['intranet_id'])) {
-                                        trigger_error('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                        throw new Exception('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
                                         $this->error->set('we could not give all users access to your modules');
                                     }
                                 }
@@ -145,7 +145,7 @@ class Intraface_modules_modulepackage_AccessUpdate
             }
             $update = $db->exec('UPDATE intranet_module_package SET status_key = 2 WHERE id = '.$db->quote($row['id'], 'integer'));
             if (PEAR::isError($update)) {
-                trigger_error('Error in exec: '.$update->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in exec: '.$update->getUserInfo());
                 exit;
             }
             $package_added += $update;

@@ -80,7 +80,7 @@ class OnlinePayment extends Intraface_Standard
         $implemented_providers = OnlinePayment::getImplementedProviders();
         // we set the fallback from settings
         if (!isset($implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')])) {
-            trigger_error('Ikke en gyldig provider fra settings i OnlinePayment->factory', E_USER_ERROR);
+            throw new Exception('Ikke en gyldig provider fra settings i OnlinePayment->factory');
         }
         $provider = $implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')];
 
@@ -92,13 +92,13 @@ class OnlinePayment extends Intraface_Standard
                 $db = new DB_Sql;
                 $db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
                 if (!$db->nextRecord()) {
-                    trigger_error('OnlinePayment::factory: Ikke et gyldigt id', E_USER_ERROR);
+                    throw new Exception('OnlinePayment::factory: Ikke et gyldigt id');
                 }
                 $provider = $implemented_providers[$db->f('provider_key')];
                 break;
             case 'provider':
                 if (!in_array($value, $implemented_providers)) {
-                    trigger_error('Ikke en gyldig provider i OnlinePayment->factory case: provider', E_USER_ERROR);
+                    throw new Exception('Ikke en gyldig provider i OnlinePayment->factory case: provider');
                     exit;
                 }
                 $provider = $value;
@@ -107,13 +107,13 @@ class OnlinePayment extends Intraface_Standard
                 $db = new DB_Sql;
                 $db->query("SELECT provider_key FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
                 if (!$db->nextRecord()) {
-                    trigger_error('OnlinePayment::factory: Ikke et gyldigt transactionnumber', E_USER_ERROR);
+                    throw new Exception('OnlinePayment::factory: Ikke et gyldigt transactionnumber');
                     exit;
                 }
                 $provider = $implemented_providers[$db->f('provider_key')];
                 break;
             default:
-                trigger_error('Ikke gyldig type i Onlinebetaling', E_USER_ERROR);
+                throw new Exception('Ikke gyldig type i Onlinebetaling');
                 break;
         }
 
@@ -132,7 +132,7 @@ class OnlinePayment extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Ugyldig onlinebetalingsudbyder", E_USER_ERROR);
+                throw new Exception("Ugyldig onlinebetalingsudbyder");
         }
         */
     }
@@ -401,11 +401,11 @@ class OnlinePayment extends Intraface_Standard
 
         $status_key = array_search($status, OnlinePayment::getStatusTypes());
         if ($status == "" || $status_key === false) {
-            trigger_error("Ugyldig status i OnlinePayment->setStatus()", E_USER_ERROR);
+            throw new Exception("Ugyldig status i OnlinePayment->setStatus()");
         }
 
         if ($status_key <= $this->get('status_key')) {
-            trigger_error("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()", E_USER_ERROR);
+            throw new Exception("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()");
         }
 
         switch($status) {

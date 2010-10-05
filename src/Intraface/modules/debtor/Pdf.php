@@ -81,7 +81,7 @@ class Intraface_modules_debtor_Pdf
     {
         // $pointX = $this->doc->get("margin_left");
         if (!is_array($contact)) {
-            trigger_error("Første parameter skal være et array med konkaktoplysninger i PdfDebtor->addRecieverAndSender", E_USER_ERROR);
+            throw new Exception("Første parameter skal være et array med konkaktoplysninger i PdfDebtor->addRecieverAndSender");
         }
 
         $box_top = $this->doc->get('y'); // $pointY;
@@ -231,11 +231,11 @@ class Intraface_modules_debtor_Pdf
     function addPaymentCondition($payment_method, $parameter, $payment_info = array())
     {
         if (!is_array($parameter)) {
-            trigger_error("The 3rd parameter to addPaymentCondition should be an array!", E_USER_ERROR);
+            throw new Exception("The 3rd parameter to addPaymentCondition should be an array!");
         }
 
         if (!is_object($parameter['contact']->address)) {
-            trigger_error("Arrayet in 2nd parameter does not contain contact object with Address", E_USER_ERROR);
+            throw new Exception("Arrayet in 2nd parameter does not contain contact object with Address");
         }
 
         // adding payments

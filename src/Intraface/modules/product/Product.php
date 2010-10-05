@@ -320,7 +320,7 @@ class Product extends Intraface_Standard
     private function validate($array_var)
     {
         if (!is_array($array_var)) {
-            trigger_error('Product::save() skal have et array', E_USER_ERROR);
+            throw new Exception('Product::save() skal have et array');
         }
 
         $validator = new Intraface_Validator($this->error);

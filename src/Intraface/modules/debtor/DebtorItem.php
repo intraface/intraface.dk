@@ -500,7 +500,7 @@ class DebtorItem extends Intraface_Standard
                     $i++;
                 }
             } else {
-                 trigger_error("Ugyldig produktdetalje i DebtorItem->getList() on ".$db->f('product_id').'/'.$db->f('product_detail_id'), E_USER_ERROR);
+                 throw new Exception("Ugyldig produktdetalje i DebtorItem->getList() on ".$db->f('product_id').'/'.$db->f('product_detail_id'));
             }
         }
         unset($db);
@@ -529,7 +529,7 @@ class DebtorItem extends Intraface_Standard
         */
 
         if (!in_array($sent, array("", "not_sent"))) {
-            trigger_error("Ugyldig v�rdi i 3. parameter til debtor->item->getQuantity()", E_USER_ERROR);
+            throw new Exception("Ugyldig værdi i 3. parameter til debtor->item->getQuantity()");
         }
 
         if ($this->debtor->get('type') == "quotation") {
@@ -548,7 +548,7 @@ class DebtorItem extends Intraface_Standard
             $status_sql = "debtor.status = 2"; // kredit notaer der er f�rdigbehandlet
             $date_sql = "AND debtor.date_executed > \"".$from_date."\"";
         } else {
-            trigger_error("Der er opst�et en fejl i Debtor->item->getQuantity()", E_USER_ERROR);
+            throw new Exception("Der er opstået en fejl i Debtor->item->getQuantity()");
         }
 
         $db = new DB_sql;

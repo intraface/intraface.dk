@@ -74,7 +74,7 @@ class InstanceManager
         
         $result = $this->db->query('SELECT name, type_key, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
         if ($result->numRows() > 0) {
@@ -124,7 +124,7 @@ class InstanceManager
                     // then we set the name to the standard type name
                     $input['name'] = $standard_type['name'];
                     if ($standard_type['fixed']) {
-                        trigger_error('You cannot overwrite fixed types', E_USER_ERROR);
+                        throw new Exception('You cannot overwrite fixed types');
                         return false;
                     }
                 }
@@ -174,7 +174,7 @@ class InstanceManager
                     'type_key = '.$this->db->quote($type_key, 'integer').', ' .
                     'active = 1, '.$sql);
             if (PEAR::isError($result)) {
-                trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in exec: '.$result->getUserInfo());
                 return false;
             }
             if ($result == 0) {
@@ -189,7 +189,7 @@ class InstanceManager
                     'WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' ' .
                             'AND type_key = '.$this->db->quote($this->type_key, 'integer'));
             if (PEAR::isError($result)) {
-                trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in exec: '.$result->getUserInfo());
                 return false;
             }
         }
@@ -206,7 +206,7 @@ class InstanceManager
     private function getStandardTypes() 
     {
         return array(
-            0 => array('type_key' => 0, 'name' => 'custom', 'fixed' => true, 'hidden' => true), // Manuelt størrelse
+            0 => array('type_key' => 0, 'name' => 'custom', 'fixed' => true, 'hidden' => true), // Manuelt stï¿½rrelse
             1 => array('type_key' => 1, 'name' => 'square', 'fixed' => false, 'hidden' => false, 'max_width' => 75, 'max_height' => 75, 'resize_type' => 'strict'),
             2 => array('type_key' => 2, 'name' => 'thumbnail', 'fixed' => false, 'hidden' => false, 'max_width' => 100, 'max_height' => 67, 'resize_type' => 'relative'),
             3 => array('type_key' => 3, 'name' => 'small', 'fixed' => false, 'hidden' => false, 'max_width' => 240, 'max_height' => 160, 'resize_type' => 'relative'),
@@ -244,7 +244,7 @@ class InstanceManager
                 'type_key != '.$this->db->quote((int)$type_key, 'integer').' AND ' .
                 'active = 1');
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
         
@@ -267,7 +267,7 @@ class InstanceManager
         $result = $this->db->query('SELECT MAX(type_key) AS max_key FROM file_handler_instance_type WHERE ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
         
@@ -290,13 +290,13 @@ class InstanceManager
     public function getList($show = 'visible') 
     {
         if (!in_array($show, array('visible', 'include_hidden'))) {
-            trigger_error('First parameter to InstanceManager->getList should either be visibe or include_hidden', E_USER_ERROR);
+            throw new Exception('First parameter to InstanceManager->getList should either be visibe or include_hidden');
             exit;
         }
         
         $result = $this->db->query('SELECT type_key, name, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND active = 1 ORDER BY type_key');
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
         $custom_types = $result->fetchAll(MDB2_FETCHMODE_ASSOC);
@@ -351,13 +351,13 @@ class InstanceManager
      */
     public function delete() {
         if ($this->type_key == 0) {
-            trigger_error('You can not delete an instancetype without setting a type_key!', E_USER_ERROR);
+            throw new Exception('You can not delete an instancetype without setting a type_key!');
             return false;
         }
         
         $result = $this->db->exec('UPDATE file_handler_instance_type SET active = 0 WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
         

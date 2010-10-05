@@ -26,7 +26,7 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         $redirect = Intraface_Redirect::receive($this->getKernel());
 
         if ($redirect->get('id') == 0) {
-            trigger_error('we did not find a redirect, which is needed', E_USER_ERROR);
+            throw new Exception('we did not find a redirect, which is needed');
             exit;
         }
         */

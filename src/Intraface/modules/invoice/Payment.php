@@ -20,7 +20,7 @@ class Payment extends Intraface_Standard
     function __construct($object, $id = 0)
     {
         if (!is_object($object)) {
-            trigger_error('First parameter for Payment needs to be a invoice or reminder object', E_USER_ERROR);
+            throw new Exception('First parameter for Payment needs to be a invoice or reminder object');
             return false;
         }
 
@@ -31,7 +31,7 @@ class Payment extends Intraface_Standard
         $this->payment_for_id = $this->payment_for->get("id");
 
         if ($this->payment_for_type_id === false) {
-            trigger_error('Payment can only be for either Invoice or reminder', E_USER_ERROR);
+            throw new Exception('Payment can only be for either Invoice or reminder');
             return false;
         }
 
@@ -56,7 +56,7 @@ class Payment extends Intraface_Standard
                 'AND id = '.$this->id);
 
         if (PEAR::isError($result)) {
-            trigger_error('Error in query '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query '.$result->getUserInfo());
             return false;
         }
 
@@ -77,11 +77,11 @@ class Payment extends Intraface_Standard
     function update($input = "")
     {
         if ($this->payment_for_type_id == 0) {
-            trigger_error('Invalid paymet_for_type_id in Payment->update', E_USER_ERROR);
+            throw new Exception('Invalid paymet_for_type_id in Payment->update');
             return false;
         }
         if ($this->payment_for_id == 0) {
-            trigger_error('Invalid paymet_for_id in Payment->update', E_USER_ERROR);
+            throw new Exception('Invalid paymet_for_id in Payment->update');
             return false;
         }
 
@@ -237,7 +237,7 @@ class Payment extends Intraface_Standard
                 $debtor->dbquery->setSorting("this_date");
             } else {
                 // Hvis det ikke er faktura, s� er det en s�gning p� alle betalinger for kontakt.
-                trigger_error("Betalinger for en contact er ikke implementeret", E_USER_ERROR);
+                throw new Exception("Betalinger for en contact er ikke implementeret");
                 // F�lgende kan vist kun v�re noget lort. contact_id og intranet_id
                 $debtor->dbquery->setCondition("contact_id = ".$this->kernel->intranet->get("id"));
                 $debtor->dbquery->setSorting("this_date");

@@ -76,7 +76,7 @@ class CMS_Page extends Intraface_Standard
     public function __construct($cmssite, $id = 0)
     {
         if (!is_object($cmssite)) {
-             trigger_error('CMS_Page::__construct needs CMS_Site', E_USER_ERROR);
+             throw new Exception('CMS_Page::__construct needs CMS_Site');
         }
 
         $this->id         = (int)$id;
@@ -170,7 +170,7 @@ class CMS_Page extends Intraface_Standard
                 */
                 break;
             default:
-                trigger_error('CMS_Page::factory unknown type', E_USER_ERROR);
+                throw new Exception('CMS_Page::factory unknown type');
                 break;
         }
     }
@@ -427,7 +427,7 @@ class CMS_Page extends Intraface_Standard
                 }
 
                 if ($i == 50) {
-                    trigger_error("The while loop is runing loose in CMS_Page::load", E_USER_ERROR);
+                    throw new Exception("The while loop is runing loose in CMS_Page::load");
                 }
             }
 
@@ -553,7 +553,7 @@ class CMS_Page extends Intraface_Standard
             if ($type != 'all') {
                 $type_key = array_search($type, $this->getTypes());
                 if ($type_key === false) {
-                    trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
+                    throw new Exception("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList");
                 }
 
                 $this->getDBQuery()->setCondition("type_key = ".$type_key);

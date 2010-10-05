@@ -10,7 +10,7 @@
  */
 
 if (basename($_SERVER['SCRIPT_NAME']) == basename(__FILE__)) {
-    trigger_error('This file cannot be accessed directly', E_USER_ERROR);
+    throw new Exception('This file cannot be accessed directly');
 }
 
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.local.php';

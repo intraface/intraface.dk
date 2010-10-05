@@ -1,39 +1,39 @@
 <?php
 /**
- * Upload handler. Klarer upload af både billeder og dokumenter.
+ * Upload handler. Klarer upload af bï¿½de billeder og dokumenter.
  *
- * Kan det passe at multiple upload endnu ikke virker? Det behøver den sådan set heller ikke:
- * Vi skal bare have nedenstående til at fungere.
+ * Kan det passe at multiple upload endnu ikke virker? Det behï¿½ver den sï¿½dan set heller ikke:
+ * Vi skal bare have nedenstï¿½ende til at fungere.
  *
- * Desuden skal jeg bruge sådan en temporaryUpload (en der sættes i gang, så
- * snart man klikker en fil ind i et fileelement (så den begynder at uploade med det samme).
- * Derved kan vi få et automatisk preview af temp-filen, så snart den er oppe på serveren.
- * Vi får dem så skrevet ind på siden med en checkbox for at sige, om man vil uploade
- * filerne. Dem der er tjekket importerer vi så med import-funktionen i stedet for at uploade
- * dem på ny. På den måde kommer upload til at gå knalderhurtigt :) Det hele skal naturligvis
- * laves ud fra et single file-input felt, som det ses på
+ * Desuden skal jeg bruge sï¿½dan en temporaryUpload (en der sï¿½ttes i gang, sï¿½
+ * snart man klikker en fil ind i et fileelement (sï¿½ den begynder at uploade med det samme).
+ * Derved kan vi fï¿½ et automatisk preview af temp-filen, sï¿½ snart den er oppe pï¿½ serveren.
+ * Vi fï¿½r dem sï¿½ skrevet ind pï¿½ siden med en checkbox for at sige, om man vil uploade
+ * filerne. Dem der er tjekket importerer vi sï¿½ med import-funktionen i stedet for at uploade
+ * dem pï¿½ ny. Pï¿½ den mï¿½de kommer upload til at gï¿½ knalderhurtigt :) Det hele skal naturligvis
+ * laves ud fra et single file-input felt, som det ses pï¿½
  *
  * http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-single-file-element/
  *
- * Men selve visningen skal foregå lidt ligesom hos http://www.air4web.com/files/upload/
+ * Men selve visningen skal foregï¿½ lidt ligesom hos http://www.air4web.com/files/upload/
  *
- * Der understøttes dog kun billeder, og vi skal understøtte det hele, men hvis det er billeder
+ * Der understï¿½ttes dog kun billeder, og vi skal understï¿½tte det hele, men hvis det er billeder
  * vises en thump. Hvis det er andet vises et ikon.
  *
- * Alternativt kan man bare se selve filnavnet, som det er på gmail. De uploader også tingene med det samme
- * - og så har du mulighed for at slette, det der ikke skal sendes med alligevel. Jeg tænkte
- * at vi gjorde det på nogenlunde samme måde. Vi skal bare have lavet en eller anden måde
- * at få slettet temporary igen.
+ * Alternativt kan man bare se selve filnavnet, som det er pï¿½ gmail. De uploader ogsï¿½ tingene med det samme
+ * - og sï¿½ har du mulighed for at slette, det der ikke skal sendes med alligevel. Jeg tï¿½nkte
+ * at vi gjorde det pï¿½ nogenlunde samme mï¿½de. Vi skal bare have lavet en eller anden mï¿½de
+ * at fï¿½ slettet temporary igen.
  *
- * Når man så har uploadet alle sine filer på en gang, sendes man til en batch editeringsside.
- * Til den mangler vi lige et eller andet med søgning i filsystemet, før vi kan implementere det.
+ * Nï¿½r man sï¿½ har uploadet alle sine filer pï¿½ en gang, sendes man til en batch editeringsside.
+ * Til den mangler vi lige et eller andet med sï¿½gning i filsystemet, fï¿½r vi kan implementere det.
  *
- * Endelig skal du lige give et bud på, hvordan filehandleren skal spille sammen med de andre
- * moduler, når man skal vælge filer derfra!
+ * Endelig skal du lige give et bud pï¿½, hvordan filehandleren skal spille sammen med de andre
+ * moduler, nï¿½r man skal vï¿½lge filer derfra!
  *
- * Der mangler en funktion til at hente alle billederne ud automatisk - og andre filtyper også.
- * Den har man brug for også selvom man ikke har adgang til selve filarkivet. For tænk sig
- * når man er sådan en der måske kun har lov at indsætte billeder på en side, der er oploadet
+ * Der mangler en funktion til at hente alle billederne ud automatisk - og andre filtyper ogsï¿½.
+ * Den har man brug for ogsï¿½ selvom man ikke har adgang til selve filarkivet. For tï¿½nk sig
+ * nï¿½r man er sï¿½dan en der mï¿½ske kun har lov at indsï¿½tte billeder pï¿½ en side, der er oploadet
  * til filarkivet.
  *
  * @package Intraface
@@ -78,14 +78,14 @@ class UploadHandler extends Intraface_Standard
     function __construct($file_handler)
     {
         if (!is_object($file_handler)) {
-            trigger_error("UploadHandler kræver et filehandler- eller filemanagerobject (1)", E_USER_ERROR);
+            throw new Exception("UploadHandler krï¿½ver et filehandler- eller filemanagerobject (1)");
         }
 
         if (strtolower(get_class($file_handler)) == 'filehandler' || strtolower(get_class($file_handler)) == 'filemanager') {
-            // @todo HJÆLP MIG, jeg kan ikke vende denne if-sætning rigtigt.
+            // @todo HJï¿½LP MIG, jeg kan ikke vende denne if-sï¿½tning rigtigt.
             // Men her er det ok.
         } else {
-            trigger_error("UploadHandler kræver et filehandler- eller filemanagerobject (2)", E_USER_ERROR);
+            throw new Exception("UploadHandler krï¿½ver et filehandler- eller filemanagerobject (2)");
         }
 
         $this->file_handler = $file_handler;
@@ -101,7 +101,7 @@ class UploadHandler extends Intraface_Standard
     }
 
     /**
-     * Benyttes til at sætte indstillinger for upload
+     * Benyttes til at sï¿½tte indstillinger for upload
      * Se indstillingenre i Uploadhandler->uploadhandler (init funktionen).
      *
      * @param string $setting @todo
@@ -114,7 +114,7 @@ class UploadHandler extends Intraface_Standard
         if (isset($this->upload_setting[$setting])) {
             $this->upload_setting[$setting] = $value;
         } else {
-            trigger_error("Ugyldig setting ".$setting." i UploadHandler->setSetting", E_USER_ERROR);
+            throw new Exception("Ugyldig setting ".$setting." i UploadHandler->setSetting");
         }
     }
 
@@ -156,8 +156,8 @@ class UploadHandler extends Intraface_Standard
     /**
      * Upload fil
      *
-     * @param string $input       er navnt på inputfeltet eller et http_upload_file object
-     * @param string $upload_type har enten værdien 'save' (gemmer filen i filehandler og returnerer id), eller 'temporary' (gemmer i filehandler, men med temporary sat) eller 'do_not_save' (flytter filen til tempdir og returnerer fil-sti)
+     * @param string $input       er navnt pï¿½ inputfeltet eller et http_upload_file object
+     * @param string $upload_type har enten vï¿½rdien 'save' (gemmer filen i filehandler og returnerer id), eller 'temporary' (gemmer i filehandler, men med temporary sat) eller 'do_not_save' (flytter filen til tempdir og returnerer fil-sti)
      *
      * @return boolean
      */
@@ -165,7 +165,7 @@ class UploadHandler extends Intraface_Standard
     {
 
         if (!in_array($upload_type, array('save', 'temporary', 'do_not_save'))) {
-            trigger_error("Anden parameter '".$upload_type."' er ikke enten 'save', 'temporary' eller 'do_not_save' i UploadHandler->upload", E_USER_ERROR);
+            throw new Exception("Anden parameter '".$upload_type."' er ikke enten 'save', 'temporary' eller 'do_not_save' i UploadHandler->upload");
         }
 
         if (is_string($input) && $input != '') {
@@ -178,7 +178,7 @@ class UploadHandler extends Intraface_Standard
         } elseif (is_object($input) && strtolower(get_class($input)) == 'http_upload_file') {
             $file = $input;
         } else {
-            trigger_error("Invalid input in FileHandler->upload", E_USER_ERROR);
+            throw new Exception("Invalid input in FileHandler->upload");
         }
 
         $prop = $file->getProp(); // returnere et array med oplysninger om filen.
@@ -234,7 +234,7 @@ class UploadHandler extends Intraface_Standard
              * This is now handled by TemporaryFile
             if (!is_dir($this->file_handler->tempdir_path)) {
                 if (!mkdir($this->file_handler->tempdir_path)) {
-                    trigger_error("Kunne ikke oprette mappe i FileHandler->upload", E_USER_ERROR);
+                    throw new Exception("Kunne ikke oprette mappe i FileHandler->upload");
                 }
             }
              */
@@ -242,7 +242,7 @@ class UploadHandler extends Intraface_Standard
             $moved = $file->moveTo($tmp_server_file->getFileDir());
 
             if (PEAR::isError($moved)) {
-                trigger_error("Kunne ikke flytte filen i UploadHandler->upload", E_USER_ERROR);
+                throw new Exception("Kunne ikke flytte filen i UploadHandler->upload");
             }
 
             return array(
@@ -305,7 +305,7 @@ class UploadHandler extends Intraface_Standard
 
 
     /**
-     * @todo Bør returnere nogle id'er
+     * @todo Bï¿½r returnere nogle id'er
      * This should not be in this class
      *
      * @return boolean
@@ -330,8 +330,8 @@ class UploadHandler extends Intraface_Standard
 
                 $file_size = filesize($dir.$file);
                 if ($file_size > $this->upload_setting['max_file_size']) {
-                    $this->file_handler->error->set("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte");
-                    print("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
+                    $this->file_handler->error->set("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte");
+                    print("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
                     CONTINUE;
                 }
 
@@ -371,20 +371,20 @@ class UploadHandler extends Intraface_Standard
                 $imported_files[] = $id;
 
                 if ($this->upload_setting['add_keyword'] != '') {
-                    $file_handler->load(); // Der skal lige loades, så id kan hentes.
+                    $file_handler->load(); // Der skal lige loades, sï¿½ id kan hentes.
                     $file_handler->kernel->useShared('keyword');
 
                     $keyword = new Keyword($file_handler);
                     $keyword->addKeywordsByString($this->upload_setting['add_keyword']);
                 }
 
-                // Vi putter vores egen extension på, det er mere sikkert.
+                // Vi putter vores egen extension pï¿½, det er mere sikkert.
                 $server_file_name = $id.".".$mime_type['extension'];
                 $file_handler->update(array('server_file_name' => $server_file_name));
 
                 if (!is_dir($this->upload_path)) {
                     if (!mkdir($this->upload_path, 0755)) {
-                        trigger_error("Kunne ikke oprette mappe i FileHandler->upload", E_USER_ERROR);
+                        throw new Exception("Kunne ikke oprette mappe i FileHandler->upload");
                     }
                 }
 
@@ -397,7 +397,7 @@ class UploadHandler extends Intraface_Standard
                 
                 if (!chmod($this->upload_path.$server_file_name, 0644)) {
                     // please do not stop executing here
-                    trigger_error("Unable to chmod file '".$this->upload_path.$server_file_name."'", E_USER_NOTICE);
+                    throw new Exception("Unable to chmod file '".$this->upload_path.$server_file_name."'", E_USER_NOTICE);
                 }
 
                 //print("SUCCESS: ".$file."<br />");

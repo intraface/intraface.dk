@@ -52,7 +52,7 @@ class Intraface_Log implements Observer
         $this->db->loadModule('Manager', null, true);
         $tables = $this->db->manager->listTables();
         if (PEAR::isError($tables)) {
-            trigger_error("Error in query: ".$tables->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query: ".$tables->getUserInfo());
         }
 
         return in_array(strtolower($table), array_map('strtolower', $tables));

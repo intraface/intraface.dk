@@ -103,7 +103,7 @@ class Intraface_modules_cms_PageGateway
             if ($type != 'all') {
                 $type_key = array_search($type, $this->getTypes());
                 if ($type_key === false) {
-                    trigger_error("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList", E_USER_ERROR);
+                    throw new Exception("Invalid type '".$type."' set with CMS_PAGE::dbquery::setFilter('type') in CMS_Page::getList");
                 }
 
                 $this->getDBQuery()->setCondition("type_key = ".$type_key);

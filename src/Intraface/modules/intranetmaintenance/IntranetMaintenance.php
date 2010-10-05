@@ -62,9 +62,9 @@ class IntranetMaintenance extends Intraface_Intranet
     public function flushAccess()
     {
         if ($this->id == 0) {
-            trigger_error('cannot flush access because no id i set', E_USER_ERROR);
+            throw new Exception('cannot flush access because no id i set');
         }
-        // Sletter alle permissions som har med intranettet - og kun intranettet at gøre.
+        // Sletter alle permissions som har med intranettet - og kun intranettet at gï¿½re.
         $this->db->query("DELETE FROM permission WHERE user_id = 0 AND intranet_id = ".intval($this->id));
         return true;
     }
@@ -78,7 +78,7 @@ class IntranetMaintenance extends Intraface_Intranet
     public function setModuleAccess($module_id)
     {
         if ($this->id == 0) {
-            trigger_error('cannot set access because no id i set in IntranetMaintenance->setModuleAccess', E_USER_ERROR);
+            throw new Exception('cannot set access because no id i set in IntranetMaintenance->setModuleAccess');
             exit;
         }
 
@@ -87,14 +87,14 @@ class IntranetMaintenance extends Intraface_Intranet
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $module_id = $row['id'];
             } else {
-                trigger_error("intranet maintenance says unknown module in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
+                throw new Exception("intranet maintenance says unknown module in IntranetMaintenance->setModuleAccess");
                 exit;
             }
         }
 
         $result = $this->db->query("SELECT id FROM module WHERE id = ".intval($module_id));
         if (PEAR::isError($result)) {
-            trigger_error('Error in query: '.$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in query: '.$result->getUserInfo());
             exit;
         }
         if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
@@ -103,11 +103,11 @@ class IntranetMaintenance extends Intraface_Intranet
                 user_id = 0,
                 module_id = ".intval($row['id']));
             if (PEAR::isError($result)) {
-                trigger_error('Error in exec: '.$result->getUserInfo(), E_USER_INFO);
+                throw new Exception('Error in exec: '.$result->getUserInfo(), E_USER_INFO);
             }
             return $result;
         } else {
-            trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess", E_USER_ERROR);
+            throw new Exception("intranet maintenance says unknown module_id in IntranetMaintenance->setModuleAccess");
             exit;
         }
     }
@@ -121,7 +121,7 @@ class IntranetMaintenance extends Intraface_Intranet
     public function removeModuleAccess($module_id)
     {
         if ($this->id == 0) {
-            trigger_error('cannot remove access because no id i set in IntranetMaintenance->removeModuleAccess', E_USER_ERROR);
+            throw new Exception('cannot remove access because no id i set in IntranetMaintenance->removeModuleAccess');
             exit;
         }
 
@@ -130,7 +130,7 @@ class IntranetMaintenance extends Intraface_Intranet
             if ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                 $module_id = $row['id'];
             } else {
-                trigger_error("intranet maintenance says unknown module in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
+                throw new Exception("intranet maintenance says unknown module in IntranetMaintenance->removeModuleAccess");
                 exit;
             }
         }
@@ -142,13 +142,13 @@ class IntranetMaintenance extends Intraface_Intranet
                 module_id = ".intval($row['id']));
 
             if (PEAR::isError($delete)) {
-                trigger_error('Error in delete: '.$delete->getUserInfo(), E_USER_ERROR);
+                throw new Exception('Error in delete: '.$delete->getUserInfo());
                 exit;
             }
 
             return true;
         } else {
-            trigger_error("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess", E_USER_ERROR);
+            throw new Exception("intranet maintenance says unknown module_id in IntranetMaintenance->removeModuleAccess");
             exit;
         }
     }
@@ -165,7 +165,7 @@ class IntranetMaintenance extends Intraface_Intranet
     {
         $validator = new Intraface_Validator($this->error);
 
-        $validator->isString($input['name'], 'Navn skal være en streng', '', '');
+        $validator->isString($input['name'], 'Navn skal vï¿½re en streng', '', '');
 
         if (!$this->identifierIsUnique($input['identifier'])) {
             $this->error->set('identifier is not unique');
@@ -190,7 +190,7 @@ class IntranetMaintenance extends Intraface_Intranet
     function save($input)
     {
         if (!is_array($input)) {
-            trigger_error('input is not an array', E_USER_ERROR);
+            throw new Exception('input is not an array');
         }
 
         settype($input['name'], 'string');
@@ -219,7 +219,7 @@ class IntranetMaintenance extends Intraface_Intranet
             $this->id = $this->db->lastInsertID('intranet', 'id');
 
             if (PEAR::isError($this->id)) {
-                   trigger_error("Error in IntranetMaintenance: ".$id->getMessage(), E_USER_ERROR);
+                   throw new Exception("Error in IntranetMaintenance: ".$id->getMessage());
             }
             $this->load();
         } else {
@@ -235,7 +235,7 @@ class IntranetMaintenance extends Intraface_Intranet
     public function setMaintainedByUser($id, $current_intranet_id)
     {
         if ($this->id == 0) {
-            trigger_error('You need to save the intranet before you can set the maintainer', E_USER_ERROR);
+            throw new Exception('You need to save the intranet before you can set the maintainer');
             return false;
         }
 
@@ -255,7 +255,7 @@ class IntranetMaintenance extends Intraface_Intranet
 
         $update = $this->db->query("UPDATE intranet SET maintained_by_user_id = ".intval($id).", date_changed = NOW() WHERE id = ".intval($this->id));
         if (PEAR::isError($update)) {
-            trigger_error('Error in update: '.$update->getUserInfo(), E_USER_ERROR);
+            throw new Exception('Error in update: '.$update->getUserInfo());
             return false;
         }
 

@@ -41,7 +41,7 @@ class Intraface_Kernel implements Intraface_Identity
         }
         $this->db = MDB2:: singleton(DB_DSN);
         if (PEAR::isError($this->db)) {
-            trigger_error($this->db->getMessage() . $this->db->getUserInfo(), E_USER_ERROR);
+            throw new Exception($this->db->getMessage() . $this->db->getUserInfo());
         }
     }
 

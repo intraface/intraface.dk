@@ -29,7 +29,7 @@ class ToolsFactory
     {
         $db = MDB2::singleton($this->db_dsn, array("persistent" => true));
         if (PEAR::isError($db)) {
-            trigger_error($db->getMessage(), E_USER_ERROR);
+            throw new Exception($db->getMessage());
         }
         $db->setFetchMode(MDB2_FETCHMODE_ASSOC);
         $db->setOption("portability", MDB2_PORTABILITY_NONE);

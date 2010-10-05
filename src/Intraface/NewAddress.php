@@ -3,10 +3,10 @@
 /**
  * Styrer adresser til intranet, bruger, kunde og kontaktperson
  *
- * Klassen kan styrer flere forskellige typer af adresser. Både for intranettet, brugere, kunder og kontaktpersoner.
- * Beskrivelsen af hvilke og med hvilket navn er beskrevet længere nede.
+ * Klassen kan styrer flere forskellige typer af adresser. Bï¿½de for intranettet, brugere, kunder og kontaktpersoner.
+ * Beskrivelsen af hvilke og med hvilket navn er beskrevet lï¿½ngere nede.
  *
- * TODO Skal vi programmere intranet_id ind i klassen? Det kræver at den får Kernel.
+ * TODO Skal vi programmere intranet_id ind i klassen? Det krï¿½ver at den fï¿½r Kernel.
  *
  * @version 001
  * @author Sune
@@ -66,15 +66,15 @@ class NewAddress extends Intraface_Standard {
     /**
      * Init: loader klassen
      *
-     * Her er angivet de typer af adresser den kan håndtere med arrayet address_type[].
-     * $this-fields er felter i tabellen (db) som overføres til array og omvendt. Måske disse
-     * engang skal differencieres, så man angvier hvad feltet i tabellen skal svare til navnet i arrayet.
-     * Klassen loader også adressens felter
+     * Her er angivet de typer af adresser den kan hï¿½ndtere med arrayet address_type[].
+     * $this-fields er felter i tabellen (db) som overfï¿½res til array og omvendt. Mï¿½ske disse
+     * engang skal differencieres, sï¿½ man angvier hvad feltet i tabellen skal svare til navnet i arrayet.
+     * Klassen loader ogsï¿½ adressens felter
      *
-     * @param	(string)$type	er typen på adressen. Skal svare til en af dem i $address_type
-     * @param	(int)$id BEMÆRK id på intranettet, brugeren, kunde eller kontaktperson. Ikke id på adressen. Det klare klassen selv.
-     * @param	(int)$address_id	Denne bruges kun, i det tilfælde, hvor man skal finde en gammel adresse. Så angiver man id på adressen.
-     * @return	(int)	Returnere 0 hvis adressen ikke er sat. Returnere id på adressen hvis det er.
+     * @param	(string)$type	er typen pï¿½ adressen. Skal svare til en af dem i $address_type
+     * @param	(int)$id BEMï¿½RK id pï¿½ intranettet, brugeren, kunde eller kontaktperson. Ikke id pï¿½ adressen. Det klare klassen selv.
+     * @param	(int)$address_id	Denne bruges kun, i det tilfï¿½lde, hvor man skal finde en gammel adresse. Sï¿½ angiver man id pï¿½ adressen.
+     * @return	(int)	Returnere 0 hvis adressen ikke er sat. Returnere id pï¿½ adressen hvis det er.
      */
     function _old_Address($type, $id, $old_address_id = 0) {
 
@@ -96,7 +96,7 @@ class NewAddress extends Intraface_Standard {
             $this->type = $i;
         }
         else {
-            trigger_error('Ugyldig address type', E_USER_ERROR);
+            throw new Exception('Ugyldig address type');
         }
 
         return($this->address_id = $this->load());
@@ -115,7 +115,7 @@ class NewAddress extends Intraface_Standard {
 
         $this->db->query("SELECT * FROM address WHERE ".$sql);
         if ($this->db->numRows() > 1) {
-            trigger_error('Der er mere end 1 aktiv adresse', FATAL);
+            throw new Exception('Der er mere end 1 aktiv adresse', FATAL);
         }
         elseif ($this->db->nextRecord()) {
             $this->value['address_id'] = $this->db->f('id');
@@ -133,7 +133,7 @@ class NewAddress extends Intraface_Standard {
      * Public: Denne funktion gemmer data. At gemme data vil sige, at den gamle adresse gemmes, men den nye aktiveres.
      *
      * @param	(array)$array_var	et array med felter med adressen. Se felterne i init funktionen: $this->fields
-     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
+     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme pï¿½ en old_address.
      */
     function save($array_var) {
 
@@ -142,7 +142,7 @@ class NewAddress extends Intraface_Standard {
             return 0;
         }
         elseif ($this->id == 0) {
-            trigger_error('Address:save(): Id kan ikke være 0 når du forsøger at gemme adresse', FATAL);
+            throw new Exception('Address:save(): Id kan ikke vï¿½re 0 nï¿½r du forsï¿½ger at gemme adresse', FATAL);
         }
         elseif (count($array_var) > 0) {
 
@@ -163,7 +163,7 @@ class NewAddress extends Intraface_Standard {
                 }
             }
             else {
-                // Kun hvis der rent faktisk gemmes nogle værdier opdaterer vi
+                // Kun hvis der rent faktisk gemmes nogle vï¿½rdier opdaterer vi
                 $do_update = 0;
                 for ($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
                     if (array_key_exists($this->fields[$i], $array_var) AND isset($array_var[$this->fields[$i]])) {
@@ -177,7 +177,7 @@ class NewAddress extends Intraface_Standard {
             }
 
             if ($do_update == 0) {
-                // Hmmmmm, der er slet ikke nogen felter der er ændret! Så gemmer vi ikke, men siger at det gik godt :-)
+                // Hmmmmm, der er slet ikke nogen felter der er ï¿½ndret! Sï¿½ gemmer vi ikke, men siger at det gik godt :-)
                 return 1;
             }
             else {
@@ -189,7 +189,7 @@ class NewAddress extends Intraface_Standard {
             }
         }
         else {
-            // Der var slet ikke noget indhold i arrayet, så vi lader være at opdatere, men siger, at vi gjorde.
+            // Der var slet ikke noget indhold i arrayet, sï¿½ vi lader vï¿½re at opdatere, men siger, at vi gjorde.
             return 1;
         }
     }
@@ -197,10 +197,10 @@ class NewAddress extends Intraface_Standard {
     /**
      * Public: Opdatere en adresse.
      *
-     * Denne funktion overskriver den nuværende adresse. Benyt som udagangspunkt ikke denne, da historikken på adresser skal gemmes.
+     * Denne funktion overskriver den nuvï¿½rende adresse. Benyt som udagangspunkt ikke denne, da historikken pï¿½ adresser skal gemmes.
      *
      * @param	(array)$array_var	et array med felter med adressen. Se felterne i init funktionen: $this->fields
-     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme på en old_address.
+     * $return	(int)	Returnere 1 hvis arrayet er gemt, 0 hvis det ikke er. Man kan ikke gemme pï¿½ en old_address.
      */
     function update($array_var) {
         if ($this->old_address_id != 0) {
@@ -210,7 +210,7 @@ class NewAddress extends Intraface_Standard {
             $this->save($array_var);
         }
         elseif ($this->id == 0) {
-            trigger_error("Id kan ikke være 0 når du forsøger at gemme adresse", FATAL);
+            throw new Exception("Id kan ikke vï¿½re 0 nï¿½r du forsï¿½ger at gemme adresse", FATAL);
         }
         else {
             for ($i = 0, $max = count($this->fields), $sql = ''; $i<$max; $i++) {
