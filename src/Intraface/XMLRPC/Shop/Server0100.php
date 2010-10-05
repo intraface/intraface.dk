@@ -704,7 +704,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $this->_factoryWebshop($shop_id);
 
         $module = $this->kernel->useModule('filemanager');
-        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        require_once 'Intraface/modules/filemanager/AppendFile.php';
 
         $pictures = array();
 

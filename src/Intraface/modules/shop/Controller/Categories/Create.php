@@ -1,5 +1,5 @@
 <?php
-class Intraface_modules_shop_Controller_Categories_Edit extends k_Component
+class Intraface_modules_shop_Controller_Categories_Create extends k_Component
 {
     protected $template;
 

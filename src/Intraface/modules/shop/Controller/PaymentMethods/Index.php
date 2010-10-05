@@ -8,11 +8,6 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Component
         $this->template = $template;
     }
 
-    function getShopId()
-    {
-        return $this->context->name();
-    }
-
     function renderHtml()
     {
         $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->find($this->getShopId());
@@ -29,25 +24,6 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Component
         $data = array('shop' => $shop, 'methods' => $methods, 'chosen' => $chosen);
         $tpl = $this->template->create(dirname(__FILE__) . '/../tpl/paymentmethods-index');
         return $tpl->render($this, $data);
-    }
-
-    function getPaymentMethodsForShop()
-    {
-        $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
-        $m = array();
-        foreach ($methods as $method) {
-            $m[$method->getPaymentMethodKey()]['id'] = $method->getId();
-            $m[$method->getPaymentMethodKey()]['text'] = $method->getText();
-        }
-        return $m;
-    }
-
-    function flushPaymentMethods()
-    {
-        $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
-        foreach ($methods as $method) {
-            $method->delete();
-        }
     }
 
     function postForm()
@@ -79,5 +55,29 @@ class Intraface_modules_shop_Controller_PaymentMethods_Index extends k_Component
         }
 
         return new k_SeeOther($this->url());
+    }
+
+    function getPaymentMethodsForShop()
+    {
+        $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
+        $m = array();
+        foreach ($methods as $method) {
+            $m[$method->getPaymentMethodKey()]['id'] = $method->getId();
+            $m[$method->getPaymentMethodKey()]['text'] = $method->getText();
+        }
+        return $m;
+    }
+
+    function flushPaymentMethods()
+    {
+        $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($this->getShopId());
+        foreach ($methods as $method) {
+            $method->delete();
+        }
+    }
+
+    function getShopId()
+    {
+        return $this->context->name();
     }
 }
