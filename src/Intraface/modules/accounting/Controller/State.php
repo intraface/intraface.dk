@@ -10,9 +10,9 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function renderHtml()
     {
-        if (!empty($_GET['message']) AND in_array($_GET['message'], array('hide'))) {
+        if (in_array($this->query('message'), array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.state.message', 'hide');
-        } elseif (!empty($_GET['message2']) AND in_array($_GET['message2'], array('hide'))) {
+        } elseif (in_array($this->query('message2'), array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.state.message2', 'hide');
         }
 
@@ -63,21 +63,6 @@ class Intraface_modules_accounting_Controller_State extends k_Component
         require_once dirname(__FILE__) . '/../Voucher.php';
         return new Voucher($this->getYear());
     }
-    /*
-    function getValues()
-    {
-        $values['voucher_number'] = $this->getVoucher()->getMaxNumber() + 1;
-        $values['date'] = date('d-m-Y');
-        $values['debet_account_number'] = '';
-        $values['credit_account_number'] = '';
-        $values['amount'] = '';
-        $values['text'] = '';
-        $values['reference'] = '';
-        $values['id'] = '';
-
-    	return $values;
-    }
-    */
 
     function getAccount()
     {
