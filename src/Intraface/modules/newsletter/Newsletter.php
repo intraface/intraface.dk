@@ -33,7 +33,7 @@ class Newsletter extends Intraface_Standard
     public function __construct($list, $id = 0)
     {
         if (!is_object($list)) {
-            trigger_error('newsletter wants a list', E_USER_ERROR);
+            throw new Exception('newsletter wants a list');
         }
         $this->list  = $list;
         $this->id    = $id;
@@ -62,7 +62,7 @@ class Newsletter extends Intraface_Standard
             $letter = new Newsletter($list, $id);
             return $letter;
         }
-        trigger_error('Ugyldigt id', E_USER_ERROR);
+        throw new Exception('Ugyldigt id');
         return false;
         */
         $gateway = new Intraface_modules_newsletter_NewsletterGateway($kernel);

@@ -11,8 +11,6 @@
  * @version  @package-version@
  */
 
-define('INTRAFACE_K2', true);
-
 /**
  * Main XMLRPC server class to extend all other Serves from
  *

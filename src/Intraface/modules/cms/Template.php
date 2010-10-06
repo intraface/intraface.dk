@@ -2,19 +2,19 @@
 /**
  * Template
  *
- * Denne klasse skal være en skabelon for den enkelte side. Skabelonen skal
+ * Denne klasse skal vï¿½re en skabelon for den enkelte side. Skabelonen skal
  * indeholde oplysninger om, hvilke sektioner.
  *
- * I praksis betyder det, at man opretter en skabelon. Når man har oprettet
- * skabelonen vælger man hvilke sektioner, der skal være i skabelonen. Når man
- * har oprettet nogle felter, kan man vælge, hvilke elementer, der er mulige
+ * I praksis betyder det, at man opretter en skabelon. Nï¿½r man har oprettet
+ * skabelonen vï¿½lger man hvilke sektioner, der skal vï¿½re i skabelonen. Nï¿½r man
+ * har oprettet nogle felter, kan man vï¿½lge, hvilke elementer, der er mulige
  * i de enkelte felter. Det kan formentlig gemmes med serialize(array()).
  *
- * Der skal være en standardskabelon med en sektion - og htmlelementet.
+ * Der skal vï¿½re en standardskabelon med en sektion - og htmlelementet.
  *
- * På den enkelte skabelon skal der være mulighed for at tilføje ekstra datafelter,
- * som måske kan knyttes med andre sider
- * til den enkelte side (dette kunne for øvrigt være en generel klasse).
+ * Pï¿½ den enkelte skabelon skal der vï¿½re mulighed for at tilfï¿½je ekstra datafelter,
+ * som mï¿½ske kan knyttes med andre sider
+ * til den enkelte side (dette kunne for ï¿½vrigt vï¿½re en generel klasse).
  *
  * @package Intraface_CMS
  * @author   Lars Olesen <lars@legestue.net>
@@ -34,7 +34,7 @@ class CMS_Template extends Intraface_Standard
     function __construct($cmssite, $id = 0)
     {
         if (!is_object($cmssite)) {
-            trigger_error('CMS_Template::__construct need CMS_Site', E_USER_ERROR);
+            throw new Exception('CMS_Template::__construct need CMS_Site');
         }
         $this->cmssite = $cmssite;
         $this->kernel = $cmssite->kernel;
@@ -71,7 +71,7 @@ class CMS_Template extends Intraface_Standard
                 return new CMS_Template($cmssite, $id);
             break;
             default:
-                trigger_error('CMS_Template::factory: duer ikke');
+                throw new Exception('CMS_Template::factory: duer ikke');
             break;
         }
     }

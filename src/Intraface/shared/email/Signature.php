@@ -27,15 +27,15 @@ class Intraface_shared_email_Signature
      */
     public function __construct($user, $intranet, $setting)
     {
-        if(!is_object($user)) {
+        if (!is_object($user)) {
             throw new Exception('First parameter must be object Intraface_User');
         }
         
-        if(!is_object($setting)) {
+        if (!is_object($setting)) {
             throw new Exception('Second parameter must be object Intraface_Intranet');
         }
         
-        if(!is_object($setting)) {
+        if (!is_object($setting)) {
             throw new Exception('Third parameter must be object Intraface_Setting');
         }
         

@@ -36,10 +36,10 @@
     $keyword = $filemanager->getKeywordAppender();
     $keywords = $keyword->getUsedKeywords();
 
-    if(count($keywords) > 0) {
+    if (count($keywords) > 0) {
         echo '<div>Nøgleord: <ul style="display: inline;">';
       foreach ($keywords AS $value) {
-            if(in_array($value['id'], $selected_keywords) === true) {
+            if (in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
                 }
                 else {

@@ -128,8 +128,8 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
 
         $currencies = $gateway->findAllWithExchangeRate();
 
-        foreach($currencies AS $currency) {
-            if($currency->getType()->getIsoCode() == 'EUR') {
+        foreach ($currencies AS $currency) {
+            if ($currency->getType()->getIsoCode() == 'EUR') {
                 $rate = $currency->getProductPriceExchangeRate(0);
                 $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
             }

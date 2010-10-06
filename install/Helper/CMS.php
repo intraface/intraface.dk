@@ -38,7 +38,7 @@ class Install_Helper_CMS {
         require_once 'Intraface/modules/cms/Site.php';
         $site = new CMS_Site($this->kernel);
         $site_id = $site->save(array('name' => 'Test', 'url' => 'http://localhost/'));
-        if(!$site_id) {
+        if (!$site_id) {
             throw new Exception('Error: '.implode(', ', $site->error->getMessage()));
         }
         

@@ -244,7 +244,7 @@ class NewsletterSubscriber extends Intraface_Standard
         } else {
             $gateway = new Intraface_modules_contact_ContactGateway($this->list->kernel, new DB_Sql);
             $contacts = $gateway->findByEmail($input['email']);
-            if(count($contacts) > 0) {
+            if (count($contacts) > 0) {
                 $contact = $contacts[0];
             } else {
                 require_once 'Intraface/modules/contact/Contact.php';

@@ -135,7 +135,7 @@ class Intraface_modules_modulepackage_Action
      */
     public function getOrderIdentifier()
     {
-        if(isset($this->order_identifier)) {
+        if (isset($this->order_identifier)) {
             return $this->order_identifier;
         }
         return '';
@@ -162,7 +162,7 @@ class Intraface_modules_modulepackage_Action
     {
 
         if (!is_object($intranet)) {
-            trigger_error("First parameter for Intraface_modules_modulepackage_Action->execute needs to be an intranet object", E_USER_ERROR);
+            throw new Exception("First parameter for Intraface_modules_modulepackage_Action->execute needs to be an intranet object");
             exit;
         }
 
@@ -170,12 +170,12 @@ class Intraface_modules_modulepackage_Action
             if ($action['action'] == 'add') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet);
                 if (!$manager->save($action['module_package_id'], date('d-m-Y', strtotime($action['start_date'])), $action['end_date'])) {
-                    trigger_error('There was an error adding the module package '.$action['module_package_id'], E_USER_NOTICE);
+                    throw new Exception('There was an error adding the module package '.$action['module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when adding your module package");
                 }
                 if ($this->getOrderIdentifier() != 0) {
                     if (!$manager->addOrderIdentifier($this->getOrderIdentifier())) {
-                        trigger_error('There was an error adding the order '.$this->getOrderId().' to the intranet module package '.$action['module_package_id'], E_USER_NOTICE);
+                        throw new Exception('There was an error adding the order '.$this->getOrderId().' to the intranet module package '.$action['module_package_id'], E_USER_NOTICE);
                     }
                 }
 
@@ -183,7 +183,7 @@ class Intraface_modules_modulepackage_Action
             elseif ($action['action'] == 'terminate') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
                 if (!$manager->terminate()) {
-                    trigger_error('There was an error terminating the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
+                    throw new Exception('There was an error terminating the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");
 
                 }
@@ -191,7 +191,7 @@ class Intraface_modules_modulepackage_Action
             elseif ($action['action'] == 'delete') {
                 $manager = new Intraface_modules_modulepackage_Manager($intranet, (int)$action['intranet_module_package_id']);
                 if (!$manager->delete()) {
-                    trigger_error('There was an error deleting the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
+                    throw new Exception('There was an error deleting the intranet module package '.$action['intranet_module_package_id'], E_USER_NOTICE);
                     $this->error->set("an error appeared when removing your old modulepackage. we have been noticed.");
                 }
             }

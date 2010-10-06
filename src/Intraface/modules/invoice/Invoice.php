@@ -91,7 +91,7 @@ class Invoice extends Debtor
         }
 
         if (!in_array($check_products, array('check_products', 'skip_check_products'))) {
-            trigger_error('Second paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"', E_USER_ERROR);
+            throw new Exception('Second paramenter in Invice->readyForState should be either "check_products" or "skip_check_products"');
             return false;
         }
 

@@ -19,7 +19,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
         $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
         if ($modulepackage->get('id') == 0) {
-            trigger_error("Invalid id", E_USER_ERROR);
+            throw new Exception("Invalid id");
             exit;
         }
 
@@ -76,7 +76,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                         $action = $modulepackagemanager->upgrade($modulepackage, (int)$_POST['duration_month'].' month');
                         break;
                     default:
-                        trigger_error('Invalid add_type "'.$add_type.'"', E_USER_ERROR);
+                        throw new Exception('Invalid add_type "'.$add_type.'"');
                         exit;
                 }
 
@@ -116,7 +116,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                     $action->setIntranetPrivateKey($this->getKernel()->intranet->get('private_key'));
 
                     if (!$action_store_identifier = $action_store->store($action)) {
-                        trigger_error("Unable to store Action!", E_USER_ERROR);
+                        throw new Exception("Unable to store Action!");
                         exit;
                     }
 
@@ -128,7 +128,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                     } elseif (!empty($action_store_identifier)) {
                         return new k_SeeOther($this->url('../../process', array('action_store_identifier' => $action_store_identifier)));
                     } else {
-                        trigger_error('We did not end up having an action store id!', E_USER_ERROR);
+                        throw new Exception('We did not end up having an action store id!');
                         exit;
                     }
                 }

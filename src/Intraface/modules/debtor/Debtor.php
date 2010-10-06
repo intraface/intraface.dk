@@ -87,7 +87,7 @@ class Debtor extends Intraface_Standard
         $this->type = $type;
         $this->type_key = array_search($type, self::getDebtorTypes());
         if (!isset($this->type_key)) {
-            trigger_error('Debtor: Ugyldig type', E_USER_ERROR);
+            throw new Exception('Debtor: Ugyldig type');
         }
 
         // Her s�tter vi lige type selvom den ikke er loaded, da man nogle
@@ -155,7 +155,7 @@ class Debtor extends Intraface_Standard
             if ($db->nextRecord()) {
                 $type = $types[$db->f("type")];
             } else {
-                trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid id for debtor in Debtor::factory");
             }
         } elseif (is_string($id) && $id != '') {
             $types = self::getDebtorTypes();
@@ -166,7 +166,7 @@ class Debtor extends Intraface_Standard
                 $type = $types[$db->f("type")];
                 $id = $db->f("id");
             } else {
-                trigger_error("Invalid identifier_key for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid identifier_key for debtor in Debtor::factory");
             }
         }
 
@@ -193,7 +193,7 @@ class Debtor extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Ugyldig type: '".$type."'", E_USER_ERROR);
+                throw new Exception("Ugyldig type: '".$type."'");
                 break;
         }
 
@@ -338,11 +338,11 @@ class Debtor extends Intraface_Standard
     public function validate($input)
     {
         if (!is_array($input)) {
-            trigger_error('Debtor->update(): $input er ikke et array', E_USER_ERROR);
+            throw new Exception('Debtor->update(): $input er ikke et array');
         }
 
         if ($this->get('locked') == true) {
-            $this->error->set('Posten er l�st og kan ikke opdateres');
+            $this->error->set('This is locked and cannot be updated');
             return 0;
         }
 
@@ -624,7 +624,7 @@ class Debtor extends Intraface_Standard
         if (is_string($status)) {
             $status_id = array_search($status, $this->getStatusTypes());
             if ($status_id === false) {
-                trigger_error("Debtor->setStatus(): Ugyldig status (streng)", E_USER_ERROR);
+                throw new Exception("Debtor->setStatus(): Ugyldig status (streng)");
             }
         } else{
             $status_id = intval($status);
@@ -632,16 +632,16 @@ class Debtor extends Intraface_Standard
             if (isset($status_types[$status_id])) {
                 $status = $status_types[$status];
             } else {
-                trigger_error("Debtor->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
+                throw new Exception("Debtor->setStatus(): Ugyldig status (integer)");
             }
         }
 
         if ($status_id == $this->get("status_id")) {
-            trigger_error("Du kan ikke sætte status til samme som den er i forvejen", E_USER_ERROR);
+            throw new Exception("Du kan ikke sætte status til samme som den er i forvejen");
         }
         if (($this->get("type") != "invoice" && $status_id < $this->get("status_id")) || ($this->get("type") == "invoice" && $this->get("status") != "executed" && $status_id < $this->get("status_id"))) {
             // Man kan godt gå fra executed til sent, hvis f.eks. en betalt faktura bliver efterfølgende bliver krediteret
-            trigger_error("Du kan ikke sætte status lavere end den er i forvejen", E_USER_ERROR);
+            throw new Exception("Du kan ikke sætte status lavere end den er i forvejen");
         }
 
         switch ($status) {
@@ -658,7 +658,7 @@ class Debtor extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Dette kan ikke lade sig gøre! Debtor->setStatus()", E_USER_ERROR);
+                throw new Exception("Dette kan ikke lade sig gøre! Debtor->setStatus()");
         }
 
         $db = new Db_Sql;
@@ -681,7 +681,7 @@ class Debtor extends Intraface_Standard
     {
         $from = array_search($from, $this->getFromTypes());
         if ($from === false) {
-            trigger_error('Debtor->setFrom(): Ugyldig from', E_USER_ERROR);
+            throw new Exception('Debtor->setFrom(): Ugyldig from');
         }
         $from_id = (int)$from_id;
 
@@ -757,7 +757,7 @@ class Debtor extends Intraface_Standard
                         AND debtor_item.product_variation_id = ".(int)$variation_id;
             break;
             default:
-                trigger_error("Ugyldg type i Debtor->any", E_USER_ERROR);
+                throw new Exception("Ugyldg type i Debtor->any");
         }
 
         $db = new DB_Sql;
@@ -864,7 +864,7 @@ class Debtor extends Intraface_Standard
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
                 if ($this->get("type") != "invoice") {
-                    trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
+                    throw new Exception("Afskrevne kan kun benyttes ved faktura");
                 }
 
                 $this->dbquery->setJoin("INNER", "invoice_payment", "invoice_payment.payment_for_id = debtor.id", "invoice_payment.intranet_id = ".$this->kernel->intranet->get("id")." AND invoice_payment.payment_for = 1");

@@ -75,14 +75,14 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
             $filehandler = new FileHandler($this->cmspage->kernel);
             $filehandler->loadUpload();
             if (!$id = $filehandler->upload->upload('userfile['.$this->get('id').']')) {
-                trigger_error('Kunne ikke uploade filen');
+                throw new Exception('Kunne ikke uploade filen');
             }
             $var['pic_id'] = $id;
             if ($this->cmspage->kernel->user->hasModuleAccess('filemanager')) {
                 $this->cmspage->kernel->useModule('filemanager');
                 $filemanager = new FileManager($this->cmspage->kernel, $var['pic_id']);
                 if (!$filemanager->update(array('description' => $var['pic_text']))) {
-                    trigger_error('Filemanager kunne ikke gemme teksten.');
+                    throw new Exception('Filemanager kunne ikke gemme teksten.');
                 }
             }
 

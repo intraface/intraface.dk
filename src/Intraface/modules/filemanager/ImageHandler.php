@@ -1,6 +1,6 @@
 <?php
  /**
-  * Image handler. Klarer håndtering af billeder.
+  * Image handler. Klarer hï¿½ndtering af billeder.
   *
   * @package Intraface
   * @author: Sune
@@ -19,7 +19,7 @@ class ImageHandler extends Intraface_Standard
      * @var integer
      */
     private $image_library;
-    
+
     /**
      * @var string tmp_file_name
      */
@@ -35,14 +35,14 @@ class ImageHandler extends Intraface_Standard
     public function __construct($file_handler)
     {
         if (!is_object($file_handler)) {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)", E_USER_ERROR);
+            throw new Exception("InstanceHandler krÃ¦ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)");
         }
 
         if (strtolower(get_class($file_handler)) == 'filehandler' || strtolower(get_class($file_handler)) == 'filemanager') {
-            // HJÆLP MIG, jeg kan ikke vende denne if-sætning rigtigt.
+            // TODO: HJï¿½LP MIG, jeg kan ikke vende denne if-sï¿½tning rigtigt.
             // Men her er det ok.
         } else {
-            trigger_error("InstanceHandler kræver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (2)", E_USER_ERROR);
+            throw new Exception("InstanceHandler krÃ¦ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (2)");
         }
 
         $this->file_handler = $file_handler;
@@ -50,21 +50,20 @@ class ImageHandler extends Intraface_Standard
         if (!defined('IMAGE_LIBRARY')) {
             define('IMAGE_LIBRARY', 'GD');
         }
-        
+
         $this->image_library = IMAGE_LIBRARY;
 
         if ($this->file_handler->get('is_image') != 1) {
-            trigger_error("Filtypen " . $file_handler->get('mime_type') . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler", E_USER_ERROR);
+            throw new Exception("Filtypen " . $file_handler->get('mime_type') . " er ikke et billede, og kan derfor ikke manipuleres i ImageHandler");
         }
 
         $this->tempdir_path = $this->file_handler->getTemporaryDirectory();
 
         if (!is_dir($this->tempdir_path)) {
             if (!mkdir($this->tempdir_path, 0755)) {
-                trigger_error('Kunne ikke oprette workdir '.$this->tempdir_path.'i ImageHandler->imageHandler', E_USER_ERROR);
+                throw new Exception('Kunne ikke oprette workdir '.$this->tempdir_path.'i ImageHandler->imageHandler');
             }
         }
-
     }
 
     /**
@@ -81,8 +80,7 @@ class ImageHandler extends Intraface_Standard
 
         $image = Image_Transform::factory($this->image_library);
         if (PEAR::isError($image)) {
-            trigger_error($image->getMessage() . $image->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw new Exception($image->getMessage() . $image->getUserInfo());
         }
 
         if ($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
@@ -91,16 +89,17 @@ class ImageHandler extends Intraface_Standard
         else {
             $error = $image->load($this->file_handler->get('file_path'));
         }
-        
+
 
         $image->setOption('quality', 95);
 
         if ($error !== true) {
-            trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
-            return false;
+            throw new Exception("Kunne ikke Ã¥bne fil i ImageHandler->resize. ".$error->getMessage());
         }
 
-        if (!in_array($strict, array('relative', 'strict'))) trigger_error("Den tredje parameter i ImageHandle->resize er ikke 'strict' eller 'relative'.", E_USER_ERROR);
+        if (!in_array($strict, array('relative', 'strict'))) {
+            throw new Exception("Den tredje parameter i ImageHandle->resize er ikke 'strict' eller 'relative'.");
+        }
 
         // die($image->img_x.':'.$image->img_y.':'.$width.':'.$height);
         if ($strict == 'strict') {
@@ -118,14 +117,12 @@ class ImageHandler extends Intraface_Standard
 
             // die($image->new_x.':'.$image->new_y.':'.$width.':'.$height.': '.$offset_x.': '.$offset_y);
             if ($image->crop($width, $height, $offset_x, $offset_y) !== true){
-                trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->resize", E_USER_ERROR);
-                return false;
+                throw new Exception("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->resize");
             }
         } else {
 
             if ($image->fit($width, $height) !== true) {
-                trigger_error("Der opstod en fejl under formatering (fit) af billedet i ImageHandler->resize", E_USER_ERROR);
-                return false;
+                throw new Exception("Der opstod en fejl under formatering (fit) af billedet i ImageHandler->resize");
             }
         }
 
@@ -134,10 +131,9 @@ class ImageHandler extends Intraface_Standard
         // $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
         if ($image->save($new_file->getFilePath()) !== true) {
-            trigger_error("Kunne ikke gemme billedet i ImageHandler->resize", E_USER_ERROR);
-            return false;
+            throw new Exception("Kunne ikke gemme billedet i ImageHandler->resize");
         }
-        
+
         $this->tmp_file_name = $new_file->getFilePath();
         return $new_file->getFilePath();
     }
@@ -151,13 +147,12 @@ class ImageHandler extends Intraface_Standard
      * @param float $offset_y offset y
      *
      * @return string new file name
-     */    
-    function crop($width, $height, $offset_x = 0, $offset_y = 0) 
+     */
+    function crop($width, $height, $offset_x = 0, $offset_y = 0)
     {
         $image = Image_Transform::factory($this->image_library);
         if (PEAR::isError($image)) {
-            trigger_error($image->getMessage() . $image->getUserInfo(), E_USER_ERROR);
-            exit;
+            throw new Exception($image->getMessage() . $image->getUserInfo());
         }
 
         if ($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
@@ -169,26 +164,24 @@ class ImageHandler extends Intraface_Standard
         $image->setOption('quality', 95);
 
         if ($error !== true) {
-            trigger_error("Kunne ikke åbne fil i ImageHandler->resize. ".$error->getMessage(), E_USER_ERROR);
+            throw new Exception("Kunne ikke Ã¥bne fil i ImageHandler->resize. ".$error->getMessage());
         }
 
         $result = $image->crop($width, $height, $offset_x, $offset_y);
 
         if (PEAR::isError($result)) {
-            trigger_error("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->crop: " . $result->getMessage(), E_USER_ERROR);
-            return false;
+            throw new Exception("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->crop: " . $result->getMessage());
         }
-        
+
         $file_type = $this->file_handler->get('file_type');
-        
+
         $new_file = $this->file_handler->createTemporaryFile($this->file_handler->get('server_file_name'));
         // $new_filename = $this->tempdir_path.date('U').$this->file_handler->kernel->randomKey(10).'.'.$file_type['extension'];
 
         if ($image->save($new_file->getFilePath()) !== true) {
-            trigger_error("Kunne ikke gemme billedet i ImageHandler->crop", E_USER_ERROR);
-            return false;
+            throw new Exception("Kunne ikke gemme billedet i ImageHandler->crop");
         }
-        
+
         $this->tmp_file_name = $new_file->getFilePath();
         return $new_file->getFilePath();
     }

@@ -41,7 +41,7 @@ class CMS_Parameter
     public function __construct($object)
     {
         if (!is_object($object)) {
-            trigger_error('CMS_Parameter::__construct needs an object', E_USER_ERROR);
+            throw new Exception('CMS_Parameter::__construct needs an object');
         }
 
         $this->object = $object;
@@ -58,7 +58,7 @@ class CMS_Parameter
             break;
 
             default:
-                trigger_error('CMS_Parameter::__construct unknown type', E_USER_ERROR);
+                throw new Exception('CMS_Parameter::__construct unknown type');
             break;
         }
 
@@ -79,7 +79,7 @@ class CMS_Parameter
     public function save($parameter, $value)
     {
         if ($this->object->get('id') == 0) {
-            trigger_error('Parameter::save() object cannot be 0 - problems in ' . get_class($this->object), E_USER_ERROR);
+            throw new Exception('Parameter::save() object cannot be 0 - problems in ' . get_class($this->object));
         }
 
         # mangler noget validering - skal sikkert kunne s�ttes fra elementet?
@@ -114,7 +114,7 @@ class CMS_Parameter
     private function load()
     {
         if ($this->object->get('id') == 0) {
-            trigger_error('Parameter::save() object cannot be 0 - problems with ' . get_class($this->object));
+            throw new Exception('Parameter::save() object cannot be 0 - problems with ' . get_class($this->object));
         }
 
         $db = new DB_Sql;

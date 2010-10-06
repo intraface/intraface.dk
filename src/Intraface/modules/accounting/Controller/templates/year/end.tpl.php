@@ -328,7 +328,7 @@ switch($context->getYearEnd()->get('step') + 1):
 		<?php
 	break;
 	default:
-		trigger_error('Ugyldigt trin');
+		throw new Exception('Ugyldigt trin');
 	break;
 
 endswitch;

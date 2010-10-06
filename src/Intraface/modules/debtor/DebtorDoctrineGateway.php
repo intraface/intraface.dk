@@ -177,7 +177,7 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
                 if ($this->get("type") != "invoice") {
-                    trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
+                    throw new Exception("Afskrevne kan kun benyttes ved faktura");
                 }
                 die('functionality not implemented yet! contact Intraface');
 

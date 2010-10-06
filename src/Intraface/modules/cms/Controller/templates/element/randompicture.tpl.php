@@ -14,7 +14,7 @@
         if (count($keywords) > 0) {
             echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
             foreach ($keywords as $keyword_value) {
-                if(in_array($keyword_value['keyword'], $selected_keywords) === true) {
+                if (in_array($keyword_value['keyword'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
                 } else {
                     $checked = "";

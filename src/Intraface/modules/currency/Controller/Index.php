@@ -52,16 +52,10 @@ class Intraface_modules_currency_Controller_Index extends k_Component
         return $this->wrap(parent::execute());
     }
 
-    function document()
-    {
-        return $this->document;
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();
     }
-
 
     public function getTranslation()
     {

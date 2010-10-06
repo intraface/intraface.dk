@@ -16,7 +16,7 @@
 	<script defer type="text/javascript" src="<?php e(url('/javascript/pngfix.js')); ?>"></script>
 	<![endif]-->
 
-	<?php foreach($context->document()->scripts() as $url): ?>
+	<?php foreach ($context->document()->scripts() as $url): ?>
 	<script type="text/javascript" src="<?php e(url('/javascript/' . $url)); ?>"></script>
 	<?php endforeach; ?>
 

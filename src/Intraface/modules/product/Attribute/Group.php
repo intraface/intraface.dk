@@ -63,7 +63,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
             ->addWhere('intranet_id = ?', $this->intranet_id)
             ->execute();
         
-        if(!$result) {
+        if (!$result) {
             throw new Exception('Error deleting group '.$this->getId());
         }
         

@@ -26,7 +26,7 @@ $level = 0;
             <tr>
                 <td><input id="category_<?php e($category['id']); ?>" type="checkbox" name="category[]" value="<?php e($category['id']); ?>" /></td>
                 <td><?php e(str_repeat('- ', $level)); ?><a href="<?php e(url($category['id'])); ?>"><?php e($category['name']); ?></a></td>
-                <td><a href="<?php e(url($category['id'] . '/edit')); ?>"><?php e(t('Edit')); ?></a></td>
+                <td><a href="<?php e(url($category['id'], array('edit'))); ?>"><?php e(t('Edit')); ?></a></td>
             </tr>
             <?php
             # If there is subcategories to the category

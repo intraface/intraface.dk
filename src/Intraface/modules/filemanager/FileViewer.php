@@ -40,8 +40,7 @@ class FileViewer {
     public function __construct($filehandler, $instance = '') {
 
         if (!is_object($filehandler)) {
-            trigger_error('the first parameter needs to be filehandler in FileViewet->__construct', E_USER_ERROR);
-            exit;
+            throw new Exception('the first parameter needs to be filehandler in FileViewet->__construct');
         }
 
         $this->filehandler = $filehandler;

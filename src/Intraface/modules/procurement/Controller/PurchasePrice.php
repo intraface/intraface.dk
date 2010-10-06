@@ -12,9 +12,8 @@ class Intraface_modules_procurement_Controller_PurchasePrice extends k_Component
     {
         $this->getKernel()->module("procurement");
         $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        $procurement = new Procurement($this->getKernel(), $this->context->name());
+        $procurement = $this->context->getProcurement();
 
         $data = array(
     		'items' => $procurement->getItems(),
@@ -23,16 +22,14 @@ class Intraface_modules_procurement_Controller_PurchasePrice extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/purchaseprice');
         return $tpl->render($this, $data);
-
     }
 
     function postForm()
     {
         $this->getKernel()->module("procurement");
         $product_module = $this->getKernel()->useModule('product');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
-        $procurement = new Procurement($this->getKernel(), intval($_POST["id"]));
+        $procurement = $this->context->getProcurement();
 
         foreach ($_POST['items'] AS $item) {
             $procurement->loadItem($item['id']);
@@ -51,4 +48,3 @@ class Intraface_modules_procurement_Controller_PurchasePrice extends k_Component
         return $this->context->getKernel();
     }
 }
-

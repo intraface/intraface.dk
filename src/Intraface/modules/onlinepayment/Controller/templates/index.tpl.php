@@ -100,9 +100,9 @@
 				</td>
 				<td class="amount">
                     <?php
-                    if($payment['currency'] && is_object($payment['currency'])) {
+                    if ($payment['currency'] && is_object($payment['currency'])) {
                         e($payment['currency']->getType()->getIsoCode().' ');
-                    } elseif($kernel->intranet->hasModuleAccess('currency')) {
+                    } elseif ($kernel->intranet->hasModuleAccess('currency')) {
                         e('DKK ');
                     }
 

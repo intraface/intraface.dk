@@ -177,7 +177,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php endif; ?>
             <ul class="options">
                 <li><a href="<?php e(url('variations', array('edit'))); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
-				<?php if($context->getKernel()->user->hasModuleAccess('stock')): ?>
+				<?php if ($context->getKernel()->user->hasModuleAccess('stock')): ?>
                 <li><a href="<?php e(url('variations/stock')); ?>"><?php e(t('Edit stock for variations')); ?></a></li>
 				<?php endif; ?>
             </ul>

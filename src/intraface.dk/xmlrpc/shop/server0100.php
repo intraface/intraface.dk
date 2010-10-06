@@ -3,7 +3,7 @@ require_once '../../common.php';
 
 $HTTP_RAW_POST_DATA = file_get_contents('php://input');
 
-if(isset($_GET['backend']) && $_GET['backend'] == 'xmlrpcext') {
+if (isset($_GET['backend']) && $_GET['backend'] == 'xmlrpcext') {
     $encoding = 'iso-8859-1';
     $options = array(
         'prefix' => 'shop.',

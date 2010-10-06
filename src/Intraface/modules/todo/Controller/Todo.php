@@ -3,10 +3,12 @@
 class Intraface_modules_todo_Controller_Todo extends k_Component
 {
     protected $template;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
         $this->template = $template;
+        $this->mdb2 = $mdb2;
     }
 
     function map($name)
@@ -29,10 +31,10 @@ class Intraface_modules_todo_Controller_Todo extends k_Component
             $todo->getItem($_GET['item_id'])->delete();
             return new k_SeeOther($this->url());
         } elseif (isset($_GET['action']) && $_GET['action'] == "moveup") {
-            $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveUp();
+            $todo->getItem($_GET['item_id'])->getPosition($this->mdb2)->moveUp();
             return new k_SeeOther($this->url());
         } elseif (isset($_GET['action']) && $_GET['action'] == "movedown") {
-            $todo->getItem($_GET['item_id'])->getPosition(MDB2::singleton(DB_DSN))->moveDown();
+            $todo->getItem($_GET['item_id'])->getPosition($this->mdb2)->moveDown();
             return new k_SeeOther($this->url());
         }
 

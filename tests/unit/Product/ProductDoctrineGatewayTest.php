@@ -25,7 +25,7 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
 
     function createProductObject($id = 0)
     {
-        if($id != 0) {
+        if ($id != 0) {
             $this->connection->clear(); // clear repo, so that we are sure data are loaded again.
             $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->connection, NULL);
             return $gateway->findById($id);
@@ -50,7 +50,7 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
     {
         $group = new Intraface_modules_product_Attribute_Group;
         $group->name = $group_name;
-        foreach($attributes AS $attribute) {
+        foreach ($attributes AS $attribute) {
             $group->attribute[0]->name = $attribute;
         }
         $group->save();

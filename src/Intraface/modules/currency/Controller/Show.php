@@ -1,9 +1,11 @@
 <?php
 class Intraface_modules_currency_Controller_Show extends k_Component
 {
-    function renderHtml()
+    protected $doctrine;
+
+    function __construct(Doctrine_Connection_Common $doctrine)
     {
-        return 'No content';
+        $this->doctrine = $doctrine;
     }
 
     function map($name)
@@ -11,6 +13,11 @@ class Intraface_modules_currency_Controller_Show extends k_Component
         if ($name == 'exchangerate') {
             return 'Intraface_modules_currency_Controller_ExchangeRate_Index';
         }
+    }
+
+    function renderHtml()
+    {
+        return 'No content';
     }
 
     /**
@@ -25,7 +32,7 @@ class Intraface_modules_currency_Controller_Show extends k_Component
 
     public function getCurrency()
     {
-        $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+        $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
         $currency = $gateway->findById($this->name());
         if ($currency === false) {
             throw new Exception('Invalid currency '.$this->name());

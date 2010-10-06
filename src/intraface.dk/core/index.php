@@ -1,6 +1,4 @@
 <?php
-define('INTRAFACE_K2', true);
-
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . '/../config.local.php';
 
 if (!file_exists($config_file)) {
@@ -193,13 +191,13 @@ class k_Translation2Translator implements k_Translator
         $factory = new Intraface_Factory;
         $cache = $factory->new_Translation2_Cache();
 
-        if($page_id == NULL) {
+        if ($page_id == NULL) {
             $cache_key = 'common';
         } else {
             $cache_key = $page_id;
         }
 
-        if($data = $cache->get($cache_key, 'translation-'.$lang)) {
+        if ($data = $cache->get($cache_key, 'translation-'.$lang)) {
             $this->page = unserialize($data);
         } else {
             $translation2 = $factory->new_Translation2();
@@ -209,7 +207,7 @@ class k_Translation2Translator implements k_Translator
             }
 
             $this->page = $translation2->getPage('common');
-            if($page_id != NULL) {
+            if ($page_id != NULL) {
                 $this->page = array_merge($this->page, $translation2->getPage($page_id));
             }
 
@@ -238,7 +236,7 @@ class k_Translation2Translator implements k_Translator
         return utf8_encode($this->translation2->get($phrase, 'common'));
         */
 
-        if(isset($this->page[$phrase])) {
+        if (isset($this->page[$phrase])) {
             return utf8_encode($this->page[$phrase]);
         }
 
@@ -374,7 +372,7 @@ if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
         $render = new Ilib_Errorhandler_Handler_File(Log::factory('file', ERROR_LOG, 'INTRAFACE'));
         $render->handle($e);
 
-        if(SERVER_STATUS != 'PRODUCTION') {
+        if (SERVER_STATUS != 'PRODUCTION') {
             $render = new Ilib_Errorhandler_Handler_Echo();
             $render->handle($e);
             die;

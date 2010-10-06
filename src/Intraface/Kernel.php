@@ -41,7 +41,7 @@ class Intraface_Kernel implements Intraface_Identity
         }
         $this->db = MDB2:: singleton(DB_DSN);
         if (PEAR::isError($this->db)) {
-            trigger_error($this->db->getMessage() . $this->db->getUserInfo(), E_USER_ERROR);
+            throw new Exception($this->db->getMessage() . $this->db->getUserInfo());
         }
     }
 
@@ -183,7 +183,7 @@ class Intraface_Kernel implements Intraface_Identity
     function getSetting()
     {
         // Very important to store setting, as getSetting is called many times in some scripts
-        if(empty($this->setting)) {
+        if (empty($this->setting)) {
             if (is_object($this->user)) {
                 $user_id = $this->user->getId();
             } else {

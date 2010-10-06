@@ -2,10 +2,12 @@
 class Intraface_Controller_ModuleGatekeeper extends k_Component
 {
     protected $template;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
         $this->template = $template;
+        $this->mdb2 = $mdb2;
     }
 
     function map($name)
@@ -48,7 +50,7 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
     {
         require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        $gateway = new Intraface_ModuleGateway($this->mdb2);
         return $gateway->getList();
     }
 }

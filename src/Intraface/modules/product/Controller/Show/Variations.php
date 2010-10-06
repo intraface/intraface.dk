@@ -37,7 +37,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
     {
         $product = $this->context->getProduct();
         $groups = $product->getAttributeGroups();
-        /*if(count($groups) == 0) {
+        /*if (count($groups) == 0) {
          return new k_TemporaryRedirect($this->url('select_attribute_groups'));
          }*/
 
@@ -57,7 +57,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
     {
         $product = $this->context->getProduct();
         $groups = $product->getAttributeGroups();
-        /*if(count($groups) == 0) {
+        /*if (count($groups) == 0) {
          return new k_TemporaryRedirect($this->url('select_attribute_groups'));
          }*/
 
@@ -86,7 +86,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
         if (!empty($_POST['save']) || !empty($_POST['save_and_close'])) {
 
-            if(isset($_POST['variation']) && is_array($_POST['variation'])) {
+            if (isset($_POST['variation']) && is_array($_POST['variation'])) {
                 foreach ($_POST['variation'] AS $variation_data) {
 
                     if (isset($variation_data['used'])) {

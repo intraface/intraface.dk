@@ -25,7 +25,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
     {
         $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
         if ($this->query('delete')) {
             $appender = $this->getFileAppender();
@@ -163,7 +162,6 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
     {
         $kernel = $this->context->getKernel();
         $module_filemanager = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
         $gateway = new Ilib_Filehandler_Gateway($this->context->getKernel());
         /*
         if (isset($this->POST['ajax'])) {
@@ -232,7 +230,7 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
             $selected = $this->POST['selected'];
 
             $number_of_files = 0;
-            foreach($selected as $id) {
+            foreach ($selected as $id) {
                 $tmp_f = $gateway->getFromId((int)$id);
                 if ($tmp_f->get('id') != 0) {
                     $receive_redirect->setParameter("file_handler_id", $tmp_f->get('id'));

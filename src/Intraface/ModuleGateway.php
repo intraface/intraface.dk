@@ -161,7 +161,7 @@ class Intraface_ModuleGateway
         $i = 0;
         $result = $this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
         if (PEAR::isError($result)) {
-            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query: ".$result->getUserInfo());
             exit;
         }
 

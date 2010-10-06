@@ -190,7 +190,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         if (empty($this->modules)) {
             $result = $this->db->query("SELECT id, name FROM module WHERE active = 1");
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getUserInfo());
             }
 
             while ($row = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
@@ -350,7 +350,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
                 WHERE permission.intranet_id = ".$intranet_id."
                     AND permission.user_id = 0");
             if (PEAR::isError($result)) {
-                trigger_error($result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getUserInfo());
             }
             while ($row = $result->fetchRow()) {
                 $this->permissions['intranet']['module'][$row['id']];
@@ -616,7 +616,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
             ORDER BY address.name");
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getUserInfo());
         }
         return $result->fetchAll();
     }

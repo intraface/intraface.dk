@@ -320,7 +320,7 @@ class Product extends Intraface_Standard
     private function validate($array_var)
     {
         if (!is_array($array_var)) {
-            trigger_error('Product::save() skal have et array', E_USER_ERROR);
+            throw new Exception('Product::save() skal have et array');
         }
 
         $validator = new Intraface_Validator($this->error);
@@ -687,7 +687,7 @@ class Product extends Intraface_Standard
         // r�kkef�lgen er vigtig - f�rst hente fra product og bagefter tilf�je nye v�rdier til arrayet
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
-            if($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
+            if ($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
                 CONTINUE;
             }
             $products[$key]               = $product->get();

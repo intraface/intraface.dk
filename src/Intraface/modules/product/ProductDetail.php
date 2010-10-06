@@ -81,7 +81,7 @@ class ProductDetail extends Intraface_Standard
             AND product_id = " . $this->product->get('id') . ' AND intranet_id = ' . $this->product->intranet->getId();
         $this->db->query($sql);
         if ($this->db->numRows() > 1) {
-            trigger_error('Der er mere end en aktiv produktdetalje', E_USER_ERROR);
+            throw new Exception('Der er mere end en aktiv produktdetalje');
         } elseif ($this->db->nextRecord()) {
             // hardcoded udtr�k af nogle vigtige oplysnigner, som vi ikke kan have i feltlisten
             for ($i = 0, $max = count($this->fields); $i<$max; $i++) {
@@ -96,7 +96,7 @@ class ProductDetail extends Intraface_Standard
 
             $unit = $this->getUnits($this->db->f('unit_key'));
             if (empty($unit)) {
-                trigger_error('invalid unit '.$this->db->f('unit_key').'!', E_USER_ERROR);
+                throw new Exception('invalid unit '.$this->db->f('unit_key').'!');
                 exit;
             }
 
@@ -205,8 +205,8 @@ class ProductDetail extends Intraface_Standard
                 }
             }
 
-            if(isset($array_var['unit'])) {
-                if($array_var['unit'] != $this->get('unit_key')) {
+            if (isset($array_var['unit'])) {
+                if ($array_var['unit'] != $this->get('unit_key')) {
                     $do_update = 1;
                 }
                 $sql .= "unit = '".$array_var['unit']."', ";
@@ -214,16 +214,16 @@ class ProductDetail extends Intraface_Standard
                 $sql .= "unit = '".$this->get('unit_key')."', ";
             }
 
-            if(isset($array_var['name'])) {
-                if($array_var['name'] != $this->get('name')) {
+            if (isset($array_var['name'])) {
+                if ($array_var['name'] != $this->get('name')) {
                     $do_update = 1;
                 }
             } else {
                 $array_var['name'] = $this->get('name');
             }
 
-            if(isset($array_var['description'])) {
-                if($array_var['description'] != $this->get('description')) {
+            if (isset($array_var['description'])) {
+                if ($array_var['description'] != $this->get('description')) {
                     $do_update = 1;
                 }
             } else {
@@ -239,8 +239,8 @@ class ProductDetail extends Intraface_Standard
             if (empty($array_var['unit'])) $array_var['unit'] = 1;
             $sql .= "unit = ".intval($array_var['unit']).", ";
 
-            if(!isset($array_var['name'])) $array_var['name'] = '';
-            if(!isset($array_var['description'])) $array_var['description'] = '';
+            if (!isset($array_var['name'])) $array_var['name'] = '';
+            if (!isset($array_var['description'])) $array_var['description'] = '';
 
             foreach ($this->fields as $field) {
                 if (!array_key_exists($field, $array_var)) {

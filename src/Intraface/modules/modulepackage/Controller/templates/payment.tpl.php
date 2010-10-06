@@ -40,7 +40,7 @@
         );
 
         ?>
-        <form action="<?php if(!strpos($payment_prepare->getAction(), '/')):  e($payment_prepare->getAction().'/'); else: e($payment_prepare->getAction()); endif; ?>" method="POST">
+        <form action="<?php if (!strpos($payment_prepare->getAction(), '/')):  e($payment_prepare->getAction().'/'); else: e($payment_prepare->getAction()); endif; ?>" method="POST">
 
         <?php echo $payment_prepare->getHiddenFields(); ?>
         <input type="hidden" name="action_store_identifier" value="<?php e($action_store->getIdentifier()); ?>" />

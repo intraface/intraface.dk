@@ -73,7 +73,7 @@ class Intraface_modules_debtor_Debtor_Item extends Doctrine_Record
      */
     private function getProductPriceObject()
     {
-        if($this->getProduct()->hasVariation()) {
+        if ($this->getProduct()->hasVariation()) {
             # Make sure we we have loaded the correct details
             $this->getProduct()->getDetails($this->product_detail_id);
             

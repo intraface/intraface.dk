@@ -312,7 +312,7 @@ class Email extends Intraface_Standard
             }
         }
 
-        if($validator->isEmail($contact->address->get('email'))) {
+        if ($validator->isEmail($contact->address->get('email'))) {
             return array($contact->address->get('email') => $contact->address->get('name'));
         }
 

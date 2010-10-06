@@ -53,7 +53,7 @@ switch ($value['type']) {
         include 'element/twitter.tpl.php';
         break;
     default:
-        trigger_error(t('not a valid type'), E_USER_ERROR);
+        throw new Exception(t('not a valid type'));
     break;
 
 }

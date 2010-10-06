@@ -18,7 +18,7 @@ class Demo_Shop_Show extends k_Controller
 
     private function intranetHasOnlinePaymentAccess()
     {
-        if($this->intranet_has_online_payment_access === NULL) {
+        if ($this->intranet_has_online_payment_access === NULL) {
             $this->intranet_has_online_payment_access = $this->registry->get('admin')->hasModuleAccess($this->getCredentials(), 'onlinepayment');
         }
         return $this->intranet_has_online_payment_access;

@@ -105,7 +105,7 @@ class Intraface_modules_debtor_DebtorGateway
             if ($db->nextRecord()) {
                 $type = $types[$db->f("type")];
             } else {
-                trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid id for debtor in Debtor::factory");
             }
         } elseif (is_string($id) && $id != '') {
             $types = self::getDebtorTypes();
@@ -116,7 +116,7 @@ class Intraface_modules_debtor_DebtorGateway
                 $type = $types[$db->f("type")];
                 $id = $db->f("id");
             } else {
-                trigger_error("Invalid identifier_key for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid identifier_key for debtor in Debtor::factory");
             }
         }
 
@@ -143,7 +143,7 @@ class Intraface_modules_debtor_DebtorGateway
                 break;
 
             default:
-                trigger_error("Ugyldig type: '".$type."'", E_USER_ERROR);
+                throw new Exception("Ugyldig type: '".$type."'");
                 break;
         }
 
@@ -160,7 +160,7 @@ class Intraface_modules_debtor_DebtorGateway
             if ($db->nextRecord()) {
                 $type = $types[$db->f("type")];
             } else {
-                trigger_error("Invalid id for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid id for debtor in Debtor::factory");
             }
         } elseif (is_string($id) && $id != '') {
             $types = self::getDebtorTypes();
@@ -171,7 +171,7 @@ class Intraface_modules_debtor_DebtorGateway
                 $type = $types[$db->f("type")];
                 $id = $db->f("id");
             } else {
-                trigger_error("Invalid identifier_key for debtor in Debtor::factory", E_USER_ERROR);
+                throw new Exception("Invalid identifier_key for debtor in Debtor::factory");
             }
         }
 
@@ -198,7 +198,7 @@ class Intraface_modules_debtor_DebtorGateway
                 break;
 
             default:
-                trigger_error("Ugyldig type: '".$type."'", E_USER_ERROR);
+                throw new Exception("Ugyldig type: '".$type."'");
                 break;
         }
 
@@ -290,7 +290,7 @@ class Intraface_modules_debtor_DebtorGateway
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
                 if ($this->get("type") != "invoice") {
-                    trigger_error("Afskrevne kan kun benyttes ved faktura", E_USER_ERROR);
+                    throw new Exception("Afskrevne kan kun benyttes ved faktura");
                 }
 
                 $this->dbquery->setJoin("INNER", "invoice_payment", "invoice_payment.payment_for_id = debtor.id", "invoice_payment.intranet_id = ".$this->kernel->intranet->get("id")." AND invoice_payment.payment_for = 1");

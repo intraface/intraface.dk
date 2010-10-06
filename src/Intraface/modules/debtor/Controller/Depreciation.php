@@ -11,7 +11,7 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
 
     function map($name)
     {
-        if($name == 'state') {
+        if ($name == 'state') {
             return 'Intraface_modules_accounting_Controller_State_Depreciation';
         }
     }
@@ -51,7 +51,7 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
 
     function getModel()
     {
-        if(empty($this->depreciation)) {
+        if (empty($this->depreciation)) {
             $invoice_module = $this->getKernel()->useModule('invoice');
             require_once 'Intraface/modules/invoice/Depreciation.php';
             $this->depreciation = new Depreciation($this->getDebtor(), $this->name());

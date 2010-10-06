@@ -33,12 +33,12 @@ class ModuleMaintenance
         /*
         $db = MDB2::singleton(DB_DSN);
         if (PEAR::isError($db)) {
-            trigger_error("Error in creating db: ".$db->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in creating db: ".$db->getUserInfo());
             exit;
         }
         $result = $db->query("SELECT id FROM module WHERE name = ".$db->quote($name, 'text'));
         if (PEAR::isError($result)) {
-            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query: ".$result->getUserInfo());
             exit;
         }
 
@@ -47,7 +47,7 @@ class ModuleMaintenance
             return new ModuleMaintenance($row['id']);
         } else {
 
-            trigger_error("invalid module name ".$name."!", E_USER_ERROR);
+            throw new Exception("invalid module name ".$name."!");
         }
         */
     }
@@ -60,7 +60,7 @@ class ModuleMaintenance
         if ($this->id != 0) {
             $result = $this->db->query("SELECT * FROM module WHERE id = ".$this->id);
             if (PEAR::isError($result)) {
-                trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+                throw new Exception("Error in query: ".$result->getUserInfo());
                 exit;
             }
 
@@ -72,7 +72,7 @@ class ModuleMaintenance
                 $j = 0;
                 $result_sub_access = $this->db->query("SELECT id, name, description FROM module_sub_access WHERE active = 1 AND module_id = ".$row["id"]." ORDER BY description");
                 if (PEAR::isError($result_sub_access)) {
-                    trigger_error("Error in query: ".$result_sub_access->getUserInfo(), E_USER_ERROR);
+                    throw new Exception("Error in query: ".$result_sub_access->getUserInfo());
                     exit;
                 }
                 $i = 0;
@@ -216,7 +216,7 @@ class ModuleMaintenance
         $i = 0;
         $result = $this->db->query("SELECT id, name, menu_label, show_menu, menu_index, frontpage_index FROM module WHERE active = 1 ORDER BY menu_index");
         if (PEAR::isError($result)) {
-            trigger_error("Error in query: ".$result->getUserInfo(), E_USER_ERROR);
+            throw new Exception("Error in query: ".$result->getUserInfo());
             exit;
         }
 

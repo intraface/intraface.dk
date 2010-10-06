@@ -39,12 +39,4 @@ class MainProduct extends Intraface_Main
 
         // $this->addSubmenuItem('attributes', 'attributes.php', 'module:webshop');
     }
-
-    /*function getPath()
-    {
-        if (defined('INTRAFACE_K2')) {
-            return url('/restricted/module/product/');
-        }
-        return parent::getPath();
-    }*/
 }

@@ -89,7 +89,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $value = $cmspage->get();
         $type = $value['type'];
 
-        if($this->body()) {
+        if ($this->body()) {
             $value = $this->body();
         }
         $template = $cmspage->template;
@@ -98,7 +98,7 @@ class Intraface_modules_cms_Controller_Page extends k_Component
             $page_types = CMS_Page::getTypesWithBinaryIndex();
             $binary_bage_type = array_search($type, $page_types);
         } else {
-            trigger_error('no type is given!', E_USER_ERROR);
+            throw new Exception('no type is given!');
             exit;
         }
 

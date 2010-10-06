@@ -62,7 +62,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         
 
         if ($this->getUser()->update($value)) {
-            if($this->getUser()->get('email') != $old_email) {
+            if ($this->getUser()->get('email') != $old_email) {
                 $user = new Intraface_AuthenticatedUser($this->getUser()->get('email'), $this->language());
                 $this->session()->set('intraface_identity', $user);
             }

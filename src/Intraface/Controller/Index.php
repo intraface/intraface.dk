@@ -61,9 +61,4 @@ class Intraface_Controller_Index extends k_Component
     {
         return $this->wrap(parent::execute());
     }
-
-    function document()
-    {
-        return $this->document;
-    }
 }

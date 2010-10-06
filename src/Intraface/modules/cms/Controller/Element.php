@@ -36,7 +36,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
     function getFileAppender()
     {
         $this->getKernel()->useModule('filemanager');
-        require_once 'Intraface/shared/filehandler/AppendFile.php';
+        require_once 'Intraface/modules/filemanager/AppendFile.php';
         if ($this->getElement()->get('type') == 'gallery') {
             return $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
         } elseif ($this->getElement()->get('type') == 'filelist') {

@@ -49,7 +49,7 @@
         <?php if (isset($variation) && isset($product)): ?>
             <?php $module_product = $context->getKernel()->useModule('product'); ?>
             <li><a href="<?php e(url($module_product->getPath().$product->get('id').'/variation/'.$variation->getId()));  ?>"><?php e(t('Show product')); ?></a></li>
-        <?php elseif(isset($product)): ?>
+        <?php elseif (isset($product)): ?>
             <?php $module_product = $context->getKernel()->useModule('product'); ?>
            <li><a href="<?php e(url($module_product->getPath().$product->get('id')));  ?>"><?php e(t('Show product')); ?></a></li>
         <?php endif; ?>
@@ -85,7 +85,7 @@
         <!-- sortering b�r v�re placeret ved at man klikker p� en overskrift i stedet - og s� b�r man kunne sortere p� det hele -->
         <label><?php e(t('Sorting')); ?>
         <select name="sorting">
-            <?php foreach(array(0 => ucfirst($debtor->getType()).' number descending', 1 => ucfirst($debtor->getType()).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
+            <?php foreach (array(0 => ucfirst($debtor->getType()).' number descending', 1 => ucfirst($debtor->getType()).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
                 <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
             <?php endforeach; ?>
         </select>
@@ -94,7 +94,7 @@
 
         <label><?php e(t('Date interval'))?>
             <select name="date_field">
-                <?php foreach(array('this_date' => ucfirst($debtor->getType()).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
+                <?php foreach (array('this_date' => ucfirst($debtor->getType()).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
                     <option value="<?php e($field); ?>" <?php if ($debtor->getDBQuery()->getFilter("date_field") == $field) echo ' selected="selected"';?>><?php e(t($description)) ?></option>
                 <?php endforeach; ?>
             </select>

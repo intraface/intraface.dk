@@ -48,7 +48,7 @@ while ($row = $result->fetchRow()) {
     
     foreach ($gateway->getEmailsToSend() as $email) {
         $to = $email->getTo();
-        if($to == false) {
+        if ($to == false) {
             echo "Mail: ".$email->getSubject()." to ".$email->getTo()." has invalid to address\n";
             continue;
         }

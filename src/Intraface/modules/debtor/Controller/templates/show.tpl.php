@@ -336,7 +336,7 @@ if (isset($context->onlinepayment)) {
             </form>
             <p><a href="<?php e(url('depreciation')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
         </div>
-    <?php elseif($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == 'executed'): ?>
+    <?php elseif ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == 'executed'): ?>
         <div class="box">
             <a href="<?php e(url('payment')); ?>"><?php e(t('Register payment or reimbursement')); ?></a>.
         </div>
@@ -482,9 +482,9 @@ if (isset($context->onlinepayment)) {
                                 </td>
                                 <td class="amount">
                                     <?php
-                                    if($p['currency'] && is_object($p['currency'])) {
+                                    if ($p['currency'] && is_object($p['currency'])) {
                                         e($p['currency']->getType()->getIsoCode().' ');
-                                    } elseif($context->getKernel()->intranet->hasModuleAccess('currency')) {
+                                    } elseif ($context->getKernel()->intranet->hasModuleAccess('currency')) {
                                         e('DKK ');
                                     }
                                     e($p['dk_amount']);

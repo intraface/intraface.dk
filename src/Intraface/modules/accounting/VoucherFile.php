@@ -20,7 +20,7 @@ class VoucherFile
     function __construct($voucher, $id=0)
     {
         if (!is_object($voucher)) {
-            trigger_error('VoucherFile:: Voucher ikke gyldig', E_USER_ERROR);
+            throw new Exception('VoucherFile:: Voucher ikke gyldig');
         }
         $this->voucher = $voucher;
         $this->id      = (int) $id;
@@ -158,7 +158,7 @@ class VoucherFile
                     $files[$i]['file_uri'] = url('/modules/procurement/view.php', array('id' => $db->f('belong_to_id')));
                 break;
                 default:
-                    trigger_error('VoucherFile::getList: ugyldig belong to');
+                    throw new Exception('VoucherFile::getList: ugyldig belong to');
                 break;
 
             }

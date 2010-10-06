@@ -58,7 +58,7 @@ class Intraface_ModuleHandler
 
                 return $module;
             } else {
-                // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller trigger_error.
+                // @todo Den fejlmeddelse er egentlig irrelevant, da useModul ikke enten returnere et objekt eller throw new Exception.
                 throw new Exception('Du har ikke adgang til modulet');
             }
         }
@@ -145,7 +145,7 @@ class Intraface_ModuleHandler
     public function useShared($shared_name)
     {
         if (!self::isValidModuleName($shared_name)) {
-            throw new Exception($shared_name. ' is not a valid shared module name', E_USER_ERROR);
+            throw new Exception($shared_name. ' is not a valid shared module name');
         }
 
         // Tjekker om shared allerede er loaded
@@ -163,7 +163,7 @@ class Intraface_ModuleHandler
             $this->shared[$shared_name] = $object;
             return $object;
         } else {
-            trigger_error($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED, E_USER_ERROR);
+            throw new Exception($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED);
         }
     }
 
@@ -180,7 +180,7 @@ class Intraface_ModuleHandler
         if (is_object($this->modules[$name])) {
             return($this->modules[$name]);
         } else {
-            trigger_error('getModule() module ' . $name . ' not loaded', E_USER_ERROR);
+            throw new Exception('getModule() module ' . $name . ' not loaded');
         }
     }
 
@@ -235,7 +235,7 @@ class Intraface_ModuleHandler
     static public function exists($db, $module_id)
     {
         if (is_numeric($module_id)) {
-            trigger_error("Not yet implemented!", E_USER_ERROR);
+            throw new Exception("Not yet implemented!");
             exit;
         } else {
             $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));

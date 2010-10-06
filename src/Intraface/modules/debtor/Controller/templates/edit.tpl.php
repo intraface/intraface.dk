@@ -57,7 +57,7 @@ $value = $context->getValues();
                 $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
                 foreach ($gateway->findAllWithExchangeRate() AS $currency) {
                     ?>
-                    <option value="<?php e($currency->getId()); ?>" <?php if(false !== ($debtor_currency = $context->getDebtor()->getCurrency()) && $debtor_currency->getId() == $currency->getId()) echo 'selected="selected"'; ?> ><?php e($currency->getType()->getIsoCode().' '.$currency->getType()->getDescription()); ?></option>
+                    <option value="<?php e($currency->getId()); ?>" <?php if (false !== ($debtor_currency = $context->getDebtor()->getCurrency()) && $debtor_currency->getId() == $currency->getId()) echo 'selected="selected"'; ?> ><?php e($currency->getType()->getIsoCode().' '.$currency->getType()->getDescription()); ?></option>
                     <?php
                 }
                 ?>

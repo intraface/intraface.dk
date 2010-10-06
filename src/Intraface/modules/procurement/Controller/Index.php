@@ -24,7 +24,6 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
         $module = $this->getKernel()->module('procurement');
         $module = $this->getKernel()->useModule('contact');
-        $translation = $this->getKernel()->getTranslation('procurement');
 
         //$gateway = $this->getProcurementGateway();
 
@@ -95,11 +94,11 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     public function postForm()
     {
-        $procurement = new Procurement($this->getKernel(), intval($_POST["id"]));
+        $procurement = new Procurement($this->getKernel());
 
-        if ($procurement->update($_POST)) {
+        if ($procurement->update($this->body())) {
 
-            if (isset($_POST["recieved"]) && $_POST["recieved"] == "1") {
+            if ($this->body("recieved") == "1") {
                 $procurement->setStatus("recieved");
             }
             return new k_SeeOther($this->url($procurement->get("id")));

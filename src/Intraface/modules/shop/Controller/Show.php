@@ -26,31 +26,6 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         }
     }
 
-    function getError()
-    {
-        if ($this->error) {
-            return $this->error;
-        }
-        return ($this->error = new Intraface_Error());
-    }
-
-    function isValid()
-    {
-        if (!$this->body()) {
-            return true;
-        }
-        $validator = new Intraface_Validator($this->getError());
-        $validator->isNumeric($this->body('show_online'), 'show_online skal v�re et tal');
-        // $validator->isString($this->POST['description'], 'description text is not valid');
-        $validator->isString($this->body('confirmation_subject'), 'confirmation subject is not valid', '', 'allow_empty');
-        $validator->isString($this->body('confirmation'), 'confirmation text is not valid', '', 'allow_empty');
-        $validator->isString($this->body('confirmation_greeting'), 'confirmation greeting is not valid', '', 'allow_empty');
-        $validator->isString($this->body('terms_of_trade_url'), 'terms of trade is not valid', '', 'allow_empty');
-        $validator->isString($this->body('receipt'), 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
-
-        return !$this->getError()->isError();
-    }
-
     function renderHtml()
     {
         $shop = $this->getShop();
@@ -166,5 +141,31 @@ class Intraface_modules_shop_Controller_Show extends k_Component
     function getModel()
     {
         return $this->getShop();
+    }
+
+
+    function getError()
+    {
+        if ($this->error) {
+            return $this->error;
+        }
+        return ($this->error = new Intraface_Error());
+    }
+
+    function isValid()
+    {
+        if (!$this->body()) {
+            return true;
+        }
+        $validator = new Intraface_Validator($this->getError());
+        $validator->isNumeric($this->body('show_online'), 'show_online skal v�re et tal');
+        // $validator->isString($this->POST['description'], 'description text is not valid');
+        $validator->isString($this->body('confirmation_subject'), 'confirmation subject is not valid', '', 'allow_empty');
+        $validator->isString($this->body('confirmation'), 'confirmation text is not valid', '', 'allow_empty');
+        $validator->isString($this->body('confirmation_greeting'), 'confirmation greeting is not valid', '', 'allow_empty');
+        $validator->isString($this->body('terms_of_trade_url'), 'terms of trade is not valid', '', 'allow_empty');
+        $validator->isString($this->body('receipt'), 'shop receipt is not valid', '<p><br/><div><ul><ol><li><h2><h3><h4>');
+
+        return !$this->getError()->isError();
     }
 }

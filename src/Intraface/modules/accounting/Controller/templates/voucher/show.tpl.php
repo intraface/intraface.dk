@@ -33,7 +33,7 @@
 			<td><input type="checkbox" name="selected[]" value="<?php e($post['id']); ?>" /></td>
 			<td><?php e($post['date_dk']); ?></td>
 			<td><?php e($post['text']); ?></td>
-			<td><a href="account.php?id=<?php e($post['account_id']); ?>"><?php e($post['account_name']); ?></a></td>
+			<td><a href="<?php e(url('../../accounts/' . $post['account_id'])); ?>"><?php e($post['account_name']); ?></a></td>
 			<td class="amount"><?php e(amountToOutput($post['debet'])); ?></td>
 			<td class="amount"><?php e(amountToOutput($post['credit'])); ?></td>
 			<td class="options">

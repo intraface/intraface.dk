@@ -74,14 +74,14 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
             $filehandler->upload->setSetting('max_file_size', 5000000);
             $filehandler->upload->setSetting('file_accessibility', 'public');
             if (!$var['pic_id'] = $filehandler->upload->upload('userfile')) {
-                trigger_error('Kunne ikke uploade filen');
+                throw new Exception('Kunne ikke uploade filen');
             }
             if (!empty($var['pic_text'])) {
                 if ($this->section->kernel->user->hasModuleAccess('filemanager')) {
                     $this->section->kernel->useModule('filemanager');
                     $filemanager = new FileManager($this->section->kernel, $var['pic_id']);
                     if (!$filemanager->update(array('description' => $var['pic_text']))) {
-                        trigger_error('Filemanager kunne ikke gemme teksten.');
+                        throw new Exception('Filemanager kunne ikke gemme teksten.');
                     }
                 }
             }

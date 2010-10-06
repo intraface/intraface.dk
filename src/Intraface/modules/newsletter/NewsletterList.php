@@ -31,7 +31,7 @@ class NewsletterList extends Intraface_Standard
     public function __construct($kernel, $id = 0)
     {
         if (!is_object($kernel)) {
-            trigger_error('Listadministration kr�ver Kernel', E_USER_ERROR);
+            throw new Exception('Listadministration kr�ver Kernel');
         }
         $this->kernel = $kernel;
 

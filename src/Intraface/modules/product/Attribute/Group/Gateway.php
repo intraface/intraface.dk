@@ -28,7 +28,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
         /**
          * @todo remove id and make $doctrine required 
          */
-        if($doctrine != NULL) {
+        if ($doctrine != NULL) {
             $this->table = $doctrine->getTable('Intraface_modules_product_Attribute_Group');
         }
     }

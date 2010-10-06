@@ -1,6 +1,6 @@
 <?php
 /**
- * Meget af det der er i year_end tabellen kan vist lige så godt indkorporeres i selve årstabellen
+ * Meget af det der er i year_end tabellen kan vist lige sï¿½ godt indkorporeres i selve ï¿½rstabellen
  * @package Intraface_Accounting
  */
 class YearEnd extends Intraface_Standard
@@ -11,10 +11,10 @@ class YearEnd extends Intraface_Standard
 
     /*
     var $step = array(
-        1 => 'Er alle poster i året indtastet?',
+        1 => 'Er alle poster i ï¿½ret indtastet?',
         2 => 'Har du lavet momsregnskab og opgivet det til Skat?',
-        3 => 'Vælg resultatkonto og overfør posterne til resultatkontoen',
-        4 => 'Rapport med årsregnskabet'
+        3 => 'Vï¿½lg resultatkonto og overfï¿½r posterne til resultatkontoen',
+        4 => 'Rapport med ï¿½rsregnskabet'
     );
     */
 
@@ -32,7 +32,7 @@ class YearEnd extends Intraface_Standard
     function __construct($year)
     {
         if (!is_object($year)) {
-            trigger_error('Year::__construct: Ikke et gyldigt Year object', E_USER_ERROR);
+            throw new Exception('Year::__construct: Ikke et gyldigt Year object');
         }
         $this->year = $year;
         $this->error = new Intraface_Error;
@@ -83,24 +83,24 @@ class YearEnd extends Intraface_Standard
                 $db->query("UPDATE accounting_year_end SET date_updated=NOW(), operating_reset_voucher_id = " . (int)$voucher_id . " WHERE year_id = " . $this->year->get('id'));
                 return true;
                 break;
-            // bruges i forbindelse med overførelse af kapitalkontoen
+            // bruges i forbindelse med overfï¿½relse af kapitalkontoen
             case 'result_account_reset':
                 $db->query("UPDATE accounting_year_end SET date_updated=NOW(), result_account_reset_voucher_id = " . (int)$voucher_id . " WHERE year_id = " . $this->year->get('id'));
                 return true;
                 break;
 
             default:
-                trigger_error('YearEnd::setStated: Ugyldig type', E_USER_ERROR);
+                throw new Exception('YearEnd::setStated: Ugyldig type');
                 break;
         }
 
     }
 
     /**
-     * Denne funktion skal gemme de ændringer der bliver lavet i bogføringen
+     * Denne funktion skal gemme de ï¿½ndringer der bliver lavet i bogfï¿½ringen
      *
-     * Det betyder at vi har mulighed for at vende den igen - skal i så tilfælde bogføres
-     * på samme bilag med modposteringer foran.
+     * Det betyder at vi har mulighed for at vende den igen - skal i sï¿½ tilfï¿½lde bogfï¿½res
+     * pï¿½ samme bilag med modposteringer foran.
      *
      * debet-konto
      * credit-konto
@@ -148,11 +148,11 @@ class YearEnd extends Intraface_Standard
     }
 
     /**
-     * Gemme resultatopgørelsen
+     * Gemme resultatopgï¿½relsen
      *
-     * @todo Der er problemer hvis man gemmer resultatopgørelsen flere gange (hvis man også nulstiller kontiene), så det
-     * bør vel egentlig ikke være muligt! Måske kan man forestille sig, at den så bare
-     * gemmer videre og at den ved get lægger tallene i amount sammen?
+     * @todo Der er problemer hvis man gemmer resultatopgï¿½relsen flere gange (hvis man ogsï¿½ nulstiller kontiene), sï¿½ det
+     * bï¿½r vel egentlig ikke vï¿½re muligt! Mï¿½ske kan man forestille sig, at den sï¿½ bare
+     * gemmer videre og at den ved get lï¿½gger tallene i amount sammen?
      *
      */
     function saveStatement($type)
@@ -161,19 +161,19 @@ class YearEnd extends Intraface_Standard
 
         switch ($type) {
             case 'operating':
-                // disse konti bliver nulstillet, så vi kan ikke bare gemme løs
-                // hvad gør vi ved det?
+                // disse konti bliver nulstillet, sï¿½ vi kan ikke bare gemme lï¿½s
+                // hvad gï¿½r vi ved det?
                 $account_start = $this->getAccount($this->year->getSetting('result_account_id_start'));
                 $account_end = $this->getAccount($this->year->getSetting('result_account_id_end'));
                 break;
             case 'balance':
-                // her kunne det måske være en ide at flushe
+                // her kunne det mï¿½ske vï¿½re en ide at flushe
                 // for de bliver ikke nulstillet
                 $account_start = $this->getAccount($this->year->getSetting('balance_account_id_start'));
                 $account_end = $this->getAccount($this->year->getSetting('balance_account_id_end'));
                 break;
             default:
-                trigger_error('YearEnd::getStatement: Ugyldig type');
+                throw new Exception('YearEnd::getStatement: Ugyldig type');
                 break;
 
         }
@@ -187,8 +187,8 @@ class YearEnd extends Intraface_Standard
             $account = new Account($this->year, $db->f('id'));
             $account->getSaldo();
 
-            // vi vender sgu lige fortegnet, så udgifter får negativt fortegn
-            // og indtægter positivt fortegn
+            // vi vender sgu lige fortegnet, sï¿½ udgifter fï¿½r negativt fortegn
+            // og indtï¿½gter positivt fortegn
             $db2->query("INSERT INTO accounting_year_end_statement SET type_key = ".array_search($type, $this->types).", intranet_id = ".$this->year->kernel->intranet->get('id').", year_id = ".$this->year->get('id').", account_id = " . $account->get('id') . ", amount = '".-1 * $account->get('saldo')."'");
         }
 
@@ -209,12 +209,12 @@ class YearEnd extends Intraface_Standard
             case 'balance':
                 break;
             default:
-                trigger_error('YearEnd::getStatement: Ugyldig type');
+                throw new Exception('YearEnd::getStatement: Ugyldig type');
                 break;
         }
 
-        // hvis jeg kunne få den her til at håndtere summen af det der er gemt,
-        // så kunne jeg måske gøre noget rigtig smart?
+        // hvis jeg kunne fï¿½ den her til at hï¿½ndtere summen af det der er gemt,
+        // sï¿½ kunne jeg mï¿½ske gï¿½re noget rigtig smart?
         $db = new DB_Sql;
         $db->query("SELECT * FROM accounting_year_end_statement WHERE year_id = ".$this->year->get('id')." AND intranet_id = ".$this->year->kernel->intranet->get('id')." AND type_key = ".array_search($type, $this->types)." ORDER BY id ASC");
         $i = 0;
@@ -259,8 +259,8 @@ class YearEnd extends Intraface_Standard
 
     /**
      *
-     * @param $type (kan være do og reverse) - reverse er hvis man fortryder at man har gemt
-     *				dog skal det jo stadig bogføres
+     * @param $type (kan vï¿½re do og reverse) - reverse er hvis man fortryder at man har gemt
+     *				dog skal det jo stadig bogfï¿½res
      */
     function resetOperatingAccounts($type = 'do')
     {
@@ -270,7 +270,7 @@ class YearEnd extends Intraface_Standard
             case 'reverse':
                 break;
             default:
-                    trigger_error('YearEnd::resetOperatingAccounts ugyldig type', E_USER_ERROR);
+                    throw new Exception('YearEnd::resetOperatingAccounts ugyldig type');
                 break;
         }
 
@@ -287,11 +287,11 @@ class YearEnd extends Intraface_Standard
         switch ($type) {
             case 'reverse':
                 // hvis man vil reverse skal vi finde actions
-                // vi skal lave bogføringen
+                // vi skal lave bogfï¿½ringen
                 // og derefter slette actions igen.
 
                 if ($this->get('operating_reset_voucher_id') == 0) {
-                    $this->error->set('Du kan ikke lave en reversepå noget der ikke er bogført');
+                    $this->error->set('Du kan ikke lave en reversepï¿½ noget der ikke er bogfï¿½rt');
                 }
 
                 $voucher = new Voucher($this->year, $this->get('operating_reset_voucher_id'));
@@ -299,7 +299,7 @@ class YearEnd extends Intraface_Standard
                 $actions = $this->getStatedActions('operating_reset');
 
                 if (!is_array($actions) OR count($actions) == 0) {
-                    $this->error->set('Du kan ikke lave en reverse, når der ikke er gemt nogen actions');
+                    $this->error->set('Du kan ikke lave en reverse, nï¿½r der ikke er gemt nogen actions');
                 }
 
                 if ($this->error->isError()) {
@@ -310,7 +310,7 @@ class YearEnd extends Intraface_Standard
                 foreach ($actions AS $a) {
 
                     $save_array = array();
-                    // der er byttet om på debet og credit med vilje, fordi
+                    // der er byttet om pï¿½ debet og credit med vilje, fordi
                     // det skal reverses
                     $debet_account = new Account($this->year, $a['credit_account_id']);
                     $credit_account = new Account($this->year, $a['debet_account_id']);
@@ -340,7 +340,7 @@ class YearEnd extends Intraface_Standard
                 $voucher = new Voucher($this->year, $this->get('operating_reset_voucher_id'));
                 $voucher->save(array(
                     'date' => $this->year->get('to_date_dk'),
-                    'text' => 'Årsafslutning. Overførsel af driftskonti til resultatopgørelse'
+                    'text' => 'ï¿½rsafslutning. Overfï¿½rsel af driftskonti til resultatopgï¿½relse'
                 ));
 
                 $accounts = $account->getList('operating', true);
@@ -360,7 +360,7 @@ class YearEnd extends Intraface_Standard
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $result_account->get('number'),
                             'credit_account_number' => $account->get('number'),
-                            'amount' => amountToForm(abs($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                            'amount' => amountToForm(abs($account->get('saldo'))), // nï¿½dvendig med amountToForm for at fï¿½ den i det rigtige format ift. at gemme i daybook
                             'text' => $account->get('name') . ' til resultatkontoen',
                             'vat_off' => 1
 
@@ -372,7 +372,7 @@ class YearEnd extends Intraface_Standard
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $account->get('number'),
                             'credit_account_number' => $result_account->get('number'),
-                            'amount' => amountToForm(abs($account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                            'amount' => amountToForm(abs($account->get('saldo'))), // nï¿½dvendig med amountToForm for at fï¿½ den i det rigtige format ift. at gemme i daybook
                             'text' => $account->get('name') . ' til resultatkontoen',
                             'vat_off' => 1
                         );
@@ -406,7 +406,7 @@ class YearEnd extends Intraface_Standard
                 // her sker ikke noget
                 break;
             default:
-                trigger_error('YearEnd::resetOperatingAccounts ugyldig type', E_USER_ERROR);
+                throw new Exception('YearEnd::resetOperatingAccounts ugyldig type');
                 break;
         }
 
@@ -426,11 +426,11 @@ class YearEnd extends Intraface_Standard
         switch ($type) {
             case 'reverse':
                 // hvis man vil reverse skal vi finde actions
-                // vi skal lave bogføringen
+                // vi skal lave bogfï¿½ringen
                 // og derefter slette actions igen.
 
                 if ($this->get('result_account_reset_voucher_id') == 0) {
-                    $this->error->set('Du kan ikke lave en reverse på noget der ikke er bogført');
+                    $this->error->set('Du kan ikke lave en reverse pï¿½ noget der ikke er bogfï¿½rt');
                 }
 
                 $voucher = new Voucher($this->year, $this->get('result_account_reset_voucher_id'));
@@ -439,7 +439,7 @@ class YearEnd extends Intraface_Standard
 
 
                 if (!is_array($actions) OR count($actions) == 0) {
-                    $this->error->set('Du kan ikke lave en reverse, når der ikke er gemt nogen actions');
+                    $this->error->set('Du kan ikke lave en reverse, nï¿½r der ikke er gemt nogen actions');
 
                 }
 
@@ -450,7 +450,7 @@ class YearEnd extends Intraface_Standard
                 foreach ($actions AS $a) {
 
                     $save_array = array();
-                    // der er byttet om på debet og credit med vilje, fordi
+                    // der er byttet om pï¿½ debet og credit med vilje, fordi
                     // det skal reverses
                     $debet_account = new Account($this->year, $a['credit_account_id']);
                     $credit_account = new Account($this->year, $a['debet_account_id']);
@@ -480,7 +480,7 @@ class YearEnd extends Intraface_Standard
                     $voucher = new Voucher($this->year);
                     $voucher->save(array(
                         'date' => $this->year->get('to_date_dk'),
-                        'text' => 'Årsafslutning. Årets resultat overføres til egenkapitalen'
+                        'text' => 'ï¿½rsafslutning. ï¿½rets resultat overfï¿½res til egenkapitalen'
                     ));
                 } else {
                     $voucher = new Voucher($this->year, $this->get('result_account_reset_voucher_id'));
@@ -497,7 +497,7 @@ class YearEnd extends Intraface_Standard
                         'date' => $this->year->get('to_date_dk'),
                         'debet_account_number' => $result_account->get('number'),
                         'credit_account_number' => $capital_account->get('number'),
-                        'amount' => abs(amountToForm($result_account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                        'amount' => abs(amountToForm($result_account->get('saldo'))), // nï¿½dvendig med amountToForm for at fï¿½ den i det rigtige format ift. at gemme i daybook
                         'text' => $result_account->get('name') . ' nulstilles',
                         'vat_off' => 1
 
@@ -509,7 +509,7 @@ class YearEnd extends Intraface_Standard
                         'date' => $this->year->get('to_date_dk'),
                         'debet_account_number' => $capital_account->get('number'),
                         'credit_account_number' => $result_account->get('number'),
-                        'amount' => abs(amountToForm($result_account->get('saldo'))), // nødvendig med amountToForm for at få den i det rigtige format ift. at gemme i daybook
+                        'amount' => abs(amountToForm($result_account->get('saldo'))), // nï¿½dvendig med amountToForm for at fï¿½ den i det rigtige format ift. at gemme i daybook
                         'text' => $result_account->get('name') . ' nulstilles',
                         'vat_off' => 1
                     );

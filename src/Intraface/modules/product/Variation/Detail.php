@@ -79,7 +79,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
      */
     public function getPrice($product)
     {
-        if(get_class($product) == 'Intraface_modules_product_ProductDoctrine') {
+        if (get_class($product) == 'Intraface_modules_product_ProductDoctrine') {
             return new Ilib_Variable_Float(round($product->getDetails()->getPrice()->getAsIso() + $this->getPriceDifference(), 2));
         } else {
             return new Ilib_Variable_Float(round($product->get('price') + $this->getPriceDifference(), 2));
@@ -113,7 +113,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
      */
     public function getPriceIncludingVat($product)
     {
-        if(get_class($product) == 'Intraface_modules_product_ProductDoctrine') {
+        if (get_class($product) == 'Intraface_modules_product_ProductDoctrine') {
             return new Ilib_Variable_Float($this->getPrice($product)->getAsIso(2) * (1 + $product->getDetails()->getVatPercent()->getAsIso()/100));
         } else {
             return new Ilib_Variable_Float($this->getPrice($product)->getAsIso(2) * (1 + $product->get('vat_percent')/100));

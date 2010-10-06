@@ -101,11 +101,11 @@ class Intraface_Install
     {
         /*
         if (!$this->dropDatabase()) {
-            trigger_error('could not drop database', E_USER_ERROR);
+            throw new Exception('could not drop database');
             exit;
         }
         if (!$this->createDatabaseSchema()) {
-            trigger_error('could not create schema', E_USER_ERROR);
+            throw new Exception('could not create schema');
             exit;
         }
         */
@@ -162,7 +162,7 @@ class Intraface_Install
             $module = ModuleMaintenance::factory($module_name);
 
             if ($module->get('id') == 0) {
-                trigger_error('Invalid module '.$module_name, E_USER_ERROR);
+                throw new Exception('Invalid module '.$module_name);
                 exit;
             }
             $intranet->setModuleAccess($module->get('id'));

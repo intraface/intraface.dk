@@ -24,7 +24,7 @@
         </select>
         </label>
         <label><?php e(t('Only pictures')); ?>:
-            <input type="checkbox" name="images" value="1" <?php if($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
+            <input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('find')); ?>" />
@@ -35,10 +35,10 @@
         $keyword = $filemanager->getKeywordAppender();
         $keywords = $keyword->getUsedKeywords();
 
-        if(count($keywords) > 0) {
+        if (count($keywords) > 0) {
             echo '<div>Nøgleord: <ul style="display: inline;">';
             foreach ($keywords AS $value) {
-                if(in_array($value['id'], $selected_keywords) === true) {
+                if (in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
                 } else {
                     $checked = "";
@@ -72,7 +72,7 @@
         <?php foreach ($files as $file) { ?>
             <tr>
                 <td>
-                    <input type="<?php if($context->multiple_choice): e('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $file["id"]; ?>" id="<?php echo $file["id"]; ?>" class="input-select_file" name="selected[]" <?php if(in_array($file['id'], $selected_files)) print("checked=\"checked\""); ?> />
+                    <input type="<?php if ($context->multiple_choice): e('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $file["id"]; ?>" id="<?php echo $file["id"]; ?>" class="input-select_file" name="selected[]" <?php if (in_array($file['id'], $selected_files)) print("checked=\"checked\""); ?> />
                 </td>
                 <td style="height: 67px;"><img src="<?php e($file["icon_uri"]); ?>" style="height: <?php e($file["icon_height"]); ?>px; width: <?php e($file["icon_width"]); ?>px;" /></td>
 
@@ -89,7 +89,7 @@
 
 <div>
 
-    <?php if($context->multiple_choice): ?>
+    <?php if ($context->multiple_choice): ?>
         <input type="submit" name="submit" id="submit-select_file" value="<?php e(t('Transfer selection')); ?>" />
     <?php endif; ?>
 

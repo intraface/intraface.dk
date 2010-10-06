@@ -83,7 +83,7 @@ class Intraface_modules_accounting_VoucherFileGateway
                     $files[$i]['file_uri'] = $this->url('/module/procurement/'.$db->f('belong_to_id'));
                 break;
                 default:
-                    trigger_error('VoucherFile::getList: ugyldig belong to');
+                    throw new Exception('VoucherFile::getList: ugyldig belong to');
                 break;
 
             }

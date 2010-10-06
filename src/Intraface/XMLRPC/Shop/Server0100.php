@@ -265,7 +265,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $products = array();
         $key = 0;
-        foreach($doctrine_products AS $p) {
+        foreach ($doctrine_products AS $p) {
             $products[$key]['id'] = $p->getId();
             $products[$key]['number'] = $p->getDetails()->getNumber();
             $products[$key]['name'] = $p->getDetails()->getTranslation('da')->name;
@@ -293,7 +293,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
             $products[$key]['pictures'] = $this->getProductPictures($p);
 
-            if($p->hasVariation() && $p->hasStock() && $attribute_id != NULL) {
+            if ($p->hasVariation() && $p->hasStock() && $attribute_id != NULL) {
                 try {
                     $variaton_gateway = new Intraface_modules_product_Variation_Gateway($p);
                     $variations = $variaton_gateway->findWithAttributeId($attribute_id);
@@ -304,7 +304,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 $stub_product = new Intraface_XMLRPC_Shop_Server0100_Product($p, $this->webshop->kernel);
                 $products[$key]['attribute_stock_for_sale'] = 0;
 
-                foreach($variations AS $variation) {
+                foreach ($variations AS $variation) {
                     $stock = $variation->getStock($stub_product)->get();
                     $products[$key]['attribute_stock_for_sale'] += $stock['for_sale'];
                 }
@@ -371,7 +371,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
     private function createAttributeGroupArray($attribute_group)
     {
-        foreach($attribute_group->attribute AS $attribute) {
+        foreach ($attribute_group->attribute AS $attribute) {
             $attributes[] = array(
                 'id' => $attribute->getId(),
                 'name' => $attribute->getName());
@@ -495,8 +495,8 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                     $attribute_string .= $attribute['id'];
 
                     // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
-                    if(!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
-                    if($stock !== false) {
+                    if (!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
+                    if ($stock !== false) {
                         // If for_sale is less than zero we add zero.
                         $attribute_for_sale[$attribute['id']] += (($stock['for_sale'] < 0) ? 0 : $stock['for_sale']);
                     } else {
@@ -542,7 +542,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 foreach ($attributes AS $attribute) {
 
                     // No products has attribute on stock we remove it from the list.
-                    if(isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
+                    if (isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
                         $is_used = 0;
                     } else {
                         $is_used = 1;
@@ -703,8 +703,12 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $this->_factoryWebshop($shop_id);
         $module = $this->kernel->useModule('filemanager');
+<<<<<<< HEAD:src/Intraface/XMLRPC/Shop/Server0100.php
 
         require_once 'Intraface/shared/filehandler/AppendFile.php';
+=======
+        require_once 'Intraface/modules/filemanager/AppendFile.php';
+>>>>>>> 3616bf2cb13d28387a620c0b5a7efa18ad90454b:src/Intraface/XMLRPC/Shop/Server0100.php
 
         $pictures = array();
 
@@ -1282,7 +1286,7 @@ class Intraface_XMLRPC_Shop_Server0100_Product {
 
     public function get($value)
     {
-        if($value == 'id') {
+        if ($value == 'id') {
             return $this->getId();
         }
 

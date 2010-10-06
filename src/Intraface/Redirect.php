@@ -55,7 +55,7 @@
  * if (isset($_POST['submit'])) {
  *     // save something
  *     // optional parameter
- *     $redirect->setParameter("add_contact_id", $added_id); // Denne sætter parameter som skal sendes tilbage til siden. Den sendes dog kun tilbage hvis askParameter er sat ved opstart af redirect. Hvis ask er sat til multiple, sï¿½ gemmes der en ny hver gang den aktiveres, hvis ikke, overskrives den
+ *     $redirect->setParameter("add_contact_id", $added_id); // Denne sï¿½tter parameter som skal sendes tilbage til siden. Den sendes dog kun tilbage hvis askParameter er sat ved opstart af redirect. Hvis ask er sat til multiple, sï¿½ gemmes der en ny hver gang den aktiveres, hvis ikke, overskrives den
  *
  *     // the redirect
  *     $standard_page_without_redirect = 'standard.php';
@@ -196,7 +196,7 @@ class Intraface_Redirect extends Ilib_Redirect
     static function factory($kernel, $type, $query_variable = 'redirect_id', $query_return_variable = 'return_redirect_id')
     {
         if (!is_object($kernel)) {
-            trigger_error("First parameter in redirect::factory is not kernel", E_USER_ERROR);
+            throw new Exception("First parameter in redirect::factory is not kernel");
         }
 
         $options = array(

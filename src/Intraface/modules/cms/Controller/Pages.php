@@ -33,7 +33,6 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
-        $translation = $this->getKernel()->getTranslation('cms');
 
         if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
             $cmspage = $this->getPageGateway()->findById($_GET['moveup']);
@@ -106,14 +105,14 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/pages');
         return $tpl->render($this, $data);
     }
-    
+
     private function getCMSPage()
     {
-        if(empty($this->cmspage)) {
+        if (empty($this->cmspage)) {
             $cmssite = $this->context->getSite();
             $this->cmspage = new CMS_Page($cmssite);
         }
-        
+
         return $this->cmspage;
     }
 
@@ -121,14 +120,14 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
 
-        if($this->body()) {
+        if ($this->body()) {
             $value = $this->body();
         }
-        
+
         $type = $_GET['type'];
         $value['type'] = $type;
         $cmspage = $this->getCMSPage();
-        $cmssite = $cmspage->cmssite; 
+        $cmssite = $cmspage->cmssite;
         $value['site_id'] = $cmssite->get('id');
         $template = new CMS_Template($cmssite);
 
@@ -137,7 +136,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
             $page_types = CMS_Page::getTypesWithBinaryIndex();
             $binary_bage_type = array_search($type, $page_types);
         } else {
-            trigger_error('no type is given!', E_USER_ERROR);
+            throw new Exception('no type is given!');
             exit;
         }
 
@@ -166,7 +165,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $module_cms = $this->getKernel()->module('cms');
 
         $cmspage = $this->getCMSPage();
-        
+
         if ($cmspage->save($_POST)) {
             if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 return new k_SeeOther($this->url($cmspage->get('id') . '/filehandler/selectfile', array('images' => 1)));

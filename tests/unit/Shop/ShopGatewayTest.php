@@ -23,7 +23,7 @@ class ShopGatewayTest extends PHPUnit_Framework_TestCase
     {
         $shop = new Intraface_modules_shop_Shop();
         $shop->name = 'Test shop';
-        if(!empty($values['intranet_id'])) {
+        if (!empty($values['intranet_id'])) {
             $shop->intranet_id = $values['intranet_id'];
         }
         $shop->save();

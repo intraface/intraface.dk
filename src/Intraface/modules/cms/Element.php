@@ -108,7 +108,7 @@ abstract class CMS_Element extends Intraface_Standard
                 return $gateway->findBySectionAndId($object, $value);
                 break;
             default:
-                trigger_error('Element::factory:: Invalid type', E_USER_ERROR);
+                throw new Exception('Element::factory:: Invalid type');
                 break;
         }
     }

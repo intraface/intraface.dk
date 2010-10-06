@@ -106,7 +106,7 @@ switch ($value['type']) {
         break;
 
     default :
-        trigger_error('"'.$value['type'].'" not allowed', E_USER_ERROR);
+        throw new Exception('"'.$value['type'].'" not allowed');
         break;
 
 }

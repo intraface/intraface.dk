@@ -20,13 +20,13 @@ class DebtorAccount extends Intraface_Standard {
     {
 
         if (!is_object($object)) {
-            trigger_error('DebtorAccount needs debtor or reminder as parameter', E_USER_ERROR);
+            throw new Exception('DebtorAccount needs debtor or reminder as parameter');
             return false;
         }
 
         $this->account_for = strtolower(get_class($object));
         if (!in_array($this->account_for, array('invoice', 'reminder'))) {
-            trigger_error('Debtor account can only be account for either invoice or reminder. Is '.$this->account_for, E_USER_ERROR);
+            throw new Exception('Debtor account can only be account for either invoice or reminder. Is '.$this->account_for);
             return false;
         }
         
@@ -88,7 +88,7 @@ class DebtorAccount extends Intraface_Standard {
             $credit_note = $this->getCreditNote();
             $credit_note->getDBQuery()->setCondition("where_from = 5 AND where_from_id = ".$this->object->get("id"));
             $credit_note->getDBQuery()->setSorting("this_date");
-            // Det er ret krævende at køre debtor->getList(), måske det burde gøres med direkte sql-udtræk.
+            // Det er ret krï¿½vende at kï¿½re debtor->getList(), mï¿½ske det burde gï¿½res med direkte sql-udtrï¿½k.
             $credit_notes = $credit_note->getList();
         } else {
             $credit_notes = array();
@@ -111,7 +111,7 @@ class DebtorAccount extends Intraface_Standard {
             
             $date = array_filter($date); // removes items with 0
             if (count($date) == 0) {
-                trigger_error('Problem in finding the next entry!', E_USER_ERROR);
+                throw new Exception('Problem in finding the next entry!');
                 return false;
             }
             asort($date); // sorts the array with the smallest first
@@ -145,7 +145,7 @@ class DebtorAccount extends Intraface_Standard {
                     $cre++;
                     break;
                 default:
-                    trigger_error('Invalid next type "'.$next['key'].'"!', E_USER_ERROR);
+                    throw new Exception('Invalid next type "'.$next['key'].'"!');
                     return false;
             }
             $i++;

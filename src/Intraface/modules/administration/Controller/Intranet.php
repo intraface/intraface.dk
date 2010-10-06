@@ -19,7 +19,6 @@ class Intraface_modules_administration_Controller_Intranet extends k_Component
     {
         $modul = $this->getKernel()->module('administration');
         $shared_filehandler = $this->getKernel()->useModule('filemanager');
-        $translation = $this->getKernel()->getTranslation('administration');
 
         if (isset($_GET['return_redirect_id'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'return');

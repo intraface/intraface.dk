@@ -147,7 +147,7 @@ class Reminder extends Intraface_Standard
         }
 
         if (!is_array($input)) {
-            trigger_error("Input er ikke et array", E_USER_ERROR);
+            throw new Exception("Input er ikke et array");
         }
 
         $input = safeToDb($input);
@@ -292,7 +292,7 @@ class Reminder extends Intraface_Standard
         if (is_string($status)) {
             $status_id = array_search($status, $this->getStatusTypes());
             if ($status_id === false) {
-                trigger_error("Reminder->setStatus(): Ugyldig status (streng)", FATAL);
+                throw new Exception("Reminder->setStatus(): Ugyldig status (streng)", FATAL);
             }
         } else {
             $status_id = intval($status);
@@ -300,13 +300,13 @@ class Reminder extends Intraface_Standard
             if (isset($status_types[$status_id])) {
                 $status = $status_types[$status];
             } else {
-                trigger_error("Reminder->setStatus(): Ugyldig status (integer)", E_USER_ERROR);
+                throw new Exception("Reminder->setStatus(): Ugyldig status (integer)");
             }
         }
 
         if ($status_id <= $this->get("status_id")) {
             $this->error->set('Du kan ikke s�tte status til samme som/lavere end den er i forvejen');
-            trigger_error("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
+            throw new Exception("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
             return false;
 
         }
@@ -325,7 +325,7 @@ class Reminder extends Intraface_Standard
                 break;
 
             default:
-                trigger_error("Dette kan ikke lade sig g�re! Reminder->setStatus()", FATAL);
+                throw new Exception("Dette kan ikke lade sig g�re! Reminder->setStatus()", FATAL);
         }
 
         $db = new Db_Sql;
@@ -595,12 +595,12 @@ class Reminder extends Intraface_Standard
     function state($year, $voucher_number, $voucher_date, $credit_account_number, $translation)
     {
         if (!is_object($year)) {
-            trigger_error('First parameter to state needs to be a Year object!', E_USER_ERROR);
+            throw new Exception('First parameter to state needs to be a Year object!');
             return false;
         }
 
         if (!is_object($translation)) {
-            trigger_error('5th parameter to state needs to be a translation object!', E_USER_ERROR);
+            throw new Exception('5th parameter to state needs to be a translation object!');
             return false;
         }
 
@@ -683,7 +683,7 @@ class Reminder extends Intraface_Standard
     function pdf($type = 'stream', $filename='')
     {
         if ($this->get('id') == 0) {
-            trigger_error('Cannot create pdf from debtor without valid id', E_USER_ERROR);
+            throw new Exception('Cannot create pdf from debtor without valid id');
         }
 
         $translation = $this->kernel->getTranslation('debtor');

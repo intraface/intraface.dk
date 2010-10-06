@@ -52,7 +52,7 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
             $debtor = $this->getModel();
             if ($debtor->get('type') != 'credit_note') {
-                trigger_error('You can only state credit notes from this page', E_USER_ERROR);
+                throw new Exception('You can only state credit notes from this page');
                 exit;
             }
             if (!empty($_POST['state_account_id'])) {

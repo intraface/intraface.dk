@@ -1,13 +1,15 @@
 <?php
 class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Component
 {
-    protected $user;
     public $method = 'put';
+    protected $user;
     protected $intranetmaintenance;
     protected $template;
+    protected $mdb2;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, MDB2_Driver_Common $mdb2)
     {
+        $this->mdb2 = $mdb2;
         $this->template = $template;
     }
 
@@ -275,7 +277,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function getModules()
     {
-        $gateway = new Intraface_ModuleGateway(MDB2::singleton(DB_DSN));
+        $gateway = new Intraface_ModuleGateway($this->mdb2);
         return $gateway->getList();
     }
 }

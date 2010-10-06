@@ -21,6 +21,12 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
         return $smarty->render($this);
     }
 
+    function postForm()
+    {
+        $this->getYear()->setSettings($_POST);
+        return new k_SeeOther($this->url());
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -38,12 +44,6 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
     function getYearGateway()
     {
         return new Intraface_modules_accounting_YearGateway($this->getKernel());
-    }
-
-    function postForm()
-    {
-        $this->getYear()->setSettings($_POST);
-        return new k_SeeOther($this->url());
     }
 
     function getVoucher()

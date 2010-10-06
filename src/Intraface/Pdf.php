@@ -109,7 +109,7 @@ class Intraface_Pdf extends Document_Cpdf
         } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['x'] -= intval(substr($value, 1));
         } else {
-            trigger_error('Ugyldig værdi i setX: '.$value, E_USER_ERROR);
+            throw new Exception('Ugyldig værdi i setX: '.$value);
         }
     }
 
@@ -130,7 +130,7 @@ class Intraface_Pdf extends Document_Cpdf
         } elseif (is_string($value) && substr($value, 0, 1) == "-") {
             $this->value['y'] -= intval(substr($value, 1));
         } else {
-            trigger_error("Ugyldig værdi i setY: ".$value, E_USER_ERROR);
+            throw new Exception("Ugyldig værdi i setY: ".$value);
         }
     }
 

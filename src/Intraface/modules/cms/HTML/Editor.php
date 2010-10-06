@@ -24,7 +24,7 @@ class Intraface_modules_cms_HTML_Editor
     function setEditor($editor)
     {
         if (!in_array($editor, $this->implemented_editors)) {
-            trigger_error($editor . 'editor not implemented', E_USER_ERROR);
+            throw new Exception($editor . 'editor not implemented');
         }
 
         $this->editor = $editor;

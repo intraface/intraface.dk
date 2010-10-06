@@ -28,7 +28,7 @@ class CMS_TemplateSection extends Intraface_Standard
     function __construct($template, $id = 0)
     {
         if (!is_object($template)) {
-            trigger_error('TemplateSection::__construct skal bruge CMS_Template', E_USER_ERROR);
+            throw new Exception('TemplateSection::__construct skal bruge CMS_Template');
         }
         $this->error    = new Intraface_Error;
         $this->id       = (int) $id;
@@ -109,7 +109,7 @@ class CMS_TemplateSection extends Intraface_Standard
 
                 break;
             default:
-                trigger_error('Section::factory::En ugyldig type');
+                throw new Exception('Section::factory::En ugyldig type');
                 break;
         }
     }

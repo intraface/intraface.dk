@@ -46,7 +46,7 @@
 			<p><?php e(t('No specific settings needed for this provider')); ?></p>
 			<?php break;
 		default:
-			trigger_error('Ugyldig provider');
+			throw new Exception('Ugyldig provider');
 			break;
 	endswitch;
 	?>

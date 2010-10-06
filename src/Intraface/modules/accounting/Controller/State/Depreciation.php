@@ -10,7 +10,7 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
 
     function map($name)
     {
-        if($name == 'selectyear') {
+        if ($name == 'selectyear') {
             return 'Intraface_modules_accounting_Controller_State_SelectYear';
         }
     }

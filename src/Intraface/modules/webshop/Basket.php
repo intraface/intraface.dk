@@ -19,26 +19,26 @@ class Basket
 
     /**
      * Variablen bruges, fordi webshop almindeligvis bruges uden for systemet.
-     * For at kunne holde fx indkøbskurven intakt, så skal den altså kunne fastholde
+     * For at kunne holde fx indkï¿½bskurven intakt, sï¿½ skal den altsï¿½ kunne fastholde
      * session id'et. Det ville den ikke kunne, fordi hver kontakt over xml-rpc jo
-     * er en ny forespørgsel og altså en ny session på serveren.
+     * er en ny forespï¿½rgsel og altsï¿½ en ny session pï¿½ serveren.
      *
      * @var string
      */
     public $session_id;
 
     /**
-     * Måske unødvendig, da den efter ændringer i klassen altid er konstant. Men fordi
-     * det var lettere at bibeholde den, blev det sådan.
+     * Mï¿½ske unï¿½dvendig, da den efter ï¿½ndringer i klassen altid er konstant. Men fordi
+     * det var lettere at bibeholde den, blev det sï¿½dan.
      *
      * @var string
      */
-    public $sql_extra; // bruges så vi ikke behøver at tjekke om der skal skelnes på session eller id
+    public $sql_extra; // bruges sï¿½ vi ikke behï¿½ver at tjekke om der skal skelnes pï¿½ session eller id
 
     /**
      * Constructor
      *
-     * Konstruktøren sørger også for at rydde op i Kurven.
+     * Konstruktï¿½ren sï¿½rger ogsï¿½ for at rydde op i Kurven.
      *
      * @param object $webshop    The webshop object
      * @param string $session_id A session id
@@ -48,11 +48,11 @@ class Basket
     public function __construct($webshop, $session_id)
     {
         if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
-            trigger_error('Basket kræver objektet Webshop', E_USER_ERROR);
+            throw new Exception('Basket krï¿½ver objektet Webshop');
         }
 
         if (empty($session_id)) {
-            trigger_error('basket needs that session id', E_USER_ERROR);
+            throw new Exception('basket needs that session id');
         }
 
         $this->webshop = $webshop;

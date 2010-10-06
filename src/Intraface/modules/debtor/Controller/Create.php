@@ -3,10 +3,12 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 {
     protected $debtor;
     protected $template;
+    protected $doctrine;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, Doctrine_Connection_Common $doctrine)
     {
         $this->template = $template;
+        $this->doctrine = $doctrine;
     }
 
     function map($name)
@@ -43,7 +45,7 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 
         if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
             $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
-            $gateway = new Intraface_modules_currency_Currency_Gateway(Doctrine_Manager::connection(DB_DSN));
+            $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
             $currency = $gateway->findById($_POST['currency_id']);
             if ($currency == false) {
                 throw new Exception('Invalid currency');

@@ -31,7 +31,7 @@ class AppendFile
     public function __construct($kernel, $belong_to, $belong_to_id)
     {
         if (!is_object($kernel)) {
-            trigger_error('AppendFile::__construct needs kernel', E_USER_ERROR);
+            throw new Exception('AppendFile::__construct needs kernel');
             return false;
         }
         $this->registerBelongTo(0, '_invalid_');
@@ -41,7 +41,7 @@ class AppendFile
         $this->registerBelongTo(4, 'cms_element_filelist');
         $this->registerBelongTo(5, 'category');
         if (!in_array($belong_to, $this->belong_to_types)) {
-            trigger_error("AppendFile->__construct unknown type", E_USER_ERROR);
+            throw new Exception("AppendFile->__construct unknown type");
         }
 
         $this->belong_to_key = $this->getBelongToKey($belong_to);

@@ -115,7 +115,7 @@ abstract class CMS_Section extends Intraface_Standard
 				*/
                 break;
             default:
-                trigger_error('Section::factory() type not known', E_USER_ERROR);
+                throw new Exception('Section::factory() type not known');
                 break;
         }
     }
@@ -144,7 +144,7 @@ abstract class CMS_Section extends Intraface_Standard
         $this->value['type'] = $this->section_types[$this->get('type_key')];
         $this->template_section = $this->getTemplateSection($this->get('template_section_id'));
         if (!is_object($this->template_section)) {
-            trigger_error('Unable to load template section', E_USER_ERROR);
+            throw new Exception('Unable to load template section');
             return false;
         }
         $this->value['section_name'] = $this->template_section->get('name');

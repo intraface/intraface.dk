@@ -88,11 +88,11 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
         $result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer')." AND id = ".$this->db->quote($this->id, 'integer') . " AND shop_id = ".$this->db->quote($this->shop->getId(), 'integer'));
 
         if (PEAR::isError($result)) {
-            trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getMessage() . $result->getUserInfo());
         }
 
         if ($result->numRows() == 0) {
-            trigger_error('Invalid id in BasketEvaluation->load', E_USER_ERROR);
+            throw new Exception('Invalid id in BasketEvaluation->load');
             return false;
         }
 
@@ -161,7 +161,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
             $result = $this->db->exec("UPDATE webshop_basket_evaluation SET ".$sql." WHERE intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer')." AND id = ".$this->db->quote($this->id, 'integer')  . " AND shop_id = ".$this->db->quote($this->shop->getId(), 'integer'));
 
             if (PEAR::isError($result)) {
-                trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getMessage() . $result->getUserInfo());
                 return false;
             }
 
@@ -169,13 +169,13 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
             $result = $this->db->query("INSERT INTO webshop_basket_evaluation SET ".$sql.", intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer').", id = ".$this->db->quote($this->id, 'integer').", shop_id = ".$this->db->quote($this->shop->getId(), 'integer'));
 
             if (PEAR::isError($result)) {
-                trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getMessage() . $result->getUserInfo());
                 return false;
             }
 
             $this->id = $this->db->lastInsertID();
             if (PEAR::isError($this->id)) {
-                trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+                throw new Exception($result->getMessage() . $result->getUserInfo());
             }
         }
 
@@ -191,7 +191,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
     {
         $result = $this->db->exec("UPDATE webshop_basket_evaluation SET active = 0 WHERE intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer')." AND id = ".$this->db->quote($this->id, 'integer'));
         if (PEAR::isError($result)) {
-            trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getMessage() . $result->getUserInfo());
             return false;
         }
         return true;
@@ -207,7 +207,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
         $result = $this->db->query("SELECT * FROM webshop_basket_evaluation WHERE active = 1 AND intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer'). " AND shop_id = ".$this->db->quote($this->shop->getId(), 'integer')." ORDER BY running_index");
 
         if (PEAR::isError($this->id)) {
-            trigger_error($result->getMessage() . $result->getUserInfo(), E_USER_ERROR);
+            throw new Exception($result->getMessage() . $result->getUserInfo());
         }
 
         $i = 0;
@@ -288,7 +288,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     settype($customer['country'], 'string');
                     
                     $countries = new Ilib_Countries('iso-8859-1');
-                    if(false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
+                    if (false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
                         $evaluate = $country['region'];
                     }
                     else {
@@ -315,7 +315,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     }
                     break;
                 default:
-                    trigger_error("Invalid evaluation_target in BasketEvaluation->run", E_USER_ERROR);
+                    throw new Exception("Invalid evaluation_target in BasketEvaluation->run");
                     return false;
             }
 
@@ -341,7 +341,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     }
                     break;
                 default:
-                    trigger_error("Invalid evaluation_method in BasketEvaluation->run", E_USER_ERROR);
+                    throw new Exception("Invalid evaluation_method in BasketEvaluation->run");
                     return false;
             }
 
@@ -359,7 +359,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                         $quantity = round(($evaluation['action_quantity']/100)*$basket->getTotalPrice('exclusive_vat'));
                         break;
                     default:
-                        trigger_error("Invalid action_unit in BasketEvaluation->run", E_USER_ERROR);
+                        throw new Exception("Invalid action_unit in BasketEvaluation->run");
                         return false;
                 }
 
@@ -373,7 +373,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                         }
                         break;
                     default:
-                        trigger_error("Invalid action_action in BasketEvaluation->run", E_USER_ERROR);
+                        throw new Exception("Invalid action_action in BasketEvaluation->run");
                         return false;
                 }
             }

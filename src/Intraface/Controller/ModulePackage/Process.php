@@ -2,17 +2,23 @@
 class Intraface_Controller_ModulePackage_Process extends k_Component
 {
     protected $kernel;
+    protected $mdb2;
+
+    function __construct(MDB2_Driver_Common $mdb2)
+    {
+        $this->mdb2 = $mdb2;
+    }
 
     function postForm()
     {
         // When we recieve from Quickpay payment not being logged in
-        $action = Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier(MDB2::singleton(DB_DSN), $_GET['action_store_identifier']);
-        if(!$action) {
+        $action = Intraface_modules_modulepackage_ActionStore::restoreFromIdentifier($this->mdb2, $_GET['action_store_identifier']);
+        if (!$action) {
             throw new Exception('Unable to restore action from identifier '. $_GET['action_store_identifier']);
         }
 
         // We login to the intranet with the private key
-        $adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), uniqid(), $action->getIntranetPrivateKey());
+        $adapter = new Intraface_Auth_PrivateKeyLogin($this->mdb2, uniqid(), $action->getIntranetPrivateKey());
         $weblogin = $adapter->auth();
         if (!$intranet_id = $weblogin->getActiveIntranetId()) {
             throw new Exception("Unable to log in to the intranet with public key: ".$action->getIntranetPrivateKey());
@@ -62,7 +68,7 @@ class Intraface_Controller_ModulePackage_Process extends k_Component
             } else {
 
                 // TODO: Here we can send an e-mail that says they still need to pay some more OR?
-                throw new Exception('Failure: Not sufficient payment', E_USER_ERROR);
+                throw new Exception('Failure: Not sufficient payment');
             }
         } else {
             // @todo should throw a 401

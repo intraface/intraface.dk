@@ -37,7 +37,7 @@
             <td><?php e($filemanager->get("accessibility")); ?></td>
         </tr>
         <?php
-        if($filemanager->get('is_image') == 1) {
+        if ($filemanager->get('is_image') == 1) {
             ?>
             <tr>
                 <th><?php e(t('Image width')); ?></th>
@@ -55,7 +55,7 @@
     <h3><?php e(t('File description')); ?></h3>
 
     <?php
-    if($filemanager->get('description') == '') {
+    if ($filemanager->get('description') == '') {
         ?>
         <p><a href="edit.php?id=<?php print($filemanager->get('id')); ?>"><?php e(t('add description')); ?></a></p>
         <?php
@@ -66,7 +66,7 @@
     ?>
 
     <?php
-    if($file_type['image'] == 1) {
+    if ($file_type['image'] == 1) {
         $filemanager->createInstance();
         $instances = $filemanager->instance->getList();
 
@@ -85,8 +85,8 @@
             </thead>
             <tbody>
                 <?php
-                foreach($instances as $instance) {
-                    if($instance['name'] == 'manual') continue;
+                foreach ($instances as $instance) {
+                    if ($instance['name'] == 'manual') continue;
                     ?>
                     <tr>
                         <td><a href="<?php e($instance['file_uri']); ?>"><?php e(t($instance['name'], 'filehandler')); ?></a></td>
@@ -94,7 +94,7 @@
                         <td><?php e($instance['height']); ?>px</td>
                         <td>
                             <?php
-                            if(is_numeric($instance['file_size'])) {
+                            if (is_numeric($instance['file_size'])) {
                                 e(number_format($instance['file_size']/1000, 2, ",", ".")." Kb");
                             }
                             else {
@@ -109,7 +109,7 @@
                 ?>
             </tbody>
         </table>
-        <?php if($kernel->user->hasModuleAccess('administration')): ?>
+        <?php if ($kernel->user->hasModuleAccess('administration')): ?>
             <?php
             $shared_filehandler = $kernel->useModule('filemanager');
             ?>
@@ -128,7 +128,7 @@
 <div id="colTwo">
 
     <?php
-    if($file_type['image'] == 1) {
+    if ($file_type['image'] == 1) {
         $filemanager->createInstance('system-small');
         ?>
         <div class="box" style="text-align: center;">

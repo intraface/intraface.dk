@@ -37,7 +37,7 @@ class Intraface_modules_modulepackage_ShopExtension {
     function __construct()
     {
         if (!defined('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY') || INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY == '') {
-            trigger_error("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set", E_USER_NOTICE);
+            throw new Exception("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set", E_USER_NOTICE);
 
             return array();
         }
@@ -64,7 +64,7 @@ class Intraface_modules_modulepackage_ShopExtension {
                 $xmlrpc_shop_url);
         } catch(Exception $e) {
             $this->shop = NULL;
-            trigger_error('Unable to connect to the intranet maintenance webshop '.$e->getMessage(), E_USER_ERROR);
+            throw new Exception('Unable to connect to the intranet maintenance webshop '.$e->getMessage());
         }
 
 
@@ -100,7 +100,7 @@ class Intraface_modules_modulepackage_ShopExtension {
                     $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
                 } catch (Exception $e) {
                     $products = array();
-                    trigger_error('unable to get products from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+                    throw new Exception('unable to get products from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
                 }
                 return (array)$products;
             } else {
@@ -114,11 +114,11 @@ class Intraface_modules_modulepackage_ShopExtension {
                 $product = $this->shop->getProduct($product_id);
             } catch (Exception $e) {
                 $products = array();
-                trigger_error('unable to get product from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+                throw new Exception('unable to get product from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
             }
             return $product;
         } else {
-            trigger_error("Invalid input for ModulePackage->getProduct, should be either array or integer", E_USER_ERROR);
+            throw new Exception("Invalid input for ModulePackage->getProduct, should be either array or integer");
             exit;
         }
     }

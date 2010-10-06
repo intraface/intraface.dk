@@ -39,7 +39,7 @@ class TemporaryFile {
     public function __construct($filehandler, $file_name = NULL)
     {
         if (!is_object($filehandler)) {
-            trigger_error("TemporaryFile requires filehandler or filemanager", E_USER_ERROR);
+            throw new Exception("TemporaryFile requires filehandler or filemanager");
         }
 
         $this->filehandler = $filehandler;
@@ -58,20 +58,20 @@ class TemporaryFile {
     private function load() 
     {
         if (empty($this->file_name)) {
-            trigger_error('file_name needs to be set to load temporary file', E_USER_ERROR);
+            throw new Exception('file_name needs to be set to load temporary file');
         }
         
         // We make sure to create the folders
         if (!is_dir($this->filehandler->upload_path)) {
             if (!mkdir($this->filehandler->upload_path, 0755)) {
-                trigger_error('Unable to create upload dir "'.$this->filehandler->upload_path.'"', E_USER_ERROR);
+                throw new Exception('Unable to create upload dir "'.$this->filehandler->upload_path.'"');
                 exit;
             }
         }
 
         if (!is_dir($this->filehandler->tempdir_path)) {
             if (!mkdir($this->filehandler->tempdir_path, 0755)) {
-                trigger_error('Unable to create temp dir "'.$this->filehandler->tempdir_path.'"', E_USER_ERROR);
+                throw new Exception('Unable to create temp dir "'.$this->filehandler->tempdir_path.'"');
                 exit;
             }
         }
@@ -81,14 +81,14 @@ class TemporaryFile {
             $unique_name = uniqid();
             $i++;
             if ($i == 50) {
-                trigger_error('Error generating a unique name', E_USER_ERROR);
+                throw new Exception('Error generating a unique name');
                 exit;
             }
         }
         while (is_dir($this->filehandler->tempdir_path.$unique_name));
         
         if (!mkdir($this->filehandler->tempdir_path.$unique_name, 0755)) {
-            trigger_error('Unable to create temporary dir "'.$this->filehandler->tempdir_path.$unique_name.'"', E_USER_ERROR);
+            throw new Exception('Unable to create temporary dir "'.$this->filehandler->tempdir_path.$unique_name.'"');
             exit;
         }
         
