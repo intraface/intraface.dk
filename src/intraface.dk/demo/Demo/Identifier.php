@@ -24,7 +24,7 @@ class Demo_Identifier extends k_Controller
         $client = $this->registry->get('admin');
 
         try {
-            $this->private_key = $client->getPrivateKey($this->name);
+            return $this->private_key = $client->getPrivateKey($this->name);
         } catch (Exception $e) {
             throw $e;
         }
