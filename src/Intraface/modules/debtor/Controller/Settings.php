@@ -33,7 +33,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
     {
         $this->context->getKernel()->useModule('invoice');
 
-        if (isset($_GET['return_redirect_id'])) {
+        if ($this->query('return_redirect_id')) {
             $redirect = Intraface_Redirect::factory($this->context->getKernel(), 'return');
             if ($redirect->get('identifier') == 'contact') {
                 // would be better if the return were a post
@@ -47,11 +47,19 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
         if ($this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact') > 0) {
             $scan_in_contact = new Contact($this->context->getKernel(), $this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact'));
+        } else {
+            $scan_in_contact = null;
         }
 
         $string = 'Det er ikke længere gratis for små og mellemstore virksomheder at bruge Læs-ind bureauer.';
+
+        $data = array(
+            'string' => $string,
+            'kernel' => $this->context->getKernel(),
+            'scan_in_contact' => $scan_in_contact);
+
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
-        return $smarty->render($this, array('string' => $string, 'kernel' => $this->context->getKernel(), 'scan_in_contact' => $scan_in_contact));
+        return $smarty->render($this, $data);
     }
 
     function getError()
