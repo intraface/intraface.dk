@@ -702,8 +702,8 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         $this->_factoryWebshop($shop_id);
-
         $module = $this->kernel->useModule('filemanager');
+
         require_once 'Intraface/shared/filehandler/AppendFile.php';
 
         $pictures = array();
@@ -730,7 +730,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                         $pictures[$key][$instance['name']]['height']   = $instance['height'];
                     }
                 }
-                $tmp_filehandler->__destruct();
+                //$tmp_filehandler->__destruct();
                 unset($tmp_filehandler);
            }
 
