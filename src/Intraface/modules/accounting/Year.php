@@ -484,10 +484,6 @@ class Year extends Intraface_Standard
                     $buy_eu = array();
 
                     foreach ($standardaccounts AS $input) {
-                        if (!defined('INTRAFACE_K2')) {
-                        // hack as long as everything is not utf8
-                            $input = array_map('utf8_decode',$input);
-                        }
                         require_once 'Intraface/modules/accounting/Account.php';
                         $account = new Account($this);
                         $input['vat_percent'] = $this->kernel->getSetting()->get('intranet', 'vatpercent');
