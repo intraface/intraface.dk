@@ -306,7 +306,7 @@ class Reminder extends Intraface_Standard
 
         if ($status_id <= $this->get("status_id")) {
             $this->error->set('Du kan ikke s�tte status til samme som/lavere end den er i forvejen');
-            throw new Exception("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus", E_USER_NOTICE);
+            throw new Exception("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus");
             return false;
 
         }

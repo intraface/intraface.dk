@@ -275,7 +275,7 @@ class Voucher extends Intraface_Standard
             return 0;
         }
 
-        throw new Exception('HER SKAL VI LIGE HAVE LAVET ET TJEK P� OM BILAGET M� SLETTES IFT. OM BILAG ER BOGF�RT', E_USER_NOTICE);
+        throw new Exception('HER SKAL VI LIGE HAVE LAVET ET TJEK P� OM BILAGET M� SLETTES IFT. OM BILAG ER BOGF�RT');
 
         $db = new DB_Sql;
         $sql = "UPDATE accounting_voucher SET active = 0 WHERE id = " . (int)$this->id . " AND year_id = " . $this->year->get('id') . " AND intranet_id=" . $this->year->kernel->intranet->get('id');

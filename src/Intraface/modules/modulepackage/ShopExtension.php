@@ -37,7 +37,7 @@ class Intraface_modules_modulepackage_ShopExtension {
     function __construct()
     {
         if (!defined('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY') || INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY == '') {
-            throw new Exception("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set", E_USER_NOTICE);
+            throw new Exception("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set");
 
             return array();
         }
@@ -66,7 +66,6 @@ class Intraface_modules_modulepackage_ShopExtension {
             $this->shop = NULL;
             throw new Exception('Unable to connect to the intranet maintenance webshop '.$e->getMessage());
         }
-
 
         $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
@@ -100,7 +99,7 @@ class Intraface_modules_modulepackage_ShopExtension {
                     $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
                 } catch (Exception $e) {
                     $products = array();
-                    throw new Exception('unable to get products from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+                    throw new Exception('unable to get products from intranet webshop: '.$e->getMessage());
                 }
                 return (array)$products;
             } else {
@@ -114,7 +113,7 @@ class Intraface_modules_modulepackage_ShopExtension {
                 $product = $this->shop->getProduct($product_id);
             } catch (Exception $e) {
                 $products = array();
-                throw new Exception('unable to get product from intranet webshop: '.$e->getMessage(), E_USER_NOTICE);
+                throw new Exception('unable to get product from intranet webshop: '.$e->getMessage());
             }
             return $product;
         } else {
@@ -146,7 +145,6 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         return false;
-
     }
 
     /**
@@ -214,7 +212,6 @@ class Intraface_modules_modulepackage_ShopExtension {
 
         return array('order_identifier' => $order_identifier,
             'total_price' => $basket['total_price']['DKK']['incl_vat']);
-
     }
 
     /**
@@ -227,7 +224,6 @@ class Intraface_modules_modulepackage_ShopExtension {
      */
     public function addPaymentToOrder($order_identifier, $postprocess)
     {
-
         return $this->onlinepayment->saveOnlinePayment(
             $order_identifier,
             $postprocess->getTransactionNumber(),

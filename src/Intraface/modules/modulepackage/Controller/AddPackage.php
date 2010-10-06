@@ -20,7 +20,6 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
         if ($modulepackage->get('id') == 0) {
             throw new Exception("Invalid id");
-            exit;
         }
 
         $add_type = $modulepackagemanager->getAddType($modulepackage);
@@ -34,11 +33,6 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
             'kernel' => $this->getKernel());
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/add-package');
         return $tpl->render($this, $data);
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
     }
 
     function postForm()
@@ -129,11 +123,15 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                         return new k_SeeOther($this->url('../../process', array('action_store_identifier' => $action_store_identifier)));
                     } else {
                         throw new Exception('We did not end up having an action store id!');
-                        exit;
                     }
                 }
             }
         }
 
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
     }
 }

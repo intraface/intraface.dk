@@ -82,7 +82,7 @@ class Intraface_modules_modulepackage_AccessUpdate
             if (is_array($modules) && count($modules) > 0) {
                 foreach ($modules AS $module) {
                     if (!$intranet->removeModuleAccess($module['module'])) {
-                        throw new Exception('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                        throw new Exception('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id']);
                     }
                 }
             }
@@ -119,20 +119,20 @@ class Intraface_modules_modulepackage_AccessUpdate
                 foreach ($modules AS $module) {
                     $module_object = ModuleMaintenance::factory($module['module']);
                     if (!$intranet->setModuleAccess($module['module'])) {
-                        throw new Exception("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id'], E_USER_NOTICE);
+                        throw new Exception("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id']);
                         $this->error->set('we could not give your intrnaet access to your modules');
                     } else {
                         // then we give access to alle the users in the intranet
                         foreach ($users AS $user) {
                             if (!$user->setModuleAccess($module['module'], $row['intranet_id'])) {
-                                throw new Exception('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                throw new Exception('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id']);
                                 $this->error->set('we could not give all users access to your modules');
                             } else {
                                 // And lastly we give all subaccess
                                 $sub_access_array = $module_object->get('sub_access');
                                 foreach ($sub_access_array AS $sub_access) {
                                     if (!$user->setSubAccess($module['module'], $sub_access['id'], $row['intranet_id'])) {
-                                        throw new Exception('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id'], E_USER_NOTICE);
+                                        throw new Exception('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id']);
                                         $this->error->set('we could not give all users access to your modules');
                                     }
                                 }

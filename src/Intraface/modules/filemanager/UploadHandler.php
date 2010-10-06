@@ -397,7 +397,7 @@ class UploadHandler extends Intraface_Standard
                 
                 if (!chmod($this->upload_path.$server_file_name, 0644)) {
                     // please do not stop executing here
-                    throw new Exception("Unable to chmod file '".$this->upload_path.$server_file_name."'", E_USER_NOTICE);
+                    throw new Exception("Unable to chmod file '".$this->upload_path.$server_file_name."'");
                 }
 
                 //print("SUCCESS: ".$file."<br />");

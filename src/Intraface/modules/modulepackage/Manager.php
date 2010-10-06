@@ -152,7 +152,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
         // We make sure that it is not possible to add a package before existing is finished.
         if (strtotime($this->getLastEndDateInGroup($modulepackage)) >= strtotime($start_date)) {
             $this->error->set('you are trying to add a package in a group before the existing package is finished');
-            throw new Exception('you are trying to add a package in a group before the existing package is finished', E_USER_NOTICE);
+            throw new Exception('you are trying to add a package in a group before the existing package is finished');
             return false;
         }
 

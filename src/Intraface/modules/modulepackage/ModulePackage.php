@@ -132,7 +132,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
 
         $limiters = unserialize($string_limiters);
         if ($limiters === false) {
-            throw new Exception('Unable to unserialize string "'.$string_limiters.'" in ModulePackage->parseLimiters', E_USER_NOTICE);
+            throw new Exception('Unable to unserialize string "'.$string_limiters.'" in ModulePackage->parseLimiters');
             return array();
         }
 
@@ -157,7 +157,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
                 $i++;
              }
              else {
-                throw new Exception('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!', E_USER_NOTICE);
+                throw new Exception('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!');
              }
         }
 

@@ -122,13 +122,13 @@ class Intraface_XMLRPC_OnlinePayment_Server extends Intraface_XMLRPC_Server
                       'belong_to'  => $payment_id);
 
         if (!$email->save($data)) {
-            throw new Exception('Could not save email to onlinepayment', E_USER_NOTICE);;
+            throw new Exception('Could not save email to onlinepayment');;
             return false;
         }
 
         if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
-            throw new Exception('Could not send email to ' . $debtor->getContact()->getId(), E_USER_NOTICE);;
+            throw new Exception('Could not send email to ' . $debtor->getContact()->getId());;
             return false;
         }
 
