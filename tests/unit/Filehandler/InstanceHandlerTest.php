@@ -10,7 +10,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE file_handler');
         $db->query('TRUNCATE file_handler_instance');
         $db->query('TRUNCATE file_handler_instance_type');
@@ -84,7 +84,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         // $this->assertEquals('c6fc157c4d2d56ad8be50a71af684fab', md5(file_get_contents($filehandler->instance->get('file_path'))));
 
         // instance handler does not return the crop parameter, so we just find it in the database!
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('SELECT crop_parameter FROM file_handler_instance WHERE id = '.$filehandler->instance->get('id'));
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         $this->assertEquals($crop, unserialize($row['crop_parameter']));

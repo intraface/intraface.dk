@@ -54,7 +54,7 @@ class ShopTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('TRUNCATE currency');
         $result = $db->query('TRUNCATE currency_exchangerate');
         $result = $db->query('TRUNCATE contact');

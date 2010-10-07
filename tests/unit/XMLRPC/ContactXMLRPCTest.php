@@ -1,26 +1,24 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
 require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/XMLRPC/Contact/Server.php';
 
 class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 {
-    private $server;
+    protected $server;
+    protected $db;
 
     function setUp()
     {
         $this->server = new Intraface_XMLRPC_Contact_Server;
-        $db = MDB2::factory(DB_DSN);
-        $db->exec('TRUNCATE contact');
-        $db->exec('TRUNCATE address');
-
+        $this->db = MDB2::singleton(DB_DSN);
     }
 
     function tearDown()
     {
-		unset($this->server);
+        $this->db->exec('TRUNCATE contact');
+        $this->db->exec('TRUNCATE address');
+        unset($this->server);
     }
 
     function getClient()
@@ -37,8 +35,8 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
         require_once 'XML/RPC2/Client.php';
         $debug = false;
-        $options = array('prefix' => 'contact.', 'debug' => $debug);
-        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact?backend=xmlrpcext', $options);
+        $options = array('prefix' => 'contact.', 'debug' => $debug, 'encoding' => 'utf-8');
+        $client = XML_RPC2_Client::create(XMLRPC_SERVER_URL.'contact', $options);
 
         return $client;
     }
@@ -83,7 +81,9 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
         $contact = new Contact(new Stub_Kernel);
         $data = array('name' => 'Tester æøå');
-        $contact->save($data);
+        $res = $contact->save($data);
+
+        $this->assertEquals(1, $res);
 
         $retrieved = $client->getContact($credentials, $contact->getId());
 
@@ -93,7 +93,6 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
     function testSaveContactWorksWithDanishCharacters()
     {
-
         $client = $this->getClient();
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
 
@@ -107,7 +106,5 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
 
         $saved_contact = new Contact(new Stub_Kernel, $contact->getId());
         $this->assertEquals($new_name, $saved_contact->get('name'));
-
     }
-
 }

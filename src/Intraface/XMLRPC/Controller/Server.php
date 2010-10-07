@@ -38,7 +38,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
         $options = array(
             'prefix' => $this->prefix . '.',
-            'encoding' => 'utf-8', // $this->encoding
+            'encoding' => $this->getEncoding(), // $this->encoding
             'backend' => $this->getBackend());
 
         return $options;

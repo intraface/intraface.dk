@@ -44,7 +44,7 @@ class PostTest extends PHPUnit_Framework_TestCase
 
     function tearDown()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
     	$db->query('TRUNCATE accounting_post');
     }
 
@@ -91,7 +91,7 @@ class PostTest extends PHPUnit_Framework_TestCase
         $skip_draft = true;
         $res = $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
         $this->assertTrue($res);
-        $this->assertEquals(1, count($post->getList()));
+        $this->assertEquals(0, count($post->getList()));
 
     }
 }

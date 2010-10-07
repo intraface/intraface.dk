@@ -10,7 +10,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE invoice_payment');
         $db->exec('TRUNCATE debtor');
         $db->exec('TRUNCATE contact');

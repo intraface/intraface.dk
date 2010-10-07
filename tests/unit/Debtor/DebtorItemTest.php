@@ -11,7 +11,7 @@ require_once dirname(__FILE__) .'/stubs/Debtor.php';
 class DebtorItemTest extends PHPUnit_Framework_TestCase
 {
     function setup() {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE debtor_item');
         $db->query('TRUNCATE product');
         $db->query('TRUNCATE product_detail');

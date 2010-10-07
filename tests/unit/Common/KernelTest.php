@@ -160,7 +160,7 @@ class KernelTest extends PHPUnit_Framework_TestCase
 
     function testGetModules()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('SELECT * FROM module');
         if (PEAR::isError($result)) {
             die($result->getMessage() . $result->getUserInfo());

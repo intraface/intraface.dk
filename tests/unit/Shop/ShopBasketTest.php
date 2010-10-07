@@ -40,13 +40,13 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
     function createProductWithVariations()
     {
         require_once dirname(__FILE__) .'/../../../install/Helper/Product.php';
-        $helper = new Install_Helper_Product($this->kernel, MDB2::factory(DB_DSN));
+        $helper = new Install_Helper_Product($this->kernel, MDB2::singleton(DB_DSN));
         $helper->createWithVariations();
     }
 
     function emptyBasketTable()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('TRUNCATE basket');
         $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');
@@ -74,7 +74,7 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $coordinator = new FakeShopBasketCoordinator();
         $shop = new FakeShopBasketWebshop;
         $coordinator->kernel = $kernel;
-        $basket = new Intraface_modules_shop_Basket(MDB2::factory(DB_DSN), new Stub_Intranet, $coordinator, $shop, 'somesessionid');
+        $basket = new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN), new Stub_Intranet, $coordinator, $shop, 'somesessionid');
         return $basket;
     }
 

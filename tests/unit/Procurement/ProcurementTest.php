@@ -11,7 +11,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE procurement');
         $db->exec('TRUNCATE procurement_item');
         $db->exec('TRUNCATE accounting_account');

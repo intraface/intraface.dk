@@ -14,7 +14,7 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE debtor');
         $db->exec('TRUNCATE debtor_item');
         $db->exec('TRUNCATE product');

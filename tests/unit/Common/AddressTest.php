@@ -12,7 +12,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE address');
     }
     
@@ -62,7 +62,7 @@ class AddressTest extends PHPUnit_Framework_TestCase
     
     function testUpdate() {
         /*
-        Da metoden er fjernet fra klassen er testen også fjernet.
+        Da metoden er fjernet fra klassen er testen ogsï¿½ fjernet.
         $address = Address::factory('intranet', 1);
         $address->save($this->getValidAddress());
         $this->assertTrue($address->update($this->getValidAddress()));

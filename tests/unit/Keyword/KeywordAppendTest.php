@@ -12,7 +12,7 @@ class KeywordAppendTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->keyword = new Intraface_Keyword_Appender(new FakeKeywordAppendObject);
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE keyword');
         $db->query('TRUNCATE keyword_x_object');
         $res = $db->query('INSERT into keyword SET id = 1, keyword = "test", intranet_id = 1, type="contact"');

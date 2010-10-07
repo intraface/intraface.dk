@@ -27,7 +27,7 @@ class PageTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE cms_template');
         $db->query('TRUNCATE cms_page');
         $this->page = new CMS_Page($this->createSite());

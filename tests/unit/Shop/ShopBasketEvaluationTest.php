@@ -38,7 +38,7 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     function emptyEvaluationTable()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE webshop_basket_evaluation');
         $db->query('TRUNCATE basket');
     }

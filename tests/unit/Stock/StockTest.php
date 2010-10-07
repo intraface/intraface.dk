@@ -27,7 +27,7 @@ class StockTest extends PHPUnit_Framework_TestCase
     {
         $this->kernel = new Stub_Kernel();
         /*
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE product');
         $db->query('TRUNCATE product_detail');
         $db->query('TRUNCATE product_detail_translation');

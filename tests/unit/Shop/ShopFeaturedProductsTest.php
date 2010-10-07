@@ -16,7 +16,7 @@ class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE shop_featuredproducts');
         $this->featured = new Intraface_modules_shop_FeaturedProducts(new Stub_Intranet, new Stub_Intranet, $db);
     }

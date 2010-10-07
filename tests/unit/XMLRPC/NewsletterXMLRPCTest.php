@@ -12,7 +12,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->server = new Intraface_XMLRPC_Newsletter_Server;
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE contact');
         $db->exec('TRUNCATE newsletter_subscriber');
         $this->kernel = new Stub_Kernel;

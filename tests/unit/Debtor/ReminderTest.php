@@ -12,7 +12,7 @@ class ReminderTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE invoice_reminder');
         $db->query('TRUNCATE invoice_reminder_item');
         $db->query('TRUNCATE invoice_reminder_unpaid_reminder');

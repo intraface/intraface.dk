@@ -19,7 +19,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
 {
     function setUp()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE newsletter_subscriber');
         $db->exec('TRUNCATE newsletter_archieve');
         $db->exec('TRUNCATE contact');

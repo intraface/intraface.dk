@@ -56,14 +56,14 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
 
     function testGetModules()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('SELECT * FROM module');
         if (PEAR::isError($result)) {
             die($result->getMessage() . $result->getUserInfo());
         }
 
-        $this->assertTrue(is_array($this->handler->getModules(MDB2::factory(DB_DSN))));
-        $this->assertEquals($result->numRows(), count($this->handler->getModules(MDB2::factory(DB_DSN))));
+        $this->assertTrue(is_array($this->handler->getModules(MDB2::singleton(DB_DSN))));
+        $this->assertEquals($result->numRows(), count($this->handler->getModules(MDB2::singleton(DB_DSN))));
     }
 
 }

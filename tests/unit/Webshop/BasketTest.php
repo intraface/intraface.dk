@@ -28,7 +28,7 @@ class BasketTest extends PHPUnit_Framework_TestCase
 
     function emptyBasketTable()
     {
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $result = $db->query('TRUNCATE basket');
         $result = $db->query('TRUNCATE basket_details');
         $result = $db->query('TRUNCATE product');

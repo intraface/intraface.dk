@@ -12,7 +12,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class FakeDebtorAddress {
     function get($key = '') {
-        $info = array('name' => 'Lars Olesen', 'address' => 'Græsvangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
+        $info = array('name' => 'Lars Olesen', 'address' => 'Grï¿½svangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
         if (empty($key)) return $info;
         else return $info[$key];
     }
@@ -68,7 +68,7 @@ class DebtorTest extends PHPUnit_Framework_TestCase
 
     function setUp() {
 
-        $db = MDB2::factory(DB_DSN);
+        $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE debtor');
         $db->query('TRUNCATE debtor_item');
         $db->query('TRUNCATE currency');
