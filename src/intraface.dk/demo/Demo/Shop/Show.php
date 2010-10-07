@@ -1,25 +1,53 @@
 <?php
-class Demo_Shop_Show extends k_Controller
+class Demo_Shop_Show extends k_Component
 {
     private $intranet_has_online_payment_access;
     public $map = array('shop' => 'IntrafacePublic_Shop_Controller_Index');
     private $translation = array();
+    protected $client;
+    protected $cache;
+    protected $template;
 
-    function GET()
+    function __construct(IntrafacePublic_Admin_Client_XMLRPC $client, k_TemplateFactory $template, Cache_Lite $cache)
     {
-        return get_class($this) . ' intentionally left blank';
+        $this->client = $client;
+        $this->template = $template;
+        $this->cache = $cache;
+    }
+
+    function map($name)
+    {
+        return 'IntrafacePublic_Shop_Controller_Index';
+    }
+
+    function renderHtml()
+    {
+        return 'Intentionally left blank';
+    }
+
+    function forward($class_name, $namespace = '')
+    {
+        $next = new IntrafacePublic_Shop_Controller_Index($this->getShop(), $this->template);
+        $next->setContext($this);
+        $next->setUrlState($this->url_state);
+        $next->setDocument($this->document);
+        $next->setComponentCreator($this->component_creator);
+        //$next->setTranslatorLoader($this->translator_loader);
+        $next->setDebugger($this->debugger);
+
+        return $next->dispatch();
     }
 
     private function getCredentials()
     {
         return array("private_key" => $this->context->getPrivateKey(),
-                     "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
+                     "session_id" => md5($this->session()->sessionId()));
     }
 
     private function intranetHasOnlinePaymentAccess()
     {
         if ($this->intranet_has_online_payment_access === NULL) {
-            $this->intranet_has_online_payment_access = $this->registry->get('admin')->hasModuleAccess($this->getCredentials(), 'onlinepayment');
+            $this->intranet_has_online_payment_access = $this->client->hasModuleAccess($this->getCredentials(), 'onlinepayment');
         }
         return $this->intranet_has_online_payment_access;
     }
@@ -27,13 +55,13 @@ class Demo_Shop_Show extends k_Controller
     function getShop()
     {
         $debug = false;
-        $shop_id = $this->name;
+        $shop_id = $this->name();
         $client = new IntrafacePublic_Shop_Client_XMLRPC(
             $this->getCredentials(),
             $shop_id,
             $debug,
             INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0100.php"); // 'iso-8859-1', 'xmlrpcext'
-        return new IntrafacePublic_Shop($client, $this->registry->get('cache'));
+        return new IntrafacePublic_Shop($client, $this->cache);
     }
 
     public function getOnlinePayment()
@@ -46,7 +74,7 @@ class Demo_Shop_Show extends k_Controller
                     $debug,
                     INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0100.php" // , 'iso-8859-1', 'xmlrpcext'
                 ),
-                $this->registry->get("cache")
+                $this->cache
             );
         }
         return false;
@@ -66,18 +94,13 @@ class Demo_Shop_Show extends k_Controller
         return 'Western Europe';
     }
     */
-
+    /*
     function execute()
     {
         return $this->forward('shop');
     }
+    */
 
-    function forward($name)
-    {
-        $this->registry->set('shop', $this->getShop());
-        $next = new IntrafacePublic_Shop_Controller_Index($this, $name);
-        return $next->handleRequest();
-    }
 
     /**
      * To test translations

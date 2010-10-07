@@ -1,9 +1,14 @@
 <?php
-class Demo_Shop_Root extends k_Controller
+class Demo_Shop_Root extends k_Component
 {
     private $private_key;
 
-    function GET()
+    function map($name)
+    {
+        return 'Demo_Shop_Show';
+    }
+
+    function renderHtml()
     {
         return get_class($this) . ' intentionally left blank';
     }
@@ -11,11 +16,5 @@ class Demo_Shop_Root extends k_Controller
     function getPrivateKey()
     {
         return $this->context->getPrivateKey();
-    }
-
-    function forward($name)
-    {
-        $next = new Demo_Shop_Show($this, $name);
-        return $next->handleRequest();
     }
 }

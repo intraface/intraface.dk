@@ -1,7 +1,7 @@
 <?php
-class Demo_Login_Root extends k_Controller
+class Demo_Login_Root extends k_Component
 {
-    function GET()
+    function renderHtml()
     {
         return get_class($this) . ' has intentionally been left blank';
     }
@@ -14,23 +14,23 @@ class Demo_Login_Root extends k_Controller
     function getCredentials()
     {
         $credentials = array();
-        
+
         $credentials["private_key"] = $this->getPrivateKey();
-        $credentials["session_id"] = md5($this->registry->get("k_http_Session")->getSessionId());
-        
-        return $credentials;     
+        $credentials["session_id"] = md5($this->session()->sessionId());
+
+        return $credentials;
     }
-    
+
     function getContactClient()
     {
-        return new IntrafacePublic_Contact_XMLRPC_Client($this->getCredentials(), false, INTRAFACE_XMLPRC_SERVER_PATH . "contact/server.php");        
+        return new IntrafacePublic_Contact_XMLRPC_Client($this->getCredentials(), false, INTRAFACE_XMLPRC_SERVER_PATH . "contact/server.php");
     }
 
     function getNewsletterClient()
     {
-        return new IntrafacePublic_Newsletter_XMLRPC_Client($this->getCredentials(), false, INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server.php");        
+        return new IntrafacePublic_Newsletter_XMLRPC_Client($this->getCredentials(), false, INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server.php");
     }
-    
+
     function getDebtorClient()
     {
         return new IntrafacePublic_Debtor_XMLRPC_Client($this->getCredentials(), true, INTRAFACE_XMLPRC_SERVER_PATH . "debtor/server.php");
@@ -41,12 +41,8 @@ class Demo_Login_Root extends k_Controller
         return $this->forward('login');
     }
 
-    function forward($name)
+    function map($name)
     {
-        $this->registry->set('contact', $this->getContactClient());
-        $this->registry->set('newsletter', $this->getNewsletterClient());
-        $this->registry->set('debtor', $this->getDebtorClient());
-        $next = new IntrafacePublic_ContactLogin_Controller_Index($this, $name);
-        return $next->handleRequest();
+        return 'IntrafacePublic_ContactLogin_Controller_Index';
     }
 }

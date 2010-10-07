@@ -1,34 +1,39 @@
 <?php
-class Demo_CMS_Show extends k_Controller
+class Demo_CMS_Show extends k_Component
 {
-    public $map = array('cms' => 'IntrafacePublic_CMS_Controller_Index');
+    private $map = array('cms' => 'IntrafacePublic_CMS_Controller_Index');
+    protected $cache;
 
-    function GET()
+    function __construct(Cache_Lite $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    function renderHtml()
     {
         return get_class($this) . ' intentionally left blank';
     }
 
     public function getPathToTemplate($template)
     {
-        return 'Demo/CMS/standard-tpl.php';
+        return 'Demo/CMS/standard';
     }
 
     public function getCMS()
     {
         $credentials = array("private_key" => $this->context->getPrivateKey(),
-                             "session_id" => md5($this->registry->get("k_http_Session")->getSessionId()));
+                             "session_id" => md5($this->session()->sessionId()));
         $debug = false;
-        $client = new IntrafacePublic_CMS_Client_XMLRPC($credentials, $this->name, $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server2.php");
-        return new IntrafacePublic_CMS($client, $this->registry->get('cache'));
+        $client = new IntrafacePublic_CMS_Client_XMLRPC($credentials, $this->name(), $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server2.php");
+        return new IntrafacePublic_CMS($client, $this->cache);
     }
 
-    public function forward($name)
+    public function map($name)
     {
         if ($name == 'enquiry') {
-            $next = new IntrafacePublic_CMS_Controller_Enquiry($this, $name, 'secher@dsa-net.dk', 'sune.t.jensen@gmail.com');
+            return 'IntrafacePublic_CMS_Controller_Enquiry';
         } else {
-            $next = new IntrafacePublic_CMS_Controller_Index($this, $name);
+            return 'IntrafacePublic_CMS_Controller_Index';
         }
-        return $next->handleRequest();
     }
 }

@@ -1,7 +1,7 @@
 <?php
-class Demo_CMS_Root extends k_Controller
+class Demo_CMS_Root extends k_Component
 {
-    function GET()
+    function renderHtml()
     {
         return get_class($this) . ' has intentionally been left blank';
     }
@@ -11,9 +11,8 @@ class Demo_CMS_Root extends k_Controller
         return $this->context->getPrivateKey();
     }
 
-    function forward($name)
+    function map($name)
     {
-        $next = new Demo_CMS_Show($this, $name);
-        return $next->handleRequest();
+        return 'Demo_CMS_Show';
     }
 }

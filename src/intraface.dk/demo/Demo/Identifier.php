@@ -1,7 +1,7 @@
 <?php
-class Demo_Identifier extends k_Controller
+class Demo_Identifier extends k_Component
 {
-    public $map = array(
+    private $map = array(
         'shop' => 'Demo_Shop_Root',
         'cms' => 'Demo_CMS_Root',
         'login' => 'Demo_Login_Root',
@@ -9,8 +9,19 @@ class Demo_Identifier extends k_Controller
     );
 
     private $private_key;
+    private $client;
 
-    function GET()
+    function __construct(IntrafacePublic_Admin_Client_XMLRPC $client)
+    {
+        $this->client = $client;
+    }
+
+    function map($name)
+    {
+        return $this->map[$name];
+    }
+
+    function renderHtml()
     {
         return get_class($this) . ' intentionally left blank';
     }
@@ -21,10 +32,8 @@ class Demo_Identifier extends k_Controller
             return $this->private_key;
         }
 
-        $client = $this->registry->get('admin');
-
         try {
-            return $this->private_key = $client->getPrivateKey($this->name);
+            return $this->private_key = $this->client->getPrivateKey($this->name());
         } catch (Exception $e) {
             throw $e;
         }
@@ -34,22 +43,5 @@ class Demo_Identifier extends k_Controller
         }
 
         return $this->private_key;
-    }
-
-    function forward($name)
-    {
-        if ($name == 'shop') {
-            $next = new Demo_Shop_Root($this, $name);
-            return $next->handleRequest();
-        } elseif ($name == 'cms') {
-            $next = new Demo_CMS_Root($this, $name);
-            return $next->handleRequest();
-        } elseif ($name == 'login') {
-            $next = new Demo_Login_Root($this, $name);
-            return $next->handleRequest();
-        } elseif ($name == 'newsletter') {
-            $next = new Demo_Newsletter_Root($this, $name);
-            return $next->handleRequest();
-        }
     }
 }

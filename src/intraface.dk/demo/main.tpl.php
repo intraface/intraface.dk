@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da">
     <head>
         <title><?php e($title); ?></title>
-        <meta http-equiv="content-type" content="text/html; charset=<?php e($encoding); ?>">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="<?php e(url('/demo/shop/rss.php')); ?>" />
 
         <style type="text/css">
-        <?php foreach ($this->document->styles as $style): ?>
+        <?php foreach ($context->document()->styles() as $style): ?>
             @import "<?php e($style); ?>";
         <?php endforeach;?>
         </style>
@@ -14,10 +14,10 @@
 
      <body>
         <div id="container">
-            <div id="header"><?php e($this->document->company_name); ?></div>
-            
+            <div id="header"><?php e($context->document()->companyName()); ?></div>
+
             <div id="menu">
-                <?php if (isset($this->document->menu)) echo $this->document->menu; ?>
+                <?php if ($context->document()->menu()) echo $context->document()->menu(); ?>
             </div>
             <div id="content">
                 <?php echo $content; ?>

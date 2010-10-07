@@ -1,23 +1,34 @@
 <?php
-class Demo_Root extends k_Dispatcher
+class Demo_Root extends k_Component
 {
-    function __construct()
+    protected $template;
+
+    function __construct(k_TemplateFactory $template)
     {
-        parent::__construct();
-        $this->document->template = dirname(__FILE__) . '/../main-tpl.php';
-        $this->document->company_name = 'Intraface Demo';
-        $this->document->styles[] = $this->url('/layout.css');
-        $this->document->styles[] = $this->url('/shop.css');
+        $this->template = $template;
     }
 
-    function GET()
+    function map($name)
+    {
+        return 'Demo_Identifier';
+    }
+
+    function renderHtml()
     {
         return get_class($this) . ' intentionally left blank';
     }
 
-    function forward($name)
+    function execute()
     {
-        $next = new Demo_Identifier($this, $name);
-        return $next->handleRequest();
+        return $this->wrap(parent::execute());
+    }
+
+    function wrapHtml($content)
+    {
+        $tpl = $this->template->create('main');
+        //$this->document->company_name = 'Intraface Demo';
+        $this->document()->addStyle($this->url('/layout.css'));
+        $this->document()->addStyle($this->url('/shop.css'));
+        return $tpl->render($this, array('content' => $content));
     }
 }

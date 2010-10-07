@@ -286,8 +286,10 @@ class Intraface_IdentityLoader implements k_IdentityLoader
     }
 }
 
-class NotAuthorizedComponent extends k_Component {
-    function dispatch() {
+class NotAuthorizedComponent extends k_Component
+{
+    function dispatch()
+    {
         // redirect to login-page
         return new k_TemporaryRedirect($this->url('/login', array('continue' => $this->requestUri())));
     }
