@@ -124,6 +124,9 @@ class Intraface_XMLRPC_Server0100
      */
     protected function processRequestData($values)
     {
+        // @todo When sending from utf8-backend from outside to xmlrpcext
+        //       the encoding will think it is iso-8859-1, but acutally it is utf8.
+        //       So it seems that it is encoded twice.
         if ($this->encoding == 'iso-8859-1') {
             return $this->recursiveMap('utf8_encode', $values);
         }
