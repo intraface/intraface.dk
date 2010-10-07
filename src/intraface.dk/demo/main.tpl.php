@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="da" lang="da">
     <head>
-        <title><?php e($title); ?></title>
+        <title><?php e($context->document()->title()); ?></title>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="<?php e(url('/demo/shop/rss.php')); ?>" />
 
