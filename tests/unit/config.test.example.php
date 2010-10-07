@@ -24,7 +24,7 @@ define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
 set_include_path(PATH_ROOT. PATH_SEPARATOR . get_include_path());
 
 require_once 'Ilib/ClassLoader.php';
-require_once 'Doctrine/lib/Doctrine.php';
+require_once 'Doctrine.php';
 spl_autoload_register(array('Doctrine', 'autoload'));
 
 $db = MDB2::singleton(DB_DSN);
@@ -46,3 +46,4 @@ if ($db->getOption('debug')) {
 Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
 Doctrine_Manager::connection(DB_DSN);
+Doctrine_Manager::setCharset('utf8');
