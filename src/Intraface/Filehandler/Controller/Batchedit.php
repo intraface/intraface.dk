@@ -13,7 +13,6 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         $kernel = $this->getKernel();
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
         $module = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
         if (!$this->query('use_stored')) {
             throw new Exception('you cannot batch edit files with no save results');
@@ -40,7 +39,6 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         $kernel = $this->getKernel();
         $gateway = new Ilib_Filehandler_Gateway($this->getKernel());
         $module = $kernel->module('filemanager');
-        $translation = $kernel->getTranslation('filemanager');
 
         $input = $this->body();
 
