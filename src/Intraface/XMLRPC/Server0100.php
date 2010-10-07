@@ -8,6 +8,7 @@
  * @category XMLRPC_Server
  * @package  Intraface_XMLRPC
  * @author   Sune Jensen <sj@sunet.dk>
+ * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
 
@@ -20,6 +21,7 @@
  * @category XMLRPC_Server
  * @package  Intraface_XMLRPC
  * @author   Sune Jensen <sj@sunet.dk>
+ * @author   Lars Olesen <lars@legestue.net>
  * @version  @package-version@
  */
 class Intraface_XMLRPC_Server0100
@@ -35,7 +37,6 @@ class Intraface_XMLRPC_Server0100
     protected $kernel;
 
     /**
-     *
      * @var array with valid encodings
      */
     protected $valid_encodings = array('utf-8', 'iso-8859-1');
@@ -102,6 +103,7 @@ class Intraface_XMLRPC_Server0100
      * Prepares response to be sent with the correct UTF-8 encoding.
      *
      * @param mixed $values Array or string to decode
+     *
      * @return mixed UTF8 decoded request
      */
     protected function prepareResponseData($values)
@@ -117,6 +119,7 @@ class Intraface_XMLRPC_Server0100
      * Process data from client, so that data is returned with the correct encoding.
      *
      * @param mixed $values Array or string to decode
+     *
      * @return mixed correct encoded response
      */
     protected function processRequestData($values)

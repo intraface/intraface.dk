@@ -10,6 +10,44 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     protected $backend = 'php';
     protected $default_server_version = null;
 
+    function dispatch()
+    {
+        switch ($this->query('backend')) {
+            case 'xmlrpcext':
+                // @todo tests does not pass with this one
+                XML_RPC2_Backend::setBackend('xmlrpcext');
+                $this->backend = 'xmlrpcext';
+                break;
+            default:
+                XML_RPC2_Backend::setBackend('php');
+                break;
+        }
+
+        return parent::dispatch();
+    }
+
+    function renderHtml()
+    {
+        ob_start();
+        $this->getServer()->autoDocument();
+        $result = ob_get_clean();
+
+        if ($this->isXmlRpcExt()) {
+            return utf8_decode($result);
+        }
+
+        return $result;
+    }
+
+    function POST()
+    {
+        if ($this->isXmlRpcExt()) {
+            return utf8_decode($this->getResponse());
+        }
+
+        return $this->getResponse();
+    }
+
     protected function getBackend()
     {
         if ($this->query('backend') != '') {
@@ -83,54 +121,9 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
         return XML_RPC2_Server::create(new $server($this->getEncoding()), $this->getServerOptions());
     }
 
-    function dispatch()
-    {
-        switch ($this->query('backend')) {
-            case 'xmlrpcext':
-                // @todo tests does not pass with this one
-                XML_RPC2_Backend::setBackend('xmlrpcext');
-                $this->backend = 'xmlrpcext';
-                break;
-            default:
-                XML_RPC2_Backend::setBackend('php');
-                break;
-        }
-
-        return parent::dispatch();
-    }
-
     protected function isXmlRpcExt()
     {
         return ($this->backend == 'xmlrpcext');
-    }
-
-    function renderHtml()
-    {
-        ob_start();
-        $this->getServer()->autoDocument();
-        $result = ob_get_clean();
-
-        if ($this->isXmlRpcExt()) {
-            return utf8_decode($result);
-        }
-
-        return $result;
-    }
-
-    /*
-    function renderXml() {
-
-        return $this->getServer()->getResponse();
-    }
-    */
-
-    function POST()
-    {
-        if ($this->isXmlRpcExt()) {
-            return utf8_decode($this->getResponse());
-        }
-
-        return $this->getResponse();
     }
 
     function getResponse()
