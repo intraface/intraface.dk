@@ -1,7 +1,7 @@
 <h1><?php e(t('Upload files')); ?></h1>
 
 <?php if (!empty($msg)): ?>
-<p class="message"><?php echo $msg; ?></p>
+    <p class="message"><?php echo $msg; ?></p>
 <?php endif; ?>
 
 <fieldset>
@@ -33,12 +33,10 @@
         </div>
     </fieldset>
 
-    <p class="alert"><?php e(t('Only click save when all files are uploaded')); ?>.</p>
-
+    <p class="alert"><?php e(t('Do not click save, before all the files have been uploaded')); ?>.</p>
 
     <p>
         <input type="submit" value="<?php e(t('Save')); ?>" />
-         <a href="<?php e($redirect->getRedirect(url('../'))); ?>"><?php e(t('Cancel')); ?></a>
+        <a href="<?php e($redirect->getRedirect(url('../'))); ?>"><?php e(t('Cancel')); ?></a>
     </p>
-
 </form>
