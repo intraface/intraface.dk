@@ -69,7 +69,6 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
     protected function getServerOptions()
     {
-
         if (!isset($this->prefix)) {
             throw new Exception('You need to set $this->prefix in class');
         }

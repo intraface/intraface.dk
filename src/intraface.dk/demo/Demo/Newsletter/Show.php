@@ -43,7 +43,8 @@ class Demo_Newsletter_Show extends k_Component
             $this->getCredentials(),
             $list_id,
             $debug,
-            INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server0101.php"); // , 'iso-8859-1', 'xmlrpcext'
+            INTRAFACE_XMLPRC_SERVER_PATH . "newsletter/server0101.php",
+            'utf-8'); // , 'iso-8859-1', 'xmlrpcext'
         return $client;
     }
 }

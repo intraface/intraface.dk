@@ -22,7 +22,9 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
     /**
      * Constructor
+     *
      * @param $encoding the encoding used for the XML_RPC2 backend
+     *
      * @return unknown_type
      */
     public function __construct(Doctrine_Connection_Common $doctrine, $encoding = 'utf-8')

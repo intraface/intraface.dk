@@ -109,9 +109,11 @@ class Intraface_XMLRPC_Server0100
     protected function prepareResponseData($values)
     {
         $values = $this->recursiveMap(array($this, 'handleNull'), $values);
+
         if ($this->encoding == 'iso-8859-1') {
             return $this->recursiveMap('utf8_decode', $values);
         }
+
         return $values;
     }
 

@@ -60,7 +60,8 @@ class Demo_Shop_Show extends k_Component
             $this->getCredentials(),
             $shop_id,
             $debug,
-            INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0100.php"); // 'iso-8859-1', 'xmlrpcext'
+            INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0100.php",
+            'utf-8'); // 'iso-8859-1', 'xmlrpcext'
         return new IntrafacePublic_Shop($client, $this->cache);
     }
 
@@ -72,7 +73,8 @@ class Demo_Shop_Show extends k_Component
                 new IntrafacePublic_OnlinePayment_Client_XMLRPC(
                     $this->getCredentials(),
                     $debug,
-                    INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0100.php" // , 'iso-8859-1', 'xmlrpcext'
+                    INTRAFACE_XMLPRC_SERVER_PATH . "onlinepayment/server0100.php", // , 'iso-8859-1', 'xmlrpcext'
+                    'utf-8'
                 ),
                 $this->cache
             );
