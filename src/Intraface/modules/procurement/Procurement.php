@@ -175,7 +175,7 @@ class Procurement extends Intraface_Standard
         }
 
         if (!isset($input['vendor'])) $input['vendor'] = '';
-        $validator->isString($input["vendor"], "Fejl i leverandï¿½r", "", "allow_empty");
+        $validator->isString($input["vendor"], "Fejl i leverandør", "", "allow_empty");
 
         if (!isset($input['description'])) $input['description'] = '';
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "");
@@ -187,21 +187,21 @@ class Procurement extends Intraface_Standard
         }
 
         if (!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
-        $validator->isDouble($input["dk_price_items"], "Varerpris er ikke et gyldigt belï¿½b", 'zero_or_greater');
+        $validator->isDouble($input["dk_price_items"], "Varepris er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_items"]);
         if ($amount->convert2db()) {
             $input["price_items"] = $amount->get();
         }
 
         if (!isset($input['dk_price_shipment_etc'])) $input['dk_price_shipment_etc'] = 0;
-        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt belï¿½b", 'zero_or_greater');
+        $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_shipment_etc"]);
         if ($amount->convert2db()) {
             $input["price_shipment_etc"] = $amount->get();
         }
 
         if (!isset($input['dk_vat'])) $input['dk_vat'] = 0;
-        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt belï¿½b", 'zero_or_greater');
+        $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_vat"]);
         if ($amount->convert2db()) {
             $input["vat"] = $amount->get();

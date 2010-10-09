@@ -5,6 +5,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
     private $error;
     public $method = 'post';
     protected $template;
+    protected $procurement;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -80,10 +81,9 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
     {
         $this->document->setTitle($this->t("Create procurement"));
         $this->document->addScript('procurement/edit.js');
-        $values["number"] = $this->getProcurementGateway()->getMaxNumber() + 1;
 
         $data = array(
-            'values' => $values,
+            'values' => $this->getValues(),
             'title' => $this->t('Create procurement'),
             'gateway' => $this->getProcurementGateway()
         );
@@ -94,19 +94,34 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     public function postForm()
     {
-        $procurement = new Procurement($this->getKernel());
-
-        if ($procurement->update($this->body())) {
+        if ($this->getProcurement()->update($this->body())) {
 
             if ($this->body("recieved") == "1") {
-                $procurement->setStatus("recieved");
+                $this->getProcurement()->setStatus("recieved");
             }
-            return new k_SeeOther($this->url($procurement->get("id")));
+            return new k_SeeOther($this->url($this->getProcurement()->get("id")));
         }
 
         return $this->render();
     }
 
+    function getValues()
+    {
+        if ($this->body()) {
+            return $this->body();
+        }
+
+        return $values["number"] = $this->getProcurementGateway()->getMaxNumber() + 1;
+    }
+
+    function getProcurement()
+    {
+        if (is_object($this->procurement)) {
+            return $this->procurement;
+        }
+
+        return $this->procurement = new Procurement($this->getKernel());
+    }
 
     public function getKernel()
     {
@@ -115,11 +130,7 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
 
     function getError()
     {
-        if (!is_object($this->error)) {
-            $this->error = new Intraface_Error();
-        }
-
-        return $this->error;
+        return $this->getProcurement()->error;
     }
 
     public function getProcurementGateway()
