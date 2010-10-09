@@ -81,24 +81,6 @@ class Intraface_Auth
     }
 
     /**
-     * Redirects to login
-     *
-     * @param string $msg Explanation
-     *
-     * @return void
-     */
-    static public function toLogin($msg = '')
-    {
-        if (empty($msg)) {
-            header('Location: ' . url('/main/login.php'));
-            exit;
-        } else {
-            header('Location: '.url('/main/login.php', array('msg' => $msg)));
-            exit;
-        }
-    }
-
-    /**
      * Implements the observer pattern
      *
      * @param object $observer
