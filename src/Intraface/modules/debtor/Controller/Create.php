@@ -32,9 +32,9 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
     function postForm()
     {
     	$debtor = $this->getDebtor();
-    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+    	$contact = new Contact($this->getKernel(), $this->body("contact_id"));
 
-    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+    	if ($this->body("contact_person_id") == "-1") {
     		$contact_person = new ContactPerson($contact);
     		$person["name"] = $_POST['contact_person_name'];
     		$person["email"] = $_POST['contact_person_email'];
@@ -43,10 +43,10 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
     		$_POST["contact_person_id"] = $contact_person->get("id");
     	}
 
-        if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
+        if ($this->getKernel()->intranet->hasModuleAccess('currency') && $this->body('currency_id')) {
             $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
             $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
-            $currency = $gateway->findById($_POST['currency_id']);
+            $currency = $gateway->findById($this->body('currency_id'));
             if ($currency == false) {
                 throw new Exception('Invalid currency');
             }
@@ -67,10 +67,13 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
             return $this->body();
         }
 
+        $due_time = time() + $this->getContact()->get('paymentcondition') * 24 * 60 * 60;
+        $due_date = date('d-m-Y', $due_time);
+
         return array(
             'number' => $this->getDebtor()->getMaxNumber() + 1,
             'dk_this_date' => date('d-m-Y'),
-            'dk_due_date' => date('d-m-Y')
+            'dk_due_date' => $due_date
         );
     }
 
