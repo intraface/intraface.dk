@@ -20,7 +20,7 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
 
     function renderHtmlCreate()
     {
-        $contact = new Contact($this->context->getKernel(), $this->context->name());
+        $contact = $this->context->getContact();
     	$person = $contact->loadContactPerson(0);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/contactperson-edit');
@@ -34,7 +34,7 @@ class Intraface_modules_contact_Controller_Contactpersons extends k_Component
 
     function postForm()
     {
-    	$contact = new Contact($this->context->getKernel(), $this->context->name());
+    	$contact = $this->context->getContact();
     	$person = $contact->loadContactPerson(0);
     	if ($id = $person->save($_POST)) {
     		return new k_SeeOther($this->url('../'));

@@ -62,8 +62,8 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
         $module_cms->includeFile('HTML_Editor.php');
 
         $files = '';
-        if (isset($_POST['section']) && is_array($_POST['section'])) {
-            foreach ($_POST['section'] AS $key=>$value) {
+        if (is_array($this->body('section'))) {
+            foreach ($this->body('section') AS $key=>$value) {
                 $section = CMS_Section::factory($this->getKernel(), 'id', $key);
                 /*
                 if ($section->get('type') == 'picture') {
@@ -102,7 +102,7 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
             }
         }
         if (empty($this->error) AND count($this->error) == 0) {
-            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
 
                 // jeg skal bruge array_key, n�r der er klikket p� choose_file, for den indeholder section_id. Der b�r
                 // kun kunne v�re en post i arrayet, s� key 0 m� v�re $section_id for vores fil
@@ -120,10 +120,10 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
                 return new k_SeeOther($url);
                 */
                 return new k_SeeOther($this->url($section_id . '/filehandler/selectfile'));
-            } elseif (!empty($_POST['edit_html'])) {
+            } elseif ($this->body('edit_html')) {
                 $keys = array_keys($_POST['edit_html']);
                 return new k_SeeOther($this->url($keys[0]));
-            } elseif (!empty($_POST['close'])) {
+            } elseif ($this->body('close')) {
                 return new k_SeeOther($this->url('../../', array('type' => $this->context->getModel()->get('type'), 'id' => $this->context->getModel()->cmssite->get('id'))));
             } else {
                 return new k_SeeOther($this->url('../../' . $this->context->getModel()->get('id')));

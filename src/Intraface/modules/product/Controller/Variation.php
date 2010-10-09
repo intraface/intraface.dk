@@ -13,11 +13,6 @@ class Intraface_modules_product_Controller_Variation extends k_Component
         return 'Intraface_modules_stock_Controller_Product';
     }
 
-    function getProduct()
-    {
-        return $this->context->getProduct();
-    }
-
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
@@ -72,7 +67,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
 
         $product = new Product($this->getKernel(), $_POST['id']);
 
-        if (isset($_POST['append_file_submit'])) {
+        if ($this->body('append_file_submit')) {
 
             $filehandler = new FileHandler($this->getKernel());
             $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
@@ -90,7 +85,7 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             }
         }
 
-        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+        if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $module_filemanager = $this->getKernel()->useModule('filemanager');
             $url = $redirect->setDestination($module_filemanager->getPath().'select_file.php?images=1', $module->getPath().'product.php?id='.$product->get('id'));
@@ -106,5 +101,10 @@ class Intraface_modules_product_Controller_Variation extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
+    }
+
+    function getProduct()
+    {
+        return $this->context->getProduct();
     }
 }

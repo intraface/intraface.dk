@@ -16,11 +16,13 @@
  */
 class Intraface_modules_contact_Controller_Merge extends k_Component
 {
+    protected $db_sql;
     protected $template;
 
-    function __construct(k_TemplateFactory $template)
+    function __construct(k_TemplateFactory $template, DB_Sql $db)
     {
         $this->template = $template;
+        $this->db_sql = $db;
     }
 
     function renderHtml()
@@ -29,7 +31,7 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
             $invoice_module = $this->getKernel()->useModule('debtor');
         }
 
-        $contact = new Contact($this->getKernel(), $this->context->name());
+        $contact = $this->context->getContact();
         $similar_contacts = $contact->getSimilarContacts();
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/merge');
@@ -38,11 +40,11 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
 
     function postForm()
     {
-        $new_contact = $this->getContact();
+        $new_contact = $this->context->getContact();
         $chosen_contacts = $this->body('contact');
 
         foreach ($chosen_contacts as $c) {
-            $old_contact = new Contact($this->getKernel(), $c);
+            $old_contact = $this->context->context->getGateway()->findById($c);
             foreach ($this->context->getDependencies() as $dependency) {
                 $dependency['gateway']->setNewContactId($old_contact->getId(), $new_contact->getId());
             }
@@ -71,8 +73,7 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
      */
     function setNewContactId($old_contact_id, $new_contact_id)
     {
-        $db = new DB_Sql;
-        $db->query('UPDATE contact_person SET contact_id = ' . $new_contact_id . ' WHERE contact_id = ' . $old_contact_id);
+        $this->db_sql->query('UPDATE contact_person SET contact_id = ' . $new_contact_id . ' WHERE contact_id = ' . $old_contact_id);
         return true;
     }
 
@@ -85,10 +86,5 @@ class Intraface_modules_contact_Controller_Merge extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function getContact()
-    {
-        return $contact = new Contact($this->getKernel(), intval($this->context->name()));
     }
 }

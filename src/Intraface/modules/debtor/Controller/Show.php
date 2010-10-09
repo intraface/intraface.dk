@@ -305,9 +305,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $type = $this->getDebtor()->get("type");
             $this->getDebtor()->delete();
             return new k_SeeOther($this->url('../', array('use_stored' => 'true')));
-        } elseif (!empty($_POST['send_electronic_invoice'])) {
+        } elseif ($this->body('send_electronic_invoice')) {
             return new k_SeeOther($this->url('send', array('send' => 'electronic_email')));
-        } elseif (!empty($_POST['send_email'])) {
+        } elseif ($this->body('send_email')) {
             return new k_SeeOther($this->url('send', array('send' => 'email')));
         }
 
@@ -393,7 +393,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 return new k_SeeOther($this->url('../' . $invoice->get('id')));
             }
         }
-
 
         // Execute invoice
         elseif ($this->body('quickprocess_invoice')) {

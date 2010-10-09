@@ -7,12 +7,12 @@
  * @since   0.1.0
  * @version @package-version@
  */
-class Intraface_XMLRPC_CMS_Server 
+class Intraface_XMLRPC_CMS_Server
 {
     private $credentials;
     private $kernel;
 
-    private function factory($site_id) 
+    private function factory($site_id)
     {
         if (!$this->kernel->weblogin->hasModuleAccess('cms')) { // -2
             require_once 'XML/RPC2/Exception.php';
@@ -35,7 +35,7 @@ class Intraface_XMLRPC_CMS_Server
      *
      * @return array
      */
-    public function getPage($credentials, $site_id, $identifier) 
+    public function getPage($credentials, $site_id, $identifier)
     {
         $this->checkCredentials($credentials);
 
@@ -51,8 +51,7 @@ class Intraface_XMLRPC_CMS_Server
         );
         $cmspage = CMS_Page::factory($this->cmssite->kernel, 'identifier', $send_array);
         if (!isset($cmspage) OR !is_object($cmspage) OR !$cmspage->get('id') > 0) {
-            // det er muligt at dette kan have fejlsideindhold
-            // måske skal man kunne vælge en side til en 404 mv., som så bare hentes i stedet.
+            // TODO: det er muligt at dette kan have fejlsideindhold
             $values['http_header_status'] = 'HTTP/1.0 404 Not Found';
             $values['content'] = 'Siden er ikke fundet';
             $values['navigation-main'] = '';
@@ -67,8 +66,8 @@ class Intraface_XMLRPC_CMS_Server
 
             /**
              * HACK HACK HACK
-             * niveau 9999 gør at den ikke kan genkende den, og tager top_level.
-             * 0 der ellers skulle være topmenu virker af en mærkelig grund ikke. Variablen er ikke registeret som sat!
+             * niveau 9999 gï¿½r at den ikke kan genkende den, og tager top_level.
+             * 0 der ellers skulle vï¿½re topmenu virker af en mï¿½rkelig grund ikke. Variablen er ikke registeret som sat!
              */
             $cmspage->value['navigation_toplevel'] = $cmspage->navigation->build(9999, 'array');	// 'toplevel'
             $cmspage->value['navigation_sublevel'] = $cmspage->navigation->build(1, 'array'); // 'sublevel'
@@ -91,7 +90,7 @@ class Intraface_XMLRPC_CMS_Server
      * @param array $search
      * @return array
      */
-    public function getPageList($credentials, $site_id, $search = '') 
+    public function getPageList($credentials, $site_id, $search = '')
     {
         $this->checkCredentials($credentials);
         $site_id = intval($site_id);
@@ -118,7 +117,7 @@ class Intraface_XMLRPC_CMS_Server
      * @param integer $site_id
      * @return array
      */
-    public function getSitemap($credentials, $site_id) 
+    public function getSitemap($credentials, $site_id)
     {
         $this->checkCredentials($credentials);
 
@@ -137,7 +136,7 @@ class Intraface_XMLRPC_CMS_Server
      * @param struct $credentials
      * @return array
      */
-    private function checkCredentials($credentials) 
+    private function checkCredentials($credentials)
     {
         $this->credentials = $credentials;
 
@@ -153,11 +152,11 @@ class Intraface_XMLRPC_CMS_Server
 
 		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
 		$weblogin = $auth_adapter->auth();
-		
+
 		if (!$weblogin) {
 		    require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
-		} 
+		}
 
         $this->kernel = new Intraface_Kernel();
         $this->kernel->weblogin = $weblogin;

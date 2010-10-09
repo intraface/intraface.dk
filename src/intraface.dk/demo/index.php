@@ -12,59 +12,59 @@ require_once 'Ilib/ClassLoader.php';
 
 class EnglishLanguage implements k_Language
 {
-  function name()
-  {
-    return 'English';
-  }
+    function name()
+    {
+        return 'English';
+    }
 
-  function isoCode()
-  {
-    return 'en';
-  }
+    function isoCode()
+    {
+        return 'en';
+    }
 }
 
 class MyLanguageLoader implements k_LanguageLoader
 {
-  function load(k_Context $context)
-  {
-    if($context->query('lang') == 'en') {
-      return new EnglishLanguage();
+    function load(k_Context $context)
+    {
+        if ($context->query('lang') == 'en') {
+            return new EnglishLanguage();
+        }
+        return new EnglishLanguage();
     }
-    return new EnglishLanguage();
-  }
 }
 
 class SimpleTranslator implements k_Translator
 {
-  protected $phrases;
+    protected $phrases;
 
-  function __construct($phrases = array())
-  {
-    $this->phrases = $phrases;
-  }
+    function __construct($phrases = array())
+    {
+        $this->phrases = $phrases;
+    }
 
-  function translate($phrase, k_Language $language = null)
-  {
-    return isset($this->phrases[$phrase]) ? $this->phrases[$phrase] : $phrase;
-  }
+    function translate($phrase, k_Language $language = null)
+    {
+        return isset($this->phrases[$phrase]) ? $this->phrases[$phrase] : $phrase;
+    }
 }
 
 class SimpleTranslatorLoader implements k_TranslatorLoader
 {
-  function load(k_Context $context) {
-    // Default to English
-    $phrases = array(
-      'Hello' => 'Hello',
-      'Meatballs' => 'Meatballs',
-    );
-    if($context->language()->isoCode() == 'sv') {
-      $phrases = array(
-        'Hello' => 'Bork, bork, bork!',
-        'Meatballs' => 'Swedish meatballs',
-      );
+    function load(k_Context $context) {
+        // Default to English
+        $phrases = array(
+            'Hello' => 'Hello',
+            'Meatballs' => 'Meatballs',
+        );
+        if ($context->language()->isoCode() == 'sv') {
+            $phrases = array(
+                'Hello' => 'Bork, bork, bork!',
+                'Meatballs' => 'Swedish meatballs',
+            );
+        }
+        return new SimpleTranslator($phrases);
     }
-    return new SimpleTranslator($phrases);
-  }
 }
 
 class Demo_TemplateFactory extends k_DefaultTemplateFactory
@@ -123,6 +123,7 @@ class Demo_Document extends k_Document
     public $keywords;
     public $description;
     public $navigation = array();
+    public $locale;
 
     function locale()
     {

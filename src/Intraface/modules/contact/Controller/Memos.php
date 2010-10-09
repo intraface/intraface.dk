@@ -34,7 +34,7 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
 
     function postForm()
     {
-        $contact = new Contact($this->context->getKernel(), (int)$this->context->name());
+        $contact = $this->context->getContact();
    		$reminder = new ContactReminder($contact);
 
     	if ($id = $reminder->update($_POST)) {

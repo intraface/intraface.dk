@@ -75,12 +75,10 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
     {
         $this->context->getKernel()->useModule('invoice');
 
-        if (!empty($_POST)) {
-
             $error = $this->getError();
             $validator = new Intraface_Validator($error);
 
-            if ($_POST['debtor_sender'] == 'defined') {
+            if ($this->body('debtor_sender') == 'defined') {
                 $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
                 $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');
             } else {
@@ -105,13 +103,14 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             $this->context->getKernel()->getSetting()->set('intranet', 'bank_reg_number', $_POST['bank_reg_number']);
             $this->context->getKernel()->getSetting()->set('intranet', 'bank_account_number', $_POST['bank_account_number']);
             $this->context->getKernel()->getSetting()->set('intranet', 'giro_account_number', $_POST['giro_account_number']);
-        }
+
+
         $debtor_module = $this->context->getKernel()->useModule('debtor');
 
-        if (!empty($_POST['delete_scan_in_contact'])) {
+        if ($this->body('delete_scan_in_contact')) {
             $this->context->getKernel()->getSetting()->set('intranet', 'debtor.scan_in_contact', 0);
             return new k_SeeOther($this->url());
-        } elseif (isset($_POST['add_scan_in_contact'])) {
+        } elseif ($this->body('add_scan_in_contact')) {
             if ($this->context->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
@@ -128,7 +127,7 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             } else {
                 throw new Exception("Du har ikke adgang til modulet contact");
             }
-        } elseif (isset($_POST['edit_scan_in_contact'])) {
+        } elseif ($this->body('edit_scan_in_contact')) {
             if ($this->context->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->context->getKernel()->useModule('contact');
 
@@ -151,8 +150,8 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
 
     function getValues()
     {
-        if (!empty($_POST)) {
-            return $_POST;
+        if ($this->body()) {
+            return $this->body();
         }
         // find settings frem
         $values['debtor_sender'] = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.sender');

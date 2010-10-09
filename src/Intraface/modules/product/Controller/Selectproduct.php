@@ -26,9 +26,8 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     function renderHtml()
     {
         $product_module = $this->getKernel()->module("product");
-        $translation = $this->getKernel()->getTranslation('product');
 
-        if (isset($_GET['add_new'])) {
+        if ($this->query('add_new')) {
             $add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $add_redirect->setIdentifier('add_new');
             $url = $add_redirect->setDestination($product_module->getPath().'product_edit.php', $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
@@ -36,7 +35,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             return new k_SeeOther($url);
         }
 
-        if (!empty($_GET['select_variation'])) {
+        if ($this->query('select_variation')) {
             $variation_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $variation_redirect->setIdentifier('select_variation');
             $url = $variation_redirect->setDestination($product_module->getPath().'select_product_variation.php?product_id='.intval($_GET['select_variation']).'&set_quantity='.$this->quantity, $product_module->getPath().'select_product.php?'.$this->getRedirect()->get('redirect_query_string').'&set_quantity='.$this->quantity);
@@ -45,7 +44,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             return new k_SeeOther($url);
         }
 
-        if (isset($_GET['return_redirect_id'])) {
+        if ($this->query('return_redirect_id')) {
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($return_redirect->getIdentifier() == 'add_new' && $return_redirect->getParameter('product_id') != 0) {
                 $redirect->setParameter('product_id', serialize(array('product_id' => intval($return_redirect->getParameter('product_id')), 'product_variation_id' => 0)), 1);
@@ -109,14 +108,14 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
     function getProducts()
     {
-        if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
+        if ($this->query("search") || $this->query("keyword_id")) {
 
-            if (isset($_GET["search"])) {
-                $this->getProduct()->getDBQuery()->setFilter("search", $_GET["search"]);
+            if ($this->query("search")) {
+                $this->getProduct()->getDBQuery()->setFilter("search", $this->query("search"));
             }
 
-            if (isset($_GET["keyword_id"])) {
-                $this->getProduct()->getDBQuery()->setKeyword($_GET["keyword_id"]);
+            if ($this->query("keyword_id")) {
+                $this->getProduct()->getDBQuery()->setKeyword($this->query("keyword_id"));
             }
         } else {
             $this->getProduct()->getDBQuery()->useCharacter();
@@ -136,7 +135,6 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
             return $this->product;
         }
         return $this->product = new Product($this->getKernel());
-
     }
 
     function getKeywords()
@@ -151,10 +149,10 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
 
     function putForm()
     {
-        if (isset($_POST['submit']) || isset($_POST['submit_close'])) {
+        if ($this->body('submit') || $this->body('submit_close')) {
             if ($this->multiple) {
-                if (isset($_POST['selected']) && is_array($_POST['selected'])) {
-                    foreach ($_POST['selected'] AS $selected_id => $selected_value) {
+                if (is_array($this->body('selected'))) {
+                    foreach ($this->body('selected') AS $selected_id => $selected_value) {
                         if ($selected_value != '' && $selected_value != '0') {
                             $product = array(
                             	'product_id' => $selected_id,
@@ -163,15 +161,15 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                     }
                 }
             } else {
-                if (isset($_POST['selected']) && (int)$_POST['selected'] != 0) {
+                if ((int)$this->body('selected') != 0) {
                     $product = array(
-                    	'product_id' => (int)$_POST['selected'],
+                    	'product_id' => (int)$this->body('selected'),
                     	'product_variation_id' => 0);
                     $this->addItem($product, (int)$this->body('quantity'));
                 }
             }
 
-            if (isset($_POST['submit_close'])) {
+            if ($this->body('submit_close')) {
                 return new k_SeeOther($this->url('../', array('from' => 'select_product')));
             }
 

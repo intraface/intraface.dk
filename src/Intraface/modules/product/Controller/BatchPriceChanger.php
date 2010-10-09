@@ -26,7 +26,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
     {
         $module = $this->context->getKernel()->module("product");
 
-        foreach ($_POST['product_id'] AS $key => $product_id) {
+        foreach ($this->body('product_id') AS $key => $product_id) {
             $product = new Product($this->context->getKernel(), $product_id);
             if ($this->body('change_type') == 'percent') {
                 $new_price = $product->get('price') + intval($product->get('price') * ($_POST['price_change'] / 100));

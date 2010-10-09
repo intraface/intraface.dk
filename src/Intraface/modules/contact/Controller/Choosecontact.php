@@ -19,31 +19,9 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
     function renderHtml()
     {
         $module = $this->getKernel()->module("contact");
-        /*
-        $redirect = $this->getRedirect();
-
-        if (!empty($_GET['add'])) {
-        	$add_redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-        	$url = $add_redirect->setDestination($module->getPath()."contact_edit.php", NET_SCHEME . NET_HOST . $this->url(null, array($redirect->get('redirect_query_string'))));
-        	$add_redirect->askParameter("contact_id");
-        	//$add_redirect->setParameter("selected_contact_id", intval($_GET['add']));
-        	return new k_SeeOther($url);
-        } elseif (!empty($_GET['return_redirect_id'])) {
-            $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
-            if ($return_redirect->getParameter('contact_id') != 0) {
-                $redirect->setParameter('contact_id', $return_redirect->getParameter('contact_id'));
-                return new k_SeeOther($redirect->getRedirect($this->url('../')));
-            }
-        }
-        */
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/choosecontact');
         return $smarty->render($this, array('contacts' => $this->getContacts()));
-    }
-
-    function getRedirectUrl($contact_id = 0)
-    {
-        return $this->context->getReturnUrl($contact_id);
     }
 
     function postForm()
@@ -53,7 +31,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+        if ($this->body('eniro_phone')) {
             $contact = $this->getContact();
 
             $eniro = new Services_Eniro();
@@ -68,7 +46,7 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
                 $address['city'] = $oplysninger['postby'];
                 $address['phone'] = $_POST['eniro_phone'];
             }
-        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        } else {
 
             // for a new contact we want to check if similar contacts alreade exists
             if (empty($_POST['id'])) {
@@ -77,7 +55,6 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
                     $contact->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
                     $similar_contacts = $contact->getList();
                 }
-
             } else {
                 $contact = new Contact($this->getKernel(), $_POST['id']);
             }
@@ -108,6 +85,31 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         return $this->render();
     }
 
+    function renderHtmlCreate()
+    {
+        $contact_module = $this->getKernel()->module("contact");
+        $contact_module->includeFile('ContactReminder.php');
+
+        $this->document->addScript('contact/contact_edit.js');
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
+        return $smarty->render($this);
+    }
+
+    function putForm()
+    {
+        $module = $this->getKernel()->module('contact');
+
+        $contact = new Contact($this->getKernel(), intval($this->body('selected')));
+        if ($contact->get('id') != 0) {
+            return new k_SeeOther($this->getRedirectUrl($contact->get('id')));
+        } else {
+            $contact->error->set("Du skal vælge en kontakt");
+        }
+
+        return $this->render();
+    }
+
     function getKernel()
     {
         return $this->context->getKernel();
@@ -123,14 +125,14 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
 
     function getContacts()
     {
-        if (!empty($_GET['contact_id'])) {
-            $this->getContact()->getDBQuery()->setCondition("contact.id = ".intval($_GET['contact_id']));
-        } elseif (isset($_GET['query']) || isset($_GET['keyword_id'])) {
-            if (isset($_GET['query'])) {
-                $this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
+        if ($this->query('contact_id')) {
+            $this->getContact()->getDBQuery()->setCondition("contact.id = ".intval($this->query('contact_id')));
+        } elseif ($this->query('query') || $this->query('keyword_id')) {
+            if ($this->query('query')) {
+                $this->getContact()->getDBQuery()->setFilter('search', $this->query('query'));
             }
-            if (isset($_GET['keyword_id'])) {
-                $this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
+            if ($this->query('keyword_id')) {
+                $this->getContact()->getDBQuery()->setKeyword($this->query('keyword_id'));
             }
         } else {
             $this->getContact()->getDBQuery()->useCharacter();
@@ -141,10 +143,10 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         $this->getContact()->getDBQuery()->storeResult('use_stored', 'select_contact', 'sublevel');
         $this->getContact()->getDBQuery()->setUri($this->url());
 
-        if (isset($_GET['contact_id']) && intval($_GET['contact_id']) != 0) {
-            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['contact_id']));
-        } elseif (isset($_GET['last_contact_id']) && intval($_GET['last_contact_id']) != 0) {
-            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($_GET['last_contact_id']));
+        if (intval($this->query('contact_id')) != 0) {
+            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($this->query('contact_id')));
+        } elseif (intval($this->query('last_contact_id')) != 0) {
+            $this->getContact()->getDBQuery()->setExtraUri("&last_contact_id=".intval($this->query('last_contact_id')));
         }
 
         return $contacts = $this->getContact()->getList();
@@ -190,28 +192,8 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
         return array();
     }
 
-    function renderHtmlCreate()
+    function getRedirectUrl($contact_id = 0)
     {
-        $contact_module = $this->getKernel()->module("contact");
-        $contact_module->includeFile('ContactReminder.php');
-
-        $this->document->addScript('contact/contact_edit.js');
-
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
-        return $smarty->render($this);
-    }
-
-    function putForm()
-    {
-        $module = $this->getKernel()->module('contact');
-
-        $contact = new Contact($this->getKernel(), intval($this->body('selected')));
-    	if ($contact->get('id') != 0) {
-    	    return new k_SeeOther($this->getRedirectUrl($contact->get('id')));
-    	} else {
-    		$contact->error->set("Du skal vælge en kontakt");
-    	}
-
-    	return $this->render();
+        return $this->context->getReturnUrl($contact_id);
     }
 }

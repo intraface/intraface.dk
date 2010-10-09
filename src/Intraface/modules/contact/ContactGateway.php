@@ -70,7 +70,6 @@ class Intraface_modules_contact_ContactGateway
         return $this->findById($this->db->f('id'));
     }
 
-
     /**
      * Public: Finde data til en liste
      *
@@ -126,11 +125,10 @@ class Intraface_modules_contact_ContactGateway
      */
     public function getMaxNumber()
     {
-        $db = new DB_Sql();
-        $db->query("SELECT number FROM contact WHERE intranet_id = " . $this->kernel->intranet->get("id") . " ORDER BY number DESC");
-        if (!$db->nextRecord()) {
+        $this->db->query("SELECT number FROM contact WHERE intranet_id = " . $this->kernel->intranet->get("id") . " ORDER BY number DESC");
+        if (!$this->db->nextRecord()) {
             return 0;
         }
-        return $db->f("number");
+        return $this->db->f("number");
     }
 }

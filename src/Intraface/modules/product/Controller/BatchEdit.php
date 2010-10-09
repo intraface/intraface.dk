@@ -8,6 +8,20 @@ class Intraface_modules_product_Controller_BatchEdit extends k_Component
         $this->template = $template;
     }
 
+    function renderHtml()
+    {
+        $module = $this->context->getKernel()->module("product");
+
+        $product = new Product($this->context->getKernel());
+        $product->getDBQuery()->defineCharacter("character", "detail_translation.name");
+        $product->getDBQuery()->usePaging("paging");
+        $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
+        $products = $product->getList();
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/batchedit');
+        return $tpl->render($this, array('products' => $products, 'product' => $product));
+    }
+
     function postForm()
     {
         $module = $this->context->getKernel()->module("product");
@@ -39,19 +53,5 @@ class Intraface_modules_product_Controller_BatchEdit extends k_Component
     function getKernel()
     {
         return $this->context->getKernel();
-    }
-
-    function renderHtml()
-    {
-        $module = $this->context->getKernel()->module("product");
-
-        $product = new Product($this->context->getKernel());
-        $product->getDBQuery()->defineCharacter("character", "detail_translation.name");
-        $product->getDBQuery()->usePaging("paging");
-        $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
-        $products = $product->getList();
-
-        $tpl = $this->template->create(dirname(__FILE__) . '/tpl/batchedit');
-        return $tpl->render($this, array('products' => $products, 'product' => $product));
     }
 }

@@ -58,7 +58,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
             'filehandler' => $filehandler,
             'db' => $this->mdb2
         );
-        if (isset($_GET['return_redirect_id'])) {
+        if ($this->query('return_redirect_id')) {
             $redirect = Intraface_Redirect::factory($kernel, 'return');
             if ($redirect->get('identifier') == 'product') {
                 $append_file = new Appender($kernel, 'product', $product->get('id'));
@@ -71,8 +71,8 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
             }
             return new k_SeeOther($this->url());
-        } elseif (isset($_GET['remove_appended_category']) && $this->getKernel()->user->hasModuleAccess('shop')) {
-            $product = new Product($this->getKernel(), $this->name());
+        } elseif ($this->query('remove_appended_category') && $this->getKernel()->user->hasModuleAccess('shop')) {
+            $product = $this->getProduct();
             $category = new Intraface_Category($this->getKernel(), $this->mdb2, new Intraface_Category_Type('shop', $_GET['shop_id']), $_GET['remove_appended_category']);
             $appender = $category->getAppender($product->getId());
             $appender->delete($category);
@@ -88,7 +88,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         $module = $this->getKernel()->useModule('filemanager');
         $product = new Product($this->getKernel(), $this->name());
 
-        if (isset($_POST['append_file_submit'])) {
+        if ($this->body('append_file_submit')) {
 
             $append_file = $this->getFileAppender();
 
@@ -116,7 +116,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
 
         }
 
-        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+        if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $module_filemanager = $this->getKernel()->useModule('filemanager');
             $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('filehandler/selectfile', array('images'=>1, 'multiple_choice' => 1)), NET_SCHEME . NET_HOST . $this->url());
@@ -132,7 +132,6 @@ class Intraface_modules_product_Controller_Show extends k_Component
     {
         $this->getKernel()->module('product');
         $this->getKernel()->useModule('filemanager');
-        $translation = $this->getKernel()->getTranslation('product');
 
         $data = array(
             'product' => $this->getProductDoctrine(),
@@ -145,7 +144,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
     function postForm()
     {
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
-        if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+        if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
             return new k_SeeOther($this->url('filehandler/selectfile'));
         }
 
@@ -209,6 +208,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         if ($id = $this->getProduct()->copy()) {
             return new k_SeeOther($this->url('../' . $id));
         }
+        return $this->render();
     }
 
     function DELETE()
@@ -217,6 +217,7 @@ class Intraface_modules_product_Controller_Show extends k_Component
         if ($id = $this->getProduct()->delete()) {
             return new k_SeeOther($this->url('../'));
         }
+        return $this->render();
     }
 
     function getProduct()

@@ -134,11 +134,11 @@ class Intraface_modules_cms_Controller_Page extends k_Component
     {
         $module_cms = $this->getKernel()->module('cms');
 
-        if (!empty($_POST['publish'])) {
+        if ($this->body('publish')) {
             if ($this->getModel()->publish()) {
                 return new k_SeeOther($this->url());
             }
-        } elseif (!empty($_POST['unpublish'])) {
+        } elseif ($this->body('unpublish')) {
             if ($this->getModel()->unpublish()) {
                 return new k_SeeOther($this->url());
             }
@@ -149,11 +149,11 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $cmspage = $this->getModel();
 
         if ($cmspage->save($_POST)) {
-            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 return new k_SeeOther($this->url('filehandler/selectfile', array('images' => 1)));
-            } elseif (!empty($_POST['close'])) {
+            } elseif ($this->body('close')) {
                 return new k_SeeOther($this->url(null));
-            } elseif (!empty($_POST['add_keywords'])) {
+            } elseif ($this->body('add_keywords')) {
                 $keyword_shared = $this->getKernel()->useShared('keyword');
                 return new k_SeeOther($this->url('keyword/connect'));
             } else {

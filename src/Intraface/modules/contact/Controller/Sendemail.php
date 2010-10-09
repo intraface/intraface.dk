@@ -53,7 +53,7 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
     				continue;
     			}
 
-    			$contact = new Contact($this->getKernel(), $contact['id']);
+    			$contact = $this->context->getGateway()->findById($contact['id']);
 
     			$email = new Email($this->getKernel());
     			$input = array(

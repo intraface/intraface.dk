@@ -49,7 +49,7 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
         $contact = $this->getContact();
 
-        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+        if ($this->body('eniro_phone')) {
 
             $eniro = new Services_Eniro();
             $value = $_POST;

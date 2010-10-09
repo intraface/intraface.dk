@@ -39,7 +39,7 @@ class Demo_Identifier extends k_Component
         }
 
         if (empty($this->private_key)) {
-            throw new Exception('private key is not found for the intranet - shop cannot be generated');
+            throw new Exception('private key is not found for the intranet');
         }
 
         return $this->private_key;

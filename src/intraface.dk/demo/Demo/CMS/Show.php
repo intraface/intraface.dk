@@ -9,6 +9,15 @@ class Demo_CMS_Show extends k_Component
         $this->cache = $cache;
     }
 
+    public function map($name)
+    {
+        if ($name == 'enquiry') {
+            return 'IntrafacePublic_CMS_Controller_Enquiry';
+        } else {
+            return 'IntrafacePublic_CMS_Controller_Index';
+        }
+    }
+
     function renderHtml()
     {
         return get_class($this) . ' intentionally left blank';
@@ -26,14 +35,5 @@ class Demo_CMS_Show extends k_Component
         $debug = false;
         $client = new IntrafacePublic_CMS_Client_XMLRPC($credentials, $this->name(), $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server2.php");
         return new IntrafacePublic_CMS($client, $this->cache);
-    }
-
-    public function map($name)
-    {
-        if ($name == 'enquiry') {
-            return 'IntrafacePublic_CMS_Controller_Enquiry';
-        } else {
-            return 'IntrafacePublic_CMS_Controller_Index';
-        }
     }
 }

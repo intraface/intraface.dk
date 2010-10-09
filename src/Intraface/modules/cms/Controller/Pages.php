@@ -21,25 +21,16 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         }
     }
 
-    function getPageGateway()
-    {
-        if (is_object($this->page_gateway)) {
-            return $this->page_gateway;
-        }
-
-        return $this->page_gateway = new Intraface_modules_cms_PageGateway($this->getKernel(), $this->db_sql);
-    }
-
     function renderHtml()
     {
         $cms_module = $this->getKernel()->module('cms');
 
-        if (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
-            $cmspage = $this->getPageGateway()->findById($_GET['moveup']);
+        if (is_numeric($this->query('moveup'))) {
+            $cmspage = $this->getPageGateway()->findById($this->query('moveup'));
             $cmspage->getPosition($this->mdb2)->moveUp();
             $cmssite = $cmspage->cmssite;
             $type = $cmspage->get('type');
-        } elseif (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
+        } elseif (is_numeric($this->query('movedown'))) {
             $cmspage = $this->getPageGateway()->findById($_GET['movedown']);
             $cmspage->getPosition($this->mdb2)->moveDown();
             $cmssite = $cmspage->cmssite;
@@ -193,5 +184,14 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
     function getSiteId()
     {
         return $this->context->name();
+    }
+
+    function getPageGateway()
+    {
+        if (is_object($this->page_gateway)) {
+            return $this->page_gateway;
+        }
+
+        return $this->page_gateway = new Intraface_modules_cms_PageGateway($this->getKernel(), $this->db_sql);
     }
 }

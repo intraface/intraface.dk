@@ -78,11 +78,11 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         $shared_filehandler = $this->getKernel()->useModule('filemanager');
         $shared_filehandler->includeFile('AppendFile.php');
 
-        if (isset($_GET['remove_gallery_append_file_id'])) {
+        if ($this->query('remove_gallery_append_file_id')) {
             $append_file = new AppendFile($this->getKernel(), 'cms_element_gallery', $this->getElement()->get('id'));
             $append_file->delete((int)$_GET['remove_gallery_append_file_id']);
             return new k_SeeOther($this->url());
-        } else if (isset($_GET['remove_filelist_append_file_id'])) {
+        } elseif ($this->query('remove_filelist_append_file_id')) {
             $append_file = new AppendFile($this->getKernel(), 'cms_element_filelist', $this->getElement()->get('id'));
             $append_file->delete((int)$_GET['remove_filelist_append_file_id']);
             return new k_SeeOther($this->url());
@@ -115,7 +115,7 @@ class Intraface_modules_cms_Controller_Element extends k_Component
         $element = $this->getElement();
 
         if ($element->save($_POST)) {
-            if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
+            if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
                 $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
                 $module_filemanager = $this->getKernel()->useModule('filemanager');
                 if ($element->get('type') == 'picture') {
@@ -146,7 +146,6 @@ class Intraface_modules_cms_Controller_Element extends k_Component
 
     function renderHtmlDelete()
     {
-        throw new Exception('her');
         $this->getElement()->delete();
         return new k_SeeOther($this->url('../'));
     }

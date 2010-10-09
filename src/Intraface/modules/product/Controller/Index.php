@@ -38,19 +38,19 @@ class Intraface_modules_product_Controller_Index extends k_Component
     function putForm()
     {
         $gateway = $this->getGateway();
-        if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
+        if ($this->body('action') == 'delete') {
             $deleted = array();
-            if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
-                foreach ($_POST['selected'] as $key=>$id) {
+            if (is_array($this->body('selected'))) {
+                foreach ($this->body('selected') as $key=>$id) {
                     $product = $gateway->getById(intval($id));
                     if ($product->delete()) {
                         $deleted[] = $id;
                     }
                 }
             }
-        } elseif (!empty($_POST['undelete'])) {
-            if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
-                $undelete = unserialize(base64_decode($_POST['deleted']));
+        } elseif ($this->body('undelete')) {
+            if (is_string($this->body('deleted'))) {
+                $undelete = unserialize(base64_decode($this->body('deleted')));
             } else {
                 throw new Exception('could not undelete');
             }
@@ -64,90 +64,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
             }
         }
         return $this->render();
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
-    }
-
-    function getProductDoctrine()
-    {
-        if (is_object($this->product_doctrine)) {
-            return $this->product_doctrine;
-        }
-
-        return $this->product_doctrine = new Intraface_modules_product_ProductDoctrine;
-    }
-
-    function getProduct()
-    {
-        if (is_object($this->product)) {
-            return $this->product;
-        }
-
-        require_once 'Intraface/modules/product/Product.php';
-        return $this->product = new Product($this->getKernel());
-    }
-
-    function getGateway()
-    {
-        if (empty($this->gateway)) {
-            $this->gateway = new Intraface_modules_product_Gateway($this->getKernel());
-        }
-        return $this->gateway;
-    }
-
-    function getKeywords()
-    {
-        $gateway = $this->getGateway();
-        $product = $gateway->getById(0);
-        // $characters = $product->getCharacters();
-        return $keywords = $product->getKeywordAppender();
-    }
-
-    function getError()
-    {
-        if (!is_object($this->error)) {
-            $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
-        }
-
-        return $this->error;
-    }
-
-    function getProducts()
-    {
-        // $gateway = $this->factory->create($this->getKernel());
-        $gateway = $this->getGateway();
-
-        $product = $gateway->getById(0);
-        // $characters = $product->getCharacters();
-        $keywords = $product->getKeywordAppender();
-
-        // burde bruge query
-        if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
-            if (isset($_GET["search"])) {
-                $gateway->getDBQuery()->setFilter("search", $_GET["search"]);
-            }
-
-            if (isset($_GET["keyword_id"])) {
-                $gateway->getDBQuery()->setKeyword($_GET["keyword_id"]);
-            }
-        } else {
-            $gateway->getDBQuery()->useCharacter();
-        }
-
-        $gateway->getDBQuery()->defineCharacter("character", "detail_translation.name");
-        $gateway->getDBQuery()->usePaging("paging");
-        $gateway->getDBQuery()->storeResult("use_stored", "products", "toplevel");
-        $gateway->getDBQuery()->setUri($this->url('.'));
-
-        return $products = $gateway->getAllProducts();
-    }
-
-    function getTranslation()
-    {
-        return $translation = $this->getKernel()->getTranslation('product');
     }
 
     function renderHtmlCreate()
@@ -203,5 +119,89 @@ class Intraface_modules_product_Controller_Index extends k_Component
     function getPostRedirectUrl($product)
     {
         return $this->url($product->getId());
+    }
+
+    function getProduct()
+    {
+        if (is_object($this->product)) {
+            return $this->product;
+        }
+
+        require_once 'Intraface/modules/product/Product.php';
+        return $this->product = new Product($this->getKernel());
+    }
+
+    function getGateway()
+    {
+        if (empty($this->gateway)) {
+            $this->gateway = new Intraface_modules_product_Gateway($this->getKernel());
+        }
+        return $this->gateway;
+    }
+
+    function getKeywords()
+    {
+        $gateway = $this->getGateway();
+        $product = $gateway->getById(0);
+        // $characters = $product->getCharacters();
+        return $keywords = $product->getKeywordAppender();
+    }
+
+    function getError()
+    {
+        if (!is_object($this->error)) {
+            $this->error = new Intraface_Doctrine_ErrorRender($this->getTranslation());
+        }
+
+        return $this->error;
+    }
+
+    function getProducts()
+    {
+        // $gateway = $this->factory->create($this->getKernel());
+        $gateway = $this->getGateway();
+
+        $product = $gateway->getById(0);
+        // $characters = $product->getCharacters();
+        $keywords = $product->getKeywordAppender();
+
+        // burde bruge query
+        if ($this->query("search") || $this->query("keyword_id")) {
+            if ($this->query("search")) {
+                $gateway->getDBQuery()->setFilter("search", $this->query("search"));
+            }
+
+            if ($this->query("keyword_id")) {
+                $gateway->getDBQuery()->setKeyword($this->query("keyword_id"));
+            }
+        } else {
+            $gateway->getDBQuery()->useCharacter();
+        }
+
+        $gateway->getDBQuery()->defineCharacter("character", "detail_translation.name");
+        $gateway->getDBQuery()->usePaging("paging");
+        $gateway->getDBQuery()->storeResult("use_stored", "products", "toplevel");
+        $gateway->getDBQuery()->setUri($this->url('.'));
+
+        return $products = $gateway->getAllProducts();
+    }
+
+    function getTranslation()
+    {
+        return $translation = $this->getKernel()->getTranslation('product');
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getProductDoctrine()
+    {
+        if (is_object($this->product_doctrine)) {
+            return $this->product_doctrine;
+        }
+
+        return $this->product_doctrine = new Intraface_modules_product_ProductDoctrine;
     }
 }

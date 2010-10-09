@@ -23,21 +23,21 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
 
     function postForm()
     {
-    	if (isset($_POST['mark_as_seen'])) {
+    	if ($this->body('mark_as_seen')) {
     		$this->getMemo()->setStatus('seen');
-    	} elseif (isset($_POST['cancel'])) {
+    	} elseif ($this->body('cancel')) {
     		$this->getMemo()->setStatus('cancelled');
-    	} elseif (isset($_POST['postpone_1_day'])) {
+    	} elseif ($this->body('postpone_1_day')) {
     		$date = new Date($this->getMemo()->get('reminder_date'));
     		$next_day = $date->getNextDay();
     		$this->getMemo()->postponeUntil($next_day->getDate());
-    	} elseif (isset($_POST['postpone_1_week'])) {
+    	} elseif ($this->body('postpone_1_week')) {
     		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
     		$date_span->setFromDays(7);
     		$date->addSpan($date_span);
     		$this->getMemo()->postponeUntil($date->getDate());
-    	} elseif (isset($_POST['postpone_1_month'])) {
+    	} elseif ($this->body('postpone_1_month')) {
     		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
             $date_calc = new Date_Calc();
@@ -45,7 +45,7 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
             $date_span->setFromDays($date_calc->daysInMonth($date_parts[1], $date_parts[0]));
     		$date->addSpan($date_span);
     		$this->getMemo()->postponeUntil($date->getDate());
-    	} elseif (isset($_POST['postpone_1_year'])) {
+    	} elseif ($this->body('postpone_1_year')) {
     		$date = new Date($this->getMemo()->get('reminder_date'));
     		$date_span = new Date_Span();
     		$date_span->setFromDays(365); // does not take account of leap year
@@ -55,9 +55,7 @@ class Intraface_modules_contact_Controller_Memo extends k_Component
         	if ($id = $this->getMemo()->update($_POST)) {
         		return new k_SeeOther($this->url('../'));
         	}
-
         	$value = $_POST;
-
     	}
 
     	return $this->render();

@@ -39,22 +39,22 @@ class Intraface_modules_cms_Controller_Section extends k_Component
             return new k_SeeOther($this->context->url());
         }
 
-        if (!empty($_GET['moveto']) AND is_numeric($_GET['moveto'])) {
-            $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['element_id']);
+        if (is_numeric($this->query('moveto'))) {
+            $element = CMS_Element::factory($this->getKernel(), 'id', $this->query('element_id'));
             if (!is_object($element)) {
                 throw new Exception('Unable to create a valid element object');
             }
-            $element->getPosition($this->db_sql)->moveToPosition($_GET['moveto']);
+            $element->getPosition($this->db_sql)->moveToPosition($this->query('moveto'));
             return new k_SeeOther($this->url());
-        } elseif (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-            $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['delete']);
+        } elseif (is_numeric($this->query('delete'))) {
+            $element = CMS_Element::factory($this->getKernel(), 'id', $this->query('delete'));
             if (!is_object($element)) {
                 throw new Exception('Unable to create a valid element object');
             }
             $element->delete();
             return new k_SeeOther($this->url());
-        } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
-            $element = CMS_Element::factory($this->getKernel(), 'id', $_GET['undelete']);
+        } elseif (is_numeric($this->query('undelete'))) {
+            $element = CMS_Element::factory($this->getKernel(), 'id', $this->query('undelete'));
             if (!is_object($element)) {
                 throw new Exception('Unable to create a valid element object');
             }
@@ -77,18 +77,18 @@ class Intraface_modules_cms_Controller_Section extends k_Component
 
     function postForm()
     {
-        if (!empty($_POST['publish'])) {
+        if ($this->body('publish')) {
             $section = $this->getSection();
             if ($section->cmspage->publish()) {
                 return new k_SeeOther($this->url());
             }
-        } elseif (!empty($_POST['unpublish'])) {
+        } elseif ($this->body('unpublish')) {
             $section = $this->getSection();
             if ($section->cmspage->unpublish()) {
                 return new k_SeeOther($this->url());
             }
-        } elseif (!empty($_POST['add_element'])) {
-            return new k_SeeOther($this->url('element', array('create', 'type' => $_POST['new_element_type_id'])));
+        } elseif ($this->body('add_element')) {
+            return new k_SeeOther($this->url('element', array('create', 'type' => $this->body('new_element_type_id'))));
         }
 
         return $this->render();

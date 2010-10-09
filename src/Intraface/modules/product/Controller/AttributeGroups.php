@@ -56,7 +56,6 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
         $data = array();
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/attributegroup-edit');
         return $smarty->render($this, $data);
-
     }
 
     function getKernel()
@@ -69,7 +68,6 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
         if (!is_object($this->error)) {
             $this->error = new Intraface_Doctrine_ErrorRender($this->getKernel()->getTranslation('product'));
         }
-
         return $this->error;
     }
 }

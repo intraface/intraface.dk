@@ -143,7 +143,6 @@ class Intraface_modules_shop_Controller_Show extends k_Component
         return $this->getShop();
     }
 
-
     function getError()
     {
         if ($this->error) {
@@ -158,7 +157,7 @@ class Intraface_modules_shop_Controller_Show extends k_Component
             return true;
         }
         $validator = new Intraface_Validator($this->getError());
-        $validator->isNumeric($this->body('show_online'), 'show_online skal v�re et tal');
+        $validator->isNumeric($this->body('show_online'), 'show_online skal være et tal');
         // $validator->isString($this->POST['description'], 'description text is not valid');
         $validator->isString($this->body('confirmation_subject'), 'confirmation subject is not valid', '', 'allow_empty');
         $validator->isString($this->body('confirmation'), 'confirmation text is not valid', '', 'allow_empty');

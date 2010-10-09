@@ -8,26 +8,25 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $this->template = $template;
     }
 
-    function postForm()
-    {
-        foreach ($_POST['product'] as $key=>$value) {
-            $product = $this->getProduct();
-            if (!empty($_POST['relate'][$key]) AND $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
-            }
-        }
-        if (!empty($_POST['close'])) {
-            return new k_SeeOther($this->url('../'));
-        }
-        return new k_SeeOther($this->url());
-
-    }
-
     function renderHtml()
     {
         $kernel = $this->context->getKernel();
         $kernel->module('product');
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/related');
         return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        foreach ($this->body('product') as $key=>$value) {
+            $product = $this->getProduct();
+            if (!empty($_POST['relate'][$key]) AND $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
+            }
+        }
+        if ($this->body('close')) {
+            return new k_SeeOther($this->url('../'));
+        }
+        return new k_SeeOther($this->url());
     }
 
     function getKernel()
@@ -46,14 +45,14 @@ class Intraface_modules_product_Controller_Related extends k_Component
 
         $keywords = $product->getKeywordAppender();
 
-        if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
+        if ($this->query("search") || $this->query("keyword_id")) {
 
-            if (isset($_GET["search"])) {
-                $product->getDBQuery()->setFilter("search", $_GET["search"]);
+            if ($this->query("search")) {
+                $product->getDBQuery()->setFilter("search", $this->query("search"));
             }
 
-            if (isset($_GET["keyword_id"])) {
-                $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
+            if ($this->query("keyword_id")) {
+                $product->getDBQuery()->setKeyword($this->query("keyword_id"));
             }
         } else {
             $product->getDBQuery()->useCharacter();
@@ -105,14 +104,14 @@ class Intraface_modules_product_Controller_Related extends k_Component
 
         $keywords = $product->getKeywordAppender();
 
-        if (isset($_GET["search"]) || isset($_GET["keyword_id"])) {
+        if ($this->query("search") || $this->query("keyword_id")) {
 
-            if (isset($_GET["search"])) {
-                $product->getDBQuery()->setFilter("search", $_GET["search"]);
+            if ($this->query("search")) {
+                $product->getDBQuery()->setFilter("search", $this->query("search"));
             }
 
-            if (isset($_GET["keyword_id"])) {
-                $product->getDBQuery()->setKeyword($_GET["keyword_id"]);
+            if ($this->query("keyword_id")) {
+                $product->getDBQuery()->setKeyword($this->query("keyword_id"));
             }
         } else {
             $product->getDBQuery()->useCharacter();
@@ -131,7 +130,7 @@ class Intraface_modules_product_Controller_Related extends k_Component
     function renderHtmlDelete()
     {
         $product = $this->getProduct();
-        $product->deleteRelatedProduct($_GET['del_related']);
+        $product->deleteRelatedProduct($this->query('del_related'));
         return new k_SeeOther($this->url('../'));
     }
 

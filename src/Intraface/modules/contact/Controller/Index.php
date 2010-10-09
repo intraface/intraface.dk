@@ -28,8 +28,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function renderHtml()
     {
-        if (!empty($_GET['search']) AND in_array($_GET['search'], array('hide', 'view'))) {
-        	$this->getKernel()->setting->set('user', 'contact.search', $_GET['search']);
+        if (in_array($this->query('search'), array('hide', 'view'))) {
+        	$this->getKernel()->setting->set('user', 'contact.search', $this->query('search'));
         }
         /*
         elseif (!empty($_GET['import'])) {
@@ -58,26 +58,26 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function putForm()
     {
-        if (!empty($_POST['action']) AND $_POST['action'] == 'delete') {
+        if ($this->body('action') == 'delete') {
         	$deleted = array();
-        	if (!empty($_POST['selected']) AND is_array($_POST['selected'])) {
-        		foreach ($_POST['selected'] AS $key=>$id) {
-        			$contact = new Contact($this->getKernel(), intval($id));
+        	if (is_array($this->body('selected'))) {
+        		foreach ($this->body('selected') AS $key=>$id) {
+        			$contact = $this->getGateway()->findById(intval($id));
         			if ($contact->delete()) {
         				$deleted[] = $id;
         			}
         		}
         	}
-        } elseif (!empty($_POST['undelete'])) {
+        } elseif ($this->body('undelete')) {
 
-        	if (!empty($_POST['deleted']) AND is_string($_POST['deleted'])) {
-        		$undelete = unserialize(base64_decode($_POST['deleted']));
+        	if (is_string($this->body('deleted'))) {
+        		$undelete = unserialize(base64_decode($this->body('deleted')));
         	} else {
         		throw new Exception('Could not undelete');
         	}
         	if (!empty($undelete) AND is_array($undelete)) {
         		foreach ($undelete AS $key=>$id) {
-        			$contact = new Contact($this->getKernel(), intval($id));
+        			$contact = $this->getGateway()->findById(intval($id));
         			if (!$contact->undelete()) {
         			// void
         			}
@@ -110,7 +110,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         }
         $doc->generate($contacts, $contact->getDBQuery()->getFilter('search'), $used_keyword);
         $doc->stream();
-
     }
 
     function renderXls()
@@ -222,7 +221,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         $redirect = Intraface_Redirect::factory($this->getKernel(), 'receive');
 
-        if (!empty($_POST['eniro']) AND !empty($_POST['eniro_phone'])) {
+        if ($this->body('eniro_phone')) {
             $eniro = new Services_Eniro();
             $value = $_POST;
 
@@ -238,7 +237,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             }
             $this->eniro = $address;
             $this->render();
-        } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        } else {
 
             // for a new contact we want to check if similar contacts alreade exists
             if (!empty($_POST['phone'])) {
@@ -266,7 +265,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function getContactModule()
     {
         return $contact_module = $this->getKernel()->module("contact");
-
     }
 
     function getValues()
@@ -290,7 +288,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
     function getDeliveryAddressValues()
     {
-
         if ($this->body()) {
             $delivery_address = array();
             $delivery_address['name'] = $_POST['delivery_name'];

@@ -10,16 +10,6 @@ class Intraface_modules_cms_Controller_Navigation extends k_Component
         $this->template = $template;
     }
 
-    function getSite()
-    {
-        return $this->context->getSite();
-    }
-
-    function getNavigationGateway()
-    {
-        return new Intraface_modules_cms_Menu($this->getKernel());
-    }
-
     function renderHtml()
     {
         $webshop_module = $this->getKernel()->module('cms');
@@ -30,11 +20,6 @@ class Intraface_modules_cms_Controller_Navigation extends k_Component
 
         $tpl = $this->template->create('Intraface/modules/cms/Controller/templates/navigation');
         return $tpl->render($this, $data);
-    }
-
-    function getKernel()
-    {
-        return $this->context->getKernel();
     }
 
     function postForm()
@@ -70,5 +55,20 @@ class Intraface_modules_cms_Controller_Navigation extends k_Component
         $validator->isString($this->body('identifier'), 'category identifier is not valid');
         $validator->isNumeric($this->body('parent_id'), 'category parent id has to be numeric');
         return !$error->isError();
+    }
+
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
+
+    function getSite()
+    {
+        return $this->context->getSite();
+    }
+
+    function getNavigationGateway()
+    {
+        return new Intraface_modules_cms_Menu($this->getKernel());
     }
 }
