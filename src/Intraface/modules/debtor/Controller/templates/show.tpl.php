@@ -26,7 +26,7 @@ if (isset($context->onlinepayment)) {
 ?>
 <?php if ($context->getKernel()->intranet->get("pdf_header_file_id") == 0 && $context->getKernel()->user->hasModuleAccess('administration')): ?>
     <div class="message-dependent">
-        <p><a href="<?php e(url('../../../../controlpanel/intranet')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
+        <p><a href="<?php e(url('../../../../administration/intranet')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
     </div>
 <?php endif; ?>
 
