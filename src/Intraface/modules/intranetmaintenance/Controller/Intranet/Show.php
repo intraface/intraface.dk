@@ -43,7 +43,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
 
         // add contact
         // @todo where to go?
-        if (isset($_GET['add_contact']) && $_GET['add_contact'] == 1) {
+        if ($this->query('add_contact') == 1) {
             if ($this->getKernel()->user->hasModuleAccess('contact')) {
                 $contact_module = $this->getKernel()->useModule('contact');
 
@@ -59,7 +59,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         }
 
         // add existing user
-        if (isset($_GET['add_user']) && $_GET['add_user'] == 1) {
+        if ($this->query('add_user') == 1) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('../../user'), NET_SCHEME . NET_HOST . $this->url(null));
             $redirect->askParameter('user_id');
@@ -68,7 +68,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         }
 
         // return
-        if (isset($_GET['return_redirect_id'])) {
+        if ($this->query('return_redirect_id')) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             if ($redirect->get('identifier') == 'contact') {
                 $intranet->setContact($redirect->getParameter('contact_id'));
@@ -81,10 +81,9 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
             }
         }
 
-        if (isset($_GET['delete_intranet_module_package_id']) && (int)$_GET['delete_intranet_module_package_id'] != 0) {
-
+        if ((int)$this->query('delete_intranet_module_package_id') != 0) {
             $modulepackagemanager = new Intraface_modules_modulepackage_Manager($intranet);
-            $modulepackagemanager->delete((int)$_GET['delete_intranet_module_package_id']);
+            $modulepackagemanager->delete((int)$this->query('delete_intranet_module_package_id'));
         }
 
         $user = new UserMaintenance();
@@ -104,13 +103,13 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         $modul = $this->getKernel()->module("intranetmaintenance");
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
 
-        $smarty = $this->template->render(dirname(__FILE__) . '/../templates/intranet/edit');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/edit');
         return $smarty->render($this);
     }
 
     function renderHtmlDelete()
     {
-        $smarty = $this->template->render(dirname(__FILE__) . '/../templates/intranet/delete');
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/intranet/delete');
         return $smarty->render($this);
     }
 
@@ -133,7 +132,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
 
     function DELETE()
     {
-
     	$db = new DB_Sql;
     	$db2 = new DB_Sql;
 
