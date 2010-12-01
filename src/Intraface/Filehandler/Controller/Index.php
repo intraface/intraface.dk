@@ -30,6 +30,8 @@ class Intraface_Filehandler_Controller_Index extends k_Component
 
     public function renderHtml()
     {
+        $this->document->setTitle('File manager');
+
         $gateway = $this->getGateway();
 
         if (is_numeric($this->query('undelete'))) {
