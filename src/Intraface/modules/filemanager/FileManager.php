@@ -4,7 +4,7 @@
  */
 require_once 'Intraface/modules/filemanager/FileHandler.php';
 
-class FileManager extends FileHandler
+class Intraface_modules_filemanager_FileManager extends FileHandler
 {
     /**
      * @var object

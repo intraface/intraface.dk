@@ -26,7 +26,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             // brugeren har filemanager.
             $this->value['keyword_id'] = $this->parameter->get('keyword_id');
 
-            $filemanager = new FileManager($this->kernel);
+            $filemanager = new Intraface_modules_filemanager_FileManager($this->kernel);
             $filemanager->getDBQuery()->setKeyword($this->value['keyword_id']);
             $files = $filemanager->getList();
 

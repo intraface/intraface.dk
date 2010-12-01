@@ -12,10 +12,6 @@
                     image_new.height = '75';
                     var br_new = par.createElement('br');
                     <?php
-                    $filemanager = new FileManager($kernel);
-                    $filemanager->createUpload();
-                    $filemanager->upload->setSetting('file_accessibility', 'public');
-                    $filemanager->upload->setSetting('max_file_size', '10000000');
                     if ($filemanager->upload->upload('file', 'temporary')) {
                         $filemanager->load();
                         ?>

@@ -2,7 +2,7 @@
 	<legend><?php e(t('Choose keywords')); ?></legend>
     <?php
         $context->getKernel()->useModule('filemanager');
-        $filemanager = new Filemanager($context->getKernel());
+        $filemanager = new Intraface_modules_filemanager_Filemanager($context->getKernel());
         if (!empty($value['keywords'])) {
             $selected_keywords = $value['keywords'];
         } else {

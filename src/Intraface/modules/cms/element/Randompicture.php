@@ -28,7 +28,7 @@ class Intraface_modules_cms_element_Randompicture extends CMS_Element
 
         $this->section->kernel->useModule('filemanager');
 
-        $filemanager = new Filemanager($this->section->kernel);
+        $filemanager = new Intraface_modules_filemanager_Filemanager($this->section->kernel);
         try {
             $img = new Ilib_Filehandler_ImageRandomizer($filemanager, $this->get('keywords'));
             $file = $img->getRandomImage();
