@@ -22,7 +22,7 @@
         <td class="amount"><?php e(amountToOutput($p['debet'])); ?></td>
         <td class="amount"><?php e(amountToOutput($p['credit'])); ?></td>
         <td><?php if (!empty($p['reference'])) e($p['reference']); ?></td>
-        <td><a href="<?php e(url('../voucher/' . $p['voucher_id'])); ?>">Se bilag</a></td>
+        <td><a href="<?php e(url('../voucher/' . $p['voucher_id'])); ?>"><?php e(t('See voucher')); ?></a></td>
     </tr>
     <?php endforeach; ?>
 </tbody>
