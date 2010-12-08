@@ -1,7 +1,6 @@
 <?php
 class Install_Helper_Accounting
 {
-
     private $kernel;
     private $db;
 
@@ -18,7 +17,5 @@ class Install_Helper_Accounting
         $year->save(array('from_date' => date('Y') . '-01-01', 'to_date' => date('Y') . '-12-31', 'label' => 'test', 'locked' => 0, 'vat' => 1));
         $year->createAccounts('standard');
         $year->setYear();
-
-
     }
 }
