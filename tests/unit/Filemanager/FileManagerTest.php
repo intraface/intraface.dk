@@ -19,7 +19,7 @@ class FileManagerTest extends PHPUnit_Framework_TestCase
 
     function createFileManager()
     {
-        return new FileManager($this->createKernel());
+        return new Intraface_modules_filemanager_FileManager($this->createKernel());
     }
 
     function createFile()

@@ -29,13 +29,12 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
 
     function createImageRandomizer($keyword = array('test'))
     {
-
-        return new ImageRandomizer(new FileManager($this->createKernel()), $keyword);
+        return new ImageRandomizer(new Intraface_modules_filemanager_FileManager($this->createKernel()), $keyword);
     }
 
     function createImages() {
         for ($i = 1; $i < 11; $i++) {
-            $filemanager = new FileManager($this->createKernel());
+            $filemanager = new Intraface_modules_filemanager_FileManager($this->createKernel());
             copy(dirname(__FILE__) . '/'.$this->file_name, PATH_UPLOAD.$this->file_name);
             $filemanager->save(PATH_UPLOAD.$this->file_name, 'file'.$i.'.jpg');
             $appender = $filemanager->getKeywordAppender();
@@ -87,7 +86,7 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
 
     function testGetRandomImageDoesNotTriggerErrorOnDeletedKeyword() {
         // first we add and delete a keyword used later
-        $filemanager = new FileManager($this->createKernel());
+        $filemanager = new Intraface_modules_filemanager_FileManager($this->createKernel());
         $keyword = new Keyword($filemanager);
         $keyword->save(array('keyword' => 'test_A'));
         $keyword->delete();
@@ -100,4 +99,3 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
     }
 
 }
-?>
