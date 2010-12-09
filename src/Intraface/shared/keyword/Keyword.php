@@ -1,9 +1,6 @@
 <?php
 /**
- * N�gleord
- *
- * @todo Gruppere n�gleord
- * @todo Systemn�gleord
+ * Keywords
  *
  * @author Lars Olesen <lars@legestue.net>
  */
@@ -69,7 +66,7 @@ class Keyword extends Ilib_Keyword
                     $this->type = 'cms_template';
                     $this->object = $object;
                     break;
-                case 'filemanager':
+                case 'intraface_modules_filemanager_filemanager':
                     $this->type = 'file_handler';
                     $this->object = $object;
                     break;
@@ -342,7 +339,7 @@ class Intraface_Keyword_Appender extends Keyword
                     $this->type = 'cms_template';
                     $this->object = $object;
                     break;
-                case 'filemanager':
+                case 'intraface_modules_filemanager_filemanager':
                     $this->type = 'file_handler';
                     $this->object = $object;
                     break;
