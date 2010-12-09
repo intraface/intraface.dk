@@ -3,16 +3,14 @@ class MyKeyword extends Keyword
 {
     function __construct($object, $id = 0)
     {
-        $this->registerType(1, 'cms');
-        $this->registerType(2, 'contact');
         parent::__construct($object, $id);
     }
 }
 
 class FakeKeywordKeyword
 {
-    public $id;
-    public $keyword;
+    protected $id;
+    protected $keyword;
 
     function __construct($id = 1, $keyword = 'test')
     {
@@ -33,8 +31,8 @@ class FakeKeywordKeyword
 
 class FakeKeywordAppendKeyword
 {
-    public $id;
-    public $keyword;
+    protected $id;
+    protected $keyword;
 
     function __construct($id = 1, $keyword = 'test')
     {
@@ -66,6 +64,16 @@ class FakeKeywordAppendObject
     {
         return 1;
     }
+
+    function identify()
+    {
+        return 'fakekeywordobject';
+    }
+
+    function getId()
+    {
+        return 1;
+    }
 }
 
 class FakeKeywordObject
@@ -81,14 +89,22 @@ class FakeKeywordObject
     {
         return 1;
     }
+
+    function identify()
+    {
+        return 'fakekeywordobject';
+    }
+
+    function getId()
+    {
+        return 1;
+    }
 }
 
 class MyStringKeyword extends Keyword
 {
     function __construct($object, $id = 0)
     {
-        $this->registerType(1, 'cms');
-        $this->registerType(2, 'contact');
         parent::__construct($object, $id);
     }
 }

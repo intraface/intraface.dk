@@ -55,17 +55,6 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $keyword->getKeyword());
     }
 
-    /*
-    function testFactory()
-    {
-        $id = $this->saveKeyword();
-        $keyword = Keyword::factory(new FakeKeywordKernel, $id);
-        $this->assertTrue(is_object($keyword));
-        $this->assertEquals(1, $keyword->getId());
-        $this->assertEquals('test', $keyword->getKeyword());
-    }
-    */
-
     function testDeleteReturnsTrueAndActuallyDeletesAKeyword()
     {
         $id = $this->saveKeyword();
@@ -80,12 +69,5 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $keywords[0]['id']);
         $this->assertEquals('test', $keywords[0]['keyword']);
     }
-
-    function testRegisterTypeAndGetType()
-    {
-        $this->keyword->registerType(1, 'cms');
-        $this->assertEquals(1, $this->keyword->getTypeKey('cms'));
-    }
-
 }
 

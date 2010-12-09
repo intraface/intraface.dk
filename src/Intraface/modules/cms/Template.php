@@ -48,6 +48,18 @@ class CMS_Template extends Intraface_Standard
         }
     }
 
+    /**
+     * Used by Keyword
+     *
+     * @see Keyword
+     *
+     * @return string
+     */
+    function identify()
+    {
+        return 'cms_template';
+    }
+
     function getPosition($db)
     {
         return new Ilib_Position($db, 'cms_template', $this->id, 'site_id = ' . $this->cmssite->get('id'), 'id', 'position');

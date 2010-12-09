@@ -12,16 +12,21 @@ class KeywordAppendTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->keyword = new Intraface_Keyword_Appender(new FakeKeywordAppendObject);
-        $db = MDB2::singleton(DB_DSN);
-        $db->query('TRUNCATE keyword');
-        $db->query('TRUNCATE keyword_x_object');
-        $res = $db->query('INSERT into keyword SET id = 1, keyword = "test", intranet_id = 1, type="contact"');
-        $res = $db->query('INSERT into keyword SET id = 2, keyword = "test 2", intranet_id = 1, type="contact"');
+        $this->db = MDB2::singleton(DB_DSN);
     }
 
-    function createKeyword($id = '1', $keyword = 'test')
+    function tearDown()
     {
-        return new FakeKeywordAppendKeyword($id, $keyword);
+        $this->db->query('TRUNCATE keyword');
+        $this->db->query('TRUNCATE keyword_x_object');
+    }
+
+    function createKeyword($keyword = 'test')
+    {
+        $k = new Keyword(new FakeKeywordAppendObject());
+        $result = $k->save(array('keyword' => $keyword));
+        $this->assertTrue($result > 0);
+        return $k;
     }
 
     ///////////////////////////////////////////////////////////////
@@ -36,8 +41,8 @@ class KeywordAppendTest extends PHPUnit_Framework_TestCase
 
     function testAddKeywords()
     {
-        $keyword = $this->createKeyword();
-        $keyword2 = $this->createKeyword(2, 'test 2');
+        $keyword = $this->createKeyword('test');
+        $keyword2 = $this->createKeyword('test 2');
         $keywords = array($keyword, $keyword2);
         $this->assertTrue($this->keyword->addKeywords($keywords));
         $keywords_connected = $this->keyword->getConnectedKeywords();
@@ -71,21 +76,9 @@ class KeywordAppendTest extends PHPUnit_Framework_TestCase
     function testGetConnectedKeywordsAsString()
     {
         $this->keyword->addKeyword($this->createKeyword());
-        $keyword2 = $this->createKeyword(2, 'test 2');
+        $keyword2 = $this->createKeyword('test 2');
         $this->keyword->addKeyword($keyword2);
         $string = $this->keyword->getConnectedKeywordsAsString();
         $this->assertEquals('test, test 2', $string);
     }
-
-
-    /*
-    function testAddKeywordsByString()
-    {
-        $this->assertTrue($this->keyword->addKeywordsByString('tester, test'));
-        $string = $this->keyword->getConnectedKeywordsAsString();
-        $this->assertEquals('test, tester', $string);
-    }
-
-
-    */
 }
