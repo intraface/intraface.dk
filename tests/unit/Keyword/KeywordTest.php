@@ -5,38 +5,6 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/shared/keyword/Keyword.php';
 require_once dirname(__FILE__) . '/../Stub/Keyword.php';
 
-class MyKeyword extends Keyword
-{
-    function __construct($object, $id = 0)
-    {
-        $this->registerType(1, 'cms');
-        $this->registerType(2, 'contact');
-        parent::__construct($object, $id);
-    }
-}
-
-class FakeKeywordKeyword
-{
-    public $id;
-    public $keyword;
-
-    function __construct($id = 1, $keyword = 'test')
-    {
-        $this->id = $id;
-        $this->keyword = $keyword;
-    }
-
-    function getId()
-    {
-        return $this->id;
-    }
-
-    function getKeyword()
-    {
-        return $this->keyword;
-    }
-}
-
 class KeywordTest extends PHPUnit_Framework_TestCase
 {
     private $keyword;
