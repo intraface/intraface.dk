@@ -44,10 +44,6 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
                 $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
                 $string_appender->addKeywordsByString($_POST['keywords']);
 
-                /*
-                $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
-                $string_appender->addKeywordsByString($_POST['keywords']);
-				*/
                 $filemanager->update(array('accessibility' => $_POST['accessibility']));
 
                 if ($filemanager->moveFromTemporary()) {

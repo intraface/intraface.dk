@@ -1,15 +1,17 @@
 <?php
-class Install_Helper_CMS {
-
+class Install_Helper_CMS
+{
     private $kernel;
     private $db;
 
-    public function __construct($kernel, $db) {
+    public function __construct($kernel, $db)
+    {
         $this->kernel = $kernel;
         $this->db = $db;
     }
 
-    public function createSite() {
+    public function createSite()
+    {
         require_once 'Intraface/modules/cms/Site.php';
         $site = new CMS_Site($this->kernel);
         $site_id = $site->save(array('name' => 'Test', 'url' => 'http://localhost/'));
@@ -41,7 +43,7 @@ class Install_Helper_CMS {
         if (!$site_id) {
             throw new Exception('Error: '.implode(', ', $site->error->getMessage()));
         }
-        
+
         require_once 'Intraface/modules/cms/Template.php';
         $template = new CMS_Template($site);
         $template_id = $template->save(array('name' => 'Test', 'identifier' => 'test', 'for_page_type' => array(1, 2, 4)));

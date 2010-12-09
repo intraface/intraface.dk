@@ -1,0 +1,6 @@
+.settings/*
+.buildpath
+.project
+src/intraface.dk/config.local.php
+project.properties
+tests/selenium/testSuite.html

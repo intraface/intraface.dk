@@ -1,16 +1,17 @@
 <?php
-class Install_Helper_Debtor {
-
+class Install_Helper_Debtor
+{
     private $kernel;
     private $db;
 
-    public function __construct($kernel, $db) {
+    public function __construct($kernel, $db)
+    {
         $this->kernel = $kernel;
         $this->db = $db;
     }
 
-    public function createInvoice() {
-
+    public function createInvoice()
+    {
         require_once dirname (__FILE__) . '/Contact.php';
         $contact = new Install_Helper_Contact($this->kernel, $this->db);
         $contact_id = $contact->create();
@@ -29,11 +30,10 @@ class Install_Helper_Debtor {
 
         $debtor->loadItem();
         $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3, 'description' => 'Test description on product'));
-
     }
 
-    public function createOrder() {
-
+    public function createOrder()
+    {
         require_once dirname(__FILE__) . '/Contact.php';
         $contact = new Install_Helper_Contact($this->kernel, $this->db);
         $contact_id = $contact->create();
@@ -52,9 +52,8 @@ class Install_Helper_Debtor {
 
         $debtor->loadItem();
         $debtor->item->save(array('product_id' => $product_id, 'quantity' => 3, 'description' => 'Test description on product'));
-
     }
-    
+
     public function createOrderFromShop()
     {
         require_once dirname(__FILE__) . '/Contact.php';
@@ -78,4 +77,3 @@ class Install_Helper_Debtor {
 
     }
 }
-?>

@@ -78,14 +78,7 @@ class UploadHandler extends Intraface_Standard
     function __construct($file_handler)
     {
         if (!is_object($file_handler)) {
-            throw new Exception("UploadHandler kr�ver et filehandler- eller filemanagerobject (1)");
-        }
-
-        if (strtolower(get_class($file_handler)) == 'filehandler' || strtolower(get_class($file_handler)) == 'filemanager') {
-            // @todo HJ�LP MIG, jeg kan ikke vende denne if-s�tning rigtigt.
-            // Men her er det ok.
-        } else {
-            throw new Exception("UploadHandler kr�ver et filehandler- eller filemanagerobject (2)");
+            throw new Exception("UploadHandler needs a filehandler- or filemanagerobject (1)");
         }
 
         $this->file_handler = $file_handler;
@@ -394,7 +387,7 @@ class UploadHandler extends Intraface_Standard
                     $file_handler->delete();
                     CONTINUE;
                 }
-                
+
                 if (!chmod($this->upload_path.$server_file_name, 0644)) {
                     // please do not stop executing here
                     throw new Exception("Unable to chmod file '".$this->upload_path.$server_file_name."'");

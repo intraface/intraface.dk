@@ -1,19 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 3.2.4
+-- version 3.3.8
 -- http://www.phpmyadmin.net
 --
--- Vært: localhost
--- Genereringstid: 05. 04 2010 kl. 12:06:49
--- Serverversion: 5.0.90
--- PHP-version: 5.2.6
+-- Host: localhost
+-- Generation Time: Dec 08, 2010 at 10:54 PM
+-- Server version: 5.0.91
+-- PHP Version: 5.2.6
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `intrafac_intraface`
@@ -22,10 +16,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_account`
+-- Table structure for table `accounting_account`
 --
 
-CREATE TABLE `accounting_account` (
+CREATE TABLE IF NOT EXISTS `accounting_account` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -33,10 +27,10 @@ CREATE TABLE `accounting_account` (
   `number` int(11) NOT NULL default '0',
   `type_key` tinyint(2) unsigned NOT NULL default '0',
   `use_key` tinyint(2) unsigned NOT NULL default '0',
-  `name` char(255) NOT NULL default '',
+  `name` char(255) character set latin1 NOT NULL default '',
   `sum_from_account_number` int(11) NOT NULL default '0',
   `sum_to_account_number` int(11) NOT NULL default '0',
-  `comment` char(255) NOT NULL default '',
+  `comment` char(255) character set latin1 NOT NULL default '',
   `vat_key` tinyint(2) NOT NULL default '0',
   `vat_percent` float(11,2) NOT NULL default '0.00',
   `active` tinyint(1) NOT NULL default '1',
@@ -49,22 +43,22 @@ CREATE TABLE `accounting_account` (
   KEY `kontonummer` (`number`),
   KEY `user_id` (`user_id`),
   KEY `intranet_id` (`intranet_id`,`year_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5237 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_post`
+-- Table structure for table `accounting_post`
 --
 
-CREATE TABLE `accounting_post` (
+CREATE TABLE IF NOT EXISTS `accounting_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
   `date` date NOT NULL default '0000-00-00',
   `voucher_id` int(11) NOT NULL default '0',
-  `text` char(255) NOT NULL default '',
+  `text` char(255) character set latin1 NOT NULL default '',
   `account_id` int(11) NOT NULL default '0',
   `debet` float(11,2) NOT NULL default '0.00',
   `credit` float(11,2) NOT NULL default '0.00',
@@ -75,15 +69,15 @@ CREATE TABLE `accounting_post` (
   KEY `year_id` (`year_id`),
   KEY `account_id` (`account_id`),
   KEY `stated` (`stated`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34209 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_vat_period`
+-- Table structure for table `accounting_vat_period`
 --
 
-CREATE TABLE `accounting_vat_period` (
+CREATE TABLE IF NOT EXISTS `accounting_vat_period` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -92,20 +86,20 @@ CREATE TABLE `accounting_vat_period` (
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_start` date NOT NULL default '0000-00-00',
   `date_end` date NOT NULL default '0000-00-00',
-  `label` char(255) NOT NULL default '',
+  `label` char(255) character set latin1 NOT NULL default '',
   `status` tinyint(1) NOT NULL default '0',
   `voucher_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=140 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_voucher`
+-- Table structure for table `accounting_voucher`
 --
 
-CREATE TABLE `accounting_voucher` (
+CREATE TABLE IF NOT EXISTS `accounting_voucher` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -114,21 +108,21 @@ CREATE TABLE `accounting_voucher` (
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `date` date NOT NULL default '0000-00-00',
   `number` int(11) NOT NULL default '0',
-  `text` char(255) NOT NULL default '',
-  `reference` char(255) NOT NULL default '',
+  `text` char(255) character set latin1 NOT NULL default '',
+  `reference` char(255) character set latin1 NOT NULL default '',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`),
   KEY `intranet_id` (`intranet_id`,`year_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6744 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_voucher_file`
+-- Table structure for table `accounting_voucher_file`
 --
 
-CREATE TABLE `accounting_voucher_file` (
+CREATE TABLE IF NOT EXISTS `accounting_voucher_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `voucher_id` int(11) NOT NULL default '0',
@@ -136,28 +130,28 @@ CREATE TABLE `accounting_voucher_file` (
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `belong_to_key` tinyint(2) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
-  `description` char(255) NOT NULL default '',
+  `description` char(255) character set latin1 NOT NULL default '',
   `active` int(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1768 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_year`
+-- Table structure for table `accounting_year`
 --
 
-CREATE TABLE `accounting_year` (
+CREATE TABLE IF NOT EXISTS `accounting_year` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `last_year_id` int(11) NOT NULL default '0',
-  `label` char(255) NOT NULL default '',
+  `label` char(255) character set latin1 NOT NULL default '',
   `from_date` date NOT NULL default '0000-00-00',
   `to_date` date NOT NULL default '0000-00-00',
   `primosaldo_id` int(11) NOT NULL default '0',
   `locked` tinyint(1) NOT NULL default '0',
-  `session_id` char(255) NOT NULL default '',
+  `session_id` char(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `active` tinyint(1) NOT NULL default '1',
@@ -165,15 +159,15 @@ CREATE TABLE `accounting_year` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=116 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_year_end`
+-- Table structure for table `accounting_year_end`
 --
 
-CREATE TABLE `accounting_year_end` (
+CREATE TABLE IF NOT EXISTS `accounting_year_end` (
   `id` int(11) NOT NULL auto_increment,
   `operating_reset_voucher_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -184,15 +178,15 @@ CREATE TABLE `accounting_year_end` (
   `result_account_reset_voucher_id` int(11) NOT NULL default '0',
   `_old_type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=46 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_year_end_action`
+-- Table structure for table `accounting_year_end_action`
 --
 
-CREATE TABLE `accounting_year_end_action` (
+CREATE TABLE IF NOT EXISTS `accounting_year_end_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -203,15 +197,15 @@ CREATE TABLE `accounting_year_end_action` (
   `voucher_id` int(11) NOT NULL default '0',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=484 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `accounting_year_end_statement`
+-- Table structure for table `accounting_year_end_statement`
 --
 
-CREATE TABLE `accounting_year_end_statement` (
+CREATE TABLE IF NOT EXISTS `accounting_year_end_statement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `year_id` int(11) NOT NULL default '0',
@@ -219,33 +213,33 @@ CREATE TABLE `accounting_year_end_statement` (
   `amount` float(11,2) NOT NULL default '0.00',
   `type_key` tinyint(2) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1659 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `address`
+-- Table structure for table `address`
 --
 
-CREATE TABLE `address` (
+CREATE TABLE IF NOT EXISTS `address` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `tmp_intranet_id` int(11) NOT NULL default '0',
   `type` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `contactname` varchar(255) NOT NULL default '',
-  `address` text NOT NULL,
-  `postcode` varchar(255) NOT NULL default '',
-  `city` varchar(255) NOT NULL default '',
-  `country` varchar(255) NOT NULL default '',
-  `cvr` varchar(255) NOT NULL default '0',
-  `email` varchar(255) NOT NULL default '',
-  `website` varchar(255) NOT NULL default '',
-  `phone` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `contactname` varchar(255) character set latin1 NOT NULL default '',
+  `address` text character set latin1 NOT NULL,
+  `postcode` varchar(255) character set latin1 NOT NULL default '',
+  `city` varchar(255) character set latin1 NOT NULL default '',
+  `country` varchar(255) character set latin1 NOT NULL default '',
+  `cvr` varchar(255) character set latin1 NOT NULL default '0',
+  `email` varchar(255) character set latin1 NOT NULL default '',
+  `website` varchar(255) character set latin1 NOT NULL default '',
+  `phone` varchar(255) character set latin1 NOT NULL default '',
   `active` int(11) NOT NULL default '0',
   `changed_date` datetime NOT NULL default '0000-00-00 00:00:00',
-  `ean` varchar(255) NOT NULL default '0',
+  `ean` varchar(255) character set latin1 NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `phone` (`phone`),
@@ -254,74 +248,74 @@ CREATE TABLE `address` (
   KEY `belong_to_id` (`belong_to_id`),
   KEY `type` (`type`),
   KEY `find_address` (`type`,`belong_to_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38663 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `basket`
+-- Table structure for table `basket`
 --
 
-CREATE TABLE `basket` (
+CREATE TABLE IF NOT EXISTS `basket` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
-  `session_id` varchar(255) NOT NULL default '',
+  `session_id` varchar(255) character set latin1 NOT NULL default '',
   `product_id` int(11) NOT NULL default '0',
   `product_detail_id` int(11) NOT NULL default '0',
   `product_variation_id` int(11) NOT NULL default '0',
   `quantity` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `basketevaluation_product` int(11) NOT NULL default '0',
-  `text` text NOT NULL,
+  `text` text character set latin1 NOT NULL,
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `date_changed` (`date_changed`),
   KEY `session_id` (`session_id`),
   KEY `product_detail_id` (`product_detail_id`,`product_variation_id`),
   KEY `intranet_id` (`intranet_id`,`product_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=306823 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `basket_details`
+-- Table structure for table `basket_details`
 --
 
-CREATE TABLE `basket_details` (
+CREATE TABLE IF NOT EXISTS `basket_details` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `order_id` int(11) NOT NULL default '0',
-  `session_id` varchar(255) NOT NULL default '',
+  `session_id` varchar(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `name` varchar(255) NOT NULL default '',
-  `contactperson` varchar(255) NOT NULL default '',
-  `address` text NOT NULL,
-  `postcode` varchar(255) NOT NULL default '',
-  `city` varchar(255) NOT NULL default '',
-  `country` varchar(255) NOT NULL default '',
-  `cvr` varchar(255) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
-  `phone` varchar(255) NOT NULL default '',
-  `customer_comment` text NOT NULL,
-  `customer_coupon` varchar(255) NOT NULL default '',
-  `customer_ean` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `contactperson` varchar(255) character set latin1 NOT NULL default '',
+  `address` text character set latin1 NOT NULL,
+  `postcode` varchar(255) character set latin1 NOT NULL default '',
+  `city` varchar(255) character set latin1 NOT NULL default '',
+  `country` varchar(255) character set latin1 NOT NULL default '',
+  `cvr` varchar(255) character set latin1 NOT NULL default '',
+  `email` varchar(255) character set latin1 NOT NULL default '',
+  `phone` varchar(255) character set latin1 NOT NULL default '',
+  `customer_comment` text character set latin1 NOT NULL,
+  `customer_coupon` varchar(255) character set latin1 NOT NULL default '',
+  `customer_ean` varchar(255) character set latin1 NOT NULL default '',
   `payment_method_key` int(11) NOT NULL default '0',
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`shop_id`),
   KEY `order_id` (`order_id`),
   KEY `session_id` (`session_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6394 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_element`
+-- Table structure for table `cms_element`
 --
 
-CREATE TABLE `cms_element` (
+CREATE TABLE IF NOT EXISTS `cms_element` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
@@ -330,20 +324,20 @@ CREATE TABLE `cms_element` (
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_publish` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_expire` datetime NOT NULL default '0000-00-00 00:00:00',
-  `shorthand` varchar(255) NOT NULL default '',
+  `shorthand` varchar(255) character set latin1 NOT NULL default '',
   `position` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`section_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3991 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_page`
+-- Table structure for table `cms_page`
 --
 
-CREATE TABLE `cms_page` (
+CREATE TABLE IF NOT EXISTS `cms_page` (
   `id` int(11) NOT NULL auto_increment,
   `user_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -352,51 +346,51 @@ CREATE TABLE `cms_page` (
   `intranet_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
   `child_of_id` int(11) NOT NULL default '0',
-  `title` varchar(255) NOT NULL default '',
-  `identifier` varchar(255) NOT NULL default '',
-  `navigation_name` varchar(255) NOT NULL default '',
-  `keywords` text NOT NULL,
+  `title` varchar(255) character set latin1 NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
+  `navigation_name` varchar(255) character set latin1 NOT NULL default '',
+  `keywords` text character set latin1 NOT NULL,
   `date_publish` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_expire` datetime NOT NULL default '0000-00-00 00:00:00',
   `active` tinyint(1) NOT NULL default '1',
   `position` int(11) NOT NULL default '0',
   `status` int(11) NOT NULL default '0',
-  `description` text NOT NULL,
+  `description` text character set latin1 NOT NULL,
   `template_id` int(11) NOT NULL default '0',
   `status_key` int(11) NOT NULL default '0',
   `allow_comments` tinyint(1) NOT NULL default '0',
   `pic_id` int(11) NOT NULL default '0',
-  `password` varchar(255) NOT NULL default '',
+  `password` varchar(255) character set latin1 NOT NULL default '',
   `hidden` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `child_of_id` (`child_of_id`),
   KEY `site_id` (`site_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1492 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_parameter`
+-- Table structure for table `cms_parameter`
 --
 
-CREATE TABLE `cms_parameter` (
+CREATE TABLE IF NOT EXISTS `cms_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
-  `parameter` varchar(255) NOT NULL default '',
-  `value` text NOT NULL,
+  `parameter` varchar(255) character set latin1 NOT NULL default '',
+  `value` text character set latin1 NOT NULL,
   `type_key` int(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`type_key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18097 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_section`
+-- Table structure for table `cms_section`
 --
 
-CREATE TABLE `cms_section` (
+CREATE TABLE IF NOT EXISTS `cms_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
@@ -407,63 +401,63 @@ CREATE TABLE `cms_section` (
   `type_key` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`page_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3521 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_site`
+-- Table structure for table `cms_site`
 --
 
-CREATE TABLE `cms_site` (
+CREATE TABLE IF NOT EXISTS `cms_site` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `url` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `url` varchar(255) character set latin1 NOT NULL default '',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=46 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_template`
+-- Table structure for table `cms_template`
 --
 
-CREATE TABLE `cms_template` (
+CREATE TABLE IF NOT EXISTS `cms_template` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
   `for_page_type` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `active` tinyint(4) NOT NULL default '1',
-  `identifier` varchar(255) NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
   `position` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`site_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=112 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `cms_template_section`
+-- Table structure for table `cms_template_section`
 --
 
-CREATE TABLE `cms_template_section` (
+CREATE TABLE IF NOT EXISTS `cms_template_section` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `template_id` int(11) NOT NULL default '0',
   `site_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
-  `identifier` varchar(255) NOT NULL default '',
-  `name` varchar(255) NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
   `type_key` int(11) NOT NULL default '0',
   `position` int(11) NOT NULL default '0',
   `active` tinyint(4) NOT NULL default '1',
@@ -471,42 +465,42 @@ CREATE TABLE `cms_template_section` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`template_id`,`site_id`),
   KEY `position` (`position`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=208 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `comment`
+-- Table structure for table `comment`
 --
 
-CREATE TABLE `comment` (
+CREATE TABLE IF NOT EXISTS `comment` (
   `id` int(11) NOT NULL auto_increment,
-  `code` varchar(255) NOT NULL default '',
+  `code` varchar(255) character set latin1 NOT NULL default '',
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
-  `headline` varchar(255) NOT NULL default '',
-  `text` text NOT NULL,
+  `headline` varchar(255) character set latin1 NOT NULL default '',
+  `text` text character set latin1 NOT NULL,
   `belong_to_id` int(11) NOT NULL default '0',
   `answer_to_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
-  `ip` varchar(255) NOT NULL default '',
+  `ip` varchar(255) character set latin1 NOT NULL default '',
   `active` int(11) NOT NULL default '1',
   `approved` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_id` (`belong_to_id`),
   KEY `date_created` (`date_created`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=79 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `contact`
+-- Table structure for table `contact`
 --
 
-CREATE TABLE `contact` (
+CREATE TABLE IF NOT EXISTS `contact` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
@@ -516,60 +510,60 @@ CREATE TABLE `contact` (
   `paymentcondition` tinyint(2) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
   `preferred_invoice` tinyint(2) NOT NULL default '0',
-  `code` varchar(255) NOT NULL,
-  `openid_url` varchar(255) NOT NULL default '',
-  `password` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
+  `code` varchar(255) character set latin1 NOT NULL,
+  `openid_url` varchar(255) character set latin1 NOT NULL default '',
+  `password` varchar(255) character set latin1 NOT NULL,
+  `username` varchar(255) character set latin1 NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `number` (`number`),
   KEY `find contact to newsletter_subscriber` (`id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28463 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `contact_message`
+-- Table structure for table `contact_message`
 --
 
-CREATE TABLE `contact_message` (
+CREATE TABLE IF NOT EXISTS `contact_message` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `message` text NOT NULL,
+  `message` text character set latin1 NOT NULL,
   `important` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `contact_person`
+-- Table structure for table `contact_person`
 --
 
-CREATE TABLE `contact_person` (
+CREATE TABLE IF NOT EXISTS `contact_person` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `phone` varchar(255) NOT NULL default '',
-  `mobile` varchar(255) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `phone` varchar(255) character set latin1 NOT NULL default '',
+  `mobile` varchar(255) character set latin1 NOT NULL default '',
+  `email` varchar(255) character set latin1 NOT NULL default '',
   `contact_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=695 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `contact_reminder_single`
+-- Table structure for table `contact_reminder_single`
 --
 
-CREATE TABLE `contact_reminder_single` (
+CREATE TABLE IF NOT EXISTS `contact_reminder_single` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
@@ -580,65 +574,65 @@ CREATE TABLE `contact_reminder_single` (
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_viewed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_cancelled` datetime NOT NULL default '0000-00-00 00:00:00',
-  `subject` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
+  `subject` varchar(255) character set latin1 NOT NULL default '',
+  `description` text character set latin1 NOT NULL,
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `core_translation_i18n`
+-- Table structure for table `core_translation_i18n`
 --
 
-CREATE TABLE `core_translation_i18n` (
-  `page_id` varchar(50) default NULL,
-  `id` text NOT NULL,
-  `dk` text,
-  `uk` text,
+CREATE TABLE IF NOT EXISTS `core_translation_i18n` (
+  `page_id` varchar(50) character set latin1 default NULL,
+  `id` text character set latin1 NOT NULL,
+  `dk` text character set latin1,
+  `uk` text character set latin1,
   UNIQUE KEY `i18n_page_id_id_index` (`page_id`,`id`(255)),
   KEY `i18n_page_id_index` (`page_id`),
   KEY `i18n_id_index` (`id`(255))
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `core_translation_langs`
+-- Table structure for table `core_translation_langs`
 --
 
-CREATE TABLE `core_translation_langs` (
-  `id` varchar(16) default NULL,
-  `name` varchar(200) default NULL,
-  `meta` text,
-  `error_text` varchar(250) default NULL,
-  `encoding` varchar(16) default NULL,
+CREATE TABLE IF NOT EXISTS `core_translation_langs` (
+  `id` varchar(16) character set latin1 default NULL,
+  `name` varchar(200) character set latin1 default NULL,
+  `meta` text character set latin1,
+  `error_text` varchar(250) character set latin1 default NULL,
+  `encoding` varchar(16) character set latin1 default NULL,
   UNIQUE KEY `langs_id_index` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `currency`
+-- Table structure for table `currency`
 --
 
-CREATE TABLE `currency` (
+CREATE TABLE IF NOT EXISTS `currency` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
   `_old_deleted` int(1) NOT NULL,
   `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `currency_exchangerate`
+-- Table structure for table `currency_exchangerate`
 --
 
-CREATE TABLE `currency_exchangerate` (
+CREATE TABLE IF NOT EXISTS `currency_exchangerate` (
   `id` bigint(20) NOT NULL auto_increment,
   `currency_id` bigint(20) NOT NULL,
   `used_for_key` tinyint(4) NOT NULL,
@@ -647,15 +641,15 @@ CREATE TABLE `currency_exchangerate` (
   `intranet_id` bigint(20) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `currency_id_idx` (`currency_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `dbquery_result`
+-- Table structure for table `dbquery_result`
 --
 
-CREATE TABLE `dbquery_result` (
+CREATE TABLE IF NOT EXISTS `dbquery_result` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -673,21 +667,21 @@ CREATE TABLE `dbquery_result` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`session_id`),
   KEY `clean_up_posts` (`intranet_id`,`date_time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=425430 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `debtor`
+-- Table structure for table `debtor`
 --
 
-CREATE TABLE `debtor` (
+CREATE TABLE IF NOT EXISTS `debtor` (
   `id` int(11) NOT NULL auto_increment,
   `where_from` int(11) NOT NULL default '0',
   `where_from_id` int(11) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `identifier_key` varchar(255) NOT NULL default '',
+  `identifier_key` varchar(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_sent` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -697,7 +691,7 @@ CREATE TABLE `debtor` (
   `voucher_id` int(11) NOT NULL default '0',
   `currency_id` int(11) NOT NULL,
   `currency_product_price_exchange_rate_id` int(11) NOT NULL,
-  `_old_voucher_number` varchar(255) NOT NULL default '',
+  `_old_voucher_number` varchar(255) character set latin1 NOT NULL default '',
   `this_date` date NOT NULL default '0000-00-00',
   `due_date` date NOT NULL default '0000-00-00',
   `number` int(11) NOT NULL default '0',
@@ -705,8 +699,8 @@ CREATE TABLE `debtor` (
   `contact_id` int(11) NOT NULL default '0',
   `contact_address_id` int(11) NOT NULL default '0',
   `contact_person_id` int(11) NOT NULL default '0',
-  `_old_attention_to` varchar(255) NOT NULL default '',
-  `description` varchar(255) NOT NULL default '',
+  `_old_attention_to` varchar(255) character set latin1 NOT NULL default '',
+  `description` varchar(255) character set latin1 NOT NULL default '',
   `status` int(11) NOT NULL default '0',
   `_old_status` int(11) NOT NULL default '0',
   `_old_status_date` date NOT NULL default '0000-00-00',
@@ -715,16 +709,16 @@ CREATE TABLE `debtor` (
   `type` int(11) NOT NULL default '0',
   `round_off` int(11) NOT NULL default '0',
   `payment_method` int(11) NOT NULL default '0',
-  `girocode` varchar(255) NOT NULL default '',
-  `ip` varchar(255) NOT NULL default '',
+  `girocode` varchar(255) character set latin1 NOT NULL default '',
+  `ip` varchar(255) character set latin1 NOT NULL default '',
   `_old_is_sent` tinyint(1) NOT NULL default '0',
   `_old_payed` int(11) NOT NULL default '0',
   `_old_payed_date` date NOT NULL default '0000-00-00',
   `_old_is_sent_date` date NOT NULL default '0000-00-00',
   `active` int(1) NOT NULL default '1',
-  `comment` text NOT NULL,
-  `message` text NOT NULL,
-  `internal_note` text NOT NULL,
+  `comment` text character set latin1 NOT NULL,
+  `message` text character set latin1 NOT NULL,
+  `internal_note` text character set latin1 NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `contact_id` (`contact_id`),
   KEY `contact_address_id` (`contact_address_id`),
@@ -734,15 +728,15 @@ CREATE TABLE `debtor` (
   KEY `intranet_id` (`intranet_id`,`status`,`type`),
   KEY `date_created` (`date_created`),
   KEY `find_debtor_from_item_to_get_quantity_of_product` (`id`,`intranet_id`,`date_sent`,`status`,`type`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18720 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `debtor_item`
+-- Table structure for table `debtor_item`
 --
 
-CREATE TABLE `debtor_item` (
+CREATE TABLE IF NOT EXISTS `debtor_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `debtor_id` int(11) NOT NULL default '0',
@@ -750,7 +744,7 @@ CREATE TABLE `debtor_item` (
   `product_detail_id` int(11) NOT NULL default '0',
   `product_variation_id` int(11) NOT NULL default '0',
   `product_variation_detail_id` int(11) NOT NULL default '0',
-  `description` text NOT NULL,
+  `description` text character set latin1 NOT NULL,
   `quantity` double(11,2) NOT NULL default '0.00',
   `position` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
@@ -761,21 +755,21 @@ CREATE TABLE `debtor_item` (
   KEY `product_detail_id` (`product_detail_id`),
   KEY `product_variation_id` (`product_variation_id`,`product_variation_detail_id`),
   KEY `find_quantity_of_product` (`intranet_id`,`product_id`,`product_variation_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54531 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `email`
+-- Table structure for table `email`
 --
 
-CREATE TABLE `email` (
+CREATE TABLE IF NOT EXISTS `email` (
   `id` int(11) NOT NULL auto_increment,
   `type_id` int(11) NOT NULL default '0',
   `status` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
-  `from_email` varchar(255) NOT NULL default '',
-  `from_name` varchar(255) NOT NULL default '',
+  `from_email` varchar(255) character set latin1 NOT NULL default '',
+  `from_name` varchar(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_deadline` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -785,38 +779,38 @@ CREATE TABLE `email` (
   `contact_person_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `bcc_to_user` int(11) NOT NULL default '0',
-  `subject` varchar(255) NOT NULL default '',
-  `body` text NOT NULL,
-  `error_msg` varchar(255) NOT NULL default '',
+  `subject` varchar(255) character set latin1 NOT NULL default '',
+  `body` text character set latin1 NOT NULL,
+  `error_msg` varchar(255) character set latin1 NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `date_sent` (`date_sent`),
   KEY `belong_to_id` (`belong_to_id`),
   KEY `search_for_due_mails` (`date_deadline`,`intranet_id`,`status`,`contact_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=121312 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `email_attachment`
+-- Table structure for table `email_attachment`
 --
 
-CREATE TABLE `email_attachment` (
+CREATE TABLE IF NOT EXISTS `email_attachment` (
   `id` int(11) NOT NULL auto_increment,
   `email_id` int(11) NOT NULL default '0',
   `file_id` int(11) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
-  `filename` varchar(255) NOT NULL default '',
+  `filename` varchar(255) character set latin1 NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `email_id` (`email_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2667 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `filehandler_append_file`
+-- Table structure for table `filehandler_append_file`
 --
 
-CREATE TABLE `filehandler_append_file` (
+CREATE TABLE IF NOT EXISTS `filehandler_append_file` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -824,32 +818,32 @@ CREATE TABLE `filehandler_append_file` (
   `belong_to_key` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
   `file_handler_id` int(11) NOT NULL default '0',
-  `description` varchar(255) NOT NULL default '',
+  `description` varchar(255) character set latin1 NOT NULL default '',
   `active` int(1) NOT NULL default '1',
   `position` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to_id`,`file_handler_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7019 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `file_handler`
+-- Table structure for table `file_handler`
 --
 
-CREATE TABLE `file_handler` (
+CREATE TABLE IF NOT EXISTS `file_handler` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `description` text NOT NULL,
-  `file_name` varchar(100) NOT NULL default '',
-  `server_file_name` varchar(255) NOT NULL default '',
+  `description` text character set latin1 NOT NULL,
+  `file_name` varchar(100) character set latin1 NOT NULL default '',
+  `server_file_name` varchar(255) character set latin1 NOT NULL default '',
   `file_size` int(11) NOT NULL default '0',
   `file_type_key` int(11) NOT NULL default '0',
   `accessibility_key` int(11) NOT NULL default '0',
-  `access_key` varchar(255) NOT NULL default '',
+  `access_key` varchar(255) character set latin1 NOT NULL default '',
   `width` int(11) default NULL,
   `height` int(11) default NULL,
   `active` int(11) NOT NULL default '1',
@@ -857,41 +851,41 @@ CREATE TABLE `file_handler` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`access_key`,`active`,`id`),
   KEY `simple_find` (`id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7807 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `file_handler_instance`
+-- Table structure for table `file_handler_instance`
 --
 
-CREATE TABLE `file_handler_instance` (
+CREATE TABLE IF NOT EXISTS `file_handler_instance` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `file_handler_id` int(11) NOT NULL default '0',
   `type_key` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `server_file_name` varchar(255) NOT NULL default '',
+  `server_file_name` varchar(255) character set latin1 NOT NULL default '',
   `width` int(255) NOT NULL default '0',
   `height` int(255) NOT NULL default '0',
-  `file_size` varchar(20) NOT NULL default '',
-  `crop_parameter` varchar(255) NOT NULL default '',
+  `file_size` varchar(20) character set latin1 NOT NULL default '',
+  `crop_parameter` varchar(255) character set latin1 NOT NULL default '',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`file_handler_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16242 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `file_handler_instance_type`
+-- Table structure for table `file_handler_instance_type`
 --
 
-CREATE TABLE `file_handler_instance_type` (
+CREATE TABLE IF NOT EXISTS `file_handler_instance_type` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
   `type_key` int(11) NOT NULL default '0',
   `max_height` int(11) NOT NULL default '0',
   `max_width` int(11) NOT NULL default '0',
@@ -899,15 +893,15 @@ CREATE TABLE `file_handler_instance_type` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `flickr_cache`
+-- Table structure for table `flickr_cache`
 --
 
-CREATE TABLE `flickr_cache` (
+CREATE TABLE IF NOT EXISTS `flickr_cache` (
   `request` varchar(35) NOT NULL default '',
   `response` mediumtext NOT NULL,
   `expiration` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -917,45 +911,45 @@ CREATE TABLE `flickr_cache` (
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ilib_category`
+-- Table structure for table `ilib_category`
 --
 
-CREATE TABLE `ilib_category` (
+CREATE TABLE IF NOT EXISTS `ilib_category` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to` int(11) NOT NULL default '0',
   `belong_to_id` int(11) NOT NULL default '0',
   `parent_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `identifier` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
   `active` int(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`belong_to`,`belong_to_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=95 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `ilib_category_append`
+-- Table structure for table `ilib_category_append`
 --
 
-CREATE TABLE `ilib_category_append` (
+CREATE TABLE IF NOT EXISTS `ilib_category_append` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `object_id` int(11) NOT NULL default '0',
   `category_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`object_id`,`category_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3011 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `intraface_modules_onlinepayment__language_translation`
+-- Table structure for table `intraface_modules_onlinepayment__language_translation`
 --
 
-CREATE TABLE `intraface_modules_onlinepayment__language_translation` (
+CREATE TABLE IF NOT EXISTS `intraface_modules_onlinepayment__language_translation` (
   `id` int(11) NOT NULL,
   `email` text,
   `lang` varchar(20) NOT NULL default '',
@@ -966,37 +960,37 @@ CREATE TABLE `intraface_modules_onlinepayment__language_translation` (
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `intranet`
+-- Table structure for table `intranet`
 --
 
-CREATE TABLE `intranet` (
+CREATE TABLE IF NOT EXISTS `intranet` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `identifier` varchar(255) NOT NULL default '',
-  `_old_bankname` varchar(255) NOT NULL default '',
-  `_old_regnumber` varchar(4) NOT NULL default '0',
-  `_old_accountnumber` varchar(255) NOT NULL default '',
-  `_old_giroaccountnumber` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
+  `_old_bankname` varchar(255) character set latin1 NOT NULL default '',
+  `_old_regnumber` varchar(4) character set latin1 NOT NULL default '0',
+  `_old_accountnumber` varchar(255) character set latin1 NOT NULL default '',
+  `_old_giroaccountnumber` varchar(255) character set latin1 NOT NULL default '',
   `pdf_header_file_id` int(11) NOT NULL default '0',
-  `key_code` varchar(255) NOT NULL default '',
-  `private_key` varchar(255) NOT NULL default '',
-  `public_key` varchar(255) NOT NULL default '',
+  `key_code` varchar(255) character set latin1 NOT NULL default '',
+  `private_key` varchar(255) character set latin1 NOT NULL default '',
+  `public_key` varchar(255) character set latin1 NOT NULL default '',
   `maintained_by_user_id` int(11) NOT NULL default '0',
-  `password` varchar(255) NOT NULL default '',
+  `password` varchar(255) character set latin1 NOT NULL default '',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `contact_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `private_key` (`private_key`),
   KEY `public_key` (`public_key`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=58 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `intranet_module_package`
+-- Table structure for table `intranet_module_package`
 --
 
-CREATE TABLE `intranet_module_package` (
+CREATE TABLE IF NOT EXISTS `intranet_module_package` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `module_package_id` int(11) NOT NULL default '0',
@@ -1008,22 +1002,22 @@ CREATE TABLE `intranet_module_package` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`module_package_id`),
   KEY `order_debtor_id` (`order_debtor_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `invoice_payment`
+-- Table structure for table `invoice_payment`
 --
 
-CREATE TABLE `invoice_payment` (
+CREATE TABLE IF NOT EXISTS `invoice_payment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `payment_date` date NOT NULL default '0000-00-00',
   `payment_for` int(11) NOT NULL default '0',
   `payment_for_id` int(11) NOT NULL default '0',
   `type` int(11) NOT NULL default '0',
-  `description` varchar(255) NOT NULL default '',
+  `description` varchar(255) character set latin1 NOT NULL default '',
   `amount` double(11,2) NOT NULL default '0.00',
   `_old_date_stated` date NOT NULL default '0000-00-00',
   `_old_voucher_id` int(11) NOT NULL default '0',
@@ -1034,15 +1028,15 @@ CREATE TABLE `invoice_payment` (
   KEY `type` (`type`),
   KEY `payment_for_id` (`payment_for_id`),
   KEY `payment_for` (`payment_for`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8634 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `invoice_reminder`
+-- Table structure for table `invoice_reminder`
 --
 
-CREATE TABLE `invoice_reminder` (
+CREATE TABLE IF NOT EXISTS `invoice_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `intranet_address_id` int(11) NOT NULL default '0',
@@ -1059,60 +1053,60 @@ CREATE TABLE `invoice_reminder` (
   `date_cancelled` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_stated` date NOT NULL default '0000-00-00',
   `voucher_id` int(11) NOT NULL default '0',
-  `attention_to` varchar(255) NOT NULL default '',
+  `attention_to` varchar(255) character set latin1 NOT NULL default '',
   `number` int(11) NOT NULL default '0',
   `this_date` date NOT NULL default '0000-00-00',
   `due_date` date NOT NULL default '0000-00-00',
   `reminder_fee` int(11) NOT NULL default '0',
-  `description` varchar(255) NOT NULL default '',
-  `text` text NOT NULL,
+  `description` varchar(255) character set latin1 NOT NULL default '',
+  `text` text character set latin1 NOT NULL,
   `payment_method` int(11) NOT NULL default '0',
-  `girocode` varchar(255) NOT NULL default '',
-  `send_as` enum('email','pdf') NOT NULL default 'pdf',
+  `girocode` varchar(255) character set latin1 NOT NULL default '',
+  `send_as` enum('email','pdf') character set latin1 NOT NULL default 'pdf',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `contact_id` (`contact_id`,`contact_address_id`),
   KEY `invoice_id` (`invoice_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1108 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `invoice_reminder_item`
+-- Table structure for table `invoice_reminder_item`
 --
 
-CREATE TABLE `invoice_reminder_item` (
+CREATE TABLE IF NOT EXISTS `invoice_reminder_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
   `invoice_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`invoice_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1276 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `invoice_reminder_unpaid_reminder`
+-- Table structure for table `invoice_reminder_unpaid_reminder`
 --
 
-CREATE TABLE `invoice_reminder_unpaid_reminder` (
+CREATE TABLE IF NOT EXISTS `invoice_reminder_unpaid_reminder` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `invoice_reminder_id` int(11) NOT NULL default '0',
   `unpaid_invoice_reminder_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`invoice_reminder_id`,`unpaid_invoice_reminder_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=721 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `kernel_log`
+-- Table structure for table `kernel_log`
 --
 
-CREATE TABLE `kernel_log` (
+CREATE TABLE IF NOT EXISTS `kernel_log` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1122,32 +1116,32 @@ CREATE TABLE `kernel_log` (
   `date_time` datetime NOT NULL default '0000-00-00 00:00:00',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `keyword`
+-- Table structure for table `keyword`
 --
 
-CREATE TABLE `keyword` (
+CREATE TABLE IF NOT EXISTS `keyword` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `keyword` varchar(255) NOT NULL default '',
-  `type` varchar(255) NOT NULL default '',
+  `keyword` varchar(255) character set latin1 NOT NULL default '',
+  `type` varchar(255) character set latin1 NOT NULL default '',
   `active` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`type`,`active`),
   KEY `keyword` (`keyword`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=792 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `keyword_x_object`
+-- Table structure for table `keyword_x_object`
 --
 
-CREATE TABLE `keyword_x_object` (
+CREATE TABLE IF NOT EXISTS `keyword_x_object` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to` int(11) NOT NULL default '0',
@@ -1156,28 +1150,28 @@ CREATE TABLE `keyword_x_object` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to` (`belong_to`),
   KEY `keyword_id` (`keyword_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27405 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `language`
+-- Table structure for table `language`
 --
 
-CREATE TABLE `language` (
+CREATE TABLE IF NOT EXISTS `language` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `type_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `lock_post`
+-- Table structure for table `lock_post`
 --
 
-CREATE TABLE `lock_post` (
+CREATE TABLE IF NOT EXISTS `lock_post` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1185,26 +1179,26 @@ CREATE TABLE `lock_post` (
   `table_name` varchar(255) NOT NULL default '',
   `post_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=871 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `log_id_seq`
+-- Table structure for table `log_id_seq`
 --
 
-CREATE TABLE `log_id_seq` (
+CREATE TABLE IF NOT EXISTS `log_id_seq` (
   `id` int(10) unsigned NOT NULL auto_increment,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22969 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `log_table`
+-- Table structure for table `log_table`
 --
 
-CREATE TABLE `log_table` (
+CREATE TABLE IF NOT EXISTS `log_table` (
   `id` int(11) NOT NULL default '0',
   `logtime` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `ident` varchar(16) NOT NULL default '',
@@ -1216,32 +1210,33 @@ CREATE TABLE `log_table` (
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module`
+-- Table structure for table `module`
 --
 
-CREATE TABLE `module` (
+CREATE TABLE IF NOT EXISTS `module` (
   `id` int(11) NOT NULL auto_increment,
-  `name` char(255) NOT NULL default '',
-  `menu_label` char(255) NOT NULL default '',
+  `name` char(255) character set latin1 NOT NULL default '',
+  `menu_label` char(255) character set latin1 NOT NULL default '',
   `show_menu` int(11) NOT NULL default '0',
   `active` tinyint(1) unsigned NOT NULL default '0',
   `position` int(11) NOT NULL default '0',
   `menu_index` int(11) NOT NULL default '0',
   `frontpage_index` int(11) NOT NULL default '0',
+  `required` tinyint(1) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `name` (`name`),
   KEY `position` (`position`),
   KEY `menu_label` (`menu_label`),
   KEY `active` (`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_package`
+-- Table structure for table `module_package`
 --
 
-CREATE TABLE `module_package` (
+CREATE TABLE IF NOT EXISTS `module_package` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_group_id` int(11) NOT NULL default '0',
   `module_package_plan_id` int(11) NOT NULL default '0',
@@ -1249,101 +1244,101 @@ CREATE TABLE `module_package` (
   `active` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `module_package_group_id` (`module_package_group_id`,`module_package_plan_id`,`product_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_package_action`
+-- Table structure for table `module_package_action`
 --
 
-CREATE TABLE `module_package_action` (
+CREATE TABLE IF NOT EXISTS `module_package_action` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `identifier` varchar(255) NOT NULL default '',
-  `order_debtor_identifier` varchar(255) NOT NULL default '0',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
+  `order_debtor_identifier` varchar(255) character set latin1 NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `action` text NOT NULL,
+  `action` text character set latin1 NOT NULL,
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `identifier` (`identifier`),
   KEY `intranet_id` (`intranet_id`,`order_debtor_identifier`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_package_group`
+-- Table structure for table `module_package_group`
 --
 
-CREATE TABLE `module_package_group` (
+CREATE TABLE IF NOT EXISTS `module_package_group` (
   `id` int(11) NOT NULL auto_increment,
-  `group_name` varchar(255) NOT NULL default '',
+  `group_name` varchar(255) character set latin1 NOT NULL default '',
   `sorting_index` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `sorting_index` (`sorting_index`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_package_module`
+-- Table structure for table `module_package_module`
 --
 
-CREATE TABLE `module_package_module` (
+CREATE TABLE IF NOT EXISTS `module_package_module` (
   `id` int(11) NOT NULL auto_increment,
   `module_package_id` int(11) NOT NULL default '0',
-  `module` varchar(255) NOT NULL default '',
-  `limiter` varchar(255) NOT NULL default '',
+  `module` varchar(255) character set latin1 NOT NULL default '',
+  `limiter` varchar(255) character set latin1 NOT NULL default '',
   `active` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `module_package_id` (`module_package_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_package_plan`
+-- Table structure for table `module_package_plan`
 --
 
-CREATE TABLE `module_package_plan` (
+CREATE TABLE IF NOT EXISTS `module_package_plan` (
   `id` int(11) NOT NULL auto_increment,
-  `plan` varchar(255) NOT NULL default '',
+  `plan` varchar(255) character set latin1 NOT NULL default '',
   `plan_index` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `plan_index` (`plan_index`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `module_sub_access`
+-- Table structure for table `module_sub_access`
 --
 
-CREATE TABLE `module_sub_access` (
+CREATE TABLE IF NOT EXISTS `module_sub_access` (
   `id` int(11) NOT NULL auto_increment,
   `module_id` int(11) NOT NULL default '0',
-  `name` char(255) NOT NULL default '',
-  `description` char(255) NOT NULL default '',
+  `name` char(255) character set latin1 NOT NULL default '',
+  `description` char(255) character set latin1 NOT NULL default '',
   `active` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `description` (`description`),
   KEY `module_id` (`module_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `newsletter_archieve`
+-- Table structure for table `newsletter_archieve`
 --
 
-CREATE TABLE `newsletter_archieve` (
+CREATE TABLE IF NOT EXISTS `newsletter_archieve` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
-  `subject` varchar(255) NOT NULL default '',
-  `text` text NOT NULL,
+  `subject` varchar(255) character set latin1 NOT NULL default '',
+  `text` text character set latin1 NOT NULL,
   `status` tinyint(4) NOT NULL default '0',
   `sent_to_receivers` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1354,72 +1349,72 @@ CREATE TABLE `newsletter_archieve` (
   `active` int(11) NOT NULL default '1',
   PRIMARY KEY  (`id`),
   KEY `list_id` (`list_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=176 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `newsletter_list`
+-- Table structure for table `newsletter_list`
 --
 
-CREATE TABLE `newsletter_list` (
+CREATE TABLE IF NOT EXISTS `newsletter_list` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `title` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
+  `title` varchar(255) character set latin1 NOT NULL default '',
+  `description` text character set latin1 NOT NULL,
   `_old_subscribe_option_key` int(11) NOT NULL default '0',
   `_old_optin` tinyint(1) NOT NULL default '1',
-  `subscribe_message` text NOT NULL,
+  `subscribe_message` text character set latin1 NOT NULL,
   `_old_optout` tinyint(1) NOT NULL default '1',
-  `_old_password` varchar(255) NOT NULL default 'vih',
+  `_old_password` varchar(255) character set latin1 NOT NULL default 'vih',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `unsubscribe_message` text NOT NULL,
-  `sender_name` varchar(255) NOT NULL default '',
-  `reply_email` varchar(255) NOT NULL default '',
-  `privacy_policy` varchar(255) NOT NULL default '',
+  `unsubscribe_message` text character set latin1 NOT NULL,
+  `sender_name` varchar(255) character set latin1 NOT NULL default '',
+  `reply_email` varchar(255) character set latin1 NOT NULL default '',
+  `privacy_policy` varchar(255) character set latin1 NOT NULL default '',
   `active` int(11) NOT NULL default '1',
-  `subscribe_subject` varchar(255) NOT NULL default '',
-  `optin_link` varchar(255) NOT NULL default '',
+  `subscribe_subject` varchar(255) character set latin1 NOT NULL default '',
+  `optin_link` varchar(255) character set latin1 NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `newsletter_subscriber`
+-- Table structure for table `newsletter_subscriber`
 --
 
-CREATE TABLE `newsletter_subscriber` (
+CREATE TABLE IF NOT EXISTS `newsletter_subscriber` (
   `id` int(11) NOT NULL auto_increment,
-  `code` varchar(255) NOT NULL default '',
+  `code` varchar(255) character set latin1 NOT NULL default '',
   `list_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `email` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `email` varchar(255) character set latin1 NOT NULL default '',
   `date_submitted` datetime NOT NULL default '0000-00-00 00:00:00',
-  `ip_submitted` varchar(50) NOT NULL default '',
+  `ip_submitted` varchar(50) character set latin1 NOT NULL default '',
   `optin` tinyint(1) NOT NULL default '0',
   `date_optin_email_sent` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_optin` datetime NOT NULL default '0000-00-00 00:00:00',
-  `ip_optin` varchar(255) NOT NULL default '',
+  `ip_optin` varchar(255) character set latin1 NOT NULL default '',
   `resend_optin_email_count` int(11) NOT NULL,
   `intranet_id` int(11) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   `date_unsubscribe` date NOT NULL,
-  `unsubscribe_comment` text NOT NULL,
+  `unsubscribe_comment` text character set latin1 NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `find_subscribers` (`intranet_id`,`optin`,`active`,`list_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18133 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `onlinepayment`
+-- Table structure for table `onlinepayment`
 --
 
-CREATE TABLE `onlinepayment` (
+CREATE TABLE IF NOT EXISTS `onlinepayment` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `belong_to_key` int(11) NOT NULL default '0',
@@ -1431,10 +1426,10 @@ CREATE TABLE `onlinepayment` (
   `date_reversed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_cancelled` datetime NOT NULL default '0000-00-00 00:00:00',
   `status_key` int(11) NOT NULL default '0',
-  `text` varchar(255) NOT NULL default '',
+  `text` varchar(255) character set latin1 NOT NULL default '',
   `transaction_number` int(11) NOT NULL default '0',
-  `transaction_status` varchar(255) NOT NULL default '',
-  `pbs_status` varchar(256) NOT NULL,
+  `transaction_status` varchar(255) character set latin1 NOT NULL default '',
+  `pbs_status` varchar(256) character set latin1 NOT NULL,
   `amount` double(11,2) NOT NULL default '0.00',
   `original_amount` double(11,2) NOT NULL default '0.00',
   `currency_id` int(11) NOT NULL default '0',
@@ -1444,41 +1439,41 @@ CREATE TABLE `onlinepayment` (
   KEY `intranet_id` (`intranet_id`),
   KEY `belong_to_key` (`belong_to_key`),
   KEY `belong_to_id` (`belong_to_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6372 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `onlinepayment_settings`
+-- Table structure for table `onlinepayment_settings`
 --
 
-CREATE TABLE `onlinepayment_settings` (
+CREATE TABLE IF NOT EXISTS `onlinepayment_settings` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `onlinepayment_settings_translation`
+-- Table structure for table `onlinepayment_settings_translation`
 --
 
-CREATE TABLE `onlinepayment_settings_translation` (
+CREATE TABLE IF NOT EXISTS `onlinepayment_settings_translation` (
   `id` int(11) NOT NULL,
-  `email` text,
-  `lang` varchar(20) NOT NULL default '',
-  `subject` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`,`lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+  `email` text character set latin1,
+  `lang` varchar(20) character set latin1 NOT NULL,
+  `subject` varchar(255) character set latin1 NOT NULL,
+  UNIQUE KEY `id` (`id`,`lang`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `permission`
+-- Table structure for table `permission`
 --
 
-CREATE TABLE `permission` (
+CREATE TABLE IF NOT EXISTS `permission` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1486,15 +1481,15 @@ CREATE TABLE `permission` (
   `module_sub_access_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`user_id`,`module_id`,`module_sub_access_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8295 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `php_sessions`
+-- Table structure for table `php_sessions`
 --
 
-CREATE TABLE `php_sessions` (
+CREATE TABLE IF NOT EXISTS `php_sessions` (
   `session_id` varchar(40) NOT NULL default '',
   `last_active` int(11) NOT NULL default '0',
   `data` text NOT NULL,
@@ -1504,10 +1499,10 @@ CREATE TABLE `php_sessions` (
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `procurement`
+-- Table structure for table `procurement`
 --
 
-CREATE TABLE `procurement` (
+CREATE TABLE IF NOT EXISTS `procurement` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
@@ -1521,8 +1516,8 @@ CREATE TABLE `procurement` (
   `paid_date` date NOT NULL default '0000-00-00',
   `number` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
-  `vendor` varchar(255) NOT NULL default '',
-  `description` varchar(255) NOT NULL default '',
+  `vendor` varchar(255) character set latin1 NOT NULL default '',
+  `description` varchar(255) character set latin1 NOT NULL default '',
   `from_region_key` int(11) NOT NULL default '0',
   `_old_total_price` double(11,2) unsigned NOT NULL default '0.00',
   `price_items` double(11,2) unsigned NOT NULL default '0.00',
@@ -1536,15 +1531,15 @@ CREATE TABLE `procurement` (
   `voucher_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=706 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `procurement_item`
+-- Table structure for table `procurement_item`
 --
 
-CREATE TABLE `procurement_item` (
+CREATE TABLE IF NOT EXISTS `procurement_item` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `procurement_id` int(11) NOT NULL default '0',
@@ -1561,15 +1556,15 @@ CREATE TABLE `procurement_item` (
   KEY `product_id` (`product_id`),
   KEY `product_detail_id` (`product_detail_id`),
   KEY `active` (`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product`
+-- Table structure for table `product`
 --
 
-CREATE TABLE `product` (
+CREATE TABLE IF NOT EXISTS `product` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `do_show` tinyint(1) NOT NULL default '1',
@@ -1581,19 +1576,19 @@ CREATE TABLE `product` (
   `locked` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8677 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_attribute`
+-- Table structure for table `product_attribute`
 --
 
-CREATE TABLE `product_attribute` (
+CREATE TABLE IF NOT EXISTS `product_attribute` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `attribute_group_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
   `position` int(11) NOT NULL default '0',
   `_old_deleted` tinyint(1) NOT NULL default '0',
   `deleted_at` timestamp NULL default NULL,
@@ -1601,45 +1596,45 @@ CREATE TABLE `product_attribute` (
   KEY `attribute_group_id` (`attribute_group_id`),
   KEY `position` (`position`),
   KEY `find_attribute_to_variation` (`intranet_id`,`deleted_at`,`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=94 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_attribute_group`
+-- Table structure for table `product_attribute_group`
 --
 
-CREATE TABLE `product_attribute_group` (
+CREATE TABLE IF NOT EXISTS `product_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `name` varchar(255) NOT NULL default '',
-  `description` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `description` varchar(255) character set latin1 NOT NULL default '',
   `_old_deleted` tinyint(1) NOT NULL default '0',
   `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `find_group_to_attribute` (`id`,`intranet_id`,`deleted_at`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_detail`
+-- Table structure for table `product_detail`
 --
 
-CREATE TABLE `product_detail` (
+CREATE TABLE IF NOT EXISTS `product_detail` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `number` int(11) NOT NULL default '0',
-  `_old_name` varchar(255) NOT NULL,
-  `_old_description` text NOT NULL,
+  `_old_name` varchar(255) character set latin1 NOT NULL,
+  `_old_description` text character set latin1 NOT NULL,
   `price` float(11,2) NOT NULL default '0.00',
   `before_price` float(11,2) NOT NULL default '0.00',
   `weight` int(11) NOT NULL default '0',
   `unit` int(11) NOT NULL default '0',
   `vat` tinyint(1) NOT NULL default '1',
-  `show_unit` enum('Yes','No') NOT NULL default 'No',
+  `show_unit` enum('Yes','No') character set latin1 NOT NULL default 'No',
   `pic_id` int(11) NOT NULL default '0',
   `changed_date` datetime NOT NULL default '0000-00-00 00:00:00',
   `do_show` tinyint(1) NOT NULL default '1',
@@ -1648,29 +1643,29 @@ CREATE TABLE `product_detail` (
   PRIMARY KEY  (`id`),
   KEY `number` (`number`),
   KEY `product_id` (`product_id`,`active`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16279 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_detail_translation`
+-- Table structure for table `product_detail_translation`
 --
 
-CREATE TABLE `product_detail_translation` (
+CREATE TABLE IF NOT EXISTS `product_detail_translation` (
   `id` int(11) NOT NULL,
-  `lang` char(2) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `description` text NOT NULL,
+  `lang` char(2) character set latin1 NOT NULL,
+  `name` varchar(255) character set latin1 NOT NULL,
+  `description` text character set latin1 NOT NULL,
   PRIMARY KEY  (`id`,`lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_related`
+-- Table structure for table `product_related`
 --
 
-CREATE TABLE `product_related` (
+CREATE TABLE IF NOT EXISTS `product_related` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1679,15 +1674,15 @@ CREATE TABLE `product_related` (
   KEY `product_id` (`product_id`),
   KEY `intranet_id` (`intranet_id`),
   KEY `related_product_id` (`related_product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5651 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_variation`
+-- Table structure for table `product_variation`
 --
 
-CREATE TABLE `product_variation` (
+CREATE TABLE IF NOT EXISTS `product_variation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1696,15 +1691,15 @@ CREATE TABLE `product_variation` (
   `deleted_at` timestamp NULL default NULL,
   PRIMARY KEY  (`id`),
   KEY `find_variation` (`intranet_id`,`product_id`,`deleted_at`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1838 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_variation_detail`
+-- Table structure for table `product_variation_detail`
 --
 
-CREATE TABLE `product_variation_detail` (
+CREATE TABLE IF NOT EXISTS `product_variation_detail` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1715,15 +1710,15 @@ CREATE TABLE `product_variation_detail` (
   KEY `intranet_id` (`intranet_id`),
   KEY `product_variation_id` (`product_variation_id`),
   KEY `find_detail_to_variation` (`intranet_id`,`product_variation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2241 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_variation_x_attribute`
+-- Table structure for table `product_variation_x_attribute`
 --
 
-CREATE TABLE `product_variation_x_attribute` (
+CREATE TABLE IF NOT EXISTS `product_variation_x_attribute` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_variation_id` int(11) NOT NULL default '0',
@@ -1734,184 +1729,184 @@ CREATE TABLE `product_variation_x_attribute` (
   KEY `product_attribute_id` (`product_attribute_id`),
   KEY `idx_product_variation_attribute` (`product_variation_id`,`attribute_number`),
   KEY `find_attribute_to_variation` (`intranet_id`,`product_variation_id`,`attribute_number`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3425 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `product_x_attribute_group`
+-- Table structure for table `product_x_attribute_group`
 --
 
-CREATE TABLE `product_x_attribute_group` (
+CREATE TABLE IF NOT EXISTS `product_x_attribute_group` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `product_attribute_group_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=788 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `project`
+-- Table structure for table `project`
 --
 
-CREATE TABLE `project` (
+CREATE TABLE IF NOT EXISTS `project` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
-  `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `description` text character set latin1 NOT NULL,
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `project_task`
+-- Table structure for table `project_task`
 --
 
-CREATE TABLE `project_task` (
+CREATE TABLE IF NOT EXISTS `project_task` (
   `id` int(11) NOT NULL auto_increment,
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_updated` datetime NOT NULL default '0000-00-00 00:00:00',
   `project_id` int(11) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
-  `item` text NOT NULL,
+  `item` text character set latin1 NOT NULL,
   `user_id` int(11) NOT NULL default '0',
   `position` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `redirect`
+-- Table structure for table `redirect`
 --
 
-CREATE TABLE `redirect` (
+CREATE TABLE IF NOT EXISTS `redirect` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `session_id` varchar(255) NOT NULL default '',
-  `from_url` varchar(255) NOT NULL default '',
-  `return_url` varchar(255) NOT NULL default '',
-  `destination_url` varchar(255) NOT NULL default '',
-  `identifier` varchar(255) NOT NULL default '',
+  `session_id` varchar(255) character set latin1 NOT NULL default '',
+  `from_url` varchar(255) character set latin1 NOT NULL default '',
+  `return_url` varchar(255) character set latin1 NOT NULL default '',
+  `destination_url` varchar(255) character set latin1 NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `cancel_url` varchar(255) NOT NULL default '',
+  `cancel_url` varchar(255) character set latin1 NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `session_id` (`session_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14757 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `redirect_parameter`
+-- Table structure for table `redirect_parameter`
 --
 
-CREATE TABLE `redirect_parameter` (
+CREATE TABLE IF NOT EXISTS `redirect_parameter` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
-  `parameter` varchar(255) NOT NULL default '',
+  `parameter` varchar(255) character set latin1 NOT NULL default '',
   `multiple` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`redirect_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10029 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `redirect_parameter_value`
+-- Table structure for table `redirect_parameter_value`
 --
 
-CREATE TABLE `redirect_parameter_value` (
+CREATE TABLE IF NOT EXISTS `redirect_parameter_value` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `redirect_id` int(11) NOT NULL default '0',
   `redirect_parameter_id` int(11) NOT NULL default '0',
-  `value` varchar(255) NOT NULL default '',
-  `extra_value` varchar(255) NOT NULL default '0',
+  `value` varchar(255) character set latin1 NOT NULL default '',
+  `extra_value` varchar(255) character set latin1 NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`redirect_id`,`redirect_parameter_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11005 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `setting`
+-- Table structure for table `setting`
 --
 
-CREATE TABLE `setting` (
+CREATE TABLE IF NOT EXISTS `setting` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  `setting` varchar(255) NOT NULL default '',
-  `value` longtext NOT NULL,
+  `setting` varchar(255) character set latin1 NOT NULL default '',
+  `value` longtext character set latin1 NOT NULL,
   `sub_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`user_id`),
   KEY `setting` (`setting`),
   KEY `user_id` (`user_id`),
   KEY `sub_id` (`sub_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1955 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `shop`
+-- Table structure for table `shop`
 --
 
-CREATE TABLE `shop` (
+CREATE TABLE IF NOT EXISTS `shop` (
   `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL default '',
-  `identifier` varchar(255) NOT NULL default '',
-  `receipt` text NOT NULL,
-  `confirmation` text NOT NULL,
-  `description` text NOT NULL,
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `identifier` varchar(255) character set latin1 NOT NULL default '',
+  `receipt` text character set latin1 NOT NULL,
+  `confirmation` text character set latin1 NOT NULL,
+  `description` text character set latin1 NOT NULL,
   `show_online` int(1) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
   `send_confirmation` tinyint(1) NOT NULL default '1',
   `confirmation_add_contact_url` tinyint(4) NOT NULL default '0',
-  `confirmation_subject` varchar(255) NOT NULL default '',
-  `confirmation_greeting` varchar(255) NOT NULL default '',
-  `payment_link` varchar(255) NOT NULL default '',
+  `confirmation_subject` varchar(255) character set latin1 NOT NULL default '',
+  `confirmation_greeting` varchar(255) character set latin1 NOT NULL default '',
+  `payment_link` varchar(255) character set latin1 NOT NULL default '',
   `payment_link_add` tinyint(1) NOT NULL default '0',
-  `trade_of_terms_url` varchar(255) NOT NULL,
-  `terms_of_trade_url` varchar(255) NOT NULL,
+  `trade_of_terms_url` varchar(255) character set latin1 NOT NULL,
+  `terms_of_trade_url` varchar(255) character set latin1 NOT NULL,
   `default_currency_id` int(11) NOT NULL,
   `language_key` int(11) NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `shop_dicount_campaign`
+-- Table structure for table `shop_dicount_campaign`
 --
 
-CREATE TABLE `shop_dicount_campaign` (
+CREATE TABLE IF NOT EXISTS `shop_dicount_campaign` (
   `id` bigint(20) NOT NULL auto_increment,
-  `name` varchar(255) NOT NULL,
-  `voucher_code_prefix` varchar(255) NOT NULL,
+  `name` varchar(255) character set latin1 NOT NULL,
+  `voucher_code_prefix` varchar(255) character set latin1 NOT NULL,
   `intranet_id` bigint(20) default NULL,
   `deleted_at` datetime default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `shop_dicount_campaign_voucher`
+-- Table structure for table `shop_dicount_campaign_voucher`
 --
 
-CREATE TABLE `shop_dicount_campaign_voucher` (
+CREATE TABLE IF NOT EXISTS `shop_dicount_campaign_voucher` (
   `id` bigint(20) NOT NULL auto_increment,
   `shop_discount_campaign_id` int(11) NOT NULL default '0',
-  `code` varchar(255) NOT NULL,
+  `code` varchar(255) character set latin1 NOT NULL,
   `quantity` bigint(20) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_expiry` datetime NOT NULL default '0000-00-00 00:00:00',
@@ -1921,47 +1916,47 @@ CREATE TABLE `shop_dicount_campaign_voucher` (
   `deleted_at` datetime default NULL,
   PRIMARY KEY  (`id`),
   KEY `shop_discount_campaign_id_idx` (`shop_discount_campaign_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `shop_featuredproducts`
+-- Table structure for table `shop_featuredproducts`
 --
 
-CREATE TABLE `shop_featuredproducts` (
+CREATE TABLE IF NOT EXISTS `shop_featuredproducts` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
-  `headline` varchar(255) NOT NULL default '',
+  `headline` varchar(255) character set latin1 NOT NULL default '',
   `keyword_id` int(11) NOT NULL default '0',
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `keyword_id` (`keyword_id`),
   KEY `intranet_id` (`intranet_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `shop_paymentmethods`
+-- Table structure for table `shop_paymentmethods`
 --
 
-CREATE TABLE `shop_paymentmethods` (
+CREATE TABLE IF NOT EXISTS `shop_paymentmethods` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL,
   `shop_id` int(11) NOT NULL,
   `paymentmethod_key` int(11) NOT NULL,
   `text` varchar(255) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `stock_adaptation`
+-- Table structure for table `stock_adaptation`
 --
 
-CREATE TABLE `stock_adaptation` (
+CREATE TABLE IF NOT EXISTS `stock_adaptation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
@@ -1972,92 +1967,55 @@ CREATE TABLE `stock_adaptation` (
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`),
   KEY `product_variation_id` (`product_variation_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=780 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `stock_regulation`
+-- Table structure for table `stock_regulation`
 --
 
-CREATE TABLE `stock_regulation` (
+CREATE TABLE IF NOT EXISTS `stock_regulation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `product_id` int(11) NOT NULL default '0',
   `product_variation_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `regulation_date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `comment` text NOT NULL,
+  `comment` text character set latin1 NOT NULL,
   `quantity` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`product_id`),
   KEY `product_variation_id` (`product_variation_id`),
   KEY `find_quantity_since_last_regulation` (`intranet_id`,`product_id`,`product_variation_id`,`regulation_date_time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6874 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `systemmessage_disturbance`
+-- Table structure for table `todo_contact`
 --
 
-CREATE TABLE `systemmessage_disturbance` (
-  `id` int(11) NOT NULL auto_increment,
-  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `user_name` varchar(255) NOT NULL default '0',
-  `from_date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `to_date_time` datetime NOT NULL default '0000-00-00 00:00:00',
-  `important` int(11) NOT NULL default '0',
-  `description` text NOT NULL,
-  `active` int(11) NOT NULL default '1',
-  PRIMARY KEY  (`id`),
-  KEY `from_date_time` (`from_date_time`),
-  KEY `to_date_time` (`to_date_time`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur-dump for tabellen `systemmessage_news`
---
-
-CREATE TABLE `systemmessage_news` (
-  `id` int(11) NOT NULL auto_increment,
-  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `user_name` varchar(255) NOT NULL default '0',
-  `area` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
-  `active` int(11) NOT NULL default '1',
-  PRIMARY KEY  (`id`),
-  KEY `date_created` (`date_created`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Struktur-dump for tabellen `todo_contact`
---
-
-CREATE TABLE `todo_contact` (
+CREATE TABLE IF NOT EXISTS `todo_contact` (
   `id` int(11) NOT NULL auto_increment,
   `list_id` int(11) NOT NULL default '0',
   `contact_id` int(11) NOT NULL default '0',
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `todo_item`
+-- Table structure for table `todo_item`
 --
 
-CREATE TABLE `todo_item` (
+CREATE TABLE IF NOT EXISTS `todo_item` (
   `id` int(11) NOT NULL auto_increment,
   `todo_list_id` int(11) NOT NULL default '0',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
-  `item` text NOT NULL,
+  `item` text character set latin1 NOT NULL,
   `status` tinyint(1) NOT NULL default '0',
   `active` tinyint(1) NOT NULL default '1',
   `position` int(11) NOT NULL default '0',
@@ -2065,67 +2023,67 @@ CREATE TABLE `todo_item` (
   `intranet_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `todo_list_id` (`todo_list_id`,`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=765 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `todo_list`
+-- Table structure for table `todo_list`
 --
 
-CREATE TABLE `todo_list` (
+CREATE TABLE IF NOT EXISTS `todo_list` (
   `id` int(255) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
   `date_changed` datetime NOT NULL default '0000-00-00 00:00:00',
-  `name` varchar(255) NOT NULL default '',
-  `description` text NOT NULL,
-  `public_key` varchar(255) NOT NULL default '',
+  `name` varchar(255) character set latin1 NOT NULL default '',
+  `description` text character set latin1 NOT NULL,
+  `public_key` varchar(255) character set latin1 NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `user`
+-- Table structure for table `user`
 --
 
-CREATE TABLE `user` (
+CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL auto_increment,
   `lastlogin` datetime NOT NULL default '0000-00-00 00:00:00',
-  `email` char(255) NOT NULL default '',
-  `password` char(255) NOT NULL default '',
-  `session_id` char(255) NOT NULL default '',
+  `email` char(255) character set latin1 NOT NULL default '',
+  `password` char(255) character set latin1 NOT NULL default '',
+  `session_id` char(255) character set latin1 NOT NULL default '',
   `active_intranet_id` int(11) NOT NULL default '0',
   `disabled` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `session_id` (`session_id`),
   KEY `email` (`email`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=168 ;
 
 -- --------------------------------------------------------
 
 --
--- Struktur-dump for tabellen `webshop_basket_evaluation`
+-- Table structure for table `webshop_basket_evaluation`
 --
 
-CREATE TABLE `webshop_basket_evaluation` (
+CREATE TABLE IF NOT EXISTS `webshop_basket_evaluation` (
   `id` int(11) NOT NULL auto_increment,
   `intranet_id` int(11) NOT NULL default '0',
   `running_index` int(11) NOT NULL default '0',
   `evaluate_target_key` int(11) NOT NULL default '0',
   `evaluate_method_key` int(11) NOT NULL default '0',
-  `evaluate_value` varchar(255) NOT NULL default '',
+  `evaluate_value` varchar(255) character set latin1 NOT NULL default '',
   `evaluate_value_case_sensitive` int(11) NOT NULL default '0',
   `go_to_index_after` int(11) NOT NULL default '0',
   `action_action_key` int(11) NOT NULL default '0',
-  `action_value` varchar(255) NOT NULL default '',
+  `action_value` varchar(255) character set latin1 NOT NULL default '',
   `action_quantity` int(11) NOT NULL default '0',
   `action_unit_key` int(11) NOT NULL default '0',
   `active` int(11) NOT NULL default '1',
   `shop_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `intranet_id` (`intranet_id`,`shop_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
