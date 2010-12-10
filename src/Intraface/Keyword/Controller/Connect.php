@@ -10,6 +10,8 @@ class Intraface_Keyword_Controller_Connect extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Add keywords');
+
         $this->getKernel()->useShared('keyword');
 
         $keyword = new Intraface_Keyword_Appender($this->context->getModel());
