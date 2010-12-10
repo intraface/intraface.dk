@@ -89,8 +89,15 @@ class Intraface_Filehandler_Controller_Index extends k_Component
 
         $files = $gateway->getList();
 
-        $data = array('files' => $files,
-                      'filemanager' => $gateway);
+        $selected_keywords = $gateway->getDBQuery()->getKeyword();
+        $appender = $gateway->getKeywordAppender();
+        $keywords = $appender->getUsedKeywords();
+
+        $data = array(
+            'files' => $files,
+            'filemanager' => $gateway,
+            'selected_keywords' => $selected_keywords,
+            'keywords' => $keywords);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/index');
         return $tpl->render($this, $data);

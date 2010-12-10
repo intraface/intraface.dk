@@ -45,10 +45,6 @@
         </span>
 
         <?php
-        $selected_keywords = $filemanager->getDBQuery()->getKeyword();
-        $appender = $filemanager->getKeywordAppender();
-        $keywords = $appender->getUsedKeywords();
-
         if (count($keywords) > 0) {
             echo '<div>'. e(t('keywords', 'keyword')) . ': <ul style="display: inline;">';
             foreach ($keywords as $value) {
