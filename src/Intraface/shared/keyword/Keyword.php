@@ -1,9 +1,6 @@
 <?php
 /**
- * N�gleord
- *
- * @todo Gruppere n�gleord
- * @todo Systemn�gleord
+ * Keywords
  *
  * @author Lars Olesen <lars@legestue.net>
  */
@@ -37,94 +34,17 @@ class Keyword extends Ilib_Keyword
      */
     function __construct($object, $id = 0)
     {
-        //@todo type gaar igen som fast parameter
-        $this->registerType(0, '_invalid_');
-        $this->registerType(1, 'contact');
-        $this->registerType(2, 'product');
-        $this->registerType(3, 'cms_page');
-        $this->registerType(4, 'newfilemanager');
-        $this->registerType(5, 'cms_template');
+        $this->type = $object->identify();
+        $this->object = $object;
 
-        if (get_class($object) == 'FakeKeywordObject') {
-            $this->type = 'contact';
-            $this->object = $object;
-            $this->kernel = $object->kernel;
-        } else {
-
-            switch (strtolower(get_class($object))) {
-                case 'contact':
-                    $this->type = 'contact';
-                    $this->object = $object;
-                    break;
-                case 'product':
-                    $this->type = 'product';
-                    $this->object = $object;
-                    $this->object->load();
-                    break;
-                case 'cms_page':
-                    $this->type = 'cms_page';
-                    $this->object = $object;
-                    break;
-                case 'cms_template':
-                    $this->type = 'cms_template';
-                    $this->object = $object;
-                    break;
-                case 'filemanager':
-                    $this->type = 'file_handler';
-                    $this->object = $object;
-                    break;
-                case 'ilib_filehandler':
-                    $this->type = 'file_handler';
-                    $this->object = $object;
-                    break;
-                default:
-                    throw new Exception('Invalid object - got ' . get_class($this->object));
-                    break;
-            }
-
-            $this->kernel = $this->object->kernel;
-        }
+        $this->kernel = $this->object->kernel;
         $extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
 
         parent::__construct($this->type, $extra_conditions, $id);
-
-        //$object_id = $this->object->get('id');
-
     }
 
     /**
-     * Skal factory bare tage en kernel og en id og s� selv lave objektet,
-     * eller skal det v�re omvendt at factory bruges til at smide et objekt ind i
-     * klassen - og at Keyword selv laver objektet?
-     *
-     * @param object  $kernel
-     * @param integer $id
-     *
-     * @return object
-     */
-    /*
-    public function factory($kernel, $id)
-    {
-        $id = (int)$id;
-
-        $db = new DB_Sql;
-        $db->query("SELECT id, type FROM keyword WHERE id = " . $id . " AND intranet_id=" . $kernel->intranet->get('id'));
-        if (!$db->nextRecord()) {
-            return 0;
-        }
-
-        $class = $db->f('type');
-
-        if (strtolower(get_class($kernel)) == 'fakekeywordkernel') {
-            return new Keyword(new FakeKeywordObject(), $db->f('id'));
-        }
-        $kernel->useModule($class);
-        return new Keyword(new $class($kernel), $db->f('id'));
-    }
-    */
-
-    /**
-     * Loader det enkelte keyword
+     * Loads the keyword
      *
      * @return boolean
      */
@@ -147,12 +67,11 @@ class Keyword extends Ilib_Keyword
         }
         $this->value['id'] = $db->f('id');
         $this->value['keyword'] = $db->f('keyword');
-        //$this->value['type'] = $db->f('type');
         return true;
     }
 
     /**
-     * Validerer
+     * Validates
      *
      * @param array $var
      *
@@ -166,7 +85,7 @@ class Keyword extends Ilib_Keyword
             $validator->isNumeric($var['id'], 'id', 'allow_empty');
         }
         if (empty($var['keyword'])) {
-            $this->error->set("Du har ikke skrevet et n�gleord");
+            $this->error->set("You have to input a keyword");
         }
 
         if ($this->error->isError()) {
@@ -252,7 +171,7 @@ class Keyword extends Ilib_Keyword
     }
 
     /**
-     * Denne metode sletter et n�gleord i n�gleordsdatabasen
+     * Deletes keyword in the keyword database
      *
      * @return boolean
      */
@@ -277,7 +196,7 @@ class Keyword extends Ilib_Keyword
     }
 
     /**
-     * Egentlig en slags getList i keywords
+     * Gets all keywords
      *
      * @return array
      */
@@ -318,49 +237,11 @@ class Intraface_Keyword_Appender extends Keyword
 
     function __construct($object)
     {
-        if (get_class($object) == 'FakeKeywordAppendObject') {
-            $this->type = 'contact';
-            $this->object = $object;
-            $this->kernel = $object->kernel;
-        } else {
-
-            switch (strtolower(get_class($object))) {
-                case 'contact':
-                    $this->type = 'contact';
-                    $this->object = $object;
-                    break;
-                case 'product':
-                    $this->type = 'product';
-                    $this->object = $object;
-                    $this->object->load();
-                    break;
-                case 'cms_page':
-                    $this->type = 'cms_page';
-                    $this->object = $object;
-                    break;
-                case 'cms_template':
-                    $this->type = 'cms_template';
-                    $this->object = $object;
-                    break;
-                case 'filemanager':
-                    $this->type = 'file_handler';
-                    $this->object = $object;
-                    break;
-                case 'ilib_filehandler':
-                    $this->type = 'file_handler';
-                    $this->object = $object;
-                    break;
-                default:
-                    throw new Exception(get_class($this) . ' got invalid object ' . get_class($object));
-                    break;
-            }
-
-            $this->kernel = $this->object->kernel;
-
-            $this->belong_to_id = $this->object->getId();
-            $this->error = new Ilib_Error;
-
-        }
+        $this->type = $object->identify();
+        $this->kernel = $object->kernel;
+        $this->object = $object;
+        $this->belong_to_id = $this->object->getId();
+        $this->error = new Ilib_Error;
         $this->extra_conditions = array('intranet_id' => $this->object->kernel->intranet->get('id'));
     }
 
@@ -370,13 +251,14 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Denne funktion tilf�jer et n�gleord til et objekt
+     * Adds keyword to object
      *
      * @param integer $keyword_id
      *
      * @return boolean
      */
-    function addKeyword($keyword) {
+    function addKeyword($keyword)
+    {
         $condition = $this->extra_conditions;
         $condition['keyword_x_object.keyword_id'] = $keyword->getId();
         $condition['keyword_x_object.belong_to'] = $this->getBelongToId();
@@ -385,13 +267,15 @@ class Intraface_Keyword_Appender extends Keyword
             $c[] = $column . " = '" . $value . "'";
         }
 
+        $sql = "SELECT * FROM keyword_x_object
+                WHERE " . implode(' AND ', $c);
         $db = new DB_Sql;
-        $db->query("SELECT * FROM keyword_x_object
-            WHERE " . implode(' AND ', $c));
+        $db->query($sql);
 
         if (!$db->nextRecord()) {
-            $db->query("INSERT INTO keyword_x_object
-                SET " . implode(', ', $c));
+            $sql = "INSERT INTO keyword_x_object
+                    SET " . implode(', ', $c);
+            $db->query($sql);
 
         }
         return true;
@@ -415,8 +299,9 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Returnerer de keywords der bliver brugt p� nogle poster
-     * Is�r anvendelig til s�geoversigter
+     * Returns keywords used on type
+     *
+     * Especially useful for search lists
      *
      * @return array
      */
@@ -452,9 +337,9 @@ class Intraface_Keyword_Appender extends Keyword
     }
 
     /**
-     * Returnerer de keywords, der er tilf�jet til et objekt
+     * Returns keywords added to an object
      *
-     * Det er meget m�rkeligt, men den her funktion returnerer alle keywords p� et intranet?
+     * @todo This function returns all keywords on an intranet
      *
      * @return array
      */
@@ -475,12 +360,13 @@ class Intraface_Keyword_Appender extends Keyword
         }
 
         $db = new DB_Sql;
-        $db->query("SELECT DISTINCT(keyword.id) AS id, keyword.keyword
-            FROM keyword_x_object
-            INNER JOIN keyword
-            ON keyword_x_object.keyword_id = keyword.id
-            WHERE " . implode(' AND ', $c) . " AND keyword.keyword != ''
-            ORDER BY keyword.keyword");
+        $sql = "SELECT DISTINCT(keyword.id) AS id, keyword.keyword
+                FROM keyword_x_object
+                INNER JOIN keyword
+                    ON keyword_x_object.keyword_id = keyword.id
+                WHERE " . implode(' AND ', $c) . " AND keyword.keyword != ''
+                ORDER BY keyword.keyword";
+        $db->query($sql);
 
         $i = 0;
         while ($db->nextRecord()) {
@@ -522,12 +408,8 @@ class Intraface_Keyword_Appender extends Keyword
         return true;
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // INGEN DB I DE FOLGENDE
-    ///////////////////////////////////////////////////////////////////////////
-
     /**
-     * Returnerer de vedh�ftede keywords som en streng
+     * Returns connected keywords as a string
      *
      * @return string
      */
@@ -585,17 +467,13 @@ class Intraface_Keyword_StringAppender
         return true;
     }
 
-    /****************************************************************************
-     * Tools
-     ***************************************************************************/
-
     /**
-     * Funktionen er en hj�lpefunktion, s� man bare kan skrive n�gleordene i et inputfelt
+     * Helper function when keywords are just inputted into a text field
      *
      * @param string $s        The string to split
      * @param string $splitter What splitter to use to split the string
      *
-     * @return array med n�gleordene
+     * @return array with keywords
      */
     public static function quotesplit($s, $splitter=',')
     {
@@ -626,6 +504,4 @@ class Intraface_Keyword_StringAppender
         }
         return $result;
     }
-
 }
-?>

@@ -132,6 +132,18 @@ class FileHandler extends Intraface_Standard
     }
 
     /**
+     * Used by Keyword
+     *
+     * @see Keyword
+     *
+     * @return string
+     */
+    function identify()
+    {
+        return 'file_handler';
+    }
+
+    /**
      * desctructor
      */
     public function __destruct()

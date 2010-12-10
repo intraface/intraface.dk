@@ -101,16 +101,17 @@ class Product extends Intraface_Standard
         }
     }
 
-    /*
-    Did not seem to have any effect
-    function __destruct()
+    /**
+     * Used by Keyword
+     *
+     * @see Keyword
+     *
+     * @return string
+     */
+    function identify()
     {
-        unset($this->dbquery);
-        unset($this->db);
-        unset($this->stock);
-        unset($this->detail);
+        return 'product';
     }
-    */
 
     /**
      * Creates the dbquery object

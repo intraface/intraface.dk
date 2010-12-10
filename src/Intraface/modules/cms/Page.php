@@ -98,6 +98,18 @@ class CMS_Page extends Intraface_Standard
         }
     }
 
+    /**
+     * Used by Keyword
+     *
+     * @see Keyword
+     *
+     * @return string
+     */
+    function identify()
+    {
+        return 'cms_page';
+    }
+
     function getDBQuery()
     {
         if ($this->dbquery) {

@@ -34,8 +34,6 @@ class Ilib_Keyword
         $this->error = new Ilib_Error;
         $this->extra_conditions = $extra_conditions;
         $this->type = $type;
-        // @todo before this is changed we need to change all the data in the database
-        //$this->type = $this->getTypeKey($this->type);
 
         if ($this->id > 0) {
             $this->load();
@@ -63,46 +61,6 @@ class Ilib_Keyword
         }
 
         throw new Exception('Error in query');
-    }
-
-    /**
-     * Gets a type for a type key
-     *
-     * @param integer $key The key for a type
-     *
-     * @return string
-     */
-    function getType($key)
-    {
-        return $this->types[$key];
-    }
-
-    /**
-     * Gets a type key
-     *
-     * @param string  $identifier Identifier for a type
-     *
-     * @return integer
-     */
-    function getTypeKey($identifier)
-    {
-        if (!$key = array_search($identifier, $this->types)) {
-            throw new Exception('No type registered with this identifier ' . $identifier);
-        }
-        return $key;
-    }
-
-    /**
-     * Register a type
-     *
-     * @param integer $key        The key for a type
-     * @param string  $identifier Identifier for a type
-     *
-     * @return void
-     */
-    function registerType($key, $identifier)
-    {
-        $this->types[$key] = $identifier;
     }
 
     /**

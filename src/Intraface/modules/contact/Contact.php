@@ -162,7 +162,7 @@ class Contact extends Intraface_Standard
     /**
      * @var object
      */
-    private $message;
+    protected $message;
 
     /**
      * @var object
@@ -172,20 +172,22 @@ class Contact extends Intraface_Standard
     /**
      * @var object
      */
-    private $lock;
+    protected $lock;
 
     /**
      * @var array
      */
-    private $addresses = array(0 => 'standard',
-    1 => 'delivery',
-    2 => 'invoice');
+    protected $addresses = array(
+        0 => 'standard',
+        1 => 'delivery',
+        2 => 'invoice');
 
     /**
      * @var array
      */
-    private $types = array(0 => 'private',
-    1 => 'corporation');
+    protected $types = array(
+        0 => 'private',
+        1 => 'corporation');
 
     /**
      * @todo has to be made private
@@ -214,6 +216,18 @@ class Contact extends Intraface_Standard
         if ($this->id > 0) {
             $this->load();
         }
+    }
+
+    /**
+     * Used by Keyword
+     *
+     * @see Keyword
+     *
+     * @return string
+     */
+    function identify()
+    {
+        return 'contact';
     }
 
     function getError()
