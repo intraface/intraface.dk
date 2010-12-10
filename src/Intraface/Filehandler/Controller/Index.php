@@ -90,8 +90,8 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         $files = $gateway->getList();
 
         $selected_keywords = $gateway->getDBQuery()->getKeyword();
-        $appender = $gateway->getKeywordAppender();
-        $keywords = $appender->getUsedKeywords();
+        $keyword = new Intraface_Keyword_Appender($gateway);
+        $keywords = $keyword->getUsedKeywords();
 
         $data = array(
             'files' => $files,
@@ -112,5 +112,4 @@ class Intraface_Filehandler_Controller_Index extends k_Component
     {
         return new Ilib_Filehandler_Gateway($this->getKernel());
     }
-
 }

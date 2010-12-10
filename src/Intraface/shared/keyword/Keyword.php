@@ -37,7 +37,7 @@ class Keyword extends Ilib_Keyword
         $this->type = $object->identify();
         $this->object = $object;
 
-        $this->kernel = $this->object->kernel;
+        $this->kernel = $this->object->getKernel();
         $extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
 
         parent::__construct($this->type, $extra_conditions, $id);
@@ -238,11 +238,16 @@ class Intraface_Keyword_Appender extends Keyword
     function __construct($object)
     {
         $this->type = $object->identify();
-        $this->kernel = $object->kernel;
+        $this->kernel = $object->getKernel();
         $this->object = $object;
-        $this->belong_to_id = $this->object->getId();
+        if (method_exists('getId', $this->object)) {
+            $this->belong_to_id = $this->object->getId();
+        } else {
+            $this->belong_to_id = 0;
+        }
+
         $this->error = new Ilib_Error;
-        $this->extra_conditions = array('intranet_id' => $this->object->kernel->intranet->get('id'));
+        $this->extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
     }
 
     function getBelongToId()
