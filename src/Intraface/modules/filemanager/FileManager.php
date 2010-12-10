@@ -216,6 +216,4 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         $db->query("SELECT id FROM file_handler WHERE file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->kernel->intranet->get("id"));
         return $db->numRows();
     }
-
 }
-?>

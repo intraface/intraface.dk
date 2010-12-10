@@ -28,7 +28,7 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function renderHtml()
     {
-        $this->document->setTitle('file') . ': ' . $this->getFile()->get('file_name');
+        $this->document->setTitle('File') . ': ' . $this->getFile()->get('file_name');
 
         $data = array('filemanager' => $this->getFile(),
                       'kernel'      => $this->getKernel());

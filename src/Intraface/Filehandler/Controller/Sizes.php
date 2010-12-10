@@ -23,9 +23,6 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
         $this->document->setTitle('Filehandler settings');
 
-        // $filehandler->createInstance();
-        // $instances = $filehandler->instance->getTypes();
-
         $instances = $instance_manager->getList();
 
         $data = array(

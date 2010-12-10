@@ -34,13 +34,6 @@ class Intraface_Filehandler_Controller_Index extends k_Component
 
         $gateway = $this->getGateway();
 
-        if (is_numeric($this->query('undelete'))) {
-            $filehandler = $gateway->getFromId($this->query('delete'));
-            if (!$filemanager->undelete()) {
-                throw new Exception($this->t('Could not undelete file'));
-            }
-        }
-
         if ($this->query('search')) {
 
             if ($this->query('text') != '') {

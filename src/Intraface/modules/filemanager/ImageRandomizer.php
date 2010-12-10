@@ -4,7 +4,7 @@ class ImageRandomizer
     /**
      * @var object $file_manager file handler
      */
-    private $file_manager;
+    protected $file_manager;
 
     /**
      * @var object $error
@@ -14,13 +14,13 @@ class ImageRandomizer
     /**
      * @var array $file_list to find image from
      */
-    private $file_list;
+    protected $file_list;
 
     /**
-     * constructor
+     * Constructor
      *
      * @param object $file_manager file handler
-     * @param array $keywords array with keywords
+     * @param array  $keywords     array with keywords
      *
      * @return void
      */
@@ -40,9 +40,7 @@ class ImageRandomizer
         $keyword_ids = array();
         foreach ($keywords AS $keyword) {
             $keyword_object = new Keyword($this->file_manager);
-            /**
-             * @todo: This is not really good, but the only way to identify keyword on name!
-             */
+            // @todo: This is not really good, but the only way to identify keyword on name!
             $keyword_ids[] = $keyword_object->save(array('keyword' => $keyword));
         }
 
@@ -75,7 +73,7 @@ class ImageRandomizer
      *
      * @return object dbquery
      */
-    private function getDBQuery()
+    protected function getDBQuery()
     {
         $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->kernel->intranet->get('id'));
         $dbquery->useErrorObject($this->error);

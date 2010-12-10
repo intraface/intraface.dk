@@ -43,7 +43,6 @@
  */
 class UploadHandler extends Intraface_Standard
 {
-
     /**
      * @var object
      */

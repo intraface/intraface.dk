@@ -36,18 +36,17 @@ class Intraface_Filehandler_Controller_UploadMultiple extends k_Component
 
         if (!empty($_POST['addfile'])) {
             foreach ($_POST['addfile'] as $key => $value) {
-                $gateway = $this->context->getGateway();
-                $filemanager = $gateway->getFromId($value);
+                $filemanager = $this->context->getGateway()->getFromId($value);
 
                 $appender = new Intraface_Keyword_Appender($filemanager);
 
                 $string_appender = new Intraface_Keyword_StringAppender(new Keyword($filemanager), $appender);
-                $string_appender->addKeywordsByString($_POST['keywords']);
+                $string_appender->addKeywordsByString($this->body('keywords'));
 
                 $filemanager->update(array('accessibility' => $_POST['accessibility']));
 
                 if ($filemanager->moveFromTemporary()) {
-                    // $msg = 'Filerne er uploadet. <a href="'.$redirect->getRedirect('/modules/filemanager/').'">�bn filarkivet</a>.';
+                    // files has been uploaded
                 } else {
                     throw new Exception('Could not move the files from temporary to uploaded.');
                 }
