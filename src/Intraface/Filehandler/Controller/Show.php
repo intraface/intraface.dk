@@ -30,8 +30,14 @@ class Intraface_Filehandler_Controller_Show extends k_Component
     {
         $this->document->setTitle('File') . ': ' . $this->getFile()->get('file_name');
 
-        $data = array('filemanager' => $this->getFile(),
-                      'kernel'      => $this->getKernel());
+        $this->getKernel()->useShared('keyword');
+        $keyword = new Intraface_Keyword_Appender($this->getFile());
+        $keywords = $keyword->getConnectedKeywords();
+
+        $data = array(
+            'filemanager' => $this->getFile(),
+            'kernel'      => $this->getKernel(),
+            'keywords'    => $keywords);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/show');
         return $tpl->render($this, $data);
