@@ -42,20 +42,21 @@ class Intraface_Keyword_Controller_Connect extends k_Component
             $appender->error->set('Kunne ikke slette keywords.');
         }
 
-        // strengen med keywords
-        if (!empty($_POST['keywords'])) {
+        // string with keywords
+        if ($this->body('keywords')) {
             $string_appender = new Intraface_Keyword_StringAppender(new Keyword($this->context->getModel()), $appender);
-            $string_appender->addKeywordsByString($_POST['keywords']);
+            $string_appender->addKeywordsByString($this->body('keywords'));
         }
 
-        // listen med keywords
-        if (!empty($_POST['keyword']) AND is_array($_POST['keyword']) AND count($_POST['keyword']) > 0) {
-            foreach ($_POST['keyword'] as $k) {
-                $appender->addKeyword(new Keyword($this->context->getModel(), $k));
+        // list with keywordsd
+        if ($this->body('keyword') AND is_array($this->body('keyword')) AND count($this->body('keyword')) > 0) {
+            foreach ($this->body('keyword') as $k) {
+                $keyword = new Keyword($this->context->getModel(), $k);
+                $appender->addKeyword($keyword);
             }
         }
 
-        if (!empty($_POST['close'])) {
+        if ($this->body('close')) {
             return new k_SeeOther($this->url('../../'));
         }
         if (!$appender->error->isError()) {

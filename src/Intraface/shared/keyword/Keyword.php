@@ -5,10 +5,11 @@
  * @author Lars Olesen <lars@legestue.net>
  */
 require_once 'Intraface/functions.php';
-require_once 'Ilib/Keyword.php';
 
-class Keyword extends Ilib_Keyword
+class Keyword
 {
+    protected $id;
+
     /**
      * @var object
      */
@@ -36,11 +37,18 @@ class Keyword extends Ilib_Keyword
     {
         $this->type = $object->identify();
         $this->object = $object;
-
+        $this->error = new Ilib_Error;
+        $this->id = $id;
         $this->kernel = $this->object->getKernel();
         $extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
+        if ($this->id > 0) {
+            $this->load();
+        }
+    }
 
-        parent::__construct($this->type, $extra_conditions, $id);
+    function getId()
+    {
+        return $this->id;
     }
 
     /**
