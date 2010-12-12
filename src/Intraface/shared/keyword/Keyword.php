@@ -248,7 +248,8 @@ class Intraface_Keyword_Appender extends Keyword
         $this->type = $object->identify();
         $this->kernel = $object->getKernel();
         $this->object = $object;
-        if (method_exists('getId', $this->object)) {
+
+        if (method_exists($this->object, 'getId')) {
             $this->belong_to_id = $this->object->getId();
         } else {
             $this->belong_to_id = 0;
