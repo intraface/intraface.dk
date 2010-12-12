@@ -54,17 +54,18 @@ class FileHandler extends Intraface_Standard
      * @var array
      */
     protected $accessibility_types = array(
-            0 => '_invalid_',
-            1 => 'user',
-            2 => 'intranet',
-            3 => 'public');
+        0 => '_invalid_',
+        1 => 'user',
+        2 => 'intranet',
+        3 => 'public');
 
     /**
      * @var array
      */
-    private $status = array(0 => 'visible',
-                            1 => 'temporary',
-                            2 => 'hidden');
+    private $status = array(
+        0 => 'visible',
+        1 => 'temporary',
+        2 => 'hidden');
 
     /**
      * @var object upload conatians upload handler
@@ -76,12 +77,10 @@ class FileHandler extends Intraface_Standard
      */
     public $instance;
 
-
     /**
      * @var object image contains the image handler
      */
     public $image;
-
 
     /**
      * @todo der er muligt, at der kun skal v�re en getList i filemanager,
@@ -329,13 +328,18 @@ class FileHandler extends Intraface_Standard
      */
     public function createInstance($type = "", $param = array())
     {
-
         require_once 'Intraface/modules/filemanager/InstanceHandler.php';
         if ($type == "") {
             $this->instance = new InstanceHandler($this);
         } else {
             $this->instance = InstanceHandler::factory($this, $type, $param);
         }
+    }
+
+    function getInstance($type = '', $param = array())
+    {
+        $this->createInstance($type, $param);
+        return $this->instance;
     }
 
     /**

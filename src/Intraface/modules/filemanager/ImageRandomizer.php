@@ -16,6 +16,8 @@ class ImageRandomizer
      */
     protected $file_list;
 
+    protected $dbquery;
+
     /**
      * Constructor
      *
@@ -27,24 +29,19 @@ class ImageRandomizer
     public function __construct($file_manager, $keywords)
     {
         $this->file_manager = $file_manager;
-
         $this->error = new Ilib_Error;
 
-        $dbquery = $this->getDBQuery();
-
-        require_once 'Intraface/shared/keyword/Keyword.php';
-        if (!is_array($keywords)) {
-            throw new Exception('second parameter should be an array with keywords');
-        }
+        $this->dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->getKernel()->intranet->get("id"));
 
         $keyword_ids = array();
+
+        require_once 'Intraface/shared/keyword/Keyword.php';
         foreach ($keywords AS $keyword) {
             $keyword_object = new Keyword($this->file_manager);
             // @todo: This is not really good, but the only way to identify keyword on name!
             $keyword_ids[] = $keyword_object->save(array('keyword' => $keyword));
         }
-
-        $dbquery->setKeyword((array)$keyword_ids);
+        $this->dbquery->setKeyword($keyword_ids);
 
         require_once 'Intraface/modules/filemanager/FileType.php';
         $filetype = new FileType();
@@ -55,10 +52,12 @@ class ImageRandomizer
                 $keys[] = $key;
             }
         }
-        $dbquery->setCondition("file_handler.file_type_key IN (".implode(',', $keys).")");
+        $this->dbquery->setCondition("file_handler.file_type_key IN (".implode(',', $keys).")");
 
         $this->file_list = array();
-        $db = $dbquery->getRecordset("file_handler.id", "", false);
+
+        $db = $this->dbquery->getRecordset("file_handler.id", "");
+
         while ($db->nextRecord()) {
             $this->file_list[] = $db->f('id');
         }
@@ -75,9 +74,13 @@ class ImageRandomizer
      */
     protected function getDBQuery()
     {
-        $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->kernel->intranet->get('id'));
+        if ($this->dbquery) {
+            return $this->dbquery;
+        }
+
+        $dbquery = new Ilib_DBQuery("file_handler", "file_handler.temporary = 0 AND file_handler.active = 1 AND file_handler.intranet_id = ".$this->file_manager->getKernel()->intranet->get('id'));
         $dbquery->useErrorObject($this->error);
-        return $dbquery;
+        return ($this->dbquery = $dbquery);
     }
 
     /**
@@ -87,7 +90,9 @@ class ImageRandomizer
      */
     public function getRandomImage()
     {
+        require_once 'Intraface/modules/filemanager/FileHandler.php';
         $key = rand(0, count($this->file_list)-1);
-        return new FileHandler($this->file_manager->kernel, $this->file_list[$key]);
+        $filehandler = new FileHandler($this->file_manager->getKernel(), $this->file_list[$key]);
+        return $filehandler;
     }
 }

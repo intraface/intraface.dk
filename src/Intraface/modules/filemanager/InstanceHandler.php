@@ -26,16 +26,6 @@ class InstanceHandler extends Intraface_Standard
     private $instance_path;
 
     /**
-     * @var array
-     */
-    // not in use ! private $instance_types;
-
-    /**
-     * @var array allo
-     */
-    // not in use! private $allowed_transform_image = array('jpg', 'jpeg', 'gif', 'png');
-
-    /**
      * @var integer id
      */
     private $id;
@@ -55,19 +45,13 @@ class InstanceHandler extends Intraface_Standard
      */
     function __construct($file_handler, $id = 0)
     {
-        if (!is_object($file_handler)) {
-            throw new Exception("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->instancehandler (1)");
-        }
-
         $this->file_handler = $file_handler;
         $this->id = (int)$id;
         $this->instance_path = $this->file_handler->getUploadPath().'instance/';
 
-
         $this->db = MDB2::singleton(DB_DSN);
 
         if ($this->file_handler->get('is_image') == 0) {
-            // throw new Exception("InstanceHandler kan kun startes, hvis filen er et billede i IntanceHandler->InstanceHandler");
             $this->id = 0;
         }
 
@@ -79,7 +63,8 @@ class InstanceHandler extends Intraface_Standard
     /**
      * desctructor
      */
-    public function __destruct() {
+    public function __destruct()
+    {
         unset($this->file_handler);
         unset($this->instance_path);
     }
@@ -95,16 +80,12 @@ class InstanceHandler extends Intraface_Standard
      */
     function factory($file_handler, $type_name, $param = array())
     {
-        if (!is_object($file_handler)) {
-            throw new Exception("InstanceHandler kr�ver et filehandler- eller filemanagerobject i InstanceHandler->factory (1)");
-        }
-
         if ((int)$file_handler->get('id') == 0) {
-            throw new Exception("Der kan kun laves instance ud en loaded fil i Instance->factory");
+            throw new Exception("You need a loaded file to create an instance");
         }
 
         if ($file_handler->get('is_image') == 0) {
-            throw new Exception("Filen skal v�re et billede i IntanceHandler->factory");
+            throw new Exception("File must be a picture");
         }
 
         $instancehandler = new InstanceHandler($file_handler);
