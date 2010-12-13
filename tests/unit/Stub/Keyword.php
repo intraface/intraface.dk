@@ -74,6 +74,11 @@ class FakeKeywordAppendObject
     {
         return 1;
     }
+
+    function getKernel()
+    {
+        return $this->kernel;
+    }
 }
 
 class FakeKeywordObject
@@ -98,6 +103,11 @@ class FakeKeywordObject
     function getId()
     {
         return 1;
+    }
+
+    function getKernel()
+    {
+        return $this->kernel;
     }
 }
 
