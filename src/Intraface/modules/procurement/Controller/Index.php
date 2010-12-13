@@ -26,8 +26,6 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         $module = $this->getKernel()->module('procurement');
         $module = $this->getKernel()->useModule('contact');
 
-        //$gateway = $this->getProcurementGateway();
-
         if (intval($this->query("contact_id")) != 0 && $this->getKernel()->user->hasModuleAccess('contact')) {
             // @todo We need some way to identify this controller i used from contact? /Sune 29-11-2009
             $contact_module = $this->getKernel()->useModule('contact');
@@ -95,7 +93,6 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
     public function postForm()
     {
         if ($this->getProcurement()->update($this->body())) {
-
             if ($this->body("recieved") == "1") {
                 $this->getProcurement()->setStatus("recieved");
             }
@@ -110,8 +107,10 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
         if ($this->body()) {
             return $this->body();
         }
-
-        return $values["number"] = $this->getProcurementGateway()->getMaxNumber() + 1;
+        $values = array(
+            'number' => $this->getProcurementGateway()->getMaxNumber() + 1
+        );
+        return $values;
     }
 
     function getProcurement()

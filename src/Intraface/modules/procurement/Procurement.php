@@ -169,7 +169,9 @@ class Procurement extends Intraface_Standard
             $input['payment_date'] = $input['delivery_date'];
         }
 
-        if (!isset($input['number'])) $input['number'] = 0;
+        if (empty($input['number'])) {
+            $input['number'] = 0;
+        }
         $validator->isNumeric($input["number"], "Nummer er ikke et gyldigt nummer", "greater_than_zero");
         $db->query("SELECT id FROM procurement WHERE id != ".$this->id." AND intranet_id = ".$this->kernel->intranet->get("id")." AND number = ".$input["number"]);
         if ($db->nextRecord()) {
