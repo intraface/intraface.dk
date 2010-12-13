@@ -230,6 +230,11 @@ class Contact extends Intraface_Standard
         return 'contact';
     }
 
+    function getKernel()
+    {
+        return $this->kernel;
+    }
+
     function getError()
     {
         return $this->error;

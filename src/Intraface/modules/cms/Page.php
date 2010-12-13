@@ -110,6 +110,11 @@ class CMS_Page extends Intraface_Standard
         return 'cms_page';
     }
 
+    function getKernel()
+    {
+        return $this->kernel;
+    }
+
     function getDBQuery()
     {
         if ($this->dbquery) {
