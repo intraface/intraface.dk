@@ -18,7 +18,7 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         $keywords = $keyword->getAllKeywords(); // henter alle keywords
         $keyword_string = $keyword->getConnectedKeywordsAsString();
 
-        // finder dem der er valgt
+        // finds chosen keywords
         $checked = array();
         foreach ($keyword->getConnectedKeywords() AS $key) {
             $checked[] = $key['id'];

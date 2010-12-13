@@ -40,7 +40,7 @@ class Keyword
         $this->error = new Ilib_Error;
         $this->id = $id;
         $this->kernel = $this->object->getKernel();
-        $extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
+        $this->extra_conditions = array('intranet_id' => $this->kernel->intranet->get('id'));
         if ($this->id > 0) {
             $this->load();
         }
@@ -219,10 +219,11 @@ class Keyword
             $c[] = $column . " = '" . $value . "'";
         }
 
-        $db = new DB_Sql;
-        $db->query("SELECT * FROM keyword
+        $sql = "SELECT * FROM keyword
             WHERE " . implode(' AND ', $c) . "
-            ORDER BY keyword ASC");
+            ORDER BY keyword ASC";
+        $db = new DB_Sql;
+        $db->query($sql);
 
         $i = 0;
         while ($db->nextRecord()) {
@@ -469,7 +470,6 @@ class Intraface_Keyword_StringAppender
         $this->appender->deleteConnectedKeywords();
 
         $keywords = self::quotesplit(stripslashes($string), ",");
-
         if (is_array($keywords) AND count($keywords) > 0) {
             foreach ($keywords AS $key => $value) {
                 $keyword = $this->cloneKeyword();
