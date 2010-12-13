@@ -48,6 +48,11 @@ class CMS_Template extends Intraface_Standard
         }
     }
 
+    function getKernel()
+    {
+        return $this->kernel;
+    }
+
     /**
      * Used by Keyword
      *
