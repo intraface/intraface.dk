@@ -76,13 +76,7 @@ class UploadHandler extends Intraface_Standard
      */
     function __construct($file_handler)
     {
-        if (!is_object($file_handler)) {
-            throw new Exception("UploadHandler needs a filehandler- or filemanagerobject (1)");
-        }
-
         $this->file_handler = $file_handler;
-
-        //$this->upload_path = PATH_UPLOAD.$this->file_handler->kernel->intranet->get('id').'/';
         $this->upload_path = $this->file_handler->getUploadPath();
 
         $this->upload_setting['max_file_size'] = 500000;
@@ -93,8 +87,9 @@ class UploadHandler extends Intraface_Standard
     }
 
     /**
-     * Benyttes til at sï¿½tte indstillinger for upload
-     * Se indstillingenre i Uploadhandler->uploadhandler (init funktionen).
+     * Sets settings for upload
+     *
+     * @see UploadHandler::__construct()
      *
      * @param string $setting @todo
      * @apram string $value   @todo
@@ -142,20 +137,18 @@ class UploadHandler extends Intraface_Standard
 
     function uploadAsTemporary()
     {
-
     }
 
     /**
-     * Upload fil
+     * Upload file
      *
-     * @param string $input       er navnt pï¿½ inputfeltet eller et http_upload_file object
-     * @param string $upload_type har enten vï¿½rdien 'save' (gemmer filen i filehandler og returnerer id), eller 'temporary' (gemmer i filehandler, men med temporary sat) eller 'do_not_save' (flytter filen til tempdir og returnerer fil-sti)
+     * @param string $input       Name of input field or a http_upload_file object
+     * @param string $upload_type Value either 'save' or 'temporary' or 'do_not_save'
      *
      * @return boolean
      */
     function upload($input, $upload_type = 'save')
     {
-
         if (!in_array($upload_type, array('save', 'temporary', 'do_not_save'))) {
             throw new Exception("Anden parameter '".$upload_type."' er ikke enten 'save', 'temporary' eller 'do_not_save' i UploadHandler->upload");
         }
@@ -173,7 +166,7 @@ class UploadHandler extends Intraface_Standard
             throw new Exception("Invalid input in FileHandler->upload");
         }
 
-        $prop = $file->getProp(); // returnere et array med oplysninger om filen.
+        $prop = $file->getProp(); // return array with info about the file
 
         if (!$file->isValid()) {
             $this->file_handler->error->set($file->getMessage());
@@ -222,15 +215,6 @@ class UploadHandler extends Intraface_Standard
 
             $file->setName($tmp_server_file->getFileName());
 
-            /*
-             * This is now handled by TemporaryFile
-            if (!is_dir($this->file_handler->tempdir_path)) {
-                if (!mkdir($this->file_handler->tempdir_path)) {
-                    throw new Exception("Kunne ikke oprette mappe i FileHandler->upload");
-                }
-            }
-             */
-
             $moved = $file->moveTo($tmp_server_file->getFileDir());
 
             if (PEAR::isError($moved)) {
@@ -252,7 +236,7 @@ class UploadHandler extends Intraface_Standard
             return $id;
         } else {
 
-            # PHP's mime_content_type showed up to be not to liable with png images. Therefor we submit the mime_type from here which is ok.
+            // PHP's mime_content_type showed up to be not to liable with png images. Therefor we submit the mime_type from here which is ok.
             $id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'visible', $mime_type['mime_type']);
             $this->file_handler->update(array('accessibility' => $this->upload_setting['file_accessibility']));
 
@@ -295,16 +279,13 @@ class UploadHandler extends Intraface_Standard
         return $upload->getFiles();
     }
 
-
     /**
-     * @todo Bï¿½r returnere nogle id'er
-     * This should not be in this class
+     * @todo Should return some id's
      *
      * @return boolean
      */
     function import($dir)
     {
-
         if ($handle = opendir($dir)) {
             while (false !== ($file = readdir($handle))) {
                 print($file);
@@ -322,8 +303,8 @@ class UploadHandler extends Intraface_Standard
 
                 $file_size = filesize($dir.$file);
                 if ($file_size > $this->upload_setting['max_file_size']) {
-                    $this->file_handler->error->set("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte");
-                    print("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
+                    $this->file_handler->error->set("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte");
+                    print("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
                     CONTINUE;
                 }
 
@@ -351,10 +332,6 @@ class UploadHandler extends Intraface_Standard
                     print("Filen \"".$file."\" er ikke et dokument. Du kan kun uploade dokumenter!");
                     CONTINUE;
                 }
-                /*
-                print_r(array('file_name' => $file, 'file_size' => $file_size, 'file_type' => $mime_type['mime_type'], 'accessibility' => $this->upload_setting['file_accessibility']));
-                die();
-                */
 
                 $file_handler = new FileHandler($this->file_handler->kernel);
 
@@ -370,7 +347,7 @@ class UploadHandler extends Intraface_Standard
                     $keyword->addKeywordsByString($this->upload_setting['add_keyword']);
                 }
 
-                // Vi putter vores egen extension pï¿½, det er mere sikkert.
+                // Put our own extension on the file
                 $server_file_name = $id.".".$mime_type['extension'];
                 $file_handler->update(array('server_file_name' => $server_file_name));
 
@@ -391,8 +368,6 @@ class UploadHandler extends Intraface_Standard
                     // please do not stop executing here
                     throw new Exception("Unable to chmod file '".$this->upload_path.$server_file_name."'");
                 }
-
-                //print("SUCCESS: ".$file."<br />");
             }
         }
 
@@ -401,4 +376,3 @@ class UploadHandler extends Intraface_Standard
         return true;
     }
 }
-?>

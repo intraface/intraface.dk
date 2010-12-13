@@ -268,8 +268,7 @@ class FileHandler extends Intraface_Standard
         }
 
         $this->value['file_uri'] = $this->file_viewer.'?/'.$this->kernel->intranet->get('public_key').'/'.$this->get('access_key').'/'.urlencode($this->get('file_name'));
-        // nedenstï¿½ende bruges til pdf-er
-        //$this->value['file_uri_pdf'] = PATH_UPLOAD.$this->kernel->intranet->get('id').'/'.$this->value['server_file_name'];
+        // used for pdf's
         $this->value['file_uri_pdf'] = $this->upload_path.$this->value['server_file_name'];
 
         if ($this->value['is_image'] == 1) {
@@ -453,7 +452,6 @@ class FileHandler extends Intraface_Standard
             $file_name = safeToDb($file_name);
         }
 
-
         $random_key_generator = $this->getRandomKeyGenerator();
 
         // Vi sikre os at ingen andre har den nï¿½gle
@@ -560,7 +558,7 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
 
         if (!is_array($input)) {
-            throw new Exception("Input skal vÃ¦re et array i FileHandler->updateInstance");
+            throw new Exception("Input skal være et array i FileHandler->updateInstance");
         }
 
         $input = safeToDb($input);
@@ -570,7 +568,7 @@ class FileHandler extends Intraface_Standard
 
         $sql[] = 'date_changed = NOW()';
 
-        // fï¿½lgende mï¿½ ikke slettes - bruges i electronisk faktura
+        // do not delete the following - used by electronic invoice
         if (isset($input['file_name'])) {
             $sql[] = 'file_name = "'.$input['file_name'].'"';
         }
@@ -670,11 +668,8 @@ class FileHandler extends Intraface_Standard
      *
      * @return boolean true on success
      */
-    public function loadMimeTypes() {
-
-        // $shared_filehandler = $this->kernel->useShared('filehandler');
-        // $shared_filehandler->includeFile('FileType.php');
-
+    public function loadMimeTypes()
+    {
         require_once 'Intraface/modules/filemanager/FileType.php';
         $filetype = new FileType();
         $this->file_types = $filetype->getList();
