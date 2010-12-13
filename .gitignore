@@ -2,5 +2,6 @@
 .buildpath
 .project
 src/intraface.dk/config.local.php
+src/package.xml
 project.properties
 tests/selenium/testSuite.html
