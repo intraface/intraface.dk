@@ -1,7 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/DBQuery.php';
@@ -12,7 +10,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class FakeDebtorAddress {
     function get($key = '') {
-        $info = array('name' => 'Lars Olesen', 'address' => 'Grï¿½svangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
+        $info = array('name' => 'Lars Olesen', 'address' => 'Græsvangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
         if (empty($key)) return $info;
         else return $info[$key];
     }

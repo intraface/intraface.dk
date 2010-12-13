@@ -1,8 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Intranet.php';
 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
@@ -13,22 +10,21 @@ class IntranetTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        
         // @todo this has the notion with the standard database setup
         //       and better setting of moduleaccess
-        
+
         $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE intranet');
         $db->exec('TRUNCATE modules');
-        
+
         $i = new IntranetMaintenance();
         $i->save(array('name' => 'intraface', 'identifier' => 'intraface'));
-        
+
         $m = new ModuleMaintenance();
         $m->register();
-        
+
         $this->intranet = new Intraface_Intranet(1);
-        
+
     }
 
     function tearDown()
@@ -47,7 +43,7 @@ class IntranetTest extends PHPUnit_Framework_TestCase
     {
         $i = new IntranetMaintenance(1);
         $i->setModuleAccess('intranetmaintenance');
-        
+
         $this->assertTrue($this->intranet->hasModuleAccess('intranetmaintenance'));
     }
 

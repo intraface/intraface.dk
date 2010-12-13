@@ -1,8 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/XMLRPC/Newsletter/Server.php';
 
 class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase

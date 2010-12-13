@@ -1,13 +1,11 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
 require_once 'Intraface/functions.php';
 
 /**
- * Remember this should actually only be tests whether the extend functionality works. 
+ * Remember this should actually only be tests whether the extend functionality works.
  * The tests are in Intraface_3Party
  */
-
 class FakeRedirectUser
 {
     function get()
@@ -22,7 +20,7 @@ class FakeRedirectIntranet
     {
         return 1;
     }
-    
+
 }
 
 class FakeRedirectKernel
@@ -34,7 +32,7 @@ class FakeRedirectKernel
         $this->user = new FakeRedirectUser();
         $this->intranet = new FakeRedirectIntranet();
     }
-    
+
     function getSessionId() {
         return 'dfp323ewrjif2309f32f30f23vcjtjkjw';
     }
@@ -55,7 +53,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $result = $this->db->exec('TRUNCATE redirect');
         $result = $this->db->exec('TRUNCATE redirect_parameter');
         $result = $this->db->exec('TRUNCATE redirect_parameter_value');
-        
+
         $_SERVER['SCRIPT_URI'] = 'http://example.php/from.php';
         $_SERVER['HTTP_HOST'] = 'http://example.php/';
         $_SERVER['REQUEST_URI'] = 'http://example.php/from.php';
@@ -160,7 +158,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($redirect->setIdentifier('identifier1'));
     }
 
-    
+
     function testThisUri() {
         $_SERVER['HTTPS']       = 'https://example.dk/index.php';
         $_SERVER['HTTP_HOST']   = 'example.dk';
@@ -172,7 +170,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         unset($_SERVER['HTTP_HOST']);
         unset($_SERVER['REQUEST_URI']);
     }
-    
+
     function testDeleteWithNoIdReturnsTrue()
     {
         $redirect = $this->createRedirect();

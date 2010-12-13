@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
 require_once 'Intraface/functions.php';
 require_once 'Intraface/modules/filemanager/FileHandler.php';
 require_once 'Intraface/modules/filemanager/InstanceManager.php';

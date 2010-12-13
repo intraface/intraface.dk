@@ -1,13 +1,10 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/User.php';
 require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/IntranetMaintenance.php';
 require_once 'Intraface/Validator.php';
-
 
 class UserTest extends PHPUnit_Framework_TestCase
 {

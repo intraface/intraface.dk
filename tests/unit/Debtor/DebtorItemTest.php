@@ -1,16 +1,13 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/modules/debtor/DebtorItem.php';
 require_once 'Intraface/functions.php';
 require_once dirname(__FILE__) .'/stubs/Debtor.php';
-// require_once 'Intraface/DBQuery.php';
-
 
 class DebtorItemTest extends PHPUnit_Framework_TestCase
 {
-    function setup() {
+    function setup()
+    {
         $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE debtor_item');
         $db->query('TRUNCATE product');

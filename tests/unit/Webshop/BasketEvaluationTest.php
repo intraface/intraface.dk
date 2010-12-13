@@ -1,10 +1,8 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
 require_once 'Intraface/modules/webshop/BasketEvaluation.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 
-error_reporting(E_ALL);
 class FakeEvaluationWebshop {
     public $kernel;
 }

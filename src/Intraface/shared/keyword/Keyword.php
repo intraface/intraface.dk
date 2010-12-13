@@ -234,6 +234,11 @@ class Keyword
 
         return $keywords;
     }
+
+    function getKeyword()
+    {
+        return $this->value['keyword'];
+    }
 }
 
 class Intraface_Keyword_Appender extends Keyword

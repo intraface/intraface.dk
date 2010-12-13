@@ -1,16 +1,11 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/Standard.php';
 require_once 'Intraface/Date.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
-
-error_reporting(E_ALL);
 
 class FakeWebshopWeblogin {
     function get() { return 1; }

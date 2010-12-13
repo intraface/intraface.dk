@@ -1,8 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/modules/accounting/Account.php';
 
 class FakeAccountYear

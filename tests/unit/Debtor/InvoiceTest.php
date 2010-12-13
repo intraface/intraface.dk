@@ -1,7 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/modules/invoice/Invoice.php';
 require_once 'Intraface/Date.php';
 require_once 'Intraface/modules/product/Product.php';
@@ -12,8 +10,8 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
 
-    function setUp() {
-
+    function setUp()
+    {
         $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE debtor');
         $db->exec('TRUNCATE debtor_item');

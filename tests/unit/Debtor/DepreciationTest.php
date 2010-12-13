@@ -1,14 +1,13 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/invoice/Depreciation.php';
 
 class DepreciationTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
 
-    function setUp() {
-
+    function setUp()
+    {
         $db = MDB2::singleton(DB_DSN);
         $db->exec('TRUNCATE invoice_payment');
         $db->exec('TRUNCATE debtor');
@@ -18,10 +17,10 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
         $db->exec('TRUNCATE accounting_voucher');
-
     }
 
-    function createKernel() {
+    function createKernel()
+    {
         $kernel = new Stub_Kernel;
         // $kernel->setting->set('intranet', 'onlinepayment.provider_key', 1);
         $kernel->setting->set('user', 'accounting.active_year', 1);

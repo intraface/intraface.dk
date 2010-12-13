@@ -14,7 +14,6 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE currency_exchangerate');
     }
 
-
     ///////////////////////////////////////////////////////
 
     function testConstruct()

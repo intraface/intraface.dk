@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/shared/email/Email.php';
 
 class EmailTest extends PHPUnit_Framework_TestCase {

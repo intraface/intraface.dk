@@ -1,7 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
 require_once dirname(__FILE__) .'/stubs/Debtor.php';
 require_once dirname(__FILE__) .'/stubs/DebtorLongProductText.php';
@@ -10,12 +8,11 @@ require_once dirname(__FILE__) .'/../Contact/stubs/ContactPerson.php';
 
 class DebtorPdfTest extends PHPUnit_Framework_TestCase
 {
-    function setup() {
-
+    function setup()
+    {
         if (file_exists(TEST_PATH_TEMP.'debtor.pdf')) {
             unlink(TEST_PATH_TEMP.'debtor.pdf');
         }
-
     }
 
     function createPdf()
@@ -23,7 +20,8 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         return new Intraface_modules_debtor_Visitor_Pdf(new Stub_Translation);
     }
 
-    function createDebtor() {
+    function createDebtor()
+    {
         $debtor = new FakeDebtor();
         $debtor->contact = new FakeContact;
         $debtor->contact->address = new Stub_Address;
@@ -31,7 +29,8 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
         return $debtor;
     }
 
-    function createDebtorLongProductText() {
+    function createDebtorLongProductText()
+    {
         $debtor = new FakeDebtorLongProductText();
         $debtor->contact = new FakeContact;
         $debtor->contact->address = new Stub_Address;

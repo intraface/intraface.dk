@@ -1,10 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
-
 require_once 'NewsletterStubs.php';
 require_once 'Intraface/modules/newsletter/NewsletterList.php';
-
 
 class NewsletterListTest extends PHPUnit_Framework_TestCase
 {

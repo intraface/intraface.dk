@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__FILE__) . '/../config.test.php';
-require_once 'PHPUnit/Framework.php';
 require_once 'Intraface/modules/invoice/Reminder.php';
 require_once 'Intraface/modules/invoice/Invoice.php';
 require_once 'Intraface/functions.php';
@@ -10,8 +9,8 @@ class ReminderTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
 
-    function setUp() {
-
+    function setUp()
+    {
         $db = MDB2::singleton(DB_DSN);
         $db->query('TRUNCATE invoice_reminder');
         $db->query('TRUNCATE invoice_reminder_item');
@@ -23,7 +22,8 @@ class ReminderTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function createKernel() {
+    function createKernel()
+    {
         $kernel = new Stub_Kernel;
         $kernel->setting->set('user', 'accounting.active_year', '1');
         $kernel->setting->set('intranet', 'vatpercent', 25);
