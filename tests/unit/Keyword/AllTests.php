@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 class Keyword_AllTests
@@ -18,4 +17,3 @@ class Keyword_AllTests
         return $suite;
     }
 }
-?>

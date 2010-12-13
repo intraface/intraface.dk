@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 class Contact_AllTests
@@ -18,4 +17,3 @@ class Contact_AllTests
         return $suite;
     }
 }
-?>
