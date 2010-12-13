@@ -24,7 +24,6 @@ class Intraface_modules_procurement_ProcurementGateway
         }
 
         return $this->dbquery;
-
     }
 
     function findByContactId($id)
@@ -66,7 +65,7 @@ class Intraface_modules_procurement_ProcurementGateway
             }
         }
 
-        // Poster med fakturadato f�r slutdato.
+        // Posts with invoice date before end date
         if ($this->dbquery->checkFilter("to_date")) {
             $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
             if ($date->convert2db()) {
@@ -78,25 +77,8 @@ class Intraface_modules_procurement_ProcurementGateway
 
         if ($this->dbquery->checkFilter("status")) {
             if ($this->dbquery->getFilter("status") == "-1") {
-                // Beh�ves ikke, den tager alle.
-
             } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = åbne
-                /*
-                if ($this->dbquery->checkFilter("to_date")) {
-                    $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if ($date->convert2db()) {
-                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan s�ttes tilbage.
-                        $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status_key = 2) OR (date_canceled >= \"".$date->get()."\") OR status_key < 2");
-                    }
-                }
-                else {
-                    // Hvis der ikke er nogen dato så tager vi alle dem som p� nuv�rende tidspunkt har status under
-                    $this->dbquery->setCondition("status_key < 2");
-                }
-                */
                 $this->dbquery->setCondition("status_key < 1 OR (status_key = 1 AND paid_date = \"0000-00-00\")");
-
             } else {
                 if ($this->dbquery->checkFilter("to_date")) {
                     switch($this->dbquery->getFilter("status")) {
@@ -206,9 +188,9 @@ class Intraface_modules_procurement_ProcurementGateway
     public function getStatusTypes()
     {
         return array(
-            0=>'ordered',
-            1=>'recieved',
-            2=>'canceled'
+            0 => 'ordered',
+            1 => 'recieved',
+            2 => 'canceled'
         );
     }
 
@@ -221,19 +203,20 @@ class Intraface_modules_procurement_ProcurementGateway
     public function getRegionTypes()
     {
         return array(
-            0=>'denmark',
-            1=>'eu',
-            2=>'eu_vat_registered',
-            3=>'outside_eu'
+            0 => 'denmark',
+            1 => 'eu',
+            2 => 'eu_vat_registered',
+            3 => 'outside_eu'
         );
     }
+
     public function findCountByContactId($contact_id)
     {
-                $sql = "SELECT id
+        $sql = "SELECT id
                 FROM procurement
-                    WHERE intranet_id = " . $this->kernel->intranet->get("id") . "
-                        AND contact_id = ".(int)$contact_id."
-              AND active = 1";
+                WHERE intranet_id = " . $this->kernel->intranet->get("id") . "
+                    AND contact_id = ".(int)$contact_id."
+                    AND active = 1";
 
         $db = new DB_Sql;
         $db->query($sql);

@@ -1,9 +1,5 @@
 <?php
 /**
- * @todo unit test not finished!
- */
-
-/**
  * @package Intraface_Procurement
  */
 class Procurement extends Intraface_Standard
@@ -140,7 +136,9 @@ class Procurement extends Intraface_Standard
         $input = safeToDb($input);
         $validator = new Intraface_Validator($this->error);
 
-        if (!isset($input['dk_invoice_date'])) $input['dk_invoice_date'] = '';
+        if (!isset($input['dk_invoice_date'])) {
+            $input['dk_invoice_date'] = '';
+        }
         $validator->isDate($input["dk_invoice_date"], "Fakturadato er ikke en gyldig dato");
         $date = new Intraface_Date($input["dk_invoice_date"]);
         if ($date->convert2db()) {
@@ -149,7 +147,9 @@ class Procurement extends Intraface_Standard
             $input["invoice_date"] = '';
         }
 
-        if (!isset($input['dk_delivery_date'])) $input['dk_delivery_date'] = '';
+        if (!isset($input['dk_delivery_date'])) {
+            $input['dk_delivery_date'] = '';
+        }
         $validator->isDate($input["dk_delivery_date"], "Leveringsdato er ikke en gyldig dato", "allow_empty");
         $date = new Intraface_Date($input["dk_delivery_date"]);
         if ($date->convert2db()) {
@@ -158,7 +158,9 @@ class Procurement extends Intraface_Standard
             $input['delivery_date'] = $input['invoice_date'];
         }
 
-        if (!isset($input['dk_payment_date'])) $input['dk_payment_date'] = '';
+        if (!isset($input['dk_payment_date'])) {
+            $input['dk_payment_date'] = '';
+        }
         $validator->isDate($input["dk_payment_date"], "Betalingsdato er ikke en gyldig dato", "allow_empty");
         $date = new Intraface_Date($input["dk_payment_date"]);
         if ($date->convert2db()) {
@@ -174,33 +176,45 @@ class Procurement extends Intraface_Standard
             $this->error->set("Nummeret er allerede benyttet");
         }
 
-        if (!isset($input['vendor'])) $input['vendor'] = '';
-        $validator->isString($input["vendor"], "Fejl i leverandør", "", "allow_empty");
+        if (!isset($input['vendor'])) {
+            $input['vendor'] = '';
+        }
+        $validator->isString($input["vendor"], "Fejl i leverand�r", "", "allow_empty");
 
-        if (!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) {
+            $input['description'] = '';
+        }
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "");
 
-        if (!isset($input['from_region_key'])) $input['from_region_key'] = 0;
+        if (!isset($input['from_region_key'])) {
+            $input['from_region_key'] = 0;
+        }
         $region_types = $this->getRegionTypes();
         if (!isset($region_types[$input["from_region_key"]])) {
-            $this->error->set("Ugyldig kï¿½bsregion");
+            $this->error->set("Ugyldig k�bsregion");
         }
 
-        if (!isset($input['dk_price_items'])) $input['dk_price_items'] = 0;
+        if (!isset($input['dk_price_items'])) {
+            $input['dk_price_items'] = 0;
+        }
         $validator->isDouble($input["dk_price_items"], "Varepris er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_items"]);
         if ($amount->convert2db()) {
             $input["price_items"] = $amount->get();
         }
 
-        if (!isset($input['dk_price_shipment_etc'])) $input['dk_price_shipment_etc'] = 0;
+        if (!isset($input['dk_price_shipment_etc'])) {
+            $input['dk_price_shipment_etc'] = 0;
+        }
         $validator->isDouble($input["dk_price_shipment_etc"], "Pris for forsendelse og andet er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_price_shipment_etc"]);
         if ($amount->convert2db()) {
             $input["price_shipment_etc"] = $amount->get();
         }
 
-        if (!isset($input['dk_vat'])) $input['dk_vat'] = 0;
+        if (!isset($input['dk_vat'])) {
+            $input['dk_vat'] = 0;
+        }
         $validator->isDouble($input["dk_vat"], "Moms er ikke et gyldigt beløb", 'zero_or_greater');
         $amount = new Intraface_Amount($input["dk_vat"]);
         if ($amount->convert2db()) {
@@ -210,9 +224,6 @@ class Procurement extends Intraface_Standard
         if ($this->error->isError()) {
             return false;
         }
-
-        // paid_date = \"".$input["paid_date"]."\",
-        // contact_id = ".$input["contact_id"].",
 
         $sql = "user_id = ".$this->kernel->user->get("id").",
             date_changed = NOW(),
@@ -237,136 +248,6 @@ class Procurement extends Intraface_Standard
 
         return true;
     }
-
-    /*
-    function getList()
-    {
-
-
-        $list = array();
-
-        if ($this->dbquery->checkFilter("contact_id")) {
-            $this->dbquery->setCondition("contact_id = ".intval($this->dbquery->getFilter("contact_id")));
-        }
-
-        if ($this->dbquery->checkFilter("text")) {
-            $this->dbquery->setCondition("(description LIKE \"%".$this->dbquery->getFilter("text")."%\" OR number = \"".$this->dbquery->getFilter("text")."\")");
-        }
-
-        if ($this->dbquery->checkFilter("from_date")) {
-            $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
-            if ($date->convert2db()) {
-                $this->dbquery->setCondition("invoice_date >= \"".$date->get()."\"");
-            } else {
-                $this->error->set("Fra dato er ikke gyldig");
-            }
-        }
-
-
-        // Poster med fakturadato fï¿½r slutdato.
-        if ($this->dbquery->checkFilter("to_date")) {
-            $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-            if ($date->convert2db()) {
-                $this->dbquery->setCondition("invoice_date <= \"".$date->get()."\"");
-            } else {
-                $this->error->set("Til dato er ikke gyldig");
-            }
-        }
-
-        if ($this->dbquery->checkFilter("status")) {
-            if ($this->dbquery->getFilter("status") == "-1") {
-                // Behï¿½ves ikke, den tager alle.
-
-            } elseif ($this->dbquery->getFilter("status") == "-2") {
-                // Not executed = ï¿½bne
-                /*
-                if ($this->dbquery->checkFilter("to_date")) {
-                    $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if ($date->convert2db()) {
-                        // Poster der er executed eller canceled efter dato, og sikring at executed stadig er det, da faktura kan sï¿½ttes tilbage.
-                        $this->dbquery->setCondition("(date_executed >= \"".$date->get()."\" AND status_key = 2) OR (date_canceled >= \"".$date->get()."\") OR status_key < 2");
-                    }
-                }
-                else {
-                    // Hvis der ikke er nogen dato sï¿½ tager vi alle dem som pï¿½ nuvï¿½rende tidspunkt har status under
-                    $this->dbquery->setCondition("status_key < 2");
-                }
-                /
-                $this->dbquery->setCondition("status_key < 1 OR paid_date = \"0000-00-00\"");
-
-            } else {
-                if ($this->dbquery->checkFilter("to_date")) {
-                    switch($this->dbquery->getFilter("status")) {
-                        case "0":
-                            $to_date_field = "date_created";
-                            break;
-
-                        case "1":
-                            $to_date_field = "date_recieved";
-                            break;
-
-                        case "2":
-                            $to_date_field = "data_canceled";
-                            break;
-                    }
-
-                    $date = new Intraface_Date($this->dbquery->getFilter("to_date"));
-                    if ($date->convert2db()) {
-                        $this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
-                    }
-                }
-                else {
-                    // tager dem som pï¿½ nuvï¿½rende tidspunkt har den angivet status
-                    $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
-                }
-            }
-
-        }
-
-        $i = 0;
-
-        $this->dbquery->setSorting("date_created DESC");
-        $db = $this->dbquery->getRecordset("*,
-            DATE_FORMAT(invoice_date, '%d-%m-%Y') AS dk_invoice_date,
-            DATE_FORMAT(delivery_date, '%d-%m-%Y') AS dk_delivery_date,
-            DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date,
-            DATE_FORMAT(paid_date, '%d-%m-%Y') AS dk_paid_date");
-
-        $status_types = $this->getStatusTypes();
-        while ($db->nextRecord()) {
-            $list[$i]["id"] = $db->f("id");
-            $list[$i]["description"] = $db->f("description");
-            $list[$i]["number"] = $db->f("number");
-            $list[$i]["vendor"] = $db->f("vendor");
-            $list[$i]["status_key"] = $db->f("status_key");
-
-            $list[$i]["status"] = $status_types[$db->f("status_key")];
-            $list[$i]["delivery_date"] = $db->f("delivery_date");
-            $list[$i]["dk_delivery_date"] = $db->f("dk_delivery_date");
-            $list[$i]["dk_invoice_date"] = $db->f("dk_invoice_date");
-            $list[$i]["payment_date"] = $db->f("payment_date");
-            $list[$i]["dk_payment_date"] = $db->f("dk_payment_date");
-            $list[$i]["paid_date"] = $db->f("paid_date");
-            $list[$i]["dk_paid_date"] = $db->f("dk_paid_date");
-            $list[$i]["contact_id"] = $db->f("contact_id");
-            $list[$i]["total_price"] = round($db->f("price_items") + $db->f("price_shipment_etc") + $db->f("vat"), 2);;
-
-            $i++;
-        }
-
-        return $list;
-
-    }*/
-
-    /*function getMaxNumber()
-    {
-        $db = new DB_sql;
-
-        $db->query("SELECT MAX(number) as max_number FROM procurement WHERE intranet_id = ".$this->kernel->intranet->get("id"));
-        $db->nextRecord();
-
-        return $db->f("max_number");
-    }*/
 
     function setStatus($status)
     {
@@ -422,7 +303,6 @@ class Procurement extends Intraface_Standard
         $this->load();
 
         return true;
-
     }
 
     function setContact($contact)
@@ -445,7 +325,6 @@ class Procurement extends Intraface_Standard
         $db->query("UPDATE procurement SET contact_id = ".$contact->get('id').", date_changed = NOW() WHERE id = ".$this->id);
         $this->load();
         return true;
-
     }
 
     function getLatest($product_id, $up_to_quantity = 0)
@@ -485,21 +364,6 @@ class Procurement extends Intraface_Standard
 
         return $list;
     }
-
-    /*
-    function isFilledIn()
-    {
-        $db = new DB_Sql;
-        $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id'));
-        return $db->numRows();
-    }*/
-
-    /*function any($contact_id)
-    {
-        $db = new DB_Sql;
-        $db->query("SELECT id FROM procurement WHERE intranet_id = " . $this->kernel->intranet->get('id')." AND contact_id = ".$contact_id." AND active = 1");
-        return $db->numRows();
-    }*/
 
     /**
      * State procurement
@@ -596,48 +460,6 @@ class Procurement extends Intraface_Standard
             }
 
         }
-        /*
-         * Changed so that Accounting automatically handles vat.
-        // vat
-        if ($this->get('vat') > 0) {
-            $debet_account = Account::factory($year, $year->getSetting('vat_in_account_id'));
-            $credit_total += $this->get('vat');
-
-            $input_values = array(
-                'voucher_number' => $voucher->get('number'),
-                'date' => $voucher_date,
-                'amount' => $this->get('vat'),
-                'debet_account_number' => $debet_account->get('number'),
-                'credit_account_number' => 0,
-                'vat_off' => 1,
-                'text' => $text - $translation->get('vat')
-            );
-
-            if (!$voucher->saveInDaybook($input_values, false)) {
-                $this->error->merge($voucher->error->getMessage());
-            }
-        }
-        */
-
-        /**
-         * Changed so that the amount is credited on every post
-        // credit amount
-        $input_values = array(
-                'voucher_number' => $voucher->get('number'),
-                'date' => $voucher_date,
-                'amount' => $credit_total,
-                'debet_account_number' => 0,
-                'credit_account_number' => $credit_account->get('number'),
-                'vat_off' => 1,
-                'text' => $text
-        );
-
-
-
-        if (!$voucher->saveInDaybook($input_values, false)) {
-            $this->error->merge($voucher->error->getMessage());
-        }
-        */
 
         require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
@@ -656,8 +478,6 @@ class Procurement extends Intraface_Standard
         $this->setStated($voucher->get('id'), $voucher_date);
         $this->load();
         return true;
-
-
     }
 
     function setStated($voucher_number, $voucher_date)
@@ -718,7 +538,6 @@ class Procurement extends Intraface_Standard
             return false;
         }
         return true;
-
     }
 
     /**
@@ -787,13 +606,10 @@ class Procurement extends Intraface_Standard
                 $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet ('.number_format($this->get('total_price'), 2, ',', '.').'). Der er en forskel på '.number_format($delta, 2, ',', '.').'. Har du fået alle varer på indkøbet med?');
             }
 
-
-
             if (round($vat, 2) != $this->get('vat')) {
                 $expected = number_format($this->get('vat') * 4, 2, ',', '.');
                 $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer (vi forventede '.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb (det samlede beløb burde have været '.$expected.'). Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
             }
-
         }
 
         if ($this->error->isError()) {
@@ -802,18 +618,9 @@ class Procurement extends Intraface_Standard
         return true;
     }
 
-
-    /*
-    function setStateAccountId($id) {
-        $db = new DB_Sql;
-        $db->query("UPDATE procurement SET state_account_id = " . $id . " WHERE id = " .$this->id);
-        $this->load();
-        return true;
-    }
-    */
-
     /**
      * returns possible status types
+     *
      * @todo: duplicate in Procurement class
      *
      * @return array status types
@@ -821,9 +628,9 @@ class Procurement extends Intraface_Standard
     private function getStatusTypes()
     {
         return array(
-            0=>'ordered',
-            1=>'recieved',
-            2=>'canceled'
+            0 => 'ordered',
+            1 => 'recieved',
+            2 => 'canceled'
         );
     }
 
@@ -836,10 +643,10 @@ class Procurement extends Intraface_Standard
     public function getRegionTypes()
     {
         return array(
-            0=>'denmark',
-            1=>'eu',
-            2=>'eu_vat_registered',
-            3=>'outside_eu'
+            0 => 'denmark',
+            1 => 'eu',
+            2 => 'eu_vat_registered',
+            3 => 'outside_eu'
         );
     }
 
