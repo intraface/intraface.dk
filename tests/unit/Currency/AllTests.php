@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 class Currency_AllTests
@@ -18,4 +17,3 @@ class Currency_AllTests
         return $suite;
     }
 }
-?>

@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 class Accounting_AllTests extends PHPUnit_Framework_TestSuite
@@ -18,4 +17,3 @@ class Accounting_AllTests extends PHPUnit_Framework_TestSuite
         return $suite;
     }
 }
-?>

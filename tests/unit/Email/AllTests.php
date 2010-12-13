@@ -1,7 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
-
 require_once 'EmailTest.php';
 
 class Email_AllTests
@@ -14,4 +12,3 @@ class Email_AllTests
         return $suite;
     }
 }
-?>

@@ -1,8 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
-
-error_reporting(E_ALL);
 
 class Shop_AllTests
 {
@@ -10,9 +7,9 @@ class Shop_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Intraface_Shop');
 
         $tests = array(
-            'ShopBasket', 
-            'ShopBasketEvaluation', 
-            'Shop', 
+            'ShopBasket',
+            'ShopBasketEvaluation',
+            'Shop',
             'ShopFeaturedProducts'
         );
 
@@ -24,4 +21,3 @@ class Shop_AllTests
         return $suite;
     }
 }
-?>

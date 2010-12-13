@@ -1,5 +1,4 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 class FileHandler_AllTests
@@ -14,8 +13,7 @@ class FileHandler_AllTests
             require_once $test . 'Test.php';
             $suite->addTestSuite($test . 'Test');
         }
-        
+
         return $suite;
     }
 }
-?>

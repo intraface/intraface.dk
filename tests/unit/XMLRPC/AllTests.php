@@ -1,8 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
-
-error_reporting(E_ALL);
 
 class XMLRPC_AllTests
 {
