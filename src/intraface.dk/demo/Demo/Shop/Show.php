@@ -89,47 +89,4 @@ class Demo_Shop_Show extends k_Component
         }
         return false;
     }
-
-    /*
-    public function getAvailableCountryRegions()
-    {
-        return 'Western Europe';
-    }
-    */
-    /*
-    function execute()
-    {
-        return $this->forward('shop');
-    }
-    */
-
-
-    /**
-     * To test translations
-     */
-    /*
-    function __($phrase)
-    {
-        if (empty($this->translation)) {
-
-            $this->translation = new Ilib_Translation_Collection;
-
-            $translator = Ilib_Countries_Translation::factory();
-            $translator->setLang('da');
-            $translator = $translator->getDecorator('UTF8');
-            $this->translation->addTranslator($translator);
-
-            $translator = IntrafacePublic_Shop_Translation::factory();
-            $translator->setLang('da');
-            $translator = $translator->getDecorator('DefaultText');
-            $translator = $translator->getDecorator('UTF8');
-            $this->translation->addTranslator($translator);
-
-        }
-
-        return $this->translation->get(utf8_encode($phrase));
-
-    }
-    */
-
 }
