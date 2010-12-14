@@ -18,6 +18,7 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $this->db->exec('TRUNCATE contact');
         $this->db->exec('TRUNCATE address');
         unset($this->server);
+        unset($this->db);
     }
 
     function getClient()
