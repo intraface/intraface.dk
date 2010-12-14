@@ -73,6 +73,9 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group xmlrpc
+     */
     function testGetContactWithDanishCharactersIsReturnedInUTF8FromTheClient()
     {
         $client = $this->getClient();
@@ -89,6 +92,9 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Tester æøå', $retrieved['name']);
     }
 
+    /**
+     * @group xmlrpc
+     */
     function testSaveContactWorksWithDanishCharacters()
     {
         $client = $this->getClient();

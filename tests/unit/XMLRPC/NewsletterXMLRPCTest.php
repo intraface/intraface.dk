@@ -18,7 +18,6 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 
     function tearDown()
     {
-
     }
 
     function testConstruction()
@@ -40,6 +39,9 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group xmlrpc
+     */
     function testIfANonExistingListIsUsedWithSubscribeAnExceptionIsThrown()
     {
         $client = $this->getClient();
@@ -56,6 +58,9 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @group xmlrpc
+     */
     function testSubscribeHandlesStuff()
     {
         $client = $this->getClient();
