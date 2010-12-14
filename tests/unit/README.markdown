@@ -9,7 +9,7 @@ Please help out running the test suite. Report bugs at: http://github.com/intraf
 Run tests
 ---------
 
-Create a config.test.php file. Check out the phpunit.xml.example and see if you want to setup your own local example.
+Create a config.test.php file. Check out the phpunit.xml.example and see if you want to setup your own local example. Maybe you want to attach the TestListener.php.
 
 Install phpunit from http://phpunit.de
 
