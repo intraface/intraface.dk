@@ -1,10 +1,10 @@
 Intraface.dk
-==
+============
 
 Source code for intraface.dk. A system for small businesses made with the konstrukt framework.
 
 Requirements
---
+------------
 
 1. Apache-server running PHP.
 2. php-xml module.
@@ -15,7 +15,7 @@ Requirements
 7. PHP with magic_quotes_pgc = Off
 
 Installation
---
+------------
 
 It is fairly easy to install intraface using the command line. You should follow the following steps:
 
@@ -49,12 +49,12 @@ Change directory so you are in the root directory of intraface:
     sudo rm src/Intraface-X.Y.Z.tgz
 
 Create the database
---
+-------------------
 
 In the install folder you will find the database structure. Make sure that you both setup the structure and values.
 
 Running the testsuite
---
+---------------------
 
 Intraface both have selenium tests and unit tests written with PHPUnit.
 
@@ -75,7 +75,7 @@ Install the Selenium IDE for Firefox. To generate the test suite files, you shou
 Now open the test suite from Firefox.
 
 Misc. information about the installation
---
+----------------------------------------
 
 1. Copy all files to your server.
 2. Make sure that all files in src/intraface.dk is put into the web accessible folder
@@ -91,7 +91,7 @@ Misc. information about the installation
 12. Go to Intranet, and edit/create your intranets. Remeber to change login data for the default created intranet.
 
 Checklist for updating intraface
-==
+================================
 
 1. Run all unit tests
 2. Run all selenium tests
@@ -113,7 +113,7 @@ Checklist for updating intraface
 18. Goodnight!
 
 How to update an package
---
+------------------------
 
 1. Go through the generate_package_xml.php to ensure everything is correct.
 2. Remember to change the version number and update the version numbers for dependencies.
