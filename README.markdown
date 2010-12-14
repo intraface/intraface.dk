@@ -13,11 +13,12 @@ Requirements
 5. PEAR setup correctly
 6. PHP module openSSL (for https requests to onlinepayment gateways)
 7. PHP with magic_quotes_pgc = Off
+8. Intraface dependencies - install by creating a PEAR package; see below
 
-Installation
-------------
+Preparing dependencies
+----------------------
 
-It is fairly easy to install intraface using the command line. You should follow the following steps:
+It is fairly easy to install intraface using the command line.
 
 First install phing
 
@@ -30,10 +31,9 @@ First install phing
     pear install --force --alldeps intrafacepublic/Phing_IlibPearDeployerTask 
     pear install --force --alldeps pear/PHP_CodeSniffer 
     
-If ftpDeployTask is not located in phing/tasks/ext/FtpDeployTask.php get it from http://phing.info/trac/browser/branches/2.3/classes/phing/tasks/ext/FtpDeployTask.php
-    
+Notice: If ftpDeployTask is not located in phing/tasks/ext/FtpDeployTask.php get it from [phing](http://phing.info/trac/browser/branches/2.3/classes/phing/tasks/ext/FtpDeployTask.php).
 
-Then install all dependencies by creating a package and installing it
+Make sure that your PEAR installation knows the following channels:
 
     pear channel-discover public.intraface.dk
     pear channel-discover pear.doctrine-project.org
@@ -41,33 +41,67 @@ Then install all dependencies by creating a package and installing it
     pear channel-discover pear.michelf.com
     pear channel-discover pearhub.org
 
+Now you are ready to create the PEAR package. The PEAR package will take care of installing all dependencies and put files in the correct web accessible folder. 
+
+To create the package
+---------------------
+
 Change directory so you are in the root directory of intraface:
 
     php generate_package_xml.php make
     pear package src/package.xml
+
+Install the package
+-------------------
+
+You need to specify which folder is the web accessible folder:
+
+    pear config-set www_dir /home/intraface/intraface.dk
+
+Now you are ready to install the package:
+
     sudo pear install --alldeps --force src/Intraface-X.Y.Z.tgz
     sudo rm src/Intraface-X.Y.Z.tgz
+
+Then you need to navigate to your web accessible folder and create a config file:
+
+    cp config.local.example.php config.local.php
+
+Edit the values in the config file, and make sure:
+
+- Create and give access to the webserver to write to log/
+- Create and give access to the webserver to write to upload/ 
+- Create and give access to the webserver to write to cache/ 
+
+Now you are ready to access intraface through your webbrowser:
+
+- Login with start@intraface.dk, password: startup.
+- Go to intranetmaintenance -> Modules, and click 'Registrer Modules'
+- Go to Intranet, and edit/create your intranets. Remeber to change login data for the default created intranet.
 
 Create the database
 -------------------
 
 In the install folder you will find the database structure. Make sure that you both setup the structure and values.
 
-Misc. information about the installation
-----------------------------------------
+Updating the package
+--------------------
 
-1. Copy all files to your server.
-2. Make sure that all files in src/intraface.dk is put into the web accessible folder
-3. Set up a database, create a user with all data and structure access.
-4. Import strucuture and values to database from intraface.dk/install/
-5. Create and give access to the webserver to write to log/
-6. Create and give access to the webserver to write to upload/ 
-7. Create and give access to the webserver to write to cache/ 
-8. Create a config.local.php on the basis of config.local.default.php
-9. Access intraface through your webbroser.
-10. Login with start@intraface.dk, password: startup.
-11. Go to intranetmaintenance -> Modules, and click 'Registrer Modules'
-12. Go to Intranet, and edit/create your intranets. Remeber to change login data for the default created intranet.
+If you create updates for intraface, you just create a new package.
+
+- Check generate_package_xml.php to ensure everything is correct.
+- Remember to change the version number and update the version numbers for dependencies.
+
+    php generate_package_xml.php make
+    pear package src/package.xml
+
+Install the package locally on your computer
+
+    pear install /path/to/package/Package.tgz
+
+Make sure that everything works correctly, and now you can upgrade, using:
+
+    pear upgrade Intraface-X.Y.Z.tgz
 
 Checklist for updating intraface
 ================================
@@ -90,15 +124,3 @@ Checklist for updating intraface
 16. Test that send invoice as e-mail sender works
 17. Write twitter status
 18. Goodnight!
-
-How to update an package
-------------------------
-
-1. Go through the generate_package_xml.php to ensure everything is correct.
-2. Remember to change the version number and update the version numbers for dependencies.
-3. run "php generate_package_xml.php" to test the configuration
-4. run "php generate_package_xml.php make" to create the package.xml file
-5. run "pear package src/package.xml" to create the package
-6. install the package locally on your computer "pear install /path/to/package/Package.tgz"
-7. Check the files are installed correct
-8. Upload the package as a new release on the channel.
