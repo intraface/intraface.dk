@@ -6,27 +6,30 @@ require_once 'Intraface/modules/product/Product.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 require_once 'Intraface/shared/keyword/Keyword.php';
 
-error_reporting(E_ALL);
-
 Intraface_Doctrine_Intranet::singleton(1);
 
 class ProductTest extends PHPUnit_Framework_TestCase
 {
+    protected $db;
 
     function setUp()
     {
         $this->kernel = new Stub_Kernel();
 
-        $db = MDB2::singleton(DB_DSN);
-        $db->query('TRUNCATE product');
-        $db->query('TRUNCATE product_attribute');
-        $db->query('TRUNCATE product_attribute_group');
-        $db->query('TRUNCATE product_detail');
-        $db->query('TRUNCATE product_detail_translation');
-        $db->query('TRUNCATE product_variation');
-        $db->query('TRUNCATE product_variation_detail');
-        $db->query('TRUNCATE product_variation_x_attribute');
-        $db->query('TRUNCATE product_x_attribute_group');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
+
+    function tearDown()
+    {
+        $this->db->query('TRUNCATE product');
+        $this->db->query('TRUNCATE product_attribute');
+        $this->db->query('TRUNCATE product_attribute_group');
+        $this->db->query('TRUNCATE product_detail');
+        $this->db->query('TRUNCATE product_detail_translation');
+        $this->db->query('TRUNCATE product_variation');
+        $this->db->query('TRUNCATE product_variation_detail');
+        $this->db->query('TRUNCATE product_variation_x_attribute');
+        $this->db->query('TRUNCATE product_x_attribute_group');
     }
 
     function createProductObject($id = 0)
