@@ -6,18 +6,23 @@ require_once 'Intraface/functions.php';
 class PaymentTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE invoice_payment');
-        $db->exec('TRUNCATE debtor');
-        $db->exec('TRUNCATE contact');
-        $db->exec('TRUNCATE address');
-        $db->exec('TRUNCATE accounting_account');
-        $db->exec('TRUNCATE accounting_post');
-        $db->exec('TRUNCATE accounting_year');
-        $db->exec('TRUNCATE accounting_voucher');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE invoice_payment');
+        $this->db->exec('TRUNCATE debtor');
+        $this->db->exec('TRUNCATE contact');
+        $this->db->exec('TRUNCATE address');
+        $this->db->exec('TRUNCATE accounting_account');
+        $this->db->exec('TRUNCATE accounting_post');
+        $this->db->exec('TRUNCATE accounting_year');
+        $this->db->exec('TRUNCATE accounting_voucher');
     }
 
     function createKernel()
@@ -75,7 +80,6 @@ class PaymentTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($payment->update(array()));
         $this->assertEquals(3, $payment->error->count());
-
     }
 
     function testUpdateWithValidInputReturnsId()
@@ -107,7 +111,6 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $payment->get());
-
     }
 
     function testReadyForStateBeforeSaved()
@@ -176,4 +179,3 @@ class PaymentTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($payment->readyForState());
     }
 }
-

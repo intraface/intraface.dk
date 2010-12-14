@@ -24,11 +24,16 @@ class FakeAccountYear
 class AccountTest extends PHPUnit_Framework_TestCase
 {
     private $delta = 0.001;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE accounting_account');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE accounting_account');
     }
 
     function createAccount($id = 0)

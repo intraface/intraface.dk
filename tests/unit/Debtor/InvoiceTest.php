@@ -9,23 +9,28 @@ require_once 'Intraface/functions.php';
 class InvoiceTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE debtor');
-        $db->exec('TRUNCATE debtor_item');
-        $db->exec('TRUNCATE product');
-        $db->exec('TRUNCATE product_detail');
-        $db->exec('TRUNCATE product_detail_translation');
-        $db->exec('TRUNCATE accounting_account');
-        $db->exec('TRUNCATE accounting_post');
-        $db->exec('TRUNCATE accounting_year');
-        $db->exec('TRUNCATE accounting_voucher');
-
+        $this->db = MDB2::singleton(DB_DSN);
     }
 
-    function createKernel() {
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE debtor');
+        $this->db->exec('TRUNCATE debtor_item');
+        $this->db->exec('TRUNCATE product');
+        $this->db->exec('TRUNCATE product_detail');
+        $this->db->exec('TRUNCATE product_detail_translation');
+        $this->db->exec('TRUNCATE accounting_account');
+        $this->db->exec('TRUNCATE accounting_post');
+        $this->db->exec('TRUNCATE accounting_year');
+        $this->db->exec('TRUNCATE accounting_voucher');
+    }
+
+    function createKernel()
+    {
         $kernel = new Stub_Kernel;
         $kernel->setting->set('intranet', 'onlinepayment.provider_key', '1');
         $kernel->setting->set('user', 'accounting.active_year', '1');

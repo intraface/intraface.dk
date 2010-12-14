@@ -8,18 +8,22 @@ require_once 'Intraface/modules/contact/Contact.php';
 class ReminderTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->query('TRUNCATE invoice_reminder');
-        $db->query('TRUNCATE invoice_reminder_item');
-        $db->query('TRUNCATE invoice_reminder_unpaid_reminder');
-        $db->exec('TRUNCATE accounting_account');
-        $db->exec('TRUNCATE accounting_post');
-        $db->exec('TRUNCATE accounting_year');
-        $db->exec('TRUNCATE accounting_voucher');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
 
+    function tearDown()
+    {
+        $this->db->query('TRUNCATE invoice_reminder');
+        $this->db->query('TRUNCATE invoice_reminder_item');
+        $this->db->query('TRUNCATE invoice_reminder_unpaid_reminder');
+        $this->db->exec('TRUNCATE accounting_account');
+        $this->db->exec('TRUNCATE accounting_post');
+        $this->db->exec('TRUNCATE accounting_year');
+        $this->db->exec('TRUNCATE accounting_voucher');
     }
 
     function createKernel()

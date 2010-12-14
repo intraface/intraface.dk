@@ -5,18 +5,23 @@ require_once 'Intraface/modules/invoice/Depreciation.php';
 class DepreciationTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE invoice_payment');
-        $db->exec('TRUNCATE debtor');
-        $db->exec('TRUNCATE contact');
-        $db->exec('TRUNCATE address');
-        $db->exec('TRUNCATE accounting_account');
-        $db->exec('TRUNCATE accounting_post');
-        $db->exec('TRUNCATE accounting_year');
-        $db->exec('TRUNCATE accounting_voucher');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE invoice_payment');
+        $this->db->exec('TRUNCATE debtor');
+        $this->db->exec('TRUNCATE contact');
+        $this->db->exec('TRUNCATE address');
+        $this->db->exec('TRUNCATE accounting_account');
+        $this->db->exec('TRUNCATE accounting_post');
+        $this->db->exec('TRUNCATE accounting_year');
+        $this->db->exec('TRUNCATE accounting_voucher');
     }
 
     function createKernel()
@@ -45,15 +50,16 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         return $debtor;
     }
 
-    function createContact() {
-
+    function createContact()
+    {
         require_once 'Intraface/modules/contact/Contact.php';
         $contact = new Contact($this->createKernel());
         $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
         return $contact;
     }
 
-    function createAccountingYear() {
+    function createAccountingYear()
+    {
         require_once 'Intraface/modules/accounting/Year.php';
         $year = new Year($this->createKernel());
         $year->save(array('from_date' => date('Y').'-01-01', 'to_date' => date('Y').'-12-31', 'label' => 'test', 'locked' => 0));
@@ -61,8 +67,8 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         return $year;
     }
 
-    function testConstruct() {
-
+    function testConstruct()
+    {
         $depreciation = new Depreciation($this->createDebtor());
         $this->assertEquals('Depreciation', get_class($depreciation));
     }
@@ -105,7 +111,6 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $depreciation->get());
-
     }
 
     function testReadyForStateBeforeSaved()
@@ -114,18 +119,21 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($depreciation->readyForState());
     }
 
-    function testReadyForStateWhenReady() {
+    function testReadyForStateWhenReady()
+    {
         $depreciation = new Depreciation($this->createDebtor());
         $depreciation->update(array('payment_date' => '01-01-2007', 'amount' => 100));
         $this->assertTrue($depreciation->readyForState());
     }
 
-    function testIsStateBeforeStated() {
+    function testIsStateBeforeStated()
+    {
         $depreciation = new Depreciation($this->createDebtor());
         $this->assertFalse($depreciation->isStated());
     }
 
-    function testState() {
+    function testState()
+    {
         $depreciation = new Depreciation($this->createDebtor());
         $depreciation->update(array('payment_date' => '01-01-'.date('Y'), 'amount' => 100));
         $year = $this->createAccountingYear();
@@ -170,6 +178,4 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($depreciation->isStated());
         $this->assertFalse($depreciation->readyForState());
     }
-
 }
-?>

@@ -98,29 +98,29 @@ class TestableVatPeriod extends VatPeriod
         $date_from = $this->get('date_start');
         $date_to = $this->get('date_end');
 
-        // Salgsmoms - udgående
+        // Salgsmoms - udgï¿½ende
         $account_vat_in = $this->getAccount(1);
         $account_vat_in->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_out'] = $account_vat_in;
 
-        // ganges med -1 for at få rigtigt fortegn til udregning
+        // ganges med -1 for at fï¿½ rigtigt fortegn til udregning
         $this->value['saldo_vat_out'] = $account_vat_in->get('saldo');
         $saldo_total += -1 * $this->value['saldo_vat_out']; // total
 
 
-        // Moms af varekøb i udlandet
-        // Dette beløb er et udregnet beløb, som udregnes under bogføringen
+        // Moms af varekï¿½b i udlandet
+        // Dette belï¿½b er et udregnet belï¿½b, som udregnes under bogfï¿½ringen
         $account_vat_abroad = $this->getAccount(2);
         $account_vat_abroad->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_abroad'] = $account_vat_abroad;
 
-        // ganges med -1 for at få rigtigt fortegn til udregning
+        // ganges med -1 for at fï¿½ rigtigt fortegn til udregning
         $this->value['saldo_vat_abroad'] = $account_vat_abroad->get('saldo');
         $saldo_total += -1 * $this->value['saldo_vat_abroad'];
 
-        // Købsmoms
-        // Købsmomsen inkluderer også den udregnede moms af moms af varekøb i udlandet.
-        // Dette beløb er lagt på kontoen under bogføringen.
+        // Kï¿½bsmoms
+        // Kï¿½bsmomsen inkluderer ogsï¿½ den udregnede moms af moms af varekï¿½b i udlandet.
+        // Dette belï¿½b er lagt pï¿½ kontoen under bogfï¿½ringen.
         $account_vat_out = $this->getAccount(3);
         $account_vat_out->getSaldo('stated', $date_from, $date_to);
         $this->value['account_vat_in'] = $account_vat_out;
@@ -130,7 +130,7 @@ class TestableVatPeriod extends VatPeriod
 
 
         // Rubrik A
-        // EU-erhvervelser - her samles forskellige konti og beløbet udregnes.
+        // EU-erhvervelser - her samles forskellige konti og belï¿½bet udregnes.
         // Primosaldoen skal ikke medregnes
         $buy_eu_accounts = unserialize($this->year->getSetting('buy_eu_accounts'));
         $this->value['saldo_rubrik_a'] = 0;
@@ -150,16 +150,16 @@ class TestableVatPeriod extends VatPeriod
         $this->value['saldo_rubrik_a'] = $saldo_rubrik_a;
 
         // Rubrik B
-        // Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
+        // Vï¿½rdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
         // denne rubrik, skal der indsendes en liste med varesalgene uden moms.
 
-        // Vi understøtter ikke rubrikken
+        // Vi understï¿½tter ikke rubrikken
 
         // Rubrik C
-        // Værdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
+        // Vï¿½rdien af varesalg uden moms til andre EU-lande (EU-leverancer). Udfyldes
         // denne rubrik, skal der indsendes en liste med varesalgene uden moms.
 
-        // Vi understøtter ikke rubrikken
+        // Vi understï¿½tter ikke rubrikken
 
         $this->value['saldo_total'] = $saldo_total;
 
@@ -169,10 +169,16 @@ class TestableVatPeriod extends VatPeriod
 
 class VatPeriodTest extends PHPUnit_Framework_TestCase
 {
+    protected $db;
+
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE accounting_account');
+        $this->db = MDB2::singleton(DB_DSN);
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE accounting_account');
     }
 
     function createPeriod()

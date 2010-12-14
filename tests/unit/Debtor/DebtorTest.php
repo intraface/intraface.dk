@@ -10,7 +10,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class FakeDebtorAddress {
     function get($key = '') {
-        $info = array('name' => 'Lars Olesen', 'address' => 'Græsvangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
+        $info = array('name' => 'Lars Olesen', 'address' => 'Grï¿½svangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
         if (empty($key)) return $info;
         else return $info[$key];
     }
@@ -63,21 +63,11 @@ class FakeDebtorSetting {
 class DebtorTest extends PHPUnit_Framework_TestCase
 {
     private $kernel;
+    protected $db;
 
     function setUp() {
 
-        $db = MDB2::singleton(DB_DSN);
-        $db->query('TRUNCATE debtor');
-        $db->query('TRUNCATE debtor_item');
-        $db->query('TRUNCATE currency');
-        $db->query('TRUNCATE currency_exchangerate');
-
-        $db->query('TRUNCATE product');
-        $db->query('TRUNCATE product_detail');
-        $db->query('TRUNCATE product_detail_translation');
-
-        $db->query('TRUNCATE invoice_payment');
-
+        $this->db = MDB2::singleton(DB_DSN);
 
         $kernel = new Intraface_Kernel;
         $kernel->user = new FakeDebtorUser;
@@ -85,6 +75,20 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $kernel->setting = new FakeDebtorSetting;
         $kernel->useModule('debtor');
         $this->kernel = $kernel;
+    }
+
+    function tearDown()
+    {
+        $this->db->query('TRUNCATE debtor');
+        $this->db->query('TRUNCATE debtor_item');
+        $this->db->query('TRUNCATE currency');
+        $this->db->query('TRUNCATE currency_exchangerate');
+
+        $this->db->query('TRUNCATE product');
+        $this->db->query('TRUNCATE product_detail');
+        $this->db->query('TRUNCATE product_detail_translation');
+
+        $this->db->query('TRUNCATE invoice_payment');
     }
 
     function createDebtor()
