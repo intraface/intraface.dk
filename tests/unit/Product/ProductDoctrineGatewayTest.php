@@ -5,11 +5,16 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
 {
+    protected $connection;
 
     function setUp()
     {
         $this->connection = Doctrine_Manager::connection();
-        // $query = $this->connection->getQuery();
+        $this->connection->clear(); // clear repo, so that we are sure data are loaded again.
+    }
+
+    function tearDown()
+    {
         $this->connection->exec('TRUNCATE product');
         $this->connection->exec('TRUNCATE product_attribute');
         $this->connection->exec('TRUNCATE product_attribute_group');
@@ -45,8 +50,8 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
         $product->refresh(true);
         return $product;
     }
-    
-    public function createAttribute($group_name, $attributes) 
+
+    public function createAttribute($group_name, $attributes)
     {
         $group = new Intraface_modules_product_Attribute_Group;
         $group->name = $group_name;
@@ -54,37 +59,37 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
             $group->attribute[0]->name = $attribute;
         }
         $group->save();
-        
+
         return $group;
-        
+
     }
 
     function createGateway()
     {
         return new Intraface_modules_product_ProductDoctrineGateway($this->connection, NULL);
     }
-    
+
     public function testFindByAttribute()
     {
         $attribute1 = $this->createAttribute('color', array('blue', 'red'));
         $attribute2 = $this->createAttribute('size', array('small', 'medium'));
-        
+
         $product1 = $this->createProduct('product1');
         $product1->setAttributeGroup($attribute1);
         $product1->setAttributeGroup($attribute2);
-        
+
         $variation1 = $product1->getVariation();
         $variation1->setAttributesFromArray(array('attribute1' => 1, 'attribute2' => 3)); // blue and small
         $variation1->save();
-                
+
         $detail = $variation1->getDetail();
         $detail->save();
-        
+
         $gateway = $this->createGateway();
         $products = $gateway->findByVariationAttributeId(3); // blue;
-        
+
         $this->assertEquals(1, $products->count());
-     
+
     }
 
     /*
@@ -105,7 +110,7 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
     function testGetVariations()
     {
         $product = $this->createNewProductWithVariations();
-        
+
 
         $variation = $product->getVariation();
         $variation->product_id = 1;
