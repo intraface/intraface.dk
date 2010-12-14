@@ -1,7 +1,10 @@
 .settings/*
 .buildpath
 .project
+project.properties
 src/intraface.dk/config.local.php
 src/package.xml
-project.properties
 tests/selenium/testSuite.html
+tests/unit/config.test.php
+tests/unit/TestListener.php
+tests/unit/phpunit.xml
