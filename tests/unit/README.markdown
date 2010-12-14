@@ -1,13 +1,13 @@
 Unit tests
-==
+==========
 
 Report bugs
---
+-----------
 
 Please help out running the test suite. Report bugs at: http://github.com/intraface/intraface.dk
 
 Run tests
---
+---------
 
 Create a config.test.php file. Check out the phpunit.xml.example and see if you want to setup your own local example.
 
@@ -16,7 +16,7 @@ Install phpunit from http://phpunit.de
     phpunit --process-isolation .
     
 Troubleshooting
---
+---------------
 
 If you get the error:
 
