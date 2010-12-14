@@ -1,12 +1,12 @@
 Running the selenium tests
-==
+==========================
 
 Install the selenium add-on for Firefox. Generate the test suite:
 
     php generate_test_suite.php
 
 Install Selemium Server
---
+-----------------------
 
 You only need this, if you are not running the test suite from Firefox.
 
