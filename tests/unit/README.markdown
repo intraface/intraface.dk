@@ -13,7 +13,7 @@ Create a config.test.php file. Check out the phpunit.xml.example and see if you 
 
 Install phpunit from http://phpunit.de
 
-    phpunit .
+    phpunit --process-isolation .
     
 Troubleshooting
 --
