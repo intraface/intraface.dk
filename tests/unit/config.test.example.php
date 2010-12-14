@@ -1,6 +1,4 @@
 <?php
-ini_set("memory_limit","512M");
-
 define('DB_HOST', 'localhost');
 define('DB_PASS', '');
 define('DB_USER', 'root');
@@ -45,5 +43,5 @@ if ($db->getOption('debug')) {
 
 Doctrine_Manager::getInstance()->setAttribute(Doctrine_Core::ATTR_USE_DQL_CALLBACKS, true);
 Doctrine_Manager::getInstance()->setAttribute(Doctrine::ATTR_VALIDATE, Doctrine::VALIDATE_TYPES | Doctrine::VALIDATE_CONSTRAINTS);
-Doctrine_Manager::connection(DB_DSN);
-Doctrine_Manager::setCharset('utf8');
+$conn = Doctrine_Manager::connection(DB_DSN);
+$conn->setCharset('utf8');
