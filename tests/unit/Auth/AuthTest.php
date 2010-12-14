@@ -32,14 +32,14 @@ class AuthTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->db = MDB2::singleton(DB_DSN);
-        $this->db->exec('TRUNCATE user');
 
         $this->auth = new Intraface_Auth(self::SESSION_LOGIN);
     }
 
     function tearDown()
     {
-		unset($this->auth);
+        $this->db->exec('TRUNCATE user');
+        unset($this->auth);
     }
 
 	function testConstructionOfAuth()
@@ -56,16 +56,13 @@ class AuthTest extends PHPUnit_Framework_TestCase
 	{
 		$db = MDB2::singleton();
 	    $db->query('INSERT INTO user SET email="start@intraface.dk", session_id="'.self::SESSION_LOGIN.'"');
-	    // @todo lidt dum da der skal være en Intraface_User tilgængelig.
+	    // @todo lidt dum da der skal vï¿½re en Intraface_User tilgï¿½ngelig.
 	    $this->auth->authenticate(new FakeAuthAdapter);
 		$identity = $this->auth->getIdentity($this->db);
 	    $this->assertTrue(is_object($identity));
-	    //$db->query('TRUNCATE user');
 	}
 
-
-	/*
-    function createUserInDatabase()
+	function createUserInDatabase()
     {
         // first we add a user.
         require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';
@@ -84,12 +81,6 @@ class AuthTest extends PHPUnit_Framework_TestCase
     }
 
     ////////////////////////////////////////////////
-
-    function testConstructionOfAuth()
-    {
-        $auth = new Intraface_Auth(self::SESSION_LOGIN);
-        $this->assertTrue(is_object($auth));
-    }
 
     function testLoginFailsOnIncorrectCredentials()
     {
@@ -119,14 +110,12 @@ class AuthTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($auth->isLoggedIn());
     }
 
-
     function testChangeOfSessionIsNotLoggedIn()
     {
         $auth = $this->createLoggedInAuth();
         $auth = new Intraface_Auth('anotherdifferntsession');
         $this->assertFalse($auth->isLoggedIn());
     }
-
 
     function testAttach()
     {
@@ -136,5 +125,4 @@ class AuthTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count($observers) == 1);
         // this assert is a
     }
-    */
 }
