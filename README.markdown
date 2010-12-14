@@ -1,7 +1,7 @@
-Intraface.dk
+[Intraface.dk](http://intraface.dk)
 ============
 
-Source code for intraface.dk. A system for small businesses made with the konstrukt framework.
+Source code for [intraface.dk](http://intraface.dk). A system for small businesses made with the [konstrukt.dk](http://konstrukt) framework.
 
 Requirements
 ------------
