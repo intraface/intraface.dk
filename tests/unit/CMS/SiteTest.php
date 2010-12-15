@@ -5,14 +5,17 @@ require_once 'Intraface/modules/cms/Site.php';
 
 class SiteTest extends PHPUnit_Framework_TestCase
 {
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE cms_site');
-
+        $this->db = MDB2::singleton(DB_DSN);
         $this->kernel = $this->createKernel();
+    }
 
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE cms_site');
     }
 
     function createKernel()

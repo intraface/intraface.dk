@@ -20,16 +20,19 @@ class FakeCMSPageSite
 
 class PageTest extends PHPUnit_Framework_TestCase
 {
-
+    protected $db;
     private $page;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->query('TRUNCATE cms_template');
-        $db->query('TRUNCATE cms_page');
+        $this->db = MDB2::singleton(DB_DSN);
         $this->page = new CMS_Page($this->createSite());
+    }
 
+    function tearDown()
+    {
+        $this->db->query('TRUNCATE cms_template');
+        $this->db->query('TRUNCATE cms_page');
     }
 
     function createKernel()

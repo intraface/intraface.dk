@@ -29,12 +29,17 @@ class FakeObjectToPutIntoParameter
 
 class ParameterTest extends PHPUnit_Framework_TestCase
 {
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE cms_parameter');
+        $this->db = MDB2::singleton(DB_DSN);
         $this->parameter = $this->createParameter();
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE cms_parameter');
     }
 
     function createParameter()

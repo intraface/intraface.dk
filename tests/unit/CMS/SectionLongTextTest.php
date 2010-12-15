@@ -17,18 +17,23 @@ class SectionLongTextTest extends PHPUnit_Framework_TestCase {
 
     private $kernel;
     private $page;
+    protected $db;
 
     function setUp()
     {
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE cms_section');
-        $db->exec('TRUNCATE cms_template');
-        $db->exec('TRUNCATE cms_template_section');
+        $this->db = MDB2::singleton(DB_DSN);
 
         $this->kernel = new Stub_Kernel;
         $this->kernel->setting->set('user', 'htmleditor', 'someeditor');
         $this->site = new FakeCMSSite($this->kernel);
         $this->page = new FakeCMSPage($this->site);
+    }
+
+    function tearDown()
+    {
+        $this->db->exec('TRUNCATE cms_section');
+        $this->db->exec('TRUNCATE cms_template');
+        $this->db->exec('TRUNCATE cms_template_section');
     }
 
     function testConstruction()
