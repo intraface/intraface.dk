@@ -1,18 +1,11 @@
 <?php
 /**
- * Instance handler. Klarer h�ndtering af billeder forskellige instancer af billeder.
- *
- * @todo		Der mangler noget der hurtigt kan returnere billedst�rrelsen.
- *				Det skal fx bruges i cms, hvor man vil knytte width og height til
- *				billedet, men hvor man ogs� gerne vil have mulighed for at bestemme
- *				hvor bred billedteksten skal v�re!
+ * Handles different instances of the pictures
  *
  * @package Intraface
  * @author		Sune
  * @version	1.0
- *
  */
-
 class InstanceHandler extends Intraface_Standard
 {
     /**
@@ -108,8 +101,7 @@ class InstanceHandler extends Intraface_Standard
                 // first we filter only crop parameters.
                 $crop_param = array_intersect_key($param, array('crop_width' =>'', 'crop_height' => '', 'crop_offset_x' => '', 'crop_offset_y' => ''));
                 $crop_param_string = serialize($crop_param);
-            }
-            else {
+            } else {
                 $crop_param_string = serialize(array());
             }
             $file = $file_handler->image->resize($type['max_width'], $type['max_height'], $type['resize_type']);
@@ -192,7 +184,6 @@ class InstanceHandler extends Intraface_Standard
         $this->value['date_created'] = $db->f('date_created');
         $this->value['date_changed'] = $db->f('date_changed');
 
-
         //$this->value['predefined_size'] = $db->f('predefined_size');
         $this->value['server_file_name'] = $db->f('server_file_name');
         $this->value['file_size'] = $db->f('file_size');
@@ -200,10 +191,9 @@ class InstanceHandler extends Intraface_Standard
 
         $this->value['last_modified'] = filemtime($this->get('file_path'));
         // $this->value['file_uri'] = FILE_VIEWER.'?id='.$this->get('id').'&type='.$this->get('type').'&name=/'.urlencode($this->file_handler->get('file_name'));
-        $this->value['file_uri'] = FILE_VIEWER.'?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$this->get('type').'/'.urlencode($this->file_handler->get('file_name'));
+        $this->value['file_uri_parameters'] = '?/'.$this->file_handler->kernel->intranet->get('public_key').'/'.$this->file_handler->get('access_key').'/'.$this->get('type').'/'.urlencode($this->file_handler->get('file_name'));
+        $this->value['file_uri'] = FILE_VIEWER.$this->value['file_uri_parameters'];
 
-        // dette er vel kun i en overgangsperiode? LO
-        // Det kan lige s� godt v�re der altid. Det g�r jo ingen skade /Sune (20/11 2007)
         if ($db->f('width') == 0) {
             $imagesize = getimagesize($this->get('file_path'));
             $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
