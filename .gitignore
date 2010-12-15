@@ -8,3 +8,7 @@ tests/selenium/testSuite.html
 tests/unit/config.test.php
 tests/unit/TestListener.php
 tests/unit/phpunit.xml
+*.tgz
+src/intraface.dk/demo/config.local.php
+tests/selenium/.tmp/
+tests/unit/htmlpurifier/
