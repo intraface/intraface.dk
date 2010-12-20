@@ -36,7 +36,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
             } else {
                 $content = 'Konto findes ikke';
             }
-            return new k_HttpResponse(200, $content);
+            return new k_TextResponse($content);
         }
 
         // set settings for viewing

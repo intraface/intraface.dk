@@ -61,9 +61,11 @@ class Intraface_Controller_ModulePackage_Process extends k_Component
 
                     $access_update = new Intraface_modules_modulepackage_AccessUpdate();
                     $access_update->run($this->getKernel()->intranet->get('id'));
-                    return new k_HttpResponse(200, 'SUCCESS!');
+                    return new k_TextResponse('SUCCESS!');
                 } else {
-                    return new k_HttpResponse(400, 'Failure:'.$action->error->view());
+                    $response = new k_TextResponse('Failure:'.$action->error->view());
+                    $response->setStatus(400);
+                    return $response;
                 }
             } else {
 
@@ -72,9 +74,13 @@ class Intraface_Controller_ModulePackage_Process extends k_Component
             }
         } else {
             // @todo should throw a 401
-            return new k_HttpResponse(200, 'Payment attempt registered. Not authorized');
+            $response = new k_TextResponse('Payment attempt registered. Not authorized');
+            $response->setStatus(401);
+            return $response;
         }
-        return new k_HttpResponse(400, 'Unknown failure');
+        $response = new k_TextResponse('Unknown failure');
+        $response->setStatus(400);
+        return $response;
     }
 
     function getKernel()

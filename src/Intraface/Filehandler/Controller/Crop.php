@@ -59,9 +59,9 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
 
         $this->document->setTitle('Crop image: ' . $filemanager->get('file_name'));
         $this->document->addScript('filehandler/cropper/lib/prototype.js');
-        // @todo HACK only way I can get the link to be correct with a comma
         $this->document->addScript('filehandler/cropper/lib/scriptaculous.js');
         $this->document->addScript('filehandler/cropper/cropper.js');
+        // @todo HACK only way I can get the link to be correct with a comma
         $this->document->addScript('filehandler/crop_image.js.php'.
             '?size_ratio=' . $size_ratio .
             '&max_width=' . round($editor_min_width) .

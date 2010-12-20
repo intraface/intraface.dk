@@ -31,7 +31,9 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
             } else {
                 $query = 'query_parts[1] is empty';
             }
-            return new k_HttpResponse(403, 'Could not login using the key ' . $query);
+            $response = new k_TextResponse('Could not login using the key ' . $query);
+            $response->setStatus(403);
+            return $response;
         }
 
         $kernel = new Intraface_Kernel;
@@ -55,13 +57,17 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
             // session_start();
             $auth = new Intraface_Auth($this->session()->sessionId());
             if (!$auth->hasIdentity()) {
-                return new k_HttpResponse(403, 'You are not correctly logged in');
+                $response = new k_TextResponse('You are not correctly logged in');
+                $response->setStatus(403);
+                return $response;
             }
 
             $user = $auth->getIdentity($this->mdb2);
             $intranet = new Intraface_Intranet($user->getActiveIntranetId());
             if ($intranet->getId() != $kernel->intranet->getId()) {
-                return new k_HttpResponse(403, 'You are not logged in to the correct intranet');
+                $response = new k_TextResponse('You are not logged in to the correct intranet');
+                $response->setStatus(403);
+                return $response;
             }
         }
 

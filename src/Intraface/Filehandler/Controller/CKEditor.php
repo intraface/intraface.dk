@@ -155,7 +155,7 @@ class Intraface_Filehandler_Controller_CKEditor extends Intraface_Filehandler_Co
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/ckeditor');
-        return new k_HttpResponse(200, $tpl->render($this, $data));
+        return new k_HtmlResponse($tpl->render($this, $data));
     }
 
     function postForm()

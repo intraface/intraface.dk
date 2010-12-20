@@ -54,7 +54,7 @@ class Intraface_Controller_Index extends k_Component
     {
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/outside');
         $content = $tpl->render($this, array('content' => $content));
-        return new k_HttpResponse(200, $content, true);
+        return new k_HtmlResponse($content);
     }
 
     function execute()

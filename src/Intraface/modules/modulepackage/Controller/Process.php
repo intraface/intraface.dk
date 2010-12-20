@@ -43,7 +43,9 @@ class Intraface_modules_modulepackage_Controller_Process extends k_Component
         }
 
         // TODO: we need to find a better solution for this
-        return new k_HttpResponse(400, 'Failure: ' . $action->error->view());
+        $response = new k_TextResponse('Failure: ' . $action->error->view());
+        $response->setStatus(400);
+        return $response;
     }
 
     function getKernel()
