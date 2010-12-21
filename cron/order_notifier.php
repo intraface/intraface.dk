@@ -1,13 +1,6 @@
 <?php
 /**
- * cronjob som skal sende e-mails for nyhedsbrevsudsenderen.
- *
- * VIGTIGT:
- * Dreamhost har et maksimalt antal afsendte e-mails p� en time p� 150.
- * Derfor m� der ikke sendes flere end det.
- *
- * Det styres ved at cronjobbet kun s�ttes i gang en gang i timen - og
- * at der kun sendes 125 e-mails ad gangen.
+ * Observers whether new orders has been placed
  *
  * @author Lars Olesen <lars@legestue.net>
  */
