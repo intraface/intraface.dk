@@ -3,6 +3,7 @@
 .project
 project.properties
 *.tgz
+htmlpurifier/*
 src/intraface.dk/demo/config.local.php
 src/intraface.dk/config.local.php
 src/package.xml
