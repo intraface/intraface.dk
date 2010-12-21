@@ -33,7 +33,7 @@ class KeywordAppendTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue($this->keyword->addKeyword($this->createKeyword()));
         $keywords = $this->keyword->getConnectedKeywords();
-        $this->assertEquals(1, $keywords[0]['id']);
+        $this->assertEquals(1, count($keywords));
         $this->assertEquals('test', $keywords[0]['keyword']);
     }
 
