@@ -244,7 +244,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
 
 
-        // Return fra tilf�j produkt og send email
+        // Returns from add product and send mail
         if ($this->query('return_redirect_id')) {
 
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
@@ -261,7 +261,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             } elseif ($return_redirect->get('identifier') == 'send_email') {
                 if ($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
                     $this->email_send_with_success = true;
-                    // hvis faktura er genfremsendt skal den ikke s�tte status igen
+                    // if invoice has been resent the status should not be set again
                     if ($this->getDebtor()->get('status') != 'sent' && $this->getDebtor()->get('status') != 'executed') {
                         $this->getDebtor()->setStatus('sent');
                     }
@@ -300,7 +300,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
     function postForm()
     {
-        // slet debtoren
+        // delete the debtor
         if ($this->body('delete')) {
             $type = $this->getDebtor()->get("type");
             $this->getDebtor()->delete();
@@ -311,12 +311,12 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($this->url('send', array('send' => 'email')));
         }
 
-        // annuller ordre tilbud eller order
+        // cancel debtor
         elseif ($this->body('cancel') AND ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order") && ($this->getDebtor()->get('status') == "created" || $this->getDebtor()->get('status') == "sent")) {
             $this->getDebtor()->setStatus('cancelled');
         }
 
-        // s�t status til sendt
+        // sets status to sent
         elseif ($this->body('sent')) {
             $this->getDebtor()->setStatus('sent');
 
@@ -326,7 +326,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($this->url());
         }
 
-        // Overf�re tilbud til ordre
+        // transfer quotation to order
         elseif ($this->body('order')) {
             if ($this->getKernel()->user->hasModuleAccess('order') && $this->getDebtor()->get("type") == "quotation") {
                 $this->getKernel()->useModule("order");
@@ -337,7 +337,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
-        // Overføre ordre til faktura
+        // transfer forder to invoice
         elseif ($this->body('invoice')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
                 $this->getKernel()->useModule("invoice");
@@ -424,7 +424,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             }
         }
 
-        // Overf�r til kreditnota
+        // create credit note
         elseif ($this->body('credit_note')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && $this->getDebtor()->get("type") == "invoice") {
                 $credit_note = new CreditNote($this->getKernel());
