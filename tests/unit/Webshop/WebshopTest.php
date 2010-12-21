@@ -33,20 +33,15 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     function testPlaceOrderReturnsAnOrderNumber()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new Stub_PhpMailer;
-        $order_id = $this->webshop->placeOrder($data, $mailer);
+        $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
-
     }
 
     function testPlaceOrderResetsBasketSoThereIsNoProductsInBasket()
     {
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'type' => 'private', 'description' => 'test', 'internal_note' => '', 'message' => '');
-        $mailer = new Stub_PhpMailer;
-        $order_id = $this->webshop->placeOrder($data, $mailer);
+        $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
 
         $basket = $this->webshop->getBasket();
         $this->assertTrue(count($basket->getItems()) == 0);
@@ -56,10 +51,8 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new Stub_PhpMailer;
-        $order_id = $this->webshop->placeOrder($data, $mailer);
+        $order_id = $this->webshop->placeOrder($data);
         $this->assertTrue($order_id > 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
 
         $order = new Order($this->kernel, $order_id);
         $this->assertEquals($ean, $order->getContact()->getAddress()->get('ean'));
@@ -70,23 +63,18 @@ class WebshopTest extends PHPUnit_Framework_TestCase
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new Stub_PhpMailer;
-        $order_id = $this->webshop->placeManualOrder($data, array(), $mailer);
+        $order_id = $this->webshop->placeManualOrder($data, array());
         $this->assertTrue($order_id > 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
-
     }
 
     function testAddOnlinePaymentReturnsZeroWhenNoAccessToOnlinepayment()
     {
         $ean = '2222222222222';
         $data = array('name' => 'Customer', 'email' => 'lars@legestue.net', 'description' => 'test', 'internal_note' => '', 'message' => '', 'customer_ean' => $ean);
-        $mailer = new Stub_PhpMailer;
-        $order_id = $this->webshop->placeOrder($data, $mailer);
+        $order_id = $this->webshop->placeOrder($data);
         $transaction_number = 1000;
         $transaction_status = 'captured';
         $amount = 1000;
         $this->assertTrue($this->webshop->addOnlinePayment($order_id, $transaction_number, $transaction_status, $amount) == 0);
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
     }
 }

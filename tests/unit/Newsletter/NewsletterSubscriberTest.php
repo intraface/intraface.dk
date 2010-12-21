@@ -42,9 +42,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
-        $mailer = new Stub_PhpMailer;
-        $this->assertTrue($subscriber->subscribe($data, $mailer));
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
+        $this->assertTrue($subscriber->subscribe($data));
     }
 
     function testUnSubscribe()
@@ -57,9 +55,7 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
     {
         $subscriber = $this->createSubscriber();
         $data = array('email' => 'test@legestue.net', 'ip' => 'ip');
-        $mailer = new Stub_PhpMailer;
-        $this->assertTrue($subscriber->subscribe($data, $mailer));
-        $this->assertTrue($mailer->isSend(), 'Mail is not send');
+        $this->assertTrue($subscriber->subscribe($data));
         $code = 'wrongcode';
         $ip = 'ip';
 
