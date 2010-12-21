@@ -84,8 +84,8 @@ class ContactXMLRPCTest extends PHPUnit_Framework_TestCase
         $contact = new Contact(new Stub_Kernel);
         $data = array('name' => 'Tester æøå');
         $res = $contact->save($data);
-
         $this->assertEquals(1, $res);
+        $this->assertEquals('Tester æøå', $contact->get('name'));
 
         $retrieved = $client->getContact($credentials, $contact->getId());
 

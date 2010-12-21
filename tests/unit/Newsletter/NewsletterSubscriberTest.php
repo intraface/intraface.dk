@@ -100,16 +100,15 @@ class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase
 
     function testGetListReturnsActiveOptedInSubscribers()
     {
-        $mailer = new Stub_PhpMailer;
         $subscriber = $this->createSubscriber();
-        $subscriber->subscribe(array('name' => 'test1', 'email' => 'test1@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        $subscriber->subscribe(array('name' => 'test1', 'email' => 'test1@intraface.dk', 'ip' => '0.0.0.0'));
 
         $subscriber = $this->createSubscriber();
-        $subscriber->subscribe(array('name' => 'test2', 'email' => 'test2@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        $subscriber->subscribe(array('name' => 'test2', 'email' => 'test2@intraface.dk', 'ip' => '0.0.0.0'));
         $subscriber->optin($subscriber->get('code'), '0.0.0.0');
 
         $subscriber = $this->createSubscriber();
-        $subscriber->subscribe(array('name' => 'test3', 'email' => 'test3@intraface.dk', 'ip' => '0.0.0.0'), $mailer);
+        $subscriber->subscribe(array('name' => 'test3', 'email' => 'test3@intraface.dk', 'ip' => '0.0.0.0'));
         $subscriber->optin($subscriber->get('code'), '0.0.0.0');
         $subscriber->delete();
 
