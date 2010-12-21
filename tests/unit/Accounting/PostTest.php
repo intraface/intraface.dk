@@ -89,7 +89,7 @@ class PostTest extends PHPUnit_Framework_TestCase
         $skip_draft = true;
         $res = $post->save($date, $account_id, $text, $debet, $credit, $skip_draft);
         $this->assertTrue($res);
+        $post->delete();
         $this->assertEquals(0, count($post->getList()));
-
     }
 }
