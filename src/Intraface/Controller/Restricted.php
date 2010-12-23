@@ -248,7 +248,7 @@ class Intraface_Controller_Restricted extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
         $content = $tpl->render($this, array('content' => $content));
-        return new k_HtmlResponse($content);
+        return new k_HttpResponse(200, $content);
     }
 
     function execute()
