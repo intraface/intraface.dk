@@ -9,6 +9,7 @@
         <li><a class="confirm" href="<?php e(url(null, array('delete'))); ?>"><?php e(t('Delete')); ?></a></li>
         <?php } ?>
         <li><a href="<?php e(url(null, array('copy'))); ?>"><?php e(t('Copy')); ?></a></li>
+        <li><a href="<?php e(url('plaintext')); ?>"><?php e(t('Plain Text')); ?></a></li>
         <li><a href="<?php e(url('../', array('use_stored' => 'true'))); ?>"><?php e(t('Close')); ?></a></li>
     </ul>
     <div><?php autohtml($product->get('description')); ?></div>

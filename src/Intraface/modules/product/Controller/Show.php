@@ -30,8 +30,10 @@ class Intraface_modules_product_Controller_Show extends k_Component
         } elseif ($name == 'stock') {
             // @todo check whether product is stock product
             return 'Intraface_modules_stock_Controller_Product';
-        } elseif ($name == 'variations' or $name = 'variation') {
+        } elseif ($name == 'variations' or $name == 'variation') {
             return 'Intraface_modules_product_Controller_Show_Variations';
+        } elseif ($name == 'plaintext') {
+            return 'Intraface_modules_product_Controller_Show_PlainText';
         }
     }
 
