@@ -56,17 +56,6 @@
 	   <td><?php e(t('Description')); ?></td>
 	   <td><?php autohtml($product->get('description')); ?></td>
     </tr>
-    <?php 
-    // HACK! Remove it wenever carmakoma has moved their product description /SJ (2010-12-27)
-    $carmakoma = new Intraface_modules_product_Controller_Show_CarmakomaProductText();
-    $carmakoma_text = $carmakoma->get('en', $product->getId(), "");
-    ?>
-    <?php if ($carmakoma_text != ''): ?>
-        <tr>
-            <td><?php e(t('Description (EN)')); ?></td>
-            <td><?php autohtml($carmakoma_text); ?></td>
-        </tr>
-    <?php endif; ?>
 </table>
 
 <?php if ($product->hasVariation()): ?>
