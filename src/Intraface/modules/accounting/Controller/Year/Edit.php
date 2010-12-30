@@ -33,10 +33,10 @@ class Intraface_modules_accounting_Controller_Year_Edit extends k_Component
 
     function getYear()
     {
-        if (!is_numeric($this->name())) {
-        	return new Year($this->getKernel());
+        if (is_numeric($this->context->name())) {
+        	return new Year($this->getKernel(), $this->context->name());
         } else {
-        	return new Year($this->getKernel(), $this->name());
+        	return new Year($this->getKernel(), 0, false);
         }
     }
 
