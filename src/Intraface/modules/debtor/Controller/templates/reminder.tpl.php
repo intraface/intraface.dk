@@ -226,7 +226,7 @@ $reminder = $context->getReminder();
                 </div>
 
                 <div style="clear: both;">
-                    <input class="confirm" type="submit" name="payment" value="Registr�r" title="Dette vil registrere betalingen" />
+                    <input class="confirm" type="submit" name="payment" value="Registrér" title="Dette vil registrere betalingen" />
                     <a href="<?php e(url('payment')); ?>"><?php e(t('Give me more choices')); ?></a>.
                 </div>
             </form>
