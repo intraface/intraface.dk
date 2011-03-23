@@ -769,7 +769,7 @@ class Year extends Intraface_Standard
             $i++;
         }
 
-        // HACK midlertidigt hack round() indtil alle bel�b er integers i stedet for floats
+        // HACK midlertidigt hack round() indtil alle beløb er integers i stedet for floats
         if (round($this->value['year_saldo']) == 0) {
             return true;
         } else {
@@ -778,13 +778,13 @@ class Year extends Intraface_Standard
     }
 
     /**************************************************************************
-     * VALIDATE FUNCTIONS - IKKE EGENTLIG �RSRELATEREDE
+     * VALIDATE FUNCTIONS - IKKE EGENTLIG ÅRSRELATEREDE
      **************************************************************************/
 
     /**
-     * Bruges i momsafregning og �rsafslutning
+     * Bruges i momsafregning og Årsafslutning
      *
-     * M�rkeligt nok ser den ud til ike at returnere rigtigt!
+     * Mærkeligt nok ser den ud til ike at returnere rigtigt!
      *
      * @return boolean
      */
