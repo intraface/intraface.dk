@@ -806,7 +806,8 @@ class Year extends Intraface_Standard
                 AND intranet_id = " .$this->kernel->intranet->get('id') . "
                 AND (this_date BETWEEN '" . $date_start . "'
                 AND '" .$date_end . "')
-                AND voucher_id = 0";
+                AND voucher_id = 0
+                AND active = 1";
         $db->query($sql);
         if ($db->numRows() == 0) {
             return true;
