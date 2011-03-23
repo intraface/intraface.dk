@@ -67,20 +67,22 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 
         $worksheet->write($i, 0, 'Dato', $format);
         $worksheet->write($i, 1, 'Bilagsnummer', $format);
-        $worksheet->write($i, 2, 'Kontonummer', $format);
-        $worksheet->write($i, 3, 'Konto', $format);
-        $worksheet->write($i, 4, 'Debet', $format);
-        $worksheet->write($i, 5, 'Kredit', $format);
+        $worksheet->write($i, 2, 'Beskrivelse', $format);
+        $worksheet->write($i, 3, 'Kontonummer', $format);
+        $worksheet->write($i, 4, 'Konto', $format);
+        $worksheet->write($i, 5, 'Debet', $format);
+        $worksheet->write($i, 6, 'Kredit', $format);
 
         $i = 3;
         if (count($posts) > 0) {
             foreach ($posts AS $post) {
                 $worksheet->write($i, 0, $post['date_dk'], $format);
                 $worksheet->write($i, 1, $post['voucher_number'], $format);
-                $worksheet->write($i, 2, $post['account_number'], $format);
-                $worksheet->write($i, 3, $post['account_name'], $format);
-                $worksheet->write($i, 4, round($post['debet'], 2), $format);
-                $worksheet->write($i, 5, round($post['credit'], 2), $format);
+                $worksheet->write($i, 2, $post['text'], $format);
+                $worksheet->write($i, 3, $post['account_number'], $format);
+                $worksheet->write($i, 4, $post['account_name'], $format);
+                $worksheet->write($i, 5, round($post['debet'], 2), $format);
+                $worksheet->write($i, 6, round($post['credit'], 2), $format);
                 $i++;
             }
         }
