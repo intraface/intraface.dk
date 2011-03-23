@@ -26,7 +26,7 @@ $values = $context->getValues();
             <label for="to_date">Til dato</label>
             <input type="text" name="to_date" id="to_date" value="<?php if (!empty($values['to_date_dk'])) e($values['to_date_dk']); ?>" />
         </div>
-        <br /> <!-- M�rkelig nok skal denne v�re der for det ser ordentlig ud!!! /Sune -->
+        <br /> <!-- Needs to be present for the layout to display properly -->
         <div class="formrow">
             <label for="last_year_id">Sidste års regnskab</label>
             <select name="last_year_id" id="last_year_id">

@@ -2,10 +2,14 @@
 /**
  * Vi skal have den til at markere e-mailen som sendt, n�r den er sendt.
  */
-class Reminder_Text {
+class Reminder_Text
+{
     private $output;
+
     function __construct() {}
-    function visit(Reminder $reminder) {
+
+    function visit(Reminder $reminder)
+    {
         $this->output .= "Dato: " . $reminder->get("dk_this_date") ."\n\n";
         $this->output .= $reminder->contact->address->get("name") . "\n";
         if ($reminder->get("attention_to") != "") {
@@ -71,7 +75,8 @@ class Reminder_Text {
             $this->output .= "\n" . $reminder->kernel->intranet->address->get("postcode") . "  " . $reminder->kernel->intranet->address->get("city");
     }
 
-    public function getText() {
+    public function getText()
+    {
         return $this->output;
     }
 
