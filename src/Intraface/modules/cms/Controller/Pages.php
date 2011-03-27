@@ -77,6 +77,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
 
         $cmsarticles = new CMS_Page($cmssite);
         $cmsarticles->getDBQuery()->setFilter('type', 'article');
+        $cmsarticles->getDBQuery()->setSorting('title');
         $articles = $cmsarticles->getList();
 
         $cmsnews = new CMS_Page($cmssite);
