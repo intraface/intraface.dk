@@ -73,6 +73,21 @@ class Intraface_modules_invoice_PaymentGateway
             }
         }
 
+        if ($this->dbquery->checkFilter("from_date")) {
+            $date = new Intraface_Date($this->dbquery->getFilter("from_date"));
+            if ($date->convert2db()) {
+                $this->dbquery->setCondition("payment_date >= \"".$date->get()."\"");
+            }
+        }
+
+        if ($this->dbquery->checkFilter("not_stated")) {
+            $this->dbquery->setCondition("voucher_id = 0");
+        }
+
+        if ($this->dbquery->checkFilter("text")) {
+            $this->dbquery->setCondition("description LIKE '%".$this->dbquery->checkFilter("text")."%'");
+        }
+
         $this->dbquery->setSorting("payment_date ASC");
         $db = $this->dbquery->getRecordset("id, amount, payment_for, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
         while($db->nextRecord()) {
