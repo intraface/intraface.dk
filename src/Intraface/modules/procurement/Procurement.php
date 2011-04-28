@@ -181,7 +181,7 @@ class Procurement extends Intraface_Standard
         if (!isset($input['vendor'])) {
             $input['vendor'] = '';
         }
-        $validator->isString($input["vendor"], "Fejl i leverand�r", "", "allow_empty");
+        $validator->isString($input["vendor"], "Fejl i leverand�r", "", "allow_empty");
 
         if (!isset($input['description'])) {
             $input['description'] = '';
@@ -193,7 +193,7 @@ class Procurement extends Intraface_Standard
         }
         $region_types = $this->getRegionTypes();
         if (!isset($region_types[$input["from_region_key"]])) {
-            $this->error->set("Ugyldig k�bsregion");
+            $this->error->set("Ugyldig k�bsregion");
         }
 
         if (!isset($input['dk_price_items'])) {
@@ -518,21 +518,21 @@ class Procurement extends Intraface_Standard
         }
 
         if (!$year->readyForState($this->get('paid_date'))) {
-            $this->error->set('Regnskabï¿½ret er ikke klar til bogfï¿½ring.');
+            $this->error->set('Regnskabåret er ikke klar til bogføring.');
             return false;
         }
 
         if ($this->get('id') == 0) {
-            $this->error->set('Indkï¿½bet er ikke gemt');
+            $this->error->set('Indkøbet er ikke gemt');
             return false;
         }
 
         if ($this->get("paid_date") == "0000-00-00") {
-            $this->error->set('Indkï¿½bet skal vï¿½re betalt for at det kan bogfï¿½res.');
+            $this->error->set('Indkøbet skal være betalt før det kan bogføres.');
         }
 
         if ($this->isStated()) {
-            $this->error->set('Indkï¿½bet er allerede bogfï¿½rt');
+            $this->error->set('Indkøbet er allerede bogført');
             return false;
         }
 
@@ -572,7 +572,7 @@ class Procurement extends Intraface_Standard
         $total = 0;
         $vat = 0;
         foreach ($debet_accounts AS $key => $debet_account) {
-            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig belï¿½b i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
+            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
 
                 $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
@@ -581,12 +581,12 @@ class Procurement extends Intraface_Standard
                 $validator->isString($debet_account['text'], 'Ugyldig tekst i linje '.($key+1).' "'.$debet_account['text'].'"', '', 'allow_empty');
 
                 if (empty($debet_account['state_account_id']) ) {
-                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogfï¿½res');
+                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogføres');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $debet_account['state_account_id']);
 
-                    // @todo check this. I changed it to make sure that we are able to state varekï¿½b til videresalg
+                    // @todo check this. I changed it to make sure that we are able to state varekøb til videresalg
                     // || $account->get('type') != 'operating'
                     if ($account->get('id') == 0) {
                         $this->error->set('Ugyldig konto for bogfï¿½ring af linje '.($key+1).' "'.$debet_account['text'].'"');
