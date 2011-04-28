@@ -26,12 +26,6 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function renderHtml()
     {
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
-        return $smarty->render($this);
-    }
-
-    function GET()
-    {
      	$vat_period = new VatPeriod($this->getYear(), $this->name());
        	$vat_period->loadAmounts();
        	$account_vat_in = $vat_period->get('account_vat_in');
@@ -39,8 +33,9 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
        	$account_vat_abroad = $vat_period->get('account_vat_abroad');
        	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
        	$saldo_total = $vat_period->get('saldo_total');
-
-        return parent::GET();
+       	
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
+        return $smarty->render($this);
     }
 
     function postForm()
@@ -66,10 +61,10 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
         	exit;
         }
         */
-        if (!empty($_POST['state']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-        	$vat_period = new VatPeriod($this->getYear(), $_POST['id']);
+        if ($this->body('id') AND is_numeric($this->body('id')) {
+        	$vat_period = new VatPeriod($this->getYear(), $this->body('id'));
 
-        	if (!$vat_period->state($_POST['date'], $_POST['voucher_number'])) {
+        	if (!$vat_period->state($this->body('date'), $this->body('voucher_number'))) {
         		throw new Exception('Could not state');
         	}
 
