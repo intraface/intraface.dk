@@ -36,6 +36,14 @@
 	<?php if (!$context->getYear()->isStated('credit_note', $context->getVatPeriod()->get('date_start'), $context->getVatPeriod()->get('date_end'))): ?>
 		<p class="warning">Alle kreditnotaer i perioden er ikke bogført. <a href="<?php e(url('/restricted/module/debtor/credit_note/list/', array('type' => 'credit_note', 'status' => -1, 'not_stated' => 'true', 'from_date' => $context->getVatPeriod()->get('date_start_dk'), 'to_date' => $context->getVatPeriod()->get('date_end_dk')))); ?>">Gå til kreditnotaer</a>.</p>
 	<?php endif; ?>
+	
+    <?php if (!$context->getYear()->isProcurementsStated($context->getVatPeriod()->get('date_start'), $context->getVatPeriod()->get('date_end'))): ?>	
+        <p class="warning">Alle indkøb i perioden er ikke bogført. <a href="<?php e(url('/restricted/module/procurement/', array('status' => -1, 'not_stated' => 'true', 'from_date' => $context->getVatPeriod()->get('date_start_dk'), 'to_date' => $context->getVatPeriod()->get('date_end_dk')))); ?>">Gå til indkøb</a>.</p>        
+    <?php endif; ?>
+
+    <?php if (!$context->getYear()->isPaymentsStated($context->getVatPeriod()->get('date_start'), $context->getVatPeriod()->get('date_end'))): ?>	
+        <p class="warning">Alle betalinger i perioden er ikke bogført. <a href="<?php e(url('/restricted/module/payment/', array('status' => -1, 'not_stated' => 'true', 'from_date' => $context->getVatPeriod()->get('date_start_dk'), 'to_date' => $context->getVatPeriod()->get('date_end_dk')))); ?>">Gå til betalinger</a>.</p>        
+    <?php endif; ?>
 
 	<table id="accounting-vat">
 	<caption>Momsopgørelse for perioden <?php e($context->getVatPeriod()->get('date_start_dk')); ?> til <?php e($context->getVatPeriod()->get('date_end_dk')); ?></caption>

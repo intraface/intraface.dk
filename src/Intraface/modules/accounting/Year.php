@@ -778,8 +778,6 @@ class Year extends Intraface_Standard
     /**
      * Bruges i momsafregning og Årsafslutning
      *
-     * Mærkeligt nok ser den ud til ike at returnere rigtigt!
-     *
      * @return boolean
      */
     function isStated($type, $date_start, $date_end)
@@ -798,8 +796,7 @@ class Year extends Intraface_Standard
         $sql = "SELECT id FROM debtor
             WHERE type= " . $type_key . "
                 AND intranet_id = " .$this->kernel->intranet->get('id') . "
-                AND (this_date BETWEEN '" . $date_start . "'
-                AND '" .$date_end . "')
+                AND (this_date BETWEEN '" . $date_start . "' AND '" .$date_end . "')
                 AND voucher_id = 0
                 AND active = 1";
         $db->query($sql);
@@ -807,6 +804,35 @@ class Year extends Intraface_Standard
             return true;
         }
         return false;
+    }
+    
+    function isPaymentsStated($date_start, $date_end)
+    {
+        $db = new DB_Sql;
+        $sql = "SELECT id FROM invoice_payment
+            WHERE intranet_id = " .$this->kernel->intranet->get('id') . "
+                AND (payment_date BETWEEN '" . $date_start . "' AND '" .$date_end . "')
+                AND voucher_id = 0";
+        $db->query($sql);
+        if ($db->numRows() == 0) {
+            return true;
+        }
+        return false;    
+    }
+    
+    function isProcurementsStated($date_start, $date_end)
+    {
+        $db = new DB_Sql;
+        $sql = "SELECT id FROM procurement
+            WHERE intranet_id = " .$this->kernel->intranet->get('id') . "
+                AND (invoice_date BETWEEN '" . $date_start . "' AND '" .$date_end . "')
+                AND voucher_id = 0
+                AND active = 1";
+        $db->query($sql);
+        if ($db->numRows() == 0) {
+            return true;
+        }
+        return false;    
     }
 
     function lock()
