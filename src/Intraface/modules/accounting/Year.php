@@ -19,9 +19,9 @@ class Year extends Intraface_Standard
     /**
      * Constructor
      *
-     * @param $kernel
-     * @param $year_id (integer)
-     * @param $load_acttive (booelean) bruges fx n�r et nyt �r skal oprettes
+     * @param object  $kernel
+     * @param integer $year_id 
+     * @param boolean $load_active used when a new year is created
      *
      * @return void
      */
@@ -107,7 +107,7 @@ class Year extends Intraface_Standard
 
     function isYearSet()
     {
-        // hvis ikke der er sat noget aktivt �r, skal det s�ttes
+        // if no active year isset, it has to be done
         $active_year = $this->loadActiveYear();
         if (!$this->_isValid()) {
             return false;
@@ -117,17 +117,13 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Metode til at resette det aktive �r for den enkelte bruger.
+     * Resets active year
      *
      * @return boolean
      */
     private function reset()
     {
         $this->kernel->getSetting()->set('user', 'accounting.active_year', 0);
-        /*
-        $db = new DB_Sql;
-        $db->query("DELETE FROM accounting_year_active WHERE intranet_id = " . $this->kernel->intranet->get('id') . " AND user_id = " . $this->kernel->user->get('id'));
-        */
         return true;
     }
 
@@ -192,11 +188,13 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Public: Metode til at opdatere �ret
+     * Updates year
      *
-     * @param $var (array) Oplysninger om �ret
+     * @param array $var Information about the year
+     *
+     * @return integer
      */
-    function save($var)
+    public function save($var)
     {
         $var = safeToDb($var);
 
@@ -254,7 +252,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Metode til at tjekke om �ret findes
+     * Checks whether year is valid
      *
      * @return 1 = year set; 0 = year NOT set
      */
@@ -278,7 +276,7 @@ class Year extends Intraface_Standard
     function vatAccountIsSet()
     {
         if ($this->get('vat') == 0) {
-            return true; // vi lader som om de er sat, n�r der ikke er moms p� selve regnskabet
+            return true; // pretend it is set, when no vat on the year
         }
         if ($this->getSetting('vat_in_account_id') > 0 AND $this->getSetting('vat_out_account_id') > 0 AND $this->getSetting('vat_balance_account_id') > 0) {
             return true;
@@ -287,7 +285,7 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Funktion til at tjekke om �ret er l�st?
+     * Checks whether the year is open for stating
      *
      * @return boolean
      */
@@ -304,9 +302,9 @@ class Year extends Intraface_Standard
     }
 
     /**
-     * Public: funktion til at tjekke om datoen er i aktuelle �r?
+     * is the date in the current year
      *
-     * @param (date) 0000-00-00
+     * @param date $date Format: 0000-00-00
      *
      * @return boolean
      */
@@ -527,9 +525,6 @@ class Year extends Intraface_Standard
                     $this->setSetting('buy_abroad_accounts', serialize($buy_abroad));
                     $this->setSetting('buy_eu_accounts', serialize($buy_eu));
 
-                    // oprette indstillinger
-                    // Hvilke indstillinger skal overf�res?
-
                   break;
             case 'transfer_from_last_year':
                     // oprette konti
@@ -547,9 +542,8 @@ class Year extends Intraface_Standard
                         $new_account = new Account($this);
                         $new_account->save($input);
                     }
-                    // overf�re indstillinger
-                    // dette skal genneml�bes stille og roligt, da jeg skal tage de gamle kontiid
-                    // og knytte dem an til den nye konto
+                    // transfer setttings
+                    // old account id will be connected to the new account
                     if ($this->get('vat') > 0) {
                         $this->transferAccountSetting($last_year, 'vat_in_account_id');
                         $this->transferAccountSetting($last_year, 'vat_abroad_account_id');
@@ -618,7 +612,7 @@ class Year extends Intraface_Standard
 
                 break;
             default:
-                    throw new Exception('Der skal v�lges en m�de at lave kontoplanen p�', FATAL);
+                    throw new Exception('A method to create the accounts must be chosen');
                 break;
         }
         return true;
