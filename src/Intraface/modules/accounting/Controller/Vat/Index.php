@@ -1,23 +1,11 @@
 <?php
 /**
- * Momsafregning
+ * Guide to calculate VAT
  *
- * Denne side skal v�re en guide til at afregne moms.
- * Siden tager automatisk alle de poster, der er anf�rt p� momskonti.
- *
- * N�r man klikker p� angiv moms skal tallene gemmes i en database.
- *
- * Hvis man vil redigere tallene, klikker man sig hen til vat_edit.php
- *
- * Siden skal regne ud, om der er forskel p� de tal, der er blevet
- * opgivet og det der rent faktisk skulle v�re opgivet, s� man kan fange
- * evt. fejl n�ste gang man skal opgive moms.
- *
- * Primosaldoer skal naturligvis fremg� af momsopg�relsen.
- *
- * Der skal v�re en liste med momsangivelsesperioder for �ret,
- * og s� skal der ud for hver momssopgivelse v�re et link enten til
- * den tidligere opgivne moms eller til at oprette en momsangivelse.
+ * Register VAT should persist values in database.
+ * 
+ * Should be able to calculate whether there is a difference between what has
+ * been stated and what should have been stated to make it less error prone.
  *
  * @author Lars Olesen <lars@legestue.net>
  *
@@ -33,7 +21,7 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 
     protected function map($name)
     {
-        if ($name) {
+        if (is_numeric($name)) {
             return 'Intraface_modules_accounting_Controller_Vat_Show';
         }
     }
