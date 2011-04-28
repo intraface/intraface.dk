@@ -28,6 +28,11 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 
     function renderHtml()
     {
+        if (is_numeric($this->query('delete'))) {
+            $vat_period = new VatPeriod($year, $this->query('delete'));
+            $vat_period->delete();
+        }
+
         $year = new Year($this->getKernel());
         $year->checkYear();
 
@@ -40,6 +45,17 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
         return $smarty->render($this);
     }
 
+    function postForm()
+    {
+    	if (isset($_POST['vat_period_key'])) {
+    		$this->getYear()->setSetting('vat_period', $_POST['vat_period_key']);
+    	}
+    	$vat_period = new VatPeriod($this->getYear());
+    	$vat_period->createPeriods();
+
+    	return new k_SeeOther($this->url(null));
+    }
+    
     function getPeriods()
     {
         $vat_period = new VatPeriod($this->getYear());
@@ -62,17 +78,6 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
         return new VatPeriod($this->getYear());
     }
 
-    function postForm()
-    {
-    	if (isset($_POST['vat_period_key'])) {
-    		$this->getYear()->setSetting('vat_period', $_POST['vat_period_key']);
-    	}
-    	$vat_period = new VatPeriod($this->getYear());
-    	$vat_period->createPeriods();
-
-    	return new k_SeeOther($this->url(null));
-    }
-
     function getKernel()
     {
         return $this->context->getKernel();
@@ -81,15 +86,5 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
     function getYear()
     {
         return $this->context->getYear();
-    }
-
-    function GET()
-    {
-        if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
-            $vat_period = new VatPeriod($year, $_GET['delete']);
-            $vat_period->delete();
-        }
-
-        return parent::GET();
     }
 }
