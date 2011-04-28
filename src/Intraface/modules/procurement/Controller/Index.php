@@ -33,32 +33,28 @@ class Intraface_modules_procurement_Controller_Index extends k_Component
             $this->getProcurementGateway()->getDBQuery()->setFilter("contact_id", $this->query("contact_id"));
         }
 
-        if ($this->query("search") != '') {
-            if ($this->query("text") != "") {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("text", $this->query("text"));
-            }
+        if ($this->query("text") != "") {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("text", $this->query("text"));
+        }
 
-            if ($this->query("from_date") != "") {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("from_date", $this->query("from_date"));
-            }
+        if ($this->query("from_date") != "") {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("from_date", $this->query("from_date"));
+        }
 
-            if ($this->query("to_date") != "") {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("to_date", $this->query("to_date"));
-            }
+        if ($this->query("to_date") != "") {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("to_date", $this->query("to_date"));
+        }
 
-            if ($this->query("status")) {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("status", $this->query("status"));
-            }
-
-            if ($this->query('not_stated')) {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("not_stated", "1");
-            }
+        if ($this->query("status")) {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("status", $this->query("status"));
         } else {
-            if ($this->getProcurementGateway()->getDBQuery()->checkFilter("contact_id")) {
-              $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-1");
-            } else {
-                $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-2");
-            }
+            $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-2");
+        }
+        if ($this->query('not_stated')) {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("not_stated", "1");
+        }
+        if ($this->getProcurementGateway()->getDBQuery()->checkFilter("contact_id")) {
+            $this->getProcurementGateway()->getDBQuery()->setFilter("status", "-1");
         }
 
         $this->getProcurementGateway()->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
