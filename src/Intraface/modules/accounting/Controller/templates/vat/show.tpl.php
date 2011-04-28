@@ -56,13 +56,13 @@
 	</thead>
 	<tbody>
 		<tr class="vat-sale">
-			<td><a href="<?php e(url('../../../account/' . $account_vat_out->get('id'))); ?>"><?php e($account_vat_out->get('number')); ?></a></td>
+			<td><a href="<?php e(url('../../account/' . $account_vat_out->get('id'))); ?>"><?php e($account_vat_out->get('number')); ?></a></td>
 			<td><?php e($account_vat_out->get('name')); ?></td>
 			<td></td>
 			<td class="amount debet"><?php e(amountToOutput($account_vat_out->get('saldo') * -1)); ?></td>
 		</tr>
 		<tr class="vat-sale">
-			<td><a href="<?php e(url('../../../account/' . $account_vat_abroad->get('id'))); ?>"><?php e($account_vat_abroad->get('number')); ?></a></td>
+			<td><a href="<?php e(url('../../account/' . $account_vat_abroad->get('id'))); ?>"><?php e($account_vat_abroad->get('number')); ?></a></td>
 			<td><?php e($account_vat_abroad->get('name')); ?></td>
 			<td></td>
 			<td class="amount debet"><?php e(amountToOutput($account_vat_abroad->get('saldo') * -1)); ?></td>
@@ -71,7 +71,7 @@
 			<td colspan="6"><h3>Fradrag</h3></td>
 		</tr>
 		<tr class="vat-buy">
-			<td><a href="<?php e(url('../../../account/' . $account_vat_in->get('id'))); ?>"><?php e($account_vat_in->get('number')); ?></a></td>
+			<td><a href="<?php e(url('../../account/' . $account_vat_in->get('id'))); ?>"><?php e($account_vat_in->get('number')); ?></a></td>
 			<td><?php e($account_vat_in->get('name')); ?></td>
 			<td class="amount debet"><?php e(amountToOutput($account_vat_in->get('saldo'))); ?></td>
 			<td></td>
