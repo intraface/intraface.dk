@@ -2,6 +2,7 @@
 class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 {
     protected $template;
+    protected $voucher;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -25,21 +26,11 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
         }
     }
 
-    function appendFile($selected_file_id)
-    {
-        $voucher = new Voucher($this->getYear(), intval($this->name()));
-        $voucher_file = new VoucherFile($voucher);
-        $var['belong_to'] = 'file';
-        $var['belong_to_id'] = intval($selected_file_id);
-        $voucher_file->save($var);
-        return true;
-    }
-
     function renderHtml()
     {
         $this->getKernel()->module('accounting');
-        if (is_numeric($this->query('delete_file'))) {
 
+        if (is_numeric($this->query('delete_file'))) {
             $voucher = new Voucher($this->getYear(), $this->name());
             $voucher_file = new VoucherFile($voucher, $this->query('delete_file'));
             if ($voucher_file->delete()) {
@@ -49,100 +40,9 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
             }
         }
 
-        /*
-$module_accounting = $kernel->module('accounting');
-$kernel->useShared('filehandler');
-$translation = $kernel->getTranslation('accounting');
+        $posts = $this->getVoucher()->getPosts();
 
-
-$not_all_stated  = false;
-
-$year = new Year($kernel);
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-	if (!empty($_GET['return_redirect_id']) AND is_numeric($_GET['return_redirect_id'])) {
-
-		$redirect = Intraface_Redirect::factory($kernel, 'return');
-		$selected_file_id = $redirect->getParameter('file_handler_id');
-
-		if ($selected_file_id != 0) {
-			$voucher = new Voucher($year, intval($_GET['id']));
-			$voucher_file = new VoucherFile($voucher);
-			$var['belong_to'] = 'file';
-			$var['belong_to_id'] = intval($selected_file_id);
-			$voucher_file->save($var);
-		}
-	}
-}
-
-if (!empty($_GET['delete']) AND is_numeric($_GET['delete']) AND !empty($_GET['id']) AND is_numeric($_GET['id'])) {
-	$voucher = new Voucher($year, $_GET['id']);
-	$post = new Post($voucher, $_GET['delete']);
-	if ($post->delete()) {
-		header('Location: voucher.php?id='.$voucher->get('id'));
-		exit;
-	}
-}
-
-if (!empty($_GET['delete_file']) AND is_numeric($_GET['delete_file'])) {
-
-	$voucher = new Voucher($year, $_GET['id']);
-	$voucher_file = new VoucherFile($voucher, $_GET['delete_file']);
-	if ($voucher_file->delete()) {
-		header('Location: voucher.php?id='.$voucher->get('id'));
-		exit;
-	} else {
-		throw new Exception('Kunne ikke slette filen');
-	}
-} elseif (!empty($_POST) AND !empty($_POST['state'])) {
-	$voucher = new Voucher($year, $_POST['id']);
-	$voucher->stateVoucher();
-} elseif (!empty($_POST) AND !empty($_FILES)) {
-	$voucher = new Voucher($year, $_POST['id']);
-	$voucher_file = new VoucherFile($voucher);
-	$var['belong_to'] = 'file';
-
-	if (!empty($_POST['choose_file']) && $kernel->user->hasModuleAccess('filemanager')) {
-		$redirect = Intraface_Redirect::factory($kernel, 'go');
-		$module_filemanager = $kernel->useModule('filemanager');
-		$url = $redirect->setDestination($module_filemanager->getPath().'select_file.php', $module_accounting->getPath().'voucher.php?id='.$voucher->get('id'));
-		// $redirect->setIdentifier('voucher'); // Den er der kun behov for, hvis der er flere redirect med return p� samme side  /Sune 06-12-2006
-		$redirect->askParameter('file_handler_id');
-		header('Location: '.$url);
-		exit;
-	} elseif (!empty($_FILES['new_file'])) {
-		$filehandler = new FileHandler($kernel);
-		$filehandler->createUpload();
-		$filehandler->upload->setSetting('max_file_size', 2000000);
-		if ($id = $filehandler->upload->upload('new_file')) {
-			$var['belong_to_id'] = $id;
-			if (!$voucher_file->save($var)) {
-				$value = $_POST;
-			} else {
-				header('Location: voucher.php?id='.$voucher->get('id'));
-				exit;
-			}
-
-		} else {
-			$filehandler->error->view();
-			$voucher_file->error->set('Kunne ikke uploade filen');
-			$voucher_file->error->view();
-		}
-
-	}
-} else {
-	$voucher = new Voucher($year, $_GET['id']);
-}
-
-$posts = $voucher->getPosts();
-$voucher_file = new VoucherFile($voucher);
-$voucher_files = $voucher_file->getList();
-*/
-        $voucher = new Voucher($this->getYear(), $this->name());
-
-        $posts = $voucher->getPosts();
-        $voucher_file = new VoucherFile($voucher);
+        $voucher_file = new VoucherFile($this->getVoucher());
         $voucher_files = $voucher_file->getList();
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/voucher/show');
@@ -209,6 +109,15 @@ $voucher_files = $voucher_file->getList();
     	return $this->render();
     }
 
+    function appendFile($selected_file_id)
+    {
+        $voucher = new Voucher($this->getYear(), intval($this->name()));
+        $voucher_file = new VoucherFile($voucher);
+        $var['belong_to'] = 'file';
+        $var['belong_to_id'] = intval($selected_file_id);
+        $voucher_file->save($var);
+        return true;
+    }
 
     function getFiles()
     {
@@ -223,7 +132,10 @@ $voucher_files = $voucher_file->getList();
 
     function getVoucher()
     {
-        return $voucher = new Voucher($this->getYear(), $this->name());
+        if (is_object($this->voucher)) {
+            return $this->voucher;
+        }
+        return ($this->voucher = new Voucher($this->getYear(), $this->name()));
     }
 
     function getPosts()
