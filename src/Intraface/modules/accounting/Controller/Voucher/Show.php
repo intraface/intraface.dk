@@ -31,8 +31,7 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
         $this->getKernel()->module('accounting');
 
         if (is_numeric($this->query('delete_file'))) {
-            $voucher = new Voucher($this->getYear(), $this->name());
-            $voucher_file = new VoucherFile($voucher, $this->query('delete_file'));
+            $voucher_file = new VoucherFile($this->getVoucher(), $this->query('delete_file'));
             if ($voucher_file->delete()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'File has been removed')));
             } else {
@@ -58,8 +57,7 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
     function postMultipart()
     {
         $this->getKernel()->useModule('filemanager');
-        $voucher = new Voucher($this->getYear(), $this->name());
-        $voucher_file = new VoucherFile($voucher);
+        $voucher_file = new VoucherFile($this->getVoucher());
         $var['belong_to'] = 'file';
 
         if (!empty($_POST['choose_file']) && $this->getKernel()->user->hasModuleAccess('filemanager')) {
@@ -95,7 +93,7 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 
         	foreach ($posts as $post) {
         		if (is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
-        			$new_post = new Post($voucher);
+        			$new_post = new Post($this->getVoucher());
         			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.$this->t('counter entry'), $post['credit'], $post['debet']);
         		}
         	}
@@ -111,8 +109,7 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
 
     function appendFile($selected_file_id)
     {
-        $voucher = new Voucher($this->getYear(), intval($this->name()));
-        $voucher_file = new VoucherFile($voucher);
+        $voucher_file = new VoucherFile($this->getVoucher());
         $var['belong_to'] = 'file';
         $var['belong_to_id'] = intval($selected_file_id);
         $voucher_file->save($var);

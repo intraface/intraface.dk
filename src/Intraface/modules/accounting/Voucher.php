@@ -148,14 +148,14 @@ class Voucher extends Intraface_Standard
 
         $db = new DB_Sql;
         $sql = $sql_type . " accounting_voucher
-                  SET intranet_id = ".$this->year->kernel->intranet->get('id').",
-                    year_id = ".$this->year->get('id').",
-                    user_id = ".$this->year->kernel->user->get('id').",
-                      date_updated = NOW(),
-                    number = '".$var['voucher_number']."',
-                      date = '".$post_date->get()."',
-                      reference = '".$var['reference']."',
-                      text = '".$var['text']."'" . $sql_end;
+            SET intranet_id = ".$this->year->kernel->intranet->get('id').",
+                year_id = ".$this->year->get('id').",
+                user_id = ".$this->year->kernel->user->get('id').",
+                date_updated = NOW(),
+                number = '".$var['voucher_number']."',
+                date = '".$post_date->get()."',
+                reference = '".$var['reference']."',
+                text = '".$var['text']."'" . $sql_end;
 
         $db->query($sql);
 
