@@ -28,7 +28,7 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/account/popup');
 
-        return new k_HtmlResponse($smarty->render($this));
+        return new k_HttpResponse(200, $smarty->render($this));
     }
 
     function getDocument()
