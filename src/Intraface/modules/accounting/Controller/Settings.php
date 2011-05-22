@@ -17,6 +17,8 @@ class Intraface_modules_accounting_Controller_Settings extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Accounting settings');
+    
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/settings');
         return $smarty->render($this);
     }

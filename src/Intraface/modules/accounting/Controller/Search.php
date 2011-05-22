@@ -12,6 +12,7 @@ class Intraface_modules_accounting_Controller_Search extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Accounting Search');
         $module = $this->context->getKernel()->module('accounting');
 
         $error = new Intraface_Error;

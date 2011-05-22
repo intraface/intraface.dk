@@ -20,6 +20,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Accounting daybook');
         $this->getKernel()->useModule('accounting');
 
         $this->document->addScript('XMLHttp.js');

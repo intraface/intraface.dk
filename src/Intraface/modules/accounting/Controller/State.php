@@ -10,6 +10,8 @@ class Intraface_modules_accounting_Controller_State extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('Accounting state');    
+    
         if (in_array($this->query('message'), array('hide'))) {
             $this->getKernel()->setting->set('user', 'accounting.state.message', 'hide');
         } elseif (in_array($this->query('message2'), array('hide'))) {
