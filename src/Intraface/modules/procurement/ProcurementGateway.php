@@ -99,9 +99,8 @@ class Intraface_modules_procurement_ProcurementGateway
                     if ($date->convert2db()) {
                         $this->dbquery->setCondition($to_date_field." <= \"".$date->get()."\"");
                     }
-                }
-                else {
-                    // tager dem som p� nuv�rende tidspunkt har den angivet status
+                } else {
+                    // takes everyone with a status
                     $this->dbquery->setCondition("status_key = ".intval($this->dbquery->getFilter("status")));
                 }
             }
