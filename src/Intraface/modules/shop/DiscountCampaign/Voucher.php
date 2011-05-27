@@ -16,21 +16,18 @@ class Intraface_modules_shop_DiscountCampaign_Voucher extends Doctrine_Record
         $this->hasColumn('date_expiry', 'timestamp',  NULL, array('type' => 'timestamp', 'notnull' => true));
         $this->hasColumn('used_on_debtor_id', 'integer', 11, array('type' => 'integer', 'length' => 11, 'default' => '0', 'notnull' => true));
         $this->hasColumn('created_from_debtor_id', 'integer', 11, array('type' => 'integer', 'length' => 11, 'default' => '0', 'notnull' => true));
-        $this->hasColumn('created_from_debtor_id', 'integer', 11, array('type' => 'integer', 'length' => 11, 'default' => '0', 'notnull' => true));
-        
-        
+
         // $this->hasColumn('end_date', 'string',  255);
         // $this->hasColumn('validity_period', 'string',  255);
         // $this->hasColumn('show_online', 'integer', 1);
         // $this->hasColumn('show_online', 'integer', 1);
-
     }
 
     public function setUp()
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
-        
+
         $this->hasOne('Intraface_modules_shop_DiscountCampaign as campaign',
             array('local' => 'shop_discount_campaign_id', 'foreign' => 'id'));
     }
@@ -45,4 +42,3 @@ class Intraface_modules_shop_DiscountCampaign_Voucher extends Doctrine_Record
         return $this->name;
     }
 }
-?>

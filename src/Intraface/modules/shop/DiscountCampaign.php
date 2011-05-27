@@ -16,14 +16,13 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
         // $this->hasColumn('validity_period', 'string',  255);
         // $this->hasColumn('show_online', 'integer', 1);
         // $this->hasColumn('show_online', 'integer', 1);
-
     }
 
     public function setUp()
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
-        
+
         $this->hasMany('Intraface_modules_shop_DiscountCampaign_Voucher as voucher',
             array('local' => 'id', 'foreign' => 'shop_discount_campaign_id'));
     }
@@ -37,20 +36,20 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
     {
         return $this->name;
     }
-    
+
     /**
-     * returns Doctrine_Collection of vouchers 
-     * 
+     * returns Doctrine_Collection of vouchers
+     *
      * @return object Doctrine_Collection
      */
     public function getVouchers()
     {
         return $this->vouchers;
     }
-    
+
     /**
-     * returns Doctrine_Collection of vouchers 
-     * 
+     * returns Doctrine_Collection of vouchers
+     *
      * @return object Doctrine_Collection
      */
     public function getVoucher($id = null)
@@ -60,7 +59,4 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
         }
         return $this->vouchers->get(null); // returns empty object
     }
-    
-    
 }
-?>

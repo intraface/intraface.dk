@@ -14,18 +14,10 @@ class DicountVoucherTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
-        /*Doctrine::loadModel('Intraface_modules_shop_DiscountCampaign','/srv/www/svnprojects/intraface/src/Intraface/modules/shop/DiscountCampaign.php' );
-        Doctrine::loadModel('Intraface_modules_shop_DiscountCampaign_Voucher','/srv/www/svnprojects/intraface/src/Intraface/modules/shop/DiscountCampaign/Voucher.php' );
-        var_dump(Doctrine::generateSqlFromModels());
-        die;*/
-        
         $connection = Doctrine_Manager::connection();
         $connection->exec('TRUNCATE shop_dicount_campaign');
-        
-        
-        
     }
-    
+
     function getDicountCampaign($id = 0)
     {
         if ($id != 0) {
@@ -39,39 +31,37 @@ class DicountVoucherTest extends PHPUnit_Framework_TestCase
 
     function testConstruction()
     {
-        
         $campaign = $this->getDicountCampaign();
         $this->assertEquals('Intraface_modules_shop_DiscountCampaign', get_class($campaign));
     }
-    
+
     function testSaveCampaign()
     {
         $campaign = $this->getDicountCampaign();
         $campaign->name = 'Test';
+        $campaign->voucher_code_prefix = 'test';
         $campaign->save();
-        
+
         $campaign->refresh();
         $this->assertEquals('Test', $campaign->getName());
         $this->assertEquals(1, $campaign->getId());
     }
-    
+
     function testFindCampaignFromId()
     {
         $campaign = $this->getDicountCampaign();
         $campaign->name = 'Test';
+        $campaign->voucher_code_prefix = 'test';
         $campaign->save();
-        
+
         $campaign = $this->getDicountCampaign($campaign->getId());
-        
+
         $this->assertEquals('Test', $campaign->getName());
         $this->assertEquals(1, $campaign->getId());
     }
-    
+
     function testSaveCoupon()
     {
-        
-    }
-    
 
-    
+    }
 }
