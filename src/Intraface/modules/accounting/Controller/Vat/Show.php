@@ -33,35 +33,14 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
        	$account_vat_abroad = $vat_period->get('account_vat_abroad');
        	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
        	$saldo_total = $vat_period->get('saldo_total');
-       	
+
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
         return $smarty->render($this);
     }
 
     function postForm()
     {
-        /*
-        if (!empty($_POST['get_amounts']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
-        	$vat_period = new VatPeriod($year, $_POST['id']);
-        	$vat_period->loadAmounts();
-        	$account_vat_in = $vat_period->get('account_vat_in');
-        	$account_vat_out = $vat_period->get('account_vat_out');
-        	$account_vat_abroad = $vat_period->get('account_vat_abroad');
-        	//$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
-        	$saldo_total = $vat_period->get('saldo_total');
-
-        	$amount = array(
-        		'vat_out' => $account_vat_out->get('saldo'),
-        		'vat_abroad' => $account_vat_abroad->get('saldo'),
-        		'vat_in' => $account_vat_in->get('saldo')
-        	);
-
-        	//$vat_period->saveAmounts($amount);
-        	header('Location: vat_view.php?id='.$vat_period->get('id'));
-        	exit;
-        }
-        */
-        if ($this->body('id') AND is_numeric($this->body('id')) {
+        if ($this->body('id') AND is_numeric($this->body('id'))) {
         	$vat_period = new VatPeriod($this->getYear(), $this->body('id'));
 
         	if (!$vat_period->state($this->body('date'), $this->body('voucher_number'))) {
