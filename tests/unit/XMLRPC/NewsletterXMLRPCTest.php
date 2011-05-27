@@ -4,20 +4,20 @@ require_once 'Intraface/XMLRPC/Newsletter/Server.php';
 
 class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
 {
-    private $server;
+    protected $server;
+    protected $db;
 
     function setUp()
     {
         $this->server = new Intraface_XMLRPC_Newsletter_Server;
-        $db = MDB2::singleton(DB_DSN);
-        $db->exec('TRUNCATE contact');
-        $db->exec('TRUNCATE newsletter_subscriber');
+        $this->db = MDB2::singleton(DB_DSN);
         $this->kernel = new Stub_Kernel;
-
     }
 
     function tearDown()
     {
+        $this->db->exec('TRUNCATE contact');
+        $this->db->exec('TRUNCATE newsletter_subscriber');
     }
 
     function testConstruction()
@@ -47,7 +47,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
         $client = $this->getClient();
 
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');
-        $list = 1;
+        $list = 1; // non existing list
         $email = 'test';
 
         try {
@@ -100,7 +100,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
         $install->grantModuleAccess('administration', 'contact', 'newsletter');
 
         require_once 'XML/RPC2/Client.php';
-        $options = array('prefix' => 'newsletter.');
-        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletter?backend=xmlrpcext&version=0.1.0', $options);
+        $options = array('prefix' => 'newsletter.', 'debug' => false);
+        return XML_RPC2_Client::create(XMLRPC_SERVER_URL.'newsletter?version=0.2.0', $options);
     }
 }

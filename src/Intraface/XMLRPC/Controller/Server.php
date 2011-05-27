@@ -9,27 +9,39 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
     protected $prefix;
     protected $backend = 'php';
     protected $default_server_version = null;
+    protected $default_backend = 'php';
 
     function dispatch()
     {
         switch ($this->query('backend')) {
             case 'xmlrpcext':
                 // @todo tests does not pass with this one
-                XML_RPC2_Backend::setBackend('xmlrpcext');
-                $this->backend = 'xmlrpcext';
+                $this->setBackend('xmlrpcext');
                 break;
             default:
-                XML_RPC2_Backend::setBackend('php');
+                $this->setBackend('php');
                 break;
         }
 
         return parent::dispatch();
     }
 
+    function setBackend($backend)
+    {
+        if ($backend == 'xmlrpcext') {
+            if (!extension_loaded('xmlrpcext')) {
+                throw new Exeption('xmlrpcext extension is not loaded');
+            }
+        }
+        XML_RPC2_Backend::setBackend($backend);
+        $this->backend = $backend;
+    }
+
     function renderHtml()
     {
         ob_start();
-        $this->getServer()->autoDocument();
+        $server = $this->getServer();
+        $server->autoDocument();
         $result = ob_get_clean();
 
         if ($this->isXmlRpcExt()) {
@@ -57,7 +69,7 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
                 throw new Exception('Invalid backend. Must be php or xmlrpcext');
             }
         } else {
-            $backend = 'xmlrpcext';
+            $backend = $this->default_backend;
         }
         return $backend;
     }
@@ -100,21 +112,6 @@ class Intraface_XMLRPC_Controller_Server extends k_Component
 
     protected function getServer()
     {
-        /*
-        if ($this->query('version') != '') {
-            if (isset($this->available_servers[$this->query('version')])) {
-                $server = $this->available_servers[$this->query('version')];
-            } else {
-                throw new Exception('Invalid server version');
-            }
-        } else {
-            if (isset($this->available_servers[$this->default_server_version])) {
-                $server = $this->available_servers[$this->default_server_version];
-            } else {
-                throw new Exception('Invalid default server version');
-            }
-        }
-        */
         $server = $this->available_servers[$this->getVersion()];
 
         return XML_RPC2_Server::create(new $server($this->getEncoding()), $this->getServerOptions());

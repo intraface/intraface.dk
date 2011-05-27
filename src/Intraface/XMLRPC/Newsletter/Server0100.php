@@ -66,7 +66,6 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         return $this->prepareResponseData(true);
-
     }
 
     /**
@@ -122,7 +121,6 @@ class Intraface_XMLRPC_Newsletter_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         return $this->prepareResponseData(true);
-
     }
 
     /**

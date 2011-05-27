@@ -40,7 +40,6 @@ class Intraface_XMLRPC_Controller extends k_Component
             'shop' => 'Shop'
         );
 
-
         return '
         <h2>Intraface xmlrpc servers</h2>
         <ul>
