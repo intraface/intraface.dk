@@ -30,10 +30,11 @@ class Demo_CMS_Show extends k_Component
 
     public function getCMS()
     {
-        $credentials = array("private_key" => $this->context->getPrivateKey(),
-                             "session_id" => md5($this->session()->sessionId()));
-        $debug = false;
-        $client = new IntrafacePublic_CMS_Client_XMLRPC($credentials, $this->name(), $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server2.php");
+        $credentials = array(
+        	"private_key" => $this->context->getPrivateKey(),
+            "session_id" => md5($this->session()->sessionId()));
+        $debug = true;
+        $client = new IntrafacePublic_CMS_Client_XMLRPC($credentials, $this->name(), $debug, INTRAFACE_XMLPRC_SERVER_PATH . "cms/server0300.php");
         return new IntrafacePublic_CMS($client, $this->cache);
     }
 }
