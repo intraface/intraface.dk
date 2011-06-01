@@ -48,7 +48,7 @@ class ShopGatewayTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Test shop', $shop->getName());
     }
 
-    function testFindAllTakesIntranetIntoAccount()
+    function testFindAllTakesIntranetIdIntoAccount()
     {
         Intraface_Doctrine_Intranet::singleton(1);
         $id = $this->createShop();
