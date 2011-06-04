@@ -92,68 +92,68 @@ $pfm->setPhpDep('5.2.0');
 $pfm->setPearinstallerDep('1.8.1');
 
 // installer
-$pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.11');
+$pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.12');
 $pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Driver_mysql', 'pear.php.net', '1.4.1');
-$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.1');
+$pfm->addPackageDepWithChannel('required', 'Translation2', 'pear.php.net', '2.0.4');
 $pfm->addPackageDepWithChannel('required', 'Translation2_Decorator_LogMissingTranslation', 'public.intraface.dk', '0.1.3');
-$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.12.1');
-$pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.3');
+$pfm->addPackageDepWithChannel('required', 'Log', 'pear.php.net', '1.12.6');
+$pfm->addPackageDepWithChannel('required', 'Validate', 'pear.php.net', '0.8.4');
 $pfm->addPackageDepWithChannel('required', 'Net_IDNA', 'pear.php.net', '0.8.1');
 $pfm->addPackageDepWithChannel('required', 'HTTP_Upload', 'pear.php.net', '0.9.1');
-$pfm->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.8');
-$pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.3');
+$pfm->addPackageDepWithChannel('required', 'Cache_Lite', 'pear.php.net', '1.7.11');
+$pfm->addPackageDepWithChannel('required', 'Image_Transform', 'pear.php.net', '0.9.4');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Handler', 'public.intraface.dk', '1.0.2');
 $pfm->addPackageDepWithChannel('required', 'MDB2_Debug_ExplainQueries', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.3.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.4.0');
+$pfm->addPackageDepWithChannel('required', 'File', 'pear.php.net', '1.4.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.intraface.dk', '0.3.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.4.1');
 $pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.1.1');
 
 
 // Doctrine
-$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.doctrine-project.org', '1.2.2');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.2');
-$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.doctrine-project.org', '1.2.4');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.3');
+$pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Greaterthan', 'public.intraface.dk', '0.1.3');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Template_Positionable', 'public.intraface.dk', '0.2.0');
 
 // Ilib
-$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.4');
-$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.8');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Category', 'public.intraface.dk', '0.1.5');
+$pfm->addPackageDepWithChannel('required', 'Ilib_DBQuery', 'public.intraface.dk', '0.1.10');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Error', 'public.intraface.dk', '1.0.1');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Redirect', 'public.intraface.dk', '0.2.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_FileImport', 'public.intraface.dk', '0.1.1');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Validator', 'public.intraface.dk', '0.0.2');
-$pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.1');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_ClassLoader', 'public.intraface.dk', '0.1.2');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Variable', 'public.intraface.dk', '1.0.1');
 
 // other intraface 3_Party packages
 $pfm->addPackageDepWithChannel('required', 'DB_Sql', 'public.intraface.dk', '0.0.1');
 
 // XMLRPC
-$pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.5');
+$pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'pear.php.net', '1.0.8');
 // Bug fix for PEAR XML_RPC2 version 1.0.2
 // $pfm->addPackageDepWithChannel('required', 'XML_RPC2', 'public.intraface.dk', '0.0.1');
 // Yet another bug fix for PEAR XML_RPC2 version 1.0.2
 // $pfm->addPackageDepWithChannel('required', 'XML_RPC2_Backend_Php_ServerFixedEncodingObject', 'public.intraface.dk', '0.0.1');
 
 // filehandler
-$pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.2.0');
-$pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.6');
+$pfm->addPackageDepWithChannel('required', 'MIME_Type', 'pear.php.net', '1.2.1');
+$pfm->addPackageDepWithChannel('required', 'System_Command', 'pear.php.net', '1.0.7');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword', 'public.intraface.dk', '0.4.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Filehandler_Controller', 'public.intraface.dk', '0.3.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_Keyword_Controller', 'public.intraface.dk', '0.3.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_Date', 'public.intraface.dk', '0.1.0');
+$pfm->addPackageDepWithChannel('required', 'Ilib_Date', 'public.intraface.dk', '0.2.1');
 
 // cms
 $pfm->addPackageDepWithChannel('required', 'XML_Util', 'pear.php.net', '1.2.0');
-$pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.20.0');
-$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '4.0.0');
-$pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.0');
+$pfm->addPackageDepWithChannel('required', 'XML_Serializer', 'pear.php.net', '0.20.2');
+$pfm->addPackageDepWithChannel('required', 'HTMLPurifier', 'htmlpurifier.org', '4.0.3');
+$pfm->addPackageDepWithChannel('required', 'Text_Wiki', 'pear.php.net', '1.2.1');
 $pfm->addPackageDepWithChannel('required', 'Markdown', 'pear.michelf.com', '1.0.1m');
 
 $pfm->addPackageDepWithChannel('required', 'SmartyPants', 'pear.michelf.com', '1.5.1oo2');
@@ -162,7 +162,7 @@ $pfm->addPackageDepWithChannel('required', 'IntrafacePublic_CMS_HTML', 'public.i
 
 // debtor
 $pfm->addPackageDepWithChannel('required', 'Document_Cpdf', 'public.intraface.dk', '0.0.2');
-$pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.2');
+$pfm->addPackageDepWithChannel('required', 'Console_Table', 'pear.php.net', '1.1.4');
 
 // contact
 $pfm->addPackageDepWithChannel('required', 'Services_Eniro', 'public.intraface.dk', '1.0.0');
@@ -204,9 +204,9 @@ $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.i
 // tools
 $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
 $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.3');
-$pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '1.0.0');
+$pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '2.0.0');
 
-$pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.10.3');
+$pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.11.7');
 
 
 foreach ($ignore AS $file) {
