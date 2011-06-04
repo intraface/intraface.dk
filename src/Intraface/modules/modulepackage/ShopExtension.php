@@ -28,6 +28,7 @@ class Intraface_modules_modulepackage_ShopExtension {
     /**
      * @var object error
      */
+    protected $error;
 
     /**
      * constructor creates the client objects
@@ -38,8 +39,6 @@ class Intraface_modules_modulepackage_ShopExtension {
     {
         if (!defined('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY') || INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY == '') {
             throw new Exception("Unable to use shop in Intraface_modules_modulepackage_ShopExtension as the private key is not set");
-
-            return array();
         }
 
         if (defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
@@ -60,14 +59,14 @@ class Intraface_modules_modulepackage_ShopExtension {
             $this->shop = new IntrafacePublic_Shop_Client_XMLRPC(
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
                 INTRAFACE_INTRANETMAINTENANCE_SHOP_ID,
-                INTRAFACE_XMLRPC_DEBUG,
+                true,
                 $xmlrpc_shop_url);
         } catch(Exception $e) {
             $this->shop = NULL;
             throw new Exception('Unable to connect to the intranet maintenance webshop '.$e->getMessage());
         }
 
-        $this->debtor = new IntrafacePublic_Debtor_XMLRPC_Client(
+        $this->debtor = new IntrafacePublic_Debtor_Client_XMLRPC(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
             INTRAFACE_XMLRPC_DEBUG,
             $xmlrpc_debtor_url);
@@ -93,15 +92,16 @@ class Intraface_modules_modulepackage_ShopExtension {
             return array();
         }
 
+        $products = array();
+
         if (is_array($product_id)) {
             if (count($product_id) > 0) {
                 try {
                     $products = $this->shop->getProducts(array('ids' => $product_id, 'use_paging' => false));
                 } catch (Exception $e) {
-                    $products = array();
                     throw new Exception('unable to get products from intranet webshop: '.$e->getMessage());
                 }
-                return (array)$products;
+                return $products;
             } else {
                 return array();
             }
@@ -112,13 +112,12 @@ class Intraface_modules_modulepackage_ShopExtension {
             try {
                 $product = $this->shop->getProduct($product_id);
             } catch (Exception $e) {
-                $products = array();
+
                 throw new Exception('unable to get product from intranet webshop: '.$e->getMessage());
             }
             return $product;
         } else {
             throw new Exception("Invalid input for ModulePackage->getProduct, should be either array or integer");
-            exit;
         }
     }
 
@@ -136,8 +135,7 @@ class Intraface_modules_modulepackage_ShopExtension {
     {
         $debtor = $this->getExistingDebtor($debtor_id);
 
-        // what kind of check of the invoice/order do we need to make here!
-
+        // @todo what kind of check of the invoice/order do we need to make here!
         foreach ($debtor['items'] AS $item) {
             if ($item['product_id'] == $product_id) {
                 return (array)$item;
@@ -232,7 +230,6 @@ class Intraface_modules_modulepackage_ShopExtension {
             $postprocess->getAmount(),
             $postprocess->getCurrency()
         );
-
     }
 
     /**
