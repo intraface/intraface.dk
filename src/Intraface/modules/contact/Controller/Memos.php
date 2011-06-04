@@ -20,7 +20,13 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
         $this->document->setTitle('Memos');
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/memos');
-        return $tpl->render($this, array('memos' => $gateway->getAll()));
+
+        if (is_numeric($this->context->name())) {
+            return $tpl->render($this, array('memos' => $gateway->findByContactId($this->context->name())));
+        } else {
+            return $tpl->render($this, array('memos' => $gateway->getAll()));
+        }
+
     }
 
     function renderHtmlCreate()
