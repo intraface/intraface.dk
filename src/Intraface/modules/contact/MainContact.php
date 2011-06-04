@@ -12,14 +12,14 @@ class MainContact extends Intraface_Main
     function __construct()
     {
         $this->module_name = 'contact';
-        $this->menu_label = 'Kontakter'; // Navnet der vil stå i menuen
+        $this->menu_label = 'Kontakter'; // Navnet der vil stï¿½ i menuen
         $this->show_menu = 1; // Skal modulet vises i menuen.
         $this->active = 1; // Er modulet aktivt.
         $this->menu_index = 120;
         $this->frontpage_index = 20;
 
         $this->addPreloadFile('Contact.php');
-        $this->addPreloadFile('ContactMessage.php'); // kan måske slettes
+        $this->addPreloadFile('ContactMessage.php'); // kan mï¿½ske slettes
         $this->addPreloadFile('ContactPerson.php');
          $this->addPreloadFile('ContactReminder.php');
 
@@ -30,15 +30,14 @@ class MainContact extends Intraface_Main
 
         $this->addFrontpageFile('include_frontpage.php');
 
-        // Tilføj undermenu punkter.
+        // Add sub menu items
 
-        // $this->addSubMenuItem("Indstillinger", "setting.php");
-        // $this->addSubMenuItem("Underside 2", "underside2.php");
+        $this->addSubMenuItem("Reminders", "memos");
 
-        // Tilføj subaccess punkter
+        // Add sub access items
         // opretkunde: et kort navn der er sigende
         // Opret ny kunde: En beskrivelse af subaccess.
-        //$this->addSubAccessItem("opretkunde", "Opret ny kunde");
+        // $this->addSubAccessItem("opretkunde", "Opret ny kunde");
 
         // settings
         // paymentconditions in days

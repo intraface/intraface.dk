@@ -23,6 +23,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             return 'Intraface_modules_contact_Controller_Import';
         } elseif ($name == 'batchnewsletter') {
             return 'Intraface_modules_contact_Controller_BatchNewsletter';
+        } elseif ($name == 'memos') {
+            return 'Intraface_modules_contact_Controller_Memos';
         }
     }
 
