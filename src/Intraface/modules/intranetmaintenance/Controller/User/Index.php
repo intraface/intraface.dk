@@ -24,8 +24,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     {
         $user = new UserMaintenance();
 
-        if (isset($_GET['add_user_id']) && $_GET['add_user_id'] != 0) {
-        	$this->getRedirect()->setParameter('user_id', intval($_GET['add_user_id']));
+        if ($this->query('add_user_id') != 0) {
+        	$this->getRedirect()->setParameter('user_id', intval($this->query('add_user_id')));
         	return new k_SeeOther($this->getRedirect()->getRedirect($this->url(null)));
         }
 
