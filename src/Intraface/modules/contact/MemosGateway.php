@@ -67,7 +67,7 @@ class Intraface_modules_contact_MemosGateway
             $reminders[$i]['reminder_date'] = $db->f("reminder_date");
             $reminders[$i]['dk_reminder_date'] = $db->f("dk_reminder_date");
             $reminders[$i]['subject'] = $db->f("subject");
-
+            $reminders[$i]['contact_id'] = $contact_id;
             $i++;
         }
         return $reminders;
