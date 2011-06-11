@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL &~E_DEPRECATED);
+
 define('DB_HOST', 'localhost');
 define('DB_PASS', '');
 define('DB_USER', 'root');
