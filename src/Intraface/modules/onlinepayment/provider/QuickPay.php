@@ -150,7 +150,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
         return array(
             0 => array(
                 'action' => 'capture',
-                'label' => 'H�v'),
+                'label' => 'Hæv'),
             1 => array(
                 'action' => 'reversal',
                 'label' => 'Tilbagebetal')
