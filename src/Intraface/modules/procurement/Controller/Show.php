@@ -80,7 +80,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 return new k_SeeOther($url);
             } else {
                 throw new Exception('You need access to the product module to do this!');
-                exit;
             }
         } elseif ($this->query('contact_id')) {
             if ($this->getKernel()->user->hasModuleAccess('contact')) {
@@ -91,11 +90,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
                 } else {
                     $this->getProcurement()->error->set('Ingen gyldig kontakt blev valgt');
                 }
-
             } else {
                 throw new Exception('You need access to the contact module!');
             }
-
         } elseif ($this->query('from') == 'select_product') {
             return new k_SeeOther($this->url('purchaseprice'));
         }
@@ -112,7 +109,6 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     function renderHtmlEdit()
     {
         $module = $this->getKernel()->module("procurement");
-        $values = $this->getProcurement()->get();
         $this->document->setTitle($this->t("Edit procurement"));
         $this->document->addScript('procurement/edit.js');
 
@@ -121,7 +117,7 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         	'kernel' => $this->getKernel(),
         	'title' => $this->t("Edit procurement"),
             'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
-            'values' => $values);
+            'values' => $this->getValues());
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
         return $tpl->render($this, $data);
     }
@@ -130,11 +126,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     {
         if ($this->getProcurement()->update($this->body())) {
             if ($this->body("recieved") == "1") {
-                $procurement->setStatus("recieved");
+                $this->getProcurement()->setStatus("recieved");
             }
             return new k_SeeOther($this->url());
-        } else {
-            $values = $this->body();
         }
 
         return $this->render();
@@ -191,6 +185,14 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         }
 
         return $this->render();
+    }
+
+    function getValues()
+    {
+        if ($this->body()) {
+            return $this->body();
+        }
+        return $this->getProcurement()->get();
     }
 
     function appendFile($file_id)
