@@ -2,10 +2,22 @@
 class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
 {
     protected $template;
+    protected $modulepackagemanager;
+    protected $modulepackage;
 
     function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
+    }
+
+    function dispatch()
+    {
+        $this->modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
+        $this->modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
+        if ($this->modulepackage->get('id') == 0) {
+            throw new k_PageNotFound();
+        }
+        return parent::dispatch();
     }
 
     function renderHtml()
@@ -15,21 +27,14 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $module->includeFile('ShopExtension.php');
         $module->includeFile('ActionStore.php');
 
-        $translation = $this->getKernel()->getTranslation('modulepackage');
-        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
-        $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
-        if ($modulepackage->get('id') == 0) {
-            throw new Exception("Invalid id");
-        }
-
-        $add_type = $modulepackagemanager->getAddType($modulepackage);
+        $add_type = $this->modulepackagemanager->getAddType($this->modulepackage);
         $modulepackageshop = new Intraface_modules_modulepackage_ShopExtension();
 
         $data = array(
-        	'modulepackagemanager' => $modulepackagemanager,
+        	'modulepackagemanager' => $this->modulepackagemanager,
             'add_type' => $add_type,
             'modulepackageshop' => $modulepackageshop,
-            'modulepackage' => $modulepackage,
+            'modulepackage' => $this->modulepackage,
             'kernel' => $this->getKernel());
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/add-package');
         return $tpl->render($this, $data);
@@ -42,39 +47,32 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $module->includeFile('ShopExtension.php');
         $module->includeFile('ActionStore.php');
 
-        $translation = $this->getKernel()->getTranslation('modulepackage');
-        $modulepackage = new Intraface_modules_modulepackage_ModulePackage(intval($this->name()));
-        $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
-
-        $add_type = $modulepackagemanager->getAddType($modulepackage);
-
-        $values = $_POST;
+        $add_type = $this->modulepackagemanager->getAddType($this->modulepackage);
+        $values = $this->body();
         if (!$this->getKernel()->intranet->address->validate($values) || !$this->getKernel()->intranet->address->save($values)) {
             // Here we need to know the errors from address, but it does not validate now!
-            $modulepackagemanager->error->set('there was an error in your address informations');
-            $modulepackagemanager->error->merge($this->getKernel()->intranet->address->error->getMessage());
+            $this->modulepackagemanager->error->set('there was an error in your address informations');
+            $this->modulepackagemanager->error->merge($this->getKernel()->intranet->address->error->getMessage());
         } else {
-            if (!isset($_POST['accept_conditions']) || $_POST['accept_conditions'] != '1') {
-                $modulepackagemanager->error->set('You need to accept the conditions of sale and use');
+            if ($this->body('accept_conditions') != '1') {
+                $this->modulepackagemanager->error->set('You need to accept the conditions of sale and use');
             } else {
-
                 // we are now ready to create the order.
                 switch($add_type) {
                     case 'add':
-                        $action = $modulepackagemanager->add($modulepackage, (int)$_POST['duration_month'].' month');
+                        $action = $this->modulepackagemanager->add($this->modulepackage, (int)$_POST['duration_month'].' month');
                         break;
                     case 'extend':
-                        $action = $modulepackagemanager->extend($modulepackage, (int)$_POST['duration_month'].' month');
+                        $action = $this->modulepackagemanager->extend($this->modulepackage, (int)$_POST['duration_month'].' month');
                         break;
                     case 'upgrade':
-                        $action = $modulepackagemanager->upgrade($modulepackage, (int)$_POST['duration_month'].' month');
+                        $action = $this->modulepackagemanager->upgrade($this->modulepackage, (int)$_POST['duration_month'].' month');
                         break;
                     default:
                         throw new Exception('Invalid add_type "'.$add_type.'"');
-                        exit;
                 }
 
-                if (!$modulepackagemanager->error->isError()) {
+                if (!$this->modulepackagemanager->error->isError()) {
                     $action_store = new Intraface_modules_modulepackage_ActionStore($this->getKernel()->intranet->get('id'));
                     if ($action->hasAddActionWithProduct()) {
 
@@ -111,12 +109,11 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
 
                     if (!$action_store_identifier = $action_store->store($action)) {
                         throw new Exception("Unable to store Action!");
-                        exit;
                     }
 
                     // TODO: What do we do if the onlinepayment is not running?
 
-                    // Notice: Only if the price is more than zero we continue to the payment page, otherwise we contibue to the process page further down.
+                    // Notice: Only continue to the payment page if price > 0 -- otherwise continue to the process page
                     if (!empty($action_store_identifier) && $total_price > 0) {
                         return new k_SeeOther($this->url('../../payment', array('action_store_identifier' => $action_store_identifier)));
                     } elseif (!empty($action_store_identifier)) {
@@ -127,7 +124,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                 }
             }
         }
-
+        return $this->render();
     }
 
     function getKernel()

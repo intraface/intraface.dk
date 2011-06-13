@@ -8,8 +8,8 @@
  * @author sune
  * @version 0.0.1
  */
-class Intraface_modules_modulepackage_ShopExtension {
-
+class Intraface_modules_modulepackage_ShopExtension
+{
     /**
      * @var object shop client
      */
@@ -42,7 +42,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         if (defined('INTRAFACE_XMLRPC_SERVER_URL') && INTRAFACE_XMLRPC_SERVER_URL != '') {
-            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server0004.php';
+            $xmlrpc_shop_url = INTRAFACE_XMLRPC_SERVER_URL.'shop/server0100.php';
             $xmlrpc_debtor_url = INTRAFACE_XMLRPC_SERVER_URL.'debtor/server.php';
             $xmlrpc_onlinepayment_url = INTRAFACE_XMLRPC_SERVER_URL.'onlinepayment/server0100.php';
         } else {
@@ -59,7 +59,7 @@ class Intraface_modules_modulepackage_ShopExtension {
             $this->shop = new IntrafacePublic_Shop_Client_XMLRPC(
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
                 INTRAFACE_INTRANETMAINTENANCE_SHOP_ID,
-                true,
+                INTRAFACE_XMLRPC_DEBUG,
                 $xmlrpc_shop_url);
         } catch(Exception $e) {
             $this->shop = NULL;
@@ -183,8 +183,7 @@ class Intraface_modules_modulepackage_ShopExtension {
         }
 
         // then we add the products to the basket
-        settype($products, 'array');
-        foreach ($products AS $product) {
+        foreach ((array)$products AS $product) {
             if (!isset($product['product_detail_id'])) {
                 $product['product_detail_id'] = 0;
             }

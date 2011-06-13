@@ -1,9 +1,9 @@
 <h1><?php e(t('your account')); ?></h1>
 
-<?php if (isset($modulepackagemanager)) echo $modulepackagemanager->error->view(); ?>
+<?php echo $modulepackagemanager->error->view(); ?>
 
 <div class="message">
-    <?php if (isset($_GET['status']) && $_GET['status'] == 'success'): ?>
+    <?php if ($context->query('status') == 'success'): ?>
         <?php
         // TODO: This is not really a good text
         ?>
@@ -15,10 +15,6 @@
 </div>
 
 <?php
-$modulepackagemanager = new Intraface_modules_modulepackage_Manager($context->getKernel()->intranet);
-$modulepackagemanager->getDBQuery($context->getKernel())->setFilter('status', 'created_and_active');
-$packages = $modulepackagemanager->getList();
-
 if (count($packages) > 0) {
     ?>
     <h2><?php e(t('your subscription')); ?></h2>
@@ -36,11 +32,11 @@ if (count($packages) > 0) {
         <tbody>
         <?php foreach ($packages AS $package): ?>
             <tr>
-                <td><?php e(t($package['plan']).' '.t($package['group'])); ?></td>
+                <td><?php e($package['plan'] . ' '. $package['group']); ?></td>
                 <td><?php e($package['dk_start_date']); ?></td>
                 <td><?php e($package['dk_end_date']); ?></td>
                 <td><?php e(t($package['status'])); ?></td>
-                <td><a href="index.php?unsubscribe_id=<?php e($package['id']); ?>" class="delete"><?php e(t('unsubscribe')); ?></a></td>
+                <td><a href="<?php e(url(null, array('unsubscribe_id' => $package['id']))); ?>" class="delete"><?php e(t('unsubscribe')); ?></a></td>
             </tr>
         <?php endforeach; ?>
     </table>
@@ -74,9 +70,7 @@ $packages = $modulepackage->getList('matrix');
         settype($plans, 'array');
 
         foreach ($groups AS $group) { ?>
-
-
-            <tr>
+           <tr>
             <th style="vertical-align: top;">
             <strong><?php e(t($group['group'])); ?></strong>
             <?php

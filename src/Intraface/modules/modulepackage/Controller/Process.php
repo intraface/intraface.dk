@@ -2,16 +2,17 @@
 class Intraface_modules_modulepackage_Controller_Process extends k_Component
 {
     protected $template;
+    protected $action;
+    protected $action_store;
 
     function __construct(k_TemplateFactory $template)
     {
         $this->template = $template;
     }
 
-    function renderHtml()
+    function dispatch()
     {
         // Here we are logged in so we can use the normal way to acccess files.
-
         $module = $this->getKernel()->module('modulepackage');
         $module->includeFile('Manager.php');
         $module->includeFile('ShopExtension.php');
@@ -19,23 +20,26 @@ class Intraface_modules_modulepackage_Controller_Process extends k_Component
         $module->includeFile('AccessUpdate.php');
 
         // When there is no payment we get this from add_package.php
-        $identifier = $_GET['action_store_identifier'];
+        $identifier = $this->query('action_store_identifier');
 
-        $action_store = new Intraface_modules_modulepackage_ActionStore($this->getKernel()->intranet->get('id'));
-        $action = $action_store->restore($identifier);
+        $this->action_store = new Intraface_modules_modulepackage_ActionStore($this->getKernel()->intranet->get('id'));
+        $this->action = $this->action_store->restore($identifier);
 
-        if (!is_object($action)) {
+        if (!is_object($this->action)) {
             throw new Exception("Problem restoring action from identifier ".$identifier);
         }
 
-        // We make a double check
-        if ($action->hasAddActionWithProduct() && $action->getTotalPrice() > 0) {
+        // We double check
+        if ($this->action->hasAddActionWithProduct() && $this->action->getTotalPrice() > 0) {
             throw new Exception("The actions can not be processed without payment!");
         }
+        return parent::dispatch();
+    }
 
-        if ($action->execute($this->getKernel()->intranet)) {
-            // we delete the action from the store
-            $action_store->delete();
+    function renderHtml()
+    {
+        if ($this->action->execute($this->getKernel()->intranet)) {
+            $this->action_store->delete();
 
             $access_update = new Intraface_modules_modulepackage_AccessUpdate();
             $access_update->run($this->getKernel()->intranet->get('id'));

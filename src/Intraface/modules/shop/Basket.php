@@ -29,9 +29,9 @@ class Intraface_modules_shop_Basket
 
     /**
      * Variablen bruges, fordi webshop almindeligvis bruges uden for systemet.
-     * For at kunne holde fx indkøbskurven intakt, så skal den altså kunne fastholde
+     * For at kunne holde fx indkï¿½bskurven intakt, sï¿½ skal den altsï¿½ kunne fastholde
      * session id'et. Det ville den ikke kunne, fordi hver kontakt over xml-rpc jo
-     * er en ny forespørgsel og altså en ny session på serveren.
+     * er en ny forespï¿½rgsel og altsï¿½ en ny session pï¿½ serveren.
      *
      * @var string
      */
@@ -68,9 +68,10 @@ class Intraface_modules_shop_Basket
         $this->session_id  = $session_id;
         $this->resetItemCache();
 
-        $this->conditions = array('session_id = ' . $this->db->quote($this->session_id, 'text'),
-                                  'shop_id = ' . $this->db->quote($this->webshop->getId(), 'integer'),
-                                  'intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer'));
+        $this->conditions = array(
+        	'session_id = ' . $this->db->quote($this->session_id, 'text'),
+            'shop_id = ' . $this->db->quote($this->webshop->getId(), 'integer'),
+            'intranet_id = ' . $this->db->quote($this->intranet->getId(), 'integer'));
 
         $this->cleanUp();
     }

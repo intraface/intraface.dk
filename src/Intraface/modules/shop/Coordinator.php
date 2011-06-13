@@ -132,7 +132,7 @@ class Intraface_modules_shop_Coordinator
             $this->contact = new Contact($this->kernel);
             $contact_person_id = 0;
 
-            // s�rger for at tjekke om det er et firma
+            // checks whether it is a company
             if (isset($input['contactperson']) && $input['contactperson'] != '') {
                 $input['type'] = 'corporation'; // firma
             }

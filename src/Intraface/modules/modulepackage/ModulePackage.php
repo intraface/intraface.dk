@@ -8,8 +8,8 @@
  * @author sune
  * @version 0.0.1
  */
-class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
-
+class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
+{
     /**
      * @var object database
      */
@@ -155,8 +155,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
                         break;
                 }
                 $i++;
-             }
-             else {
+             } else {
                 throw new Exception('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!');
              }
         }
@@ -196,7 +195,6 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
     {
         if (!in_array($list_type, array('list', 'matrix'))) {
             throw new Exception('Invalid list type '.$list_type.' in ModulePackage->getList()');
-            exit;
         }
 
         $this->dbquery->setSorting('module_package_group.sorting_index, module_package_plan.plan_index');
@@ -221,7 +219,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard {
         }
 
         // get all products in one request and add them to the array
-        require_once('Intraface/modules/modulepackage/ShopExtension.php');
+        require_once 'Intraface/modules/modulepackage/ShopExtension.php';
         $shopextension = new Intraface_modules_modulepackage_ShopExtension;
         $products = $shopextension->getProduct((array)$product_ids);
 

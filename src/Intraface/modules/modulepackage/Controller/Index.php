@@ -19,21 +19,15 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
         } elseif ($name == 'postform') {
             return 'Intraface_modules_modulepackage_Controller_Postform';
         }
-
     }
 
     function renderHtml()
     {
         $module = $this->getKernel()->module('modulepackage');
         $module->includeFile('Manager.php');
-
-        // temp test
-        // require('Intraface/ModulePackage/AccessUpdate.php');
-        // $access_update = new Intraface_modules_modulepackage_AccessUpdate();
-        // $access_update->run($this->getKernel()->intranet->get('id'));
         $modulepackagemanager = null;
 
-        if (isset($_GET['unsubscribe_id']) && intval($_GET['unsubscribe_id']) != 0) {
+        if (intval($this->query('unsubscribe_id')) != 0) {
             $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet, (int)$_GET['unsubscribe_id']);
             if ($modulepackagemanager->get('id') != 0) {
                 if ($modulepackagemanager->get('status') == 'created') {
@@ -45,16 +39,17 @@ class Intraface_modules_modulepackage_Controller_Index extends k_Component
                     $access_update = new Intraface_modules_modulepackage_AccessUpdate();
                     $access_update->run($this->getKernel()->intranet->get('id'));
                     $this->getKernel()->user->clearCachedPermission();
-
                 } else {
                     $modulepackagemanager->error->set('it is not possible to unsubscribe module packages which is not either created or active');
                 }
             }
         }
 
-        $translation = $this->getKernel()->getTranslation('modulepackage');
+        $modulepackagemanager = new Intraface_modules_modulepackage_Manager($this->getKernel()->intranet);
+        $modulepackagemanager->getDBQuery($this->getKernel())->setFilter('status', 'created_and_active');
+        $packages = $modulepackagemanager->getList();
 
-        $data = array('modulepackagemanager' => $modulepackagemanager);
+        $data = array('packages' => $packages, 'modulepackagemanager' => $modulepackagemanager);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $tpl->render($this, $data);
     }

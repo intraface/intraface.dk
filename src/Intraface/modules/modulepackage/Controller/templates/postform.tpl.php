@@ -1,6 +1,6 @@
 <h1><?php e(t('Pay your order'))?></h1>
 
-<form action="<?php $url = $form->getAction(); if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://'): echo ''; else: echo $url; endif; ?>" method="post" autocomplete="off" id="payment_details">
+<form action="<?php e($form_action); ?>" method="post" autocomplete="off" id="payment_details">
     <?php echo $form->getHiddenFields(); ?>
     <input type="hidden" name="order_identifier" value="<?php e($_POST['order_identifier']); ?>" />
 
