@@ -1,17 +1,10 @@
 <?php
 /**
+ * Online payment
+ *
+ * Online payment is able to add payments to a debtor.
+ *
  * @package Intraface_OnlinePayment
- */
-/**
- * Onlinebetaling
- *
- * Onlinebetalingerne skal kunne knytte betalinger til debtor. Måske
- * kan den fungere lidt ligesom elementer i CMS, og så kan vi skrive nogle enkelte
- * udbydere, hvor vi starter med QuickPay - hvis det hele da skal køre over vores
- * system. Det kan også være, at kodningen skal foretages hos den enkelte?
- *
- * Så det grundlæggende spørgsmål er om selve betalingsløsningen skal programmeres på
- * klienten eller i systemet.
  */
 class OnlinePayment extends Intraface_Standard
 {
@@ -21,7 +14,10 @@ class OnlinePayment extends Intraface_Standard
 
     protected $currency;
 
-    // Standard udbyder-transactionsstatus. Er lavet ud fra QuickPay
+    /**
+     * Standard transactions statuses from providers. Based on QuickPay
+     * @var array
+     */
     public $transaction_status_types = array(
         '' => 'Ingen kontakt til udbyder - mangler $eval',
         '000' => '', // Betalingsoplysninger godkendt
@@ -43,11 +39,8 @@ class OnlinePayment extends Intraface_Standard
         $this->id = $id;
         $this->error = new Intraface_Error;
 
-        // @todo lidt usikker på om det her er det smarteste sted at have den, men den skal være til stede, når der skal gemmes
+        // @todo is this the proper place to get the provider key?
         $this->provider_key = $kernel->getSetting()->get('intranet', 'onlinepayment.provider_key');
-
-        //$this->dbquery = new Intraface_DBQuery($this->kernel, "onlinepayment", "intranet_id = ".$this->kernel->intranet->get("id"));
-        //$this->dbquery->useErrorObject($this->error);
         $this->dbquery = $this->getDBQuery();
 
         if ($this->id > 0) {
@@ -75,66 +68,6 @@ class OnlinePayment extends Intraface_Standard
                 throw new Exception('Ikke gyldig type i Onlinebetaling');
                 break;
         }
-
-        /*
-        $implemented_providers = OnlinePayment::getImplementedProviders();
-        // we set the fallback from settings
-        if (!isset($implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')])) {
-            throw new Exception('Ikke en gyldig provider fra settings i OnlinePayment->factory');
-        }
-        $provider = $implemented_providers[$kernel->getSetting()->get('intranet', 'onlinepayment.provider_key')];
-
-        switch($type) {
-            case 'settings':
-                // We accept it, but do nothing as we just use fallback provider
-                break;
-            case 'id':
-                $db = new DB_Sql;
-                $db->query("SELECT provider_key FROM onlinepayment WHERE id = ".(int)$value. " AND intranet_id = " . $kernel->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    throw new Exception('OnlinePayment::factory: Ikke et gyldigt id');
-                }
-                $provider = $implemented_providers[$db->f('provider_key')];
-                break;
-            case 'provider':
-                if (!in_array($value, $implemented_providers)) {
-                    throw new Exception('Ikke en gyldig provider i OnlinePayment->factory case: provider');
-                    exit;
-                }
-                $provider = $value;
-                break;
-            case 'transactionnumber':
-                $db = new DB_Sql;
-                $db->query("SELECT provider_key FROM onlinepayment WHERE transaction_number = '".$value."' AND intranet_id = " . $kernel->intranet->get('id'));
-                if (!$db->nextRecord()) {
-                    throw new Exception('OnlinePayment::factory: Ikke et gyldigt transactionnumber');
-                    exit;
-                }
-                $provider = $implemented_providers[$db->f('provider_key')];
-                break;
-            default:
-                throw new Exception('Ikke gyldig type i Onlinebetaling');
-                break;
-        }
-
-        switch(strtolower($provider)) {
-            case 'default':
-                require_once 'Intraface/modules/onlinepayment/provider/Default.php';
-                return new OnlinePaymentDefault($kernel, $value);
-                break;
-            case 'quickpay':
-                require_once 'Intraface/modules/onlinepayment/provider/QuickPay.php';
-                return new OnlinePaymentQuickPay($kernel, $value);
-                break;
-            case 'dandomain':
-                require_once 'Intraface/modules/onlinepayment/provider/DanDomain.php';
-                return new OnlinePaymentDanDomain($kernel, $value);
-                break;
-
-            default:
-                throw new Exception("Ugyldig onlinebetalingsudbyder");
-        }
-        */
     }
 
     function load()
@@ -178,7 +111,6 @@ class OnlinePayment extends Intraface_Standard
             $this->value['original_amount'] = $db->f('original_amount');
             $this->value['dk_original_amount'] = number_format($db->f('original_amount'), 2, ",", ".");
 
-
             $this->value['transaction_number'] = $db->f('transaction_number');
             $this->value['transaction_status'] = $db->f('transaction_status');
             $this->value['pbs_status'] = $db->f('pbs_status');
@@ -197,9 +129,9 @@ class OnlinePayment extends Intraface_Standard
     }
 
     /**
-     * Funktion der gemmer onlinebetaling gennem xml-rpc-serveren
+     * Saves online payment through the xmlrpc webservice
      *
-     * @input: array(belong_to, belong_to_id, transaction_number, transaction_status, amount);
+     * @param array $input (belong_to, belong_to_id, transaction_number, transaction_status, amount)
      *
      * @return integer
       */
@@ -326,7 +258,7 @@ class OnlinePayment extends Intraface_Standard
     }
 
     /**
-     * Funktion til at opdatere betaling inden fra intranettet
+     * Updates payment from intraface
      *
      * @param array $input
      *
@@ -433,8 +365,7 @@ class OnlinePayment extends Intraface_Standard
     }
 
     /**
-     * Tilf�jer en onlinebetaling som betaling til faktura
-     *
+     * Adds onlinepayment to invoice
      */
     function addAsPayment()
     {
@@ -467,8 +398,8 @@ class OnlinePayment extends Intraface_Standard
             "payment_date" => date("d-m-Y"),
             "amount" => $this->getAmountInSystemCurrency()->getAsLocal('da_dk', 2),
             "description" => "Transaction ".$this->get('transaction_number'),
-            "type" => 2);
-        // type = 2: credit_card
+            "type" => 2 // credit card
+        );
 
         if ($payment->update($input)) {
             $this->value['create_payment_id'] = $payment->get('id');
@@ -502,21 +433,8 @@ class OnlinePayment extends Intraface_Standard
                 'action' => 'capture',
                 'label' => 'Hæv')
         );
-        /*
-        return array(
-            0 => array(
-                'action' => 'capture',
-                'label' => 'H�v'),
-            1 => array(
-                'action' => 'reverse',
-                'label' => 'Tilbagebetal')
-        );
-        */
     }
 
-    /**
-     * @todo remove this or is it just an abstract method which the providers must have?
-     */
     function transactionAction($action)
     {
         return false;
@@ -533,15 +451,7 @@ class OnlinePayment extends Intraface_Standard
                 throw new Exception("belong_to_key er ikke gyldig i OnlinePayment->getList()");
             }
             $this->getDBQuery()->setCondition("belong_to_key = ".$belong_to_key." AND belong_to_id = ".$this->dbquery->getFilter('belong_to_id'));
-
-            // $this->dbquery->setFilter('status', -1);
         }
-
-        /*
-        if ($this->dbquery->getFilter('status') == 0) {
-            $this->dbquery->setFilter('status', 2);
-        }
-        */
 
         if ($this->getDBQuery()->getFilter('status') > 0) {
             $this->getDBQuery()->setCondition("status_key = ".intval($this->getDBQuery()->getFilter('status')));
@@ -607,12 +517,11 @@ class OnlinePayment extends Intraface_Standard
 
             if ($db->f('currency_id') != 0) {
                 $list[$i]['currency'] = $currency_gateway->findById($db->f('currency_id'));
-            }
-            else {
+            } else {
                 $list[$i]['currency'] = false;
             }
 
-            // Don't really know want this is for? /Sune(19-05-2007)
+            // @todo What is this for?
             if (array_key_exists($list[$i]['transaction_status'], $this->transaction_status_types) && $db->f('transaction_status') != $this->transaction_status_authorized) {
                 $list[$i]['user_transaction_status_translated'] = $this->transaction_status_types[$db->f('transaction_status')];
             } else {
@@ -710,7 +619,7 @@ class OnlinePayment extends Intraface_Standard
     {
         return array(
             0 => '_invalid_',
-            1 => 'default', // reserveret for a custom provider, where everythinh runs outside the system.
+            1 => 'default', // reserved for custom provider, where everything runs outside the system
             2 => 'quickpay',
             3 => 'dandomain'
         );
@@ -728,17 +637,11 @@ class OnlinePayment extends Intraface_Standard
         return $this->dbquery;
     }
 
-    /**
-     * @todo remove this?
-     */
     function isFilledIn()
     {
-        return true; // Onlinepyment kan ikke udfyldes.
+        return true; // No settings for the online payment
     }
 
-    /**
-     * @todo remove this?
-     */
     function isSettingsSet()
     {
         return true;
@@ -751,8 +654,7 @@ class OnlinePayment extends Intraface_Standard
 
     function setProvider($input)
     {
-        // der skal nok laves et tjek på om alle poster er færdigbehandlet inden man kan skifte
-        // udbyder
+        // @todo check whether all payments has been dealt with when changing provider
         $this->kernel->getSetting()->set('intranet', 'onlinepayment.provider_key', $input['provider_key']);
         return true;
     }
@@ -767,5 +669,4 @@ class OnlinePayment extends Intraface_Standard
         $status =  $this->getStatusTypes();
         return $status[$this->value['status_key']];
     }
-
 }
