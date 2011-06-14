@@ -1,4 +1,4 @@
-<h1><?php e(t('Daybook for')); ?> <a href="<?php e(url('../year/' . $context->getYear()->getId())); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
+<h1><?php e(t('Daybook for')); ?> <a href="<?php e(url('../')); ?>"><?php e($context->getYear()->get('label')); ?></a></h1>
 
 <?php echo $message; ?>
 
