@@ -59,40 +59,6 @@ class VatPeriod extends Intraface_Standard
     }
 
     /**
-     * Get vat from this year
-     *
-     * @return array
-     */
-    public function getList()
-    {
-        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
-        return $gateway->getList();
-    }
-
-    /**
-     * @return integer
-     */
-    public function periodsCreated()
-    {
-        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
-        return $gateway->arePeriodsCreated();
-    }
-
-    public static function getPeriodsArray()
-    {
-        return Intraface_modules_accounting_VatPeriodGateway::getPeriodsArray();
-    }
-
-    /**
-     * @return boolean
-     */
-    public function createPeriods()
-    {
-        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
-        return $gateway->createPeriods();
-    }
-
-    /**
      * @todo should also validate type
      *
      * @return boolean
@@ -162,11 +128,6 @@ class VatPeriod extends Intraface_Standard
         }
         $db->query("UPDATE accounting_vat_period SET active = 0, date_updated = NOW() WHERE id = " . $this->id . " AND intranet_id = " . $this->year->kernel->intranet->get('id'));
         return true;
-    }
-
-    protected function getAccount($id)
-    {
-        return new Account($this->year, (int)$id);
     }
 
     /**
@@ -286,7 +247,7 @@ class VatPeriod extends Intraface_Standard
 
         $voucher = $this->getVoucher($var['voucher_number']);
         if (!$voucher->saveInDaybook($var, $skip_daybook)) {
-            $this->error->set('Systemet kunne ikke opdatere udg�ende moms');
+            $this->error->set('Systemet kunne ikke opdatere udgående moms');
         }
         // Moms af varekøb i udlandet
         $var['text'] = 'Momsafregning - moms af køb i udlandet';
@@ -318,7 +279,7 @@ class VatPeriod extends Intraface_Standard
         $var['amount'] = abs(round($this->get('saldo_vat_in')));
 
         if (!$voucher->saveInDaybook($var, $skip_daybook)) {
-             $this->error->set('Systemet kunne ikke opdatere indg�ende moms');
+             $this->error->set('Systemet kunne ikke opdatere indgående moms');
         }
 
         if ($this->error->isError()){
@@ -337,11 +298,6 @@ class VatPeriod extends Intraface_Standard
         }
 
         return true;
-    }
-
-    protected function getVoucher($id)
-    {
-        return Voucher::factory($this->year, $id);
     }
 
     /**
@@ -370,5 +326,49 @@ class VatPeriod extends Intraface_Standard
     public function getId()
     {
         return $this->id;
+    }
+
+    protected function getVoucher($id)
+    {
+        return Voucher::factory($this->year, $id);
+    }
+
+    protected function getAccount($id)
+    {
+        return new Account($this->year, (int)$id);
+    }
+
+    /**
+     * Get vat from this year
+     *
+     * @return array
+     */
+    public function getList()
+    {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->getList();
+    }
+
+    /**
+     * @return integer
+     */
+    public function periodsCreated()
+    {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->arePeriodsCreated();
+    }
+
+    public static function getPeriodsArray()
+    {
+        return Intraface_modules_accounting_VatPeriodGateway::getPeriodsArray();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function createPeriods()
+    {
+        $gateway = new Intraface_modules_accounting_VatPeriodGateway($this->year);
+        return $gateway->createPeriods();
     }
 }
