@@ -34,7 +34,16 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
        	$saldo_rubrik_a = $vat_period->get('saldo_rubrik_a');
        	$saldo_total = $vat_period->get('saldo_total');
 
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
+       	$data = array(
+       	    'vat_period' => $vat_period,
+       	    'account_vat_in' => $account_vat_in,
+       	    'account_vat_out' => $account_vat_out,
+       	    'account_vat_abroad' => $account_vat_abroad,
+       	    'saldo_rubrik_a' => $saldo_rubrik_a,
+       	    'saldo_total' => $saldo_total
+       	);
+
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show', $data);
         return $smarty->render($this);
     }
 
