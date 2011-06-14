@@ -57,13 +57,13 @@
     </div>
 
     <div class="formrow">
-        <label for="dk_price_shipment_etc"><?php e(t('Price for shipment, fees etc.'))?></label>
-        <input type="text" name="dk_price_shipment_etc" id="dk_price_shipment_etc" value="<?php  if (isset($values['dk_price_shipment_etc'])) e($values["dk_price_shipment_etc"]); ?>" size="10" /> DKK <?php e(t('(excl vat')); ?>
+        <label for="dk_vat"><?php e(t('Vat'))?></label>
+        <input type="text" name="dk_vat" id="vat" value="<?php  if (isset($values['dk_vat'])) e($values["dk_vat"]); ?>" size="10" /> DKK
     </div>
 
     <div class="formrow">
-        <label for="dk_vat"><?php e(t('Vat'))?></label>
-        <input type="text" name="dk_vat" id="vat" value="<?php  if (isset($values['dk_vat'])) e($values["dk_vat"]); ?>" size="10" /> DKK
+        <label for="dk_price_shipment_etc"><?php e(t('Price for shipment, fees etc.'))?></label>
+        <input type="text" name="dk_price_shipment_etc" id="dk_price_shipment_etc" value="<?php  if (isset($values['dk_price_shipment_etc'])) e($values["dk_price_shipment_etc"]); ?>" size="10" /> DKK <?php e(t('(excl vat')); ?>
     </div>
 
 </fieldset>
