@@ -26,7 +26,7 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function renderHtml()
     {
-     	$vat_period = new VatPeriod($this->getYear(), $this->name());
+     	$vat_period = $this->getVatPeriod();
        	$vat_period->loadAmounts();
        	$account_vat_in = $vat_period->get('account_vat_in');
        	$account_vat_out = $vat_period->get('account_vat_out');
@@ -49,15 +49,11 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
 
     function postForm()
     {
-        if ($this->body('id') AND is_numeric($this->body('id'))) {
-        	$vat_period = new VatPeriod($this->getYear(), $this->body('id'));
-
-        	if (!$vat_period->state($this->body('date'), $this->body('voucher_number'))) {
-        		throw new Exception('Could not state');
-        	}
-
-        	return new k_SeeOther($this->url());
+        $vat_period = $this->getVatPeriod();
+        if ($vat_period->state($this->body('date'), $this->body('voucher_number'))) {
+            return new k_SeeOther($this->url(null, array('flare' => 'VAT period has been stated')));
         }
+        throw new Exception('Could not state');
     }
 
     function getError()
