@@ -28,7 +28,8 @@
 
 </head>
 
-<body id="onlinefaktura-dk"<?php if (!empty($module_name)) echo ' class="' . $module_name . '"'; ?>>
+<body id="intraface-dk"<?php if (!empty($module_name)) echo ' class="' . $module_name . '"'; ?>>
+    <a href="http://github.com/intraface/intraface.dk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
 
 	<div id="container" class="clearfix">
 
@@ -42,7 +43,7 @@
 			<span class="location"><?php e($context->getKernel()->intranet->address->get('city')); ?></span>
 			<?php endif; ?>
 			<?php if ($context->getKernel()->intranet->address->get('cvr') != ""): ?>
-				&bull; <span>CVR <?php e( $context->getKernel()->intranet->address->get('cvr'));	?> </span>
+				&bull; <span>CVR <?php e( $context->getKernel()->intranet->address->get('cvr')); ?></span>
 			<?php endif; ?>
 			</div>
 		</div>
