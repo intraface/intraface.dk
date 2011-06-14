@@ -181,7 +181,7 @@ class Procurement extends Intraface_Standard
         if (!isset($input['vendor'])) {
             $input['vendor'] = '';
         }
-        $validator->isString($input["vendor"], "Fejl i leverand�r", "", "allow_empty");
+        $validator->isString($input["vendor"], "Fejl i leverandør", "", "allow_empty");
 
         if (!isset($input['description'])) {
             $input['description'] = '';
@@ -193,7 +193,7 @@ class Procurement extends Intraface_Standard
         }
         $region_types = $this->getRegionTypes();
         if (!isset($region_types[$input["from_region_key"]])) {
-            $this->error->set("Ugyldig k�bsregion");
+            $this->error->set("Ugyldig købsregion");
         }
 
         if (!isset($input['dk_price_items'])) {
