@@ -46,7 +46,7 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         } elseif (in_array($this->query('quickhelp'), array('true', 'false'))) {
             $this->getKernel()->getSetting()->set('user', 'accounting.daybook_cheatsheet', $this->query('quickhelp'));
         } elseif (in_array($this->query('view'), array('income', 'expenses', 'classic', 'debtor'))) {
-            $this->getKernel()->getSetting->set('user', 'accounting.daybook_view', $this->query('view'));
+            $this->getKernel()->getSetting()->set('user', 'accounting.daybook_view', $this->query('view'));
         }
 
         // tests whether you are ready to state anything in the daybook
