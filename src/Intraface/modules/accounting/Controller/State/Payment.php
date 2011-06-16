@@ -18,9 +18,10 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
 
     function renderHtml()
     {
+        $this->document->setTitle('State payment');
+
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
-        $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
         //$object = $this->context->getDebtor();
         $payment = $this->getModel();
@@ -34,7 +35,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         	'voucher' => $voucher,
         	'payment' => $payment,
         	//'object' => $object,
-        	'year' => $year,
+        	'year' => $this->getYear(),
             'accounting_module' => $accounting_module);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/payment');
@@ -45,20 +46,18 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
     {
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
-        $translation = $this->context->getKernel()->getTranslation('debtor');
-        $year = new Year($this->context->getKernel());
         $voucher = $this->getVoucher();
 
         $payment = $this->getModel();
 
-        $this->context->getKernel()->getSetting()->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($_POST['state_account_id']));
+        $this->context->getKernel()->getSetting()->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($this->body('state_account_id')));
 
         if ($payment->error->isError()) {
             // nothing, we continue
-        } elseif (!$payment->state($year, $_POST['voucher_number'], $_POST['date_state'], $_POST['state_account_id'], $translation)) {
+        } elseif (!$payment->state($this->getYear(), $this->body('voucher_number'), $this->body('date_state'), $this->body('state_account_id'), $this->context->getKernel()->getTranslation('debtor'))) {
             $payment->error->set('Could not state');
         } else {
-            return new k_SeeOther($this->url('../../../'));
+            return new k_SeeOther($this->url('../../', array('use_stored' => 'true')));
         }
 
         return $this->render();
