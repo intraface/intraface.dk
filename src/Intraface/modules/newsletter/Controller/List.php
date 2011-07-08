@@ -31,6 +31,37 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/list');
         return $smarty->render($this);
     }
+    
+    function renderHtmlDelete()
+    {
+        if ($this->DELETE()) {
+            return new k_SeeOther($this->url('../', array('flare' => 'List has been deleted')));
+        }
+        return $this->render();
+    }
+    
+
+    function DELETE()
+    {
+    	return $this->getList()->delete();
+    }
+
+    function renderHtmlEdit()
+    {
+        $smarty = $this->template->create(dirname(__FILE__) . '/templates/list-edit');
+        return $smarty->render($this);
+    }
+
+    function postForm()
+    {
+        $list = $this->getList();
+        if ($id = $list->save($_POST)) {
+            return new k_SeeOther($this->url());
+        } else {
+            $value = $_POST;
+        }
+        return $this->render();
+    }
 
     function getList()
     {
@@ -53,28 +84,4 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         $list = new NewsletterList($this->getKernel());
         return $list->getList();
     }
-
-    function DELETE()
-    {
-    	$list = new NewsletterList($this->getKernel(), $this->name());
-    	$list->delete();
-    }
-
-    function renderHtmlEdit()
-    {
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/list-edit');
-        return $smarty->render($this);
-    }
-
-    function postForm()
-    {
-        $list = $this->getList();
-        if ($id = $list->save($_POST)) {
-            return new k_SeeOther($this->url());
-        } else {
-            $value = $_POST;
-        }
-        return $this->render();
-    }
-
 }
