@@ -24,10 +24,7 @@
 	
     <target name="phpunit">
         <exec dir="${tests.dir}" command="phpunit
-           --log-xml ${reports.phpunit.dir}/unit.xml
-           --log-pmd ${reports.phpunit.dir}/phpunit.pmd.xml
-           --log-metrics ${reports.phpunit.dir}/phpunit.metrics.xml 	
-           --coverage-xml ${reports.phpunit.dir}/phpunit.coverage.xml
+           --log-junit ${reports.phpunit.dir}/unit.xml
            --coverage-html ${reports.coverage.dir}/
            ." passthru="true" checkreturn="false" />
     </target>

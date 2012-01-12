@@ -29,7 +29,6 @@ class Intraface_modules_product_Controller_Index extends k_Component
     function renderHtml()
     {
         $module = $this->getKernel()->module('product');
-        $translation = $this->getKernel()->getTranslation('product');
 
         $smarty = $this->template->create(dirname(__FILE__) . '/tpl/index');
         return $smarty->render($this);

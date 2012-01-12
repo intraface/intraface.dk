@@ -23,8 +23,6 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $accounting_module = $this->context->getKernel()->useModule('accounting');
         $this->context->getKernel()->useModule('invoice');
         $voucher = $this->getVoucher();
-        //$object = $this->context->getDebtor();
-        $payment = $this->getModel();
 
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
@@ -33,8 +31,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $data = array(
         	'kernel' => $this->getKernel(),
         	'voucher' => $voucher,
-        	'payment' => $payment,
-        	//'object' => $object,
+        	'payment' => $this->getModel(),
         	'year' => $this->getYear(),
             'accounting_module' => $accounting_module);
 
@@ -48,25 +45,25 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         $this->context->getKernel()->useModule('invoice');
         $voucher = $this->getVoucher();
 
-        $payment = $this->getModel();
+        $this->context->getKernel()->getSetting()->set('intranet', 'payment.state.'.$this->getModel()->get('type').'.account', intval($this->body('state_account_id')));
 
-        $this->context->getKernel()->getSetting()->set('intranet', 'payment.state.'.$payment->get('type').'.account', intval($this->body('state_account_id')));
-
-        if ($payment->error->isError()) {
+        if ($this->getModel()->error->isError()) {
             // nothing, we continue
-        } elseif (!$payment->state($this->getYear(), $this->body('voucher_number'), $this->body('date_state'), $this->body('state_account_id'), $this->context->getKernel()->getTranslation('debtor'))) {
-            $payment->error->set('Could not state');
+        } elseif (!$this->getModel()->state($this->getYear(), $this->body('voucher_number'), $this->body('date_state'), $this->body('state_account_id'), $this->context->getKernel()->getTranslation('debtor'))) {
+            $this->getModel()->error->set('Could not state');
         } else {
-            return new k_SeeOther($this->url('../../', array('use_stored' => 'true')));
+            return new k_SeeOther($this->url('../../../', array('use_stored' => 'true')));
         }
 
         return $this->render();
-
     }
 
     function getModel()
     {
-        return $this->context->getModel();
+        if (is_object($this->payment)) {
+            return $this->payment;
+        }
+        return ($this->payment = $this->context->getModel());
     }
 
     function getVoucher()
@@ -75,7 +72,7 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
             return $this->voucher;
         }
 
-        return $this->voucher = new Voucher($this->getYear());
+        return ($this->voucher = new Voucher($this->getYear()));
     }
 
     function getYear()

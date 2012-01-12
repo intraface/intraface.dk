@@ -12,7 +12,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
     {
         $module = $this->context->getKernel()->module("product");
 
-        $product = new Product($this->context->getKernel());
+        $product = $this->context->getGateway();
         $product->getDBQuery()->storeResult("use_stored", "products", "toplevel");
         $products = $product->getList();
 

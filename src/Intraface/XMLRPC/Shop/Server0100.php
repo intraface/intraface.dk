@@ -799,11 +799,11 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
 
-        $product_id = $this->processRequestData(intval($product_id));
-        $product_variation_id = $this->processRequestData(intval($product_variation_id));
-        $quantity = $this->processRequestData(intval($quantity));
+        $product_id = intval($product_id);
+        $product_variation_id = intval($product_variation_id);
+        $quantity = intval($quantity);
         $text = $this->processRequestData($text);
-        $product_detail_id = $this->processRequestData(intval($product_detail_id));
+        $product_detail_id = intval($product_detail_id);
 
         if (!$this->webshop->getBasket()->change($product_id, $product_variation_id, $quantity, $text, $product_detail_id)) {
             return false;
@@ -815,9 +815,9 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
     /**
      * Gets an array with the current basket
      *
-     * @param struct $credentials Credentials to use the server
-     * @param integer $shop_id    Id for the shop
-     * @param struct $customer customer values
+     * @param struct  $credentials Credentials to use the server
+     * @param integer $shop_id     Id for the shop
+     * @param struct  $customer    customer values
      *
      * @return array
      */
@@ -828,7 +828,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $this->_factoryWebshop($shop_id);
 
         $customer = $this->processRequestData($customer);
-
 
         // we put the possibility for BasketEvaluation not to be run.
         if (is_string($customer) && $customer == 'no_evaluation') {
