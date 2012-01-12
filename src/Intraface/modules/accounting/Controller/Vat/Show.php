@@ -43,8 +43,8 @@ class Intraface_modules_accounting_Controller_Vat_Show extends k_Component
        	    'saldo_total' => $saldo_total
        	);
 
-        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show', $data);
-        return $smarty->render($this);
+        $smarty = $this->template->create(dirname(__FILE__) . '/../templates/vat/show');
+        return $smarty->render($this, $data);
     }
 
     function postForm()
