@@ -49,10 +49,8 @@ class Intraface_modules_accounting_VoucherFileGateway
                         $files[$i]['description'] = 'Momsperiode';
                     }
                     $files[$i]['name'] = 'Momsperiode';
-                    // @todo how to fix this?
-                    $files[$i]['file_uri'] = $this->url('/module/accounting/vat_view.php', array('id' => $db->f('belong_to_id')));
+                    $files[$i]['file_uri'] = $this->url('/module/accounting/year/'.$this->voucher->year->getId().'/vat/' . $db->f('belong_to_id'));
                 break;
-
                 case 'file':
                     $this->voucher->year->kernel->useModule('filemanager');
                     $filehandler = new FileHandler($this->voucher->year->kernel, $db->f('belong_to_id'));

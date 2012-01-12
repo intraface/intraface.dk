@@ -91,7 +91,7 @@
 			<tr>
 				<td><a href="<?php e($file['file_uri']); ?>"><?php e($file['description']); ?></a></td>
 				<td class="options">
-					<a class="delete" href="<?php e(url(null)); ?>?delete_file=<?php e($file['id']); ?>&amp;id=<?php e($context->getVoucher()->get('id')); ?>">Slet</a>
+					<a class="delete" href="<?php e(url(null, array('delete_file' => $file['id'], 'id' => $context->getVoucher()->get('id')))); ?>">Slet</a>
 				</td>
 			</tr>
 		<?php endforeach; ?>
