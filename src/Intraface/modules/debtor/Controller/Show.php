@@ -230,7 +230,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($url . '&edit');
         }
 
-        // Redirect til tilf�j produkt
+        // Redirect til tilføj produkt
         if ($this->query('add_item')) {
             $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
             $product_module = $this->getKernel()->useModule('product');
@@ -288,14 +288,14 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
         }
         $contact_module = $this->getKernel()->getModule('contact');
 
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/show');
-        return $smarty->render($this);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
+        return $tpl->render($this);
     }
 
     function renderHtmlEdit()
     {
-        $smarty = $this->template->create(dirname(__FILE__) . '/templates/edit');
-        return $smarty->render($this);
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/edit');
+        return $tpl->render($this);
     }
 
     function postForm()

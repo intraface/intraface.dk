@@ -66,35 +66,6 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
 
         $checked_invoice = array();
         $checked_reminder = array();
-        /*
-                if (intval($_POST["id"]) != 0) {
-                    $title = "Ret rykker";
-                } else {
-                    $title = "Ny rykker";
-                }
-
-                $value = $_POST;
-
-                $value["dk_this_date"] = $value["this_date"];
-                $value["dk_due_date"] = $value["due_date"];
-
-                $contact = new contact($this->getKernel(), $_POST["contact_id"]);
-
-                if (isset($value["checked_invoice"]) && is_array($value["checked_invoice"])) {
-                    $checked_invoice = $value["checked_invoice"];
-                } else {
-                    $checked_invoice = array();
-                }
-
-                if (isset($value["checked_reminder"]) && is_array($value["checked_reminder"])) {
-                    $checked_reminder = $value["checked_reminder"];
-                } else {
-                    $checked_reminder = array();
-                }
-            }
-        */
-
-
 
         $this->document->setTitle("Ret rykker");
         $reminder = new Reminder($this->getKernel(), intval($this->name()));
@@ -112,92 +83,55 @@ class Intraface_modules_debtor_Controller_Reminder extends k_Component
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/reminder-edit');
-        return $smarty->render($this, array('checked_invoice' => $checked_invoice, 'checked_reminder' => $checked_reminder));
+        return $smarty->render($this, array('value' => $value, 'checked_invoice' => $checked_invoice, 'checked_reminder' => $checked_reminder));
     }
 
     function renderPdf()
     {
+        $mainInvoice = $this->getKernel()->useModule("invoice");
+        $this->getKernel()->useModule('filemanager');
+        $mainInvoice->includeFile("Reminder.php");
+        $mainInvoice->includeFile("ReminderItem.php");
+
         $reminder = new Reminder($this->getKernel(), intval($this->name()));
         return $reminder->pdf();
     }
 
     function postForm()
     {
-
         $module = $this->getKernel()->module("debtor");
-
-        $translation = $this->getKernel()->getTranslation('debtor');
-
         $mainInvoice = $this->getKernel()->useModule("invoice");
         $mainInvoice->includeFile("Reminder.php");
         $mainInvoice->includeFile("ReminderItem.php");
 
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $reminder = new Reminder($this->getKernel(), intval($_POST["id"]));
 
-            $reminder = new Reminder($this->getKernel(), intval($_POST["id"]));
-
-            // mark as sent
-            if (!empty($_POST["mark_as_sent"])) {
-                $reminder->setStatus("sent");
-
-                if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
-                    return new k_SeeOther($this->url('state'));
-
-                }
+        // mark as sent
+        if (!empty($_POST["mark_as_sent"])) {
+            $reminder->setStatus("sent");
+            if ($this->getKernel()->user->hasModuleAccess('accounting') && $reminder->somethingToState()) {
+                return new k_SeeOther($this->url('state'));
             }
         }
+        $reminder = new Reminder($this->getKernel(), intval($this->name()));
 
+        if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+            $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+            $contact_person = new ContactPerson($contact);
+            $person["name"] = $_POST['contact_person_name'];
+            $person["email"] = $_POST['contact_person_email'];
+            $contact_person->save($person);
+            $contact_person->load();
+            $_POST["contact_person_id"] = $contact_person->get("id");
+        }
 
-            $reminder = new Reminder($this->getKernel(), intval($this->name()));
-
-            if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
-                $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
-                $contact_person = new ContactPerson($contact);
-                $person["name"] = $_POST['contact_person_name'];
-                $person["email"] = $_POST['contact_person_email'];
-                $contact_person->save($person);
-                $contact_person->load();
-                $_POST["contact_person_id"] = $contact_person->get("id");
+        if ($reminder->save($_POST)) {
+            if ($_POST['send_as'] == 'email') {
+                return new k_SeeOther($this->url(null, array('email')));
+            } else {
+                return new k_SeeOther($this->url());
             }
-
-            if ($reminder->save($_POST)) {
-
-                if ($_POST['send_as'] == 'email') {
-                    return new k_SeeOther($this->url(null, array('email')));
-                } else {
-                    return new k_SeeOther($this->url());
-                }
-            }
-
-
-            /*
-            else {
-                if (intval($_POST["id"]) != 0) {
-                    $title = "Ret rykker";
-                } else {
-                    $title = "Ny rykker";
-                }
-
-                $value = $_POST;
-
-                $value["dk_this_date"] = $value["this_date"];
-                $value["dk_due_date"] = $value["due_date"];
-
-                $contact = new contact($this->getKernel(), $_POST["contact_id"]);
-
-                if (isset($value["checked_invoice"]) && is_array($value["checked_invoice"])) {
-                    $checked_invoice = $value["checked_invoice"];
-                } else {
-                    $checked_invoice = array();
-                }
-
-                if (isset($value["checked_reminder"]) && is_array($value["checked_reminder"])) {
-                    $checked_reminder = $value["checked_reminder"];
-                } else {
-                    $checked_reminder = array();
-                }
-            }
-        }*/
+        }
         return $this->render();
     }
 
@@ -326,6 +260,7 @@ class Reminder_Text
 {
     private $output;
     function __construct() {}
+
     function visit(Reminder $reminder)
     {
         $this->output .= "Dato: " . $reminder->get("dk_this_date") ."\n\n";
@@ -371,13 +306,13 @@ class Reminder_Text
                 "amount" => $total,
                 "due_date" => $reminder->get("dk_due_date"),
                 "girocode" => $reminder->get("girocode"));
-            $this->output .= "\n\nDet skyldige bel�b betales senest: " . $parameter['due_date'];
+            $this->output .= "\n\nDet skyldige beløb betales senest: " . $parameter['due_date'];
 
             // TODO: change to payment_method
             switch ($reminder->get('payment_method_key')) {
                 case 1: // fall through - ingen valgt
-                case 2: // kontooverf�rsel
-                    $this->output .= "\n\nBetales p� konto:";
+                case 2: // kontooverførsel
+                    $this->output .= "\n\nBetales på konto:";
                     $this->output .= "\nBank:                ".$reminder->kernel->setting->get('intranet', 'bank_name');
                     $this->output .= "\nRegnr.:              ".$reminder->kernel->setting->get('intranet', 'bank_reg_number');
                     $this->output .= "\nKontonr.:            ".$reminder->kernel->setting->get('intranet', 'bank_account_number');
@@ -397,5 +332,4 @@ class Reminder_Text
     {
         return $this->output;
     }
-
 }
