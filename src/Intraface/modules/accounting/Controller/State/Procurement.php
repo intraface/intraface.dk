@@ -26,14 +26,14 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
             return new k_SeeOther($this->url('selectyear'));
         }
         $procurement = $this->getProcurement();
-        //$this->value = $procurement->get();
         $items = $procurement->getItems();
         $i = 0;
 
         if (count($items) > 0) {
+            // @todo what should be implemented
             // implement to a line for each item
         }
-        /*
+        /* @todo What should this be used for?
          if ($procurement->get('price_items') - $items_amount > 0) {
          $this->value['debet_account'][$i++] = array('text' => '', 'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
          }
