@@ -159,11 +159,14 @@
     <div>
         <input type="submit" name="add_line" value="<?php e(t('add line')); ?>" />
     </div>
-
+    <?php if (count($procurement->getItems()) == 0): ?>
+         <p class="warning"><?php e(t('Cannot state procurement with no items.')); ?> <a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></p>
+    <?php else: ?>
     <div>
          <input type="submit" name="state" value="<?php e(t('State')); ?>" />
          <a href="<?php url('../'); ?>"><?php e(t('Cancel')); ?></a>
     </div>
+    <?php endif; ?>
 
 </form>
 
