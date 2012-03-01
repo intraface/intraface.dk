@@ -93,6 +93,7 @@
 
     </fieldset>
 
+    <?php if (isset($value['debet_account']) && is_array($value['debet_account'])): ?>
     <table class="stripe">
         <thead>
             <tr>
@@ -105,7 +106,7 @@
         </thead>
         <tbody>
             <?php
-            if (isset($value['debet_account']) && is_array($value['debet_account'])) {
+               if (isset($value['debet_account']) && is_array($value['debet_account'])) {
 
                 $account = new Account($year);
 
@@ -156,6 +157,7 @@
 
         </tbody>
     </table>
+    <?php endif; ?>
     <div>
         <input type="submit" name="add_line" value="<?php e(t('add line')); ?>" />
     </div>
