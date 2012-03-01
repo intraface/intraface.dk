@@ -159,7 +159,7 @@
     <div>
         <input type="submit" name="add_line" value="<?php e(t('add line')); ?>" />
     </div>
-    <?php if (count($procurement->getItems()) == 0): ?>
+    <?php if (empty($value['debet_account'])): ?>
          <p class="warning"><?php e(t('Cannot state procurement with no items.')); ?> <a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></p>
     <?php else: ?>
     <div>
