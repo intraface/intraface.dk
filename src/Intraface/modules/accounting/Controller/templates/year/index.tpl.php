@@ -20,15 +20,19 @@
                 <th></th>
                 <th>År</th>
                 <th></th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
         <?php foreach ($context->getYearGateway()->getList() as $y): ?>
         <tr>
             <td><input type="radio" name="id" value="<?php e($y['id']); ?>" <?php if ($context->getYear()->loadActiveYear() == $y['id']) { echo ' checked="checked"'; } ?>/></td>
-            <td><a href="<?php e($context->url($y['id'])); ?>"><?php e($y['label']); ?></a></td>
+            <td><a href="<?php e(url($y['id'])); ?>"><?php e($y['label']); ?></a></td>
+            <td><a href="<?php e(url($y['id'] . '/vat')); ?>"><?php e(t('Vat')); ?></a></td>
+            <td><a href="<?php e(url($y['id'] . '/end')); ?>"><?php e(t('End year')); ?></a></td>            
             <td class="options">
-                <a class="edit" href="<?php e($context->url($y['id'] . '/edit')); ?>">Ret</a>
+                <a class="edit" href="<?php e(url($y['id'] . '/edit')); ?>"><?php e(t('Edit')); ?></a>
             </td>
         </tr>
         <?php endforeach; ?>
