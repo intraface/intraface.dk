@@ -28,9 +28,11 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $data = array(
         	'procurement' => $this->getProcurement(),
         	'year' => $this->getYear(),
+            'account' => new Account($this->getYear()),
         	'voucher' => $voucher,
         	'items' => $this->getProcurement()->getItems(),
-        	'value' => $this->getValues());
+        	'value' => $this->getValues(),
+            'vat_account' => new Account($this->getYear(), $this->getYear()->getSetting('vat_in_account_id')));
         $this->document->setTitle('State procurement #' . $this->getProcurement()->get('id'));
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/procurement');
@@ -43,7 +45,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $this->getKernel()->useModule('accounting');
 
         if ($this->body('state')) {
-            if ($this->getProcurement()->checkStateDebetAccounts($this->getYear(), $this->body('debet_account'))) {
+            if ($this->getProcurement()->checkStateDebetAccounts($this->getYear(), $this->body('debet_account'), 'do_amount_check')) {
                 if ($this->getProcurement()->state($this->getYear(), $this->body('voucher_number'), $this->body('voucher_date'), $this->body('debet_account'), (int)$this->body('credit_account_number'), $this->getKernel()->getTranslation('procurement'))) {
                     return new k_SeeOther($this->url('../'));
                 }

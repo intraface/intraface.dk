@@ -9,7 +9,6 @@
     <p><?php e(t('Please verify manually whether the amounts has been stated correctly')); ?>.</p>
 </div>
 
-
     <?php echo $procurement->error->view(); ?>
 
     <form action="<?php e(url()); ?>" method="post">
@@ -59,8 +58,6 @@
         </table>
     </fieldset>
 
-
-
     <fieldset>
         <legend><?php e(t('Information')); ?></legend>
 
@@ -79,14 +76,12 @@
             <select name="credit_account_number">
                 <option value=""><?php e(t('Choose')); ?></option>
                 <?php
-                $account = new Account($year);
-                $accounts = $account->getList('finance');
-                foreach ($accounts as $account):
-                    if ($year->getSetting('debtor_account_id') == $account['id']) continue;
+                foreach ($account->getList('finance') as $a):
+                    if ($year->getSetting('debtor_account_id') == $a['id']) continue;
                     ?>
-                    <option value="<?php e($account['number']); ?>"
-                    <?php if (isset($value['credit_account_number']) && $account['number'] == $value['credit_account_number']) echo ' selected="selected"'; ?>
-                    ><?php e($account['name']); ?></option>
+                    <option value="<?php e($a['number']); ?>"
+                    <?php if (isset($value['credit_account_number']) && $a['number'] == $value['credit_account_number']) echo ' selected="selected"'; ?>
+                    ><?php e($a['name']); ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
@@ -108,8 +103,6 @@
             <?php
                if (isset($value['debet_account']) && is_array($value['debet_account'])) {
 
-                $account = new Account($year);
-
                 foreach ($value['debet_account'] AS $key => $line) {
                     ?>
                     <tr>
@@ -117,13 +110,10 @@
                         <td><?php e($procurement->get('description')); ?> - <input type="text" name="debet_account[<?php e($key); ?>][text]" value="<?php e($line["text"]); ?>" /></td>
                         <td><input type="text" name="debet_account[<?php e($key); ?>][amount]" value="<?php e($line["amount"]); ?>" size="8" /> <?php e('('.t('excl. vat').')'); ?></td>
                         <td>
-                            <?php
-                            $accounts =  $account->getList('expenses');
-                            ?>
                             <select id="state_account" name="debet_account[<?php e($key); ?>][state_account_id]">
                                 <option value=""><?php e(t('Choose')); ?></option>
                                 <?php
-                                foreach ($accounts AS $a):
+                                foreach ($account->getList('expenses') AS $a):
                                     if (strtolower($a['type']) == 'sum') continue;
                                     if (strtolower($a['type']) == 'headline') continue;
                                     ?>
@@ -145,12 +135,7 @@
                     <td>&nbsp;</td>
                     <td><?php e($procurement->get('description'). ' - '.t('vat')); ?></td>
                     <td><?php e($procurement->get('dk_vat')); ?></td>
-                    <td>
-                        <?php
-                        $account = new Account($year, $year->getSetting('vat_in_account_id'));
-                        e($account->get('number') . ' ' . $account->get('name'));
-                        ?>
-                    </td>
+                    <td><?php e($vat_account->get('number') . ' ' . $vat_account->get('name')); ?></td>
                     <td>&nbsp;</td>
                  </tr>
              <?php endif; ?>
@@ -171,4 +156,3 @@
     <?php endif; ?>
 
 </form>
-

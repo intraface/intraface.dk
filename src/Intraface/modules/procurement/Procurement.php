@@ -505,6 +505,7 @@ class Procurement extends Intraface_Standard
      * returns whether the procurement is ready for state
      *
      * @param object year accounting year
+     *
      * @return boolean true or false
      */
     function readyForState($year)
@@ -539,7 +540,13 @@ class Procurement extends Intraface_Standard
     }
 
     /**
-     * Checks whether the debet accounts is valid
+     * Checks whether the debet accounts are valid
+     *
+     * @param object $year              Accounting year object
+     * @param array  $debet_accounts    Array with debet accounts
+     * @param string $skip_amount_check Valid options: do_amount_check or skip_amount_check
+     *
+     * @return boolean
      */
     public function checkStateDebetAccounts($year, $debet_accounts, $skip_amount_check = 'do_amount_check')
     {
@@ -574,7 +581,7 @@ class Procurement extends Intraface_Standard
                 $validator->isString($debet_account['text'], 'Ugyldig tekst i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', '', 'allow_empty');
 
                 if (empty($debet_account['state_account_id']) ) {
-                    $this->error->set('Linje ' . ($key+1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
+                    $this->error->set('Linje ' . ($key + 1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $debet_account['state_account_id']);
