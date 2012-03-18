@@ -602,7 +602,7 @@ class Procurement extends Intraface_Standard
 
             if (round($vat, 2) != $this->get('vat')) {
                 $expected = number_format($this->get('vat') * 4, 2, ',', '.');
-                $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer (vi forventede '.number_format($vat, 2, ',', '.').') ikke overens med momsen på det samlede indkøb (det samlede beløb burde have været '.$expected.'). Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
+                $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer ikke overens med momsen på det samlede indkøb (vi forventede '.number_format($vat, 2, ',', '.').' i moms og det samlede beløb burde have været ' . $expected . '). Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
             }
         }
 
