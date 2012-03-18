@@ -315,12 +315,10 @@ class Procurement extends Intraface_Standard
 
         if (!is_object($contact)) {
             throw new Exception('The parameter to set Contact need to be a contact object!');
-            return false;
         }
 
         if ($contact->get('id') == 0) {
             throw new Exception('The given contact is not valid!');
-            return false;
         }
 
         $db = new DB_sql;
@@ -383,11 +381,10 @@ class Procurement extends Intraface_Standard
 
         if (!is_object($translation)) {
             throw new Exception('Sixth parameter to state needs to be a Translation object!');
-            return false;
         }
 
         if (!$this->readyForState($year)) {
-            $this->error->set('Ikke klar til bogføring');
+            $this->error->set('Ikke klar til at blive bogført');
             return false;
         }
 
@@ -465,7 +462,7 @@ class Procurement extends Intraface_Standard
 
         require_once 'Intraface/modules/accounting/VoucherFile.php';
         $voucher_file = new VoucherFile($voucher);
-        if (!$voucher_file->save(array('description' => $text, 'belong_to'=>'procurement','belong_to_id'=>$this->get('id')))) {
+        if (!$voucher_file->save(array('description' => $text, 'belong_to' => 'procurement', 'belong_to_id' => $this->get('id')))) {
             $this->error->merge($voucher_file->error->getMessage());
             $this->error->set('Filen blev ikke overflyttet');
         }
@@ -514,7 +511,6 @@ class Procurement extends Intraface_Standard
     {
         if (!is_object($year)) {
             throw new Exception('First parameter to readyForState needs to be a Year object!');
-            return false;
         }
 
         if (!$year->readyForState($this->get('paid_date'))) {
@@ -549,17 +545,14 @@ class Procurement extends Intraface_Standard
     {
         if (!is_object($year)) {
             throw new Exception('First parameter to checkStateDebetAccounts needs to be a Year object!');
-            return false;
         }
 
         if (!is_array($debet_accounts)) {
             throw new Exception('Second parameter to checkStateDebetAccounts needs to be an array');
-            return false;
         }
 
         if (!in_array($skip_amount_check, array('do_amount_check', 'skip_amount_check'))) {
             throw new Exception('Third parameter to checkStateDebetAccounts needs to be either do_amount_check or skip_amount_check');
-            return false;
         }
 
         if (empty($debet_accounts)) {
@@ -572,16 +565,16 @@ class Procurement extends Intraface_Standard
         $total = 0;
         $vat = 0;
         foreach ($debet_accounts AS $key => $debet_account) {
-            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje '.($key+1).' "'.$debet_account['text'].'"', 'greater_than_zero')) {
+            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', 'greater_than_zero')) {
 
                 $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
                 $total += $amount->get();
 
-                $validator->isString($debet_account['text'], 'Ugyldig tekst i linje '.($key+1).' "'.$debet_account['text'].'"', '', 'allow_empty');
+                $validator->isString($debet_account['text'], 'Ugyldig tekst i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', '', 'allow_empty');
 
                 if (empty($debet_account['state_account_id']) ) {
-                    $this->error->set('Linje '.($key+1).' "'.$debet_account['text'].'" ved ikke hvor den skal bogføres');
+                    $this->error->set('Linje ' . ($key+1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $debet_account['state_account_id']);
@@ -589,10 +582,9 @@ class Procurement extends Intraface_Standard
                     // @todo check this. I changed it to make sure that we are able to state varekøb til videresalg
                     // || $account->get('type') != 'operating'
                     if ($account->get('id') == 0) {
-                        $this->error->set('Ugyldig konto for bogfï¿½ring af linje '.($key+1).' "'.$debet_account['text'].'"');
+                        $this->error->set('Ugyldig konto for bogføring af linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"');
                     } elseif ($account->get('vat') == 'in') {
-
-                        $vat += $amount->get()/100*$account->get('vat_percent');
+                        $vat += $amount->get() / 100 * $account->get('vat_percent');
                     }
                 }
             }
