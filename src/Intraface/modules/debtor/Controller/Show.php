@@ -548,12 +548,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
         switch ($this->getDebtor()->contact->get('preferred_invoice')) {
             case 2: // if the customer prefers e-mail
-
-                $valid_sender = true;
                 switch ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
                     case 'intranet':
                         if ($this->getKernel()->intranet->address->get('name') == '' || $this->getKernel()->intranet->address->get('email') == '') {
-                            $valid_sender = false;
                             if ($this->getKernel()->user->hasModuleAccess('administration')) {
                                 $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
                             } else {
@@ -564,13 +561,11 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                         break;
                     case 'user':
                         if ($this->getKernel()->user->getAddress()->get('name') == '' || $this->getKernel()->user->getAddress()->get('email') == '') {
-                            $valid_sender = false;
                             $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../controlpanel/user', array('edit')).'">'.t('do it now').'</a>.</p></div>';
                         }
                         break;
                     case 'defined':
                         if ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender.name') == '' || $this->getKernel()->getSetting()->get('intranet', 'debtor.sender.email') == '') {
-                            $valid_sender = false;
                             if ($this->getKernel()->user->hasModuleAccess('administration')) {
                                 $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.$module_debtor->getPath().'settings">'.t('do it now').'</a>.</p></div>';
                             } else {
@@ -580,13 +575,11 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                         }
                         break;
                     default:
-                        $valid_sender = false;
                         throw new Exception("Invalid sender!");
 
                 }
 
                 if ($this->getDebtor()->contact->address->get('email') == '') {
-                    $valid_sender = false;
                     $msg = '<div class="message-dependent"><p>'.$this->t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
 
                 }
