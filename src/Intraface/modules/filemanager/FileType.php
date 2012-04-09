@@ -133,7 +133,14 @@ class FileType
             'extension' => 'csv',
             'icon' => 'csv.jpg',
             'image' => 0,
-            'allow_user_upload' => 1)
+            'allow_user_upload' => 1),
+        17 => array(
+            'description' => 'PDF document',
+            'mime_type' => 'application/download',
+            'extension' => 'pdf',
+            'icon' => 'pdf.jpg',
+            'image' => 0,
+            'allow_user_upload' => 1),
         );
 
     /**
