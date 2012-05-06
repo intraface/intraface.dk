@@ -255,7 +255,7 @@ class Procurement extends Intraface_Standard
     {
         $status_key = array_search($status, $this->getStatusTypes());
         if ($status_key === false) {
-            throw new Exception("Ugyldigt status: ".$status, FATAL);
+            throw new Exception("Ugyldigt status: ".$status);
         }
 
         switch($status) {
