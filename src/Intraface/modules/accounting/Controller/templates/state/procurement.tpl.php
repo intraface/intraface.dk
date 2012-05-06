@@ -100,18 +100,14 @@
             </tr>
         </thead>
         <tbody>
-            <?php
-               if (isset($value['debet_account']) && is_array($value['debet_account'])) {
-
-                foreach ($value['debet_account'] AS $key => $line) {
-                    ?>
-                    <tr>
-                        <td><?php e($key+1); ?></td>
-                        <td><?php e($procurement->get('description')); ?> - <input type="text" name="debet_account[<?php e($key); ?>][text]" value="<?php e($line["text"]); ?>" /></td>
-                        <td><input type="text" name="debet_account[<?php e($key); ?>][amount]" value="<?php e($line["amount"]); ?>" size="8" /> <?php e('('.t('excl. vat').')'); ?></td>
-                        <td>
-                            <select id="state_account" name="debet_account[<?php e($key); ?>][state_account_id]">
-                                <option value=""><?php e(t('Choose')); ?></option>
+            <?php foreach ($value['debet_account'] AS $key => $line) { ?>
+                <tr>
+                    <td><?php e($key+1); ?></td>
+                    <td><?php e($procurement->get('description')); ?> - <input type="text" name="debet_account[<?php e($key); ?>][text]" value="<?php e($line["text"]); ?>" /></td>
+                    <td><input type="text" name="debet_account[<?php e($key); ?>][amount]" value="<?php e($line["amount"]); ?>" size="8" /> <?php e('('.t('excl. vat').')'); ?></td>
+                    <td>
+                        <select id="state_account" name="debet_account[<?php e($key); ?>][state_account_id]">
+                            <option value=""><?php e(t('Choose')); ?></option>
                                 <?php
                                 foreach ($account->getList('expenses') AS $a):
                                     if (strtolower($a['type']) == 'sum') continue;
@@ -126,10 +122,7 @@
                         </td>
                         <td><input type="submit" name="remove_line[<?php e($key); ?>]" value="<?php e(t('remove')); ?>" /></td>
                     </tr>
-                    <?php
-                }
-            }
-            ?>
+            <?php } ?>
             <?php if ($procurement->get('vat') > 0): ?>
                 <tr>
                     <td>&nbsp;</td>
@@ -138,8 +131,7 @@
                     <td><?php e($vat_account->get('number') . ' ' . $vat_account->get('name')); ?></td>
                     <td>&nbsp;</td>
                  </tr>
-             <?php endif; ?>
-
+            <?php endif; ?>
         </tbody>
     </table>
     <?php endif; ?>
