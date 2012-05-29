@@ -29,8 +29,6 @@
 </head>
 
 <body id="intraface-dk"<?php if (!empty($module_name)) echo ' class="' . $module_name . '"'; ?>>
-    <a href="http://github.com/intraface/intraface.dk"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
-
 	<div id="container" class="clearfix">
 
 		<?php if (!empty($system_message)) { ?><p id="system_message"><?php e($system_message); ?></p><?php } ?>
@@ -95,8 +93,6 @@
 		}
 	?>
 </div><!-- container -->
-
-
 
 </body>
 </html>
