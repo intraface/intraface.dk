@@ -49,8 +49,7 @@ h1 span {
 }
 
 form { 
-	margin: 1em auto; 
-	padding: 0em; 
+	margin: 2em auto; 
 }
 
 legend { 
@@ -63,12 +62,13 @@ label {
 }
 
 fieldset { 
-	padding: 0 0; 
+	padding: 0 1em; 
 }
 
 div.align-left { 
 	float: left; 
-	margin-right: 1em; 
+	width: 13em;
+	margin-right: 2em; 
 }
 
 div { 
