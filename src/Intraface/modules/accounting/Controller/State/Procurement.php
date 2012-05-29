@@ -4,6 +4,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
     protected $year;
     protected $value = array();
     protected $template;
+    protected $add_propose_button = false;
 
     function __construct(k_TemplateFactory $template)
     {
@@ -20,20 +21,20 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $this->getKernel()->module('procurement');
         $this->getKernel()->useModule('accounting');
 
-        $voucher = new Voucher($this->getYear());
         if (!$this->getYear()->readyForState($this->getModel()->get('this_date'))) {
             return new k_SeeOther($this->url('selectyear'));
         }
+
+        $this->document->setTitle('State procurement #' . $this->getProcurement()->get('id'));
 
         $data = array(
         	'procurement' => $this->getProcurement(),
         	'year' => $this->getYear(),
             'account' => new Account($this->getYear()),
-        	'voucher' => $voucher,
+        	'voucher' => new Voucher($this->getYear()),
         	'items' => $this->getProcurement()->getItems(),
         	'value' => $this->getValues(),
             'vat_account' => new Account($this->getYear(), $this->getYear()->getSetting('vat_in_account_id')));
-        $this->document->setTitle('State procurement #' . $this->getProcurement()->get('id'));
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/procurement');
         return $smarty->render($this, $data);
@@ -50,6 +51,8 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
                     return new k_SeeOther($this->url('../'));
                 }
                 $this->getProcurement()->error->set('Kunne ikke bogføre posten');
+            } else {
+                $this->add_propose_button = true;
             }
         }
 
@@ -69,8 +72,9 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
                     array_splice($this->value['debet_account'], $key, 1);
                 }
                 return $this->value;
+            } elseif ($this->body('propose_changes')) {
+                $this->value['debet_account'][] = array('text' => 'Proposed solution', 'amount' => '100,00');
             }
-
         } else {
             $i = 0;
             $procurement = $this->getProcurement();
@@ -109,5 +113,12 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
     function getModel()
     {
         return $object = $this->context->getModel();
+    }
+    
+    function getProposeButton() 
+    {
+        if ($this->add_propose_button === true) {
+            return '<input type="submit" name="propose_changes" value="' . $this->t('Propose changes') . '" />';
+        }
     }
 }
