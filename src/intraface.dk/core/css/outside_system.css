@@ -20,8 +20,8 @@ div#container {
 
 fieldset {
 	border: none;
-	width: 32em;
-	margin: auto;
+	width: 34em;
+	margin: 2em auto;
 }
 
 a { 
@@ -50,8 +50,7 @@ h1 span {
 
 form { 
 	margin: 1em auto; 
-	padding: 0.5em; 
-	margin: 2em; 
+	padding: 0em; 
 }
 
 legend { 
@@ -64,12 +63,12 @@ label {
 }
 
 fieldset { 
-	padding: 0 1em; 
+	padding: 0 0; 
 }
 
-
 div.align-left { 
-	float: left; width: 13em; 
+	float: left; 
+	margin-right: 1em; 
 }
 
 div { 
