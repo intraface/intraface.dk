@@ -67,9 +67,10 @@ fieldset {
 	padding: 0 1em; 
 }
 
-
 div.align-left { 
-	float: left; width: 13em; 
+	float: left; 
+	width: 13em;
+	margin-right: 2em; 
 }
 
 div { 
