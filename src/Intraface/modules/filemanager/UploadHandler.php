@@ -208,7 +208,6 @@ class UploadHandler extends Intraface_Standard
             return false;
         }
 
-
         if ($upload_type == 'do_not_save') {
             // $tmp_server_file_name = date("U").$this->file_handler->kernel->randomKey(10).".".$mime_type['extension'];
             $tmp_server_file = $this->file_handler->createTemporaryFile($prop['real']);
@@ -232,10 +231,8 @@ class UploadHandler extends Intraface_Standard
 
         } elseif ($upload_type == 'temporary') {
             $id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'temporary', $mime_type['mime_type']);
-
             return $id;
         } else {
-
             // PHP's mime_content_type showed up to be not to liable with png images. Therefor we submit the mime_type from here which is ok.
             $id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'visible', $mime_type['mime_type']);
             $this->file_handler->update(array('accessibility' => $this->upload_setting['file_accessibility']));
@@ -303,8 +300,8 @@ class UploadHandler extends Intraface_Standard
 
                 $file_size = filesize($dir.$file);
                 if ($file_size > $this->upload_setting['max_file_size']) {
-                    $this->file_handler->error->set("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte");
-                    print("Filen \"".$file."\" er større end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
+                    $this->file_handler->error->set("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte");
+                    print("Filen \"".$file."\" er stï¿½rre end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
                     CONTINUE;
                 }
 

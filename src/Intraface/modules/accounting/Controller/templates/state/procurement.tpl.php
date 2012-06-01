@@ -12,6 +12,8 @@
     <?php echo $procurement->error->view(); ?>
 
     <form action="<?php e(url()); ?>" method="post">
+    
+    <?php echo $context->getProposeButton(); ?>
 
     <fieldset>
         <legend><?php e(t('procurement')); ?></legend>

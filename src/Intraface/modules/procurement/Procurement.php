@@ -620,6 +620,71 @@ class Procurement extends Intraface_Standard
     }
 
     /**
+     * Propose a solution if checkStateDebetAccounts() fails
+     *
+     * @param array  $debet_accounts    Array with debet accounts
+     *
+     * @return boolean
+     */
+    public function proposeSolution(array $debet_accounts)
+    {
+        if (empty($debet_accounts)) {
+            $this->error->set('you have not set any debet accounts');
+            return false;
+        }
+
+        $validator = new Intraface_Validator($this->error);
+
+        $total = 0;
+        $vat = 0;
+        foreach ($debet_accounts AS $key => $debet_account) {
+            if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', 'greater_than_zero')) {
+
+                $amount = new Intraface_Amount($debet_account['amount']);
+                $amount->convert2db();
+                $total += $amount->get();
+
+                $validator->isString($debet_account['text'], 'Ugyldig tekst i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', '', 'allow_empty');
+
+                if (empty($debet_account['state_account_id']) ) {
+                    $this->error->set('Linje ' . ($key + 1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
+                } else {
+                    require_once 'Intraface/modules/accounting/Account.php';
+                    $account = Account::factory($year, $debet_account['state_account_id']);
+
+                    // @todo check this. I changed it to make sure that we are able to state varekøb til videresalg
+                    // || $account->get('type') != 'operating'
+                    if ($account->get('id') == 0) {
+                        $this->error->set('Ugyldig konto for bogføring af linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"');
+                    } elseif ($account->get('vat') == 'in') {
+                        $vat += $amount->get() / 100 * $account->get('vat_percent');
+                    }
+                }
+            }
+        }
+
+        if ($this->error->isError()) {
+            return false;
+        }
+
+        if (round($total + $this->get('vat'), 2) != $this->get('total_price')) {
+            $delta = $this->get('total_price') - ($total + $this->get('vat'));
+            $this->error->set('Det samlede beløb ('.number_format($total + $this->get('vat'), 2, ',', '.').') til bogføring stemmer ikke overens med det samlede beløb på indkøbet ('.number_format($this->get('total_price'), 2, ',', '.').'). Der er en forskel på '.number_format($delta, 2, ',', '.').'. Har du fået alle varer på indkøbet med?');
+        }
+
+        if (round($vat, 2) != $this->get('vat')) {
+            $expected_vat = number_format($vat, 2, ',', '.');
+            $expected_value = number_format($this->get('vat') * 4, 2, ',', '.');
+            $this->error->set('Momsen af de beløb du bogfører på konti med moms stemmer ikke overens med momsen på det samlede indkøb (vi forventede ' . $expected_vat . ' i moms og det samlede beløb burde have været ' . $expected_value . '). Har du fået alle varer med? Har du husket at skrive beløbet uden moms for varerne?');
+        }
+        
+        if ($this->error->isError()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * returns possible status types
      *
      * @todo: duplicate in Procurement class
