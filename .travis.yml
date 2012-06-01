@@ -8,7 +8,7 @@ before_script:
   - pear channel-discover pear.pdepend.org
   - pear channel-discover pear.phpunit.de
   - pear channel-discover pear.phpmd.org
-  - pear channel-discover docblox-project.org
+  - pear channel-discover pear.docblox-project.org
   - pear install phing/Phing
   - pear channel-discover pear.domain51.com
   - pear install --force pear.domain51/Phing_d51PearPkg2Task
