@@ -6,7 +6,7 @@
  * @author  Lars Olesen <lars@legestue.net>
  * @version @package-version@
  */
-error_reporting(E_ALL & ~(E_DEPRECATED|E_STRICT));
+error_reporting(E_ALL ^ (E_DEPRECATED|E_STRICT));
 
 $version = '2.0.7';
 $stability = 'stable';
