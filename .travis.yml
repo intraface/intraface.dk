@@ -5,9 +5,13 @@ before_script:
   - mysql -e 'create database IF NOT EXISTS intraface_test;'
   - pear install --force --alldeps pear_packagefilemanager
   - pear channel-discover pear.phing.info
+  - pear channel-discover pear.pdepend.org
+  - pear channel-discover pear.phpunit.de
+  - pear channel-discover pearmd.org
+  - pear channel-discover docblox-project.org
   - pear install phing/Phing
   - pear channel-discover pear.domain51.com
-  - pear install --force d51/Phing_d51PearPkg2Task
+  - pear install --force pear.domain51/Phing_d51PearPkg2Task
   - pear channel-discover pear.saltybeagle.com
   - pear install --force --alldeps intrafacepublic/Phing_IlibPearDeployerTask 
   - pear install --force --alldeps pear/PHP_CodeSniffer 
