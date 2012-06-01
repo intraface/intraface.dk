@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false" bootstrap="bootstrap.php" colors="true">
+    <php>
+        <var name="db_host" value="localhost"/>
+        <var name="db_username" value="root"/>
+        <var name="db_password" value=""/>
+        <var name="db_name" value="intraface_test"/>
+        <ini name="memory_limit" value="2048M"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Intraface Test Suite">
+            <directory>./</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">../../src/Intraface/</directory>
+            <exclude>
+              <directory suffix=".tpl.php">../../src/Intraface/</directory>
+              <directory suffix=".tpl.php">../../src/Intraface/config/</directory>
+              <file>../../src/Intraface/modules/accounting/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/administration/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/contact/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/invoice/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/modulepackage/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/onlinepayment/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/order/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/procurement/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/product/include_frontpage.php</file>
+              <file>../../src/Intraface/modules/todo/include_frontpage.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>
+
+
+<phpunit backupGlobals="false" colors="true">
+  <php>
+    <ini name="memory_limit" value="2048M"/>
+  </php>
+  <whitelist>
+    <directory suffix=".php">../../src/Intraface/</directory>
+    <exclude>
+      <directory suffix=".tpl.php">../../src/Intraface/</directory>
+      <directory suffix=".tpl.php">../../src/Intraface/config/</directory>
+      <file>../../src/Intraface/modules/accounting/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/administration/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/contact/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/invoice/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/modulepackage/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/onlinepayment/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/order/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/procurement/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/product/include_frontpage.php</file>
+      <file>../../src/Intraface/modules/todo/include_frontpage.php</file>
+    </exclude>
+  </whitelist>

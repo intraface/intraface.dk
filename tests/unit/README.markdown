@@ -1,17 +1,32 @@
 Unit tests
 ==========
 
+Unit tests for intraface.dk.
+
 Report bugs
 -----------
 
-Please help out running the test suite. Report bugs at: http://github.com/intraface/intraface.dk
+Please help out running the test suite. Report bugs at: http://github.com/intraface/intraface.dk/issues
+
+Requirements
+------------
+
+* Test database
+* PHPUnit
 
 Run tests
 ---------
 
-Create a config.test.php file. Check out the phpunit.xml.example and see if you want to setup your own local example. Maybe you want to attach the TestListener.php.
+First install PHPUnit:
 
-Install phpunit from http://phpunit.de
+    pear channel-discover pear.phpunit.de
+    pear install phpunit/phpunit
+
+Add a phpunit.xml file to the test suite. Copy phpunit.example.xml and edit the settings in the file.
+
+    cp phpunit.example.xml phpunit.xml
+
+Run the test suite from within the unit test directory as follows
 
     phpunit --process-isolation .
     
