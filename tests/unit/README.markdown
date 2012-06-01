@@ -1,6 +1,8 @@
 Unit tests
 ==========
 
+[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk)
+
 Unit tests for intraface.dk.
 
 Report bugs
