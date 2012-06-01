@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../../config.test.php';
-
 class PdfMakerTest extends PHPUnit_Framework_TestCase
 {
     function createPdf()
@@ -24,5 +22,4 @@ class PdfMakerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(50, $pdf->get('margin_bottom'));
         $this->assertEquals(42, $pdf->get('margin_left'));
     }
-
 }

@@ -2,8 +2,6 @@
 /**
  * Not finished. Can be removed if costumers no longer interested 6/3 2010 /Sune
  */
-require_once dirname(__FILE__) . '/../config.test.php';
-
 Intraface_Doctrine_Intranet::singleton(1);
 
 class DicountVoucherTest extends PHPUnit_Framework_TestCase

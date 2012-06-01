@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/Error.php';
 require_once 'Intraface/Validator.php';
 require_once 'Intraface/Address.php';

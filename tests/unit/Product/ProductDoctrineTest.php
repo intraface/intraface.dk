@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
-
 Intraface_Doctrine_Intranet::singleton(1);
 
 class ProductDoctrineTest extends PHPUnit_Framework_TestCase

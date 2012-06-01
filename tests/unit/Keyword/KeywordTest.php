@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/shared/keyword/Keyword.php';
 require_once dirname(__FILE__) . '/../Stub/Keyword.php';
 

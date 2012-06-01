@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/modules/contact/Contact.php';
 require_once 'ContactStubs.php';
 

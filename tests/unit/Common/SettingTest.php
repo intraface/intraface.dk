@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/Setting.php';
 
 class SettingTest extends PHPUnit_Framework_TestCase

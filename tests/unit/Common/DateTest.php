@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/Date.php';
 
 date_default_timezone_set('Europe/Berlin');

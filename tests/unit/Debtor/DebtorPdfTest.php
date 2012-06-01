@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/modules/debtor/Visitor/Pdf.php';
 require_once dirname(__FILE__) .'/stubs/Debtor.php';
 require_once dirname(__FILE__) .'/stubs/DebtorLongProductText.php';

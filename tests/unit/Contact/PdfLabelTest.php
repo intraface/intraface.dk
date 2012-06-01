@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/modules/contact/PdfLabel.php';
 require_once 'Intraface/Pdf.php';
 require_once 'Document/Cpdf.php';

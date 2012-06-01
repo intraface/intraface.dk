@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . './../config.test.php';
 require_once 'Intraface/modules/accounting/VatPeriod.php';
 require_once 'Intraface/modules/accounting/Account.php';
 require_once 'Intraface/modules/accounting/Voucher.php';

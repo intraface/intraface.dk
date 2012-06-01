@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
-
 class Fake_Auth_Intraface_Intranet {}
 
 class WebloginTest extends PHPUnit_Framework_TestCase {

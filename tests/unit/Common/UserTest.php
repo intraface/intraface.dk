@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/User.php';
 require_once 'Intraface/modules/intranetmaintenance/ModuleMaintenance.php';
 require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';

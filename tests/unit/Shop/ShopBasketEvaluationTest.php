@@ -1,6 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
-
 class FakeShopEvaluationCoordinator
 {
     public $kernel;

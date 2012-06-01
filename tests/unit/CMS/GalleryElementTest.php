@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . './../config.test.php';
 require_once 'CMSStubs.php';
 require_once 'Intraface/modules/cms/Element.php';
 require_once 'Intraface/modules/cms/element/Gallery.php';

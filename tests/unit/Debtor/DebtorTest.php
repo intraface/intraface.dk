@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__FILE__) . '/../config.test.php';
 require_once 'Intraface/Kernel.php';
 require_once 'Intraface/Setting.php';
 require_once 'Intraface/DBQuery.php';
