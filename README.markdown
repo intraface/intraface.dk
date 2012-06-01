@@ -1,6 +1,8 @@
 [Intraface.dk](http://intraface.dk)
 ============
 
+[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk)
+
 Source code for [intraface.dk](http://intraface.dk). A system for small businesses made with the [konstrukt.dk](http://konstrukt) framework.
 
 Requirements
@@ -18,7 +20,7 @@ Requirements
 Preparing dependencies
 ----------------------
 
-It is fairly easy to install intraface using the command line.
+It is fairly easy to install intraface using the command line. 
 
 First install phing
 
