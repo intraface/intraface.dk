@@ -6,6 +6,7 @@
  * @author  Lars Olesen <lars@legestue.net>
  * @version @package-version@
  */
+error_reporting(E_ALL ^~E_DEPRECATED);
 
 $version = '2.0.7';
 $stability = 'stable';
@@ -17,15 +18,15 @@ $web_dir = 'src/intraface.dk';
 // @todo make sure that there is not created an intraface.dk/intraface.dk on the server
 // @todo make sure that there is not created an install dir on the server.
 $ignore = array(
-            'intraface.dk/config.local.php',
-            'intraface.dk/config.local.default.php',
-            'intraface.dk/demo/config.local.php',
-            'intraface.dk/demo/config.local.example.php',
-            'intraface.dk/install/',
-            'intraface.dk/install/reset-staging-server.php',
-            '.svn/',
-            '.settings/'
-            );
+    'intraface.dk/config.local.php',
+    'intraface.dk/config.local.default.php',
+    'intraface.dk/demo/config.local.php',
+    'intraface.dk/demo/config.local.example.php',
+    'intraface.dk/install/',
+    'intraface.dk/install/reset-staging-server.php',
+    '.git/',
+    '.settings/'
+);
 
 function getFilelist($dir) {
     global $rFiles;
@@ -113,7 +114,6 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_RandomKeyGenerator', 'public.in
 $pfm->addPackageDepWithChannel('required', 'Ilib_Position', 'public.intraface.dk', '0.4.1');
 $pfm->addPackageDepWithChannel('required', 'bucket', 'pearhub.org', '1.1.1');
 
-
 // Doctrine
 $pfm->addPackageDepWithChannel('required', 'Doctrine', 'pear.doctrine-project.org', '1.2.4');
 $pfm->addPackageDepWithChannel('required', 'Doctrine_Validator_Nohtml', 'public.intraface.dk', '0.1.3');
@@ -173,7 +173,6 @@ $pfm->addPackageDepWithChannel('required', 'Date', 'pear.php.net', '1.4.7');
 $pfm->addPackageDepWithChannel('required', 'Payment_Quickpay', 'public.intraface.dk', '1.18.3');
 // $pfm->addPackageDepWithChannel('required', 'Validate_Finance_CreditCard', 'pear.php.net', '0.5.2');
 
-
 // accounting
 $pfm->addPackageDepWithChannel('required', 'OLE', 'pear.php.net', '1.0.0RC1');
 $pfm->addPackageDepWithChannel('required', 'Spreadsheet_Excel_Writer', 'pear.php.net', '0.9.2');
@@ -207,7 +206,6 @@ $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_Erro
 $pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '2.0.0');
 
 $pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.11.7');
-
 
 foreach ($ignore AS $file) {
     // $pfm->addIgnoreToRelease($file);
@@ -271,7 +269,5 @@ if (isset($_GET['make']) || (isset($_SERVER['argv']) && @$_SERVER['argv'][1] == 
     if (PEAR::isError($res)) {
         echo $res->toString()."\n";
     }
-
-
 }
-?>
+
