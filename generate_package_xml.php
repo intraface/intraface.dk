@@ -205,9 +205,9 @@ $pfm->addPackageDepWithChannel('required', 'konstrukt', 'pearhub.org', '2.3.1');
 $pfm->addPackageDepWithChannel('required', 'ilib_recursive_array_map', 'public.intraface.dk', '0.1.0');
 
 // tools
-$pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
-$pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.3');
-$pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '2.0.0');
+// $pfm->addPackageDepWithChannel('required', 'Ilib_SimpleLogin', 'public.intraface.dk', '1.0.0');
+// $pfm->addPackageDepWithChannel('required', 'Ilib_ErrorHandler_Observer_File_ErrorList', 'public.intraface.dk', '1.0.3');
+// $pfm->addPackageDepWithChannel('required', 'Translation2_Frontend', 'public.intraface.dk', '2.0.0');
 
 $pfm->addPackageDepWithChannel('required', 'Zend', 'zend.googlecode.com/svn', '1.11.7');
 
