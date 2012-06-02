@@ -12,7 +12,6 @@ before_script:
   - pear channel-discover pear.docblox-project.org
   - pear channel-discover pear.domain51.com
   - pear channel-discover public.intraface.dk
-  - pear channel-discover pear.doctrine-project.org
   - pear channel-discover htmlpurifier.org
   - pear channel-discover pear.michelf.com
   - pear channel-discover pearhub.org
