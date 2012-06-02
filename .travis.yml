@@ -4,6 +4,9 @@ php:
 before_script:
   - mysql -e 'create database IF NOT EXISTS intraface_test;'
   - pear channel-discover pear.phpunit.de
+  - pear channel-discover zend.googlecode.com/svn
+  - pear channel-discover pear.swiftmailer.org
+  - pear channel-discover pear.doctrine-project.org
   - pear channel-discover pear.pdepend.org
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.docblox-project.org
