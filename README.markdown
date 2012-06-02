@@ -50,7 +50,7 @@ To create the package
 
 Change directory so you are in the root directory of intraface:
 
-    php generate_package_xml.php make
+    php generate_package_xml.php make X.Y.Z
     pear package src/package.xml
 
 Install the package
