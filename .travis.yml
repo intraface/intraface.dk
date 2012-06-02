@@ -20,7 +20,7 @@ before_script:
   - pear install --force domain51/Phing_d51PearPkg2Task
   - pear install --force --alldeps intrafacepublic/Phing_IlibPearDeployerTask 
   - pear install --force --alldeps pear/PHP_CodeSniffer 
-  - php generate_package_xml.php make
+  - php generate_package_xml.php make X.Y.Z
   - pear package src/package.xml
   - sudo pear install --alldeps --force src/Intraface-X.Y.Z.tgz
   - sudo rm src/Intraface-X.Y.Z.tgz

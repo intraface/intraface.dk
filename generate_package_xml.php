@@ -8,7 +8,12 @@
  */
 error_reporting(0);
 
-$version = '2.0.7';
+if (isset($_SERVER['argv']) && !empty($_SERVER['argv'][2])) {
+    $version = $_SERVER['argv'][2];
+} else {
+    $version = '2.0.7';
+}
+
 $stability = 'stable';
 $notes = '
 * many changes
