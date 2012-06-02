@@ -27,6 +27,8 @@ before_script:
   - pear package src/package.xml
   - pear install intrafacepublic/Ilib_Error-1.0.1
   - pear install pear/Translation2-2.0.4
+  - pear install pear/Validate-0.8.5
+  - pear install pear/XML_RPC2-1.1.1
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
   - phpenv rehash
