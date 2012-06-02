@@ -6,7 +6,7 @@
  * @author  Lars Olesen <lars@legestue.net>
  * @version @package-version@
  */
-error_reporting(E_ALL ^ (E_DEPRECATED|E_STRICT));
+error_reporting(0);
 
 $version = '2.0.7';
 $stability = 'stable';
@@ -81,7 +81,6 @@ $pfm->addRelease();
 
 $pfm->resetUsesRole();
 $pfm->addPackageDepWithChannel('required', 'HTTP', 'pear.php.net', '1.4.1');
-
 
 // $pfm->addGlobalReplacement('package-info', '@package-version@', 'version');
 $pfm->addReplacement('intraface.php', 'pear-config', '@php-dir@', 'php_dir');
@@ -214,7 +213,6 @@ foreach ($ignore AS $file) {
 /**
  * @todo: path_include_path: what to set it to?
  */
-
 $post_install_script = $pfm->initPostinstallScript('intraface.php');
 $post_install_script->addParamGroup('setup',
     array($post_install_script->getParam('db_user', 'User', 'string', 'root'),
