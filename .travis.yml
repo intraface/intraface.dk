@@ -30,4 +30,4 @@ before_script:
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
   - phpenv rehash
-script: phpunit --configuration tests/unit/phpunit.example.xml tests/unit/.
+script: phpunit --configuration tests/unit/phpunit.example.xml --coverage-text tests/unit/.
