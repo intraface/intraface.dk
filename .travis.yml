@@ -3,6 +3,7 @@ php:
   - 5.3
 before_script:
   - mysql -e 'create database IF NOT EXISTS intraface_test;'
+  - pear config-set preferred_state alpha
   - pear channel-discover pear.phpunit.de
   - pear channel-discover zend.googlecode.com/svn
   - pear channel-discover pear.swiftmailer.org
