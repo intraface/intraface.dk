@@ -43,6 +43,7 @@ before_script:
   - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.15.0.jar
   - java -jar selenium-server-standalone-2.15.0.jar > /dev/null 2>&1 &
   - sleep 30  # to wait for Selenium to be up and running
-  - cd tests/unit  
+  - cd tests/unit
+  - phpunit --version  
   - phpenv rehash
 script: phpunit --configuration phpunit.example.xml --coverage-text SeleniumTests.php
