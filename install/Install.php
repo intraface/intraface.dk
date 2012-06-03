@@ -20,7 +20,7 @@ class Intraface_Install
         $this->db = MDB2::singleton(DB_DSN);
 
         if (PEAR::isError($this->db)) {
-            throw Exception($this->db->getUserInfo());
+            throw new Exception($this->db->getUserInfo());
         }
     }
 
@@ -28,13 +28,13 @@ class Intraface_Install
     {
         $result = $this->db->query("SHOW TABLES FROM " . DB_NAME);
         if (PEAR::isError($result)) {
-            throw Exception($result->getUserInfo());
+            throw new Exception($result->getUserInfo());
         }
 
         while ($line = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
             $drop = $this->db->exec('DROP TABLE ' . $line['Tables_in_'.DB_NAME]);
             if (PEAR::IsError($drop)) {
-                throw Exception($drop->getUserInfo());
+                throw new Exception($drop->getUserInfo());
             }
         }
         return true;
@@ -49,7 +49,7 @@ class Intraface_Install
             if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
-                throw Exception($result->getUserInfo());
+                throw new Exception($result->getUserInfo());
             }
         }
 
@@ -60,7 +60,7 @@ class Intraface_Install
             if (empty($sql)) { continue; }
             $result = $this->db->exec($sql);
             if (PEAR::isError($result)) {
-                throw Exception($result->getUserInfo());
+                throw new Exception($result->getUserInfo());
             }
         }
         return true;
@@ -102,11 +102,9 @@ class Intraface_Install
         /*
         if (!$this->dropDatabase()) {
             throw new Exception('could not drop database');
-            exit;
         }
         if (!$this->createDatabaseSchema()) {
             throw new Exception('could not create schema');
-            exit;
         }
         */
 
@@ -163,7 +161,6 @@ class Intraface_Install
 
             if ($module->get('id') == 0) {
                 throw new Exception('Invalid module '.$module_name);
-                exit;
             }
             $intranet->setModuleAccess($module->get('id'));
             $user->setModuleAccess($module->get('id'), 1);
@@ -222,9 +219,7 @@ class Intraface_Install
             $object_name = 'Install_Helper_'.$object_method[0];
             $object = new $object_name($kernel, $this->db);
             $object->$object_method[1]();
-
         }
-
     }
 
     /**
