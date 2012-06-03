@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL ^~E_STRICT);
+
 define('SERVER_STATUS', 'DEVELOPEMENT');
 define('DB_DSN', 'mysql://root:@localhost/intraface_test');
 define('DB_NAME', 'intraface_test');

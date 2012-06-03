@@ -36,7 +36,6 @@ before_script:
   - pear install --force intrafacepublic/Ilib_Variable-1.0.1
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
-  - php src/intraface.dk/install/reset-staging-server.php
   - php tests/unit/setup_database.php
   - phpenv rehash
 script: phpunit --configuration tests/unit/phpunit.example.xml --coverage-text tests/unit/.
