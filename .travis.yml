@@ -37,7 +37,7 @@ before_script:
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
   - php tests/unit/setup_database.php
-  - pear install --force phpunit/PHPUnit_Selenium
+  - pear install phpunit/PHPUnit_Selenium
   - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
