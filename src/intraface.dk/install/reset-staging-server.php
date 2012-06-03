@@ -1,7 +1,7 @@
 <?php
-require_once '../common.php';
+require_once dirname(__FILE__) . '/../common.php';
 
-$install_class = realpath('../../../install/').'/Install.php';
+$install_class = realpath(dirname(__FILE__) . '/../../../install/') . '/Install.php';
 
 if (!file_exists($install_class)) {
     throw new Exception('The install class is not present. Probably because you should not run it now!');
