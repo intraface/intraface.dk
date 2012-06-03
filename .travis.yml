@@ -31,7 +31,7 @@ before_script:
   - pear install pear/Validate-0.8.5
   - pear install pear/XML_RPC2-1.1.1
   - pear install intrafacepublic/Ilib_RandomKeyGenerator-0.3.1
-  - pear install intrafacepublic/Ilib_DBQuery-0.1.10
+  - pear install --force intrafacepublic/Ilib_DBQuery-0.1.10
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
   - phpenv rehash
