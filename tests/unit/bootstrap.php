@@ -21,7 +21,7 @@ define('PATH_UPLOAD_TEMPORARY', 'tempdir/');
 define('FILE_VIEWER', '');
 define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');
-define('XMLRPC_SERVER_URL', 'http://privatekeyshouldbereplaced:something@localhost/intraface.dk/tests/xmlrpcservers/');
+define('XMLRPC_SERVER_URL', 'http://privatekeyshouldbereplaced:something@' . $GLOBALS['xmlrpc_server_url']);
 
 if (!file_exists($GLOBALS['test_path_temp'])) {
     mkdir($GLOBALS['test_path_temp']);

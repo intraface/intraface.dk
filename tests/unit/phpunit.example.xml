@@ -7,6 +7,8 @@
         <var name="db_name" value="intraface_test"/>
         <var name="path_upload" value="./upload"/>
         <var name="test_path_temp" value="./temp"/>
+        <var name="xmlrpc_server_url" value="localhost:8080/tests/xmlrpcservers/"/>
+        <var name="selenium_url" value="http://localhost:8080/src/intraface.dk/"/>            
         <ini name="memory_limit" value="2048M"/>
     </php>
 

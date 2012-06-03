@@ -9,7 +9,8 @@ class SeleniumTests extends PHPUnit_Extensions_SeleniumTestCase
     protected function setUp()
     {
         $this->setBrowser('*firefox');
-        $this->setBrowserUrl('http://workspace/intraface/intraface.dk/');
+        $this->setBrowserUrl($GLOBALS['selenium_url']);
+        //$this->setSleep(10);
     }
 
     function assertConfirmation()
