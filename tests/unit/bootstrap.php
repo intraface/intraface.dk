@@ -11,15 +11,24 @@ define('PATH_INCLUDE_CONFIG', PATH_ROOT . 'Intraface/config/');
 define('PATH_INCLUDE_MODULE', PATH_ROOT . 'Intraface/modules/');
 define('PATH_INCLUDE_SHARED', PATH_ROOT . 'Intraface/shared/');
 define('CONNECTION_INTERNET', 'ONLINE');
-define('PATH_UPLOAD', '/var/lib/www/intraface_test/upload/');
+
+if (!file_exists($GLOBALS['path_upload'])) {
+    mkdir($GLOBALS['path_upload']);
+}
+
+define('PATH_UPLOAD', $GLOBALS['path_upload']);
 define('PATH_UPLOAD_TEMPORARY', 'tempdir/');
 define('FILE_VIEWER', '');
 define('PATH_WWW', '');
 define('IMAGE_LIBRARY', 'GD');
 define('XMLRPC_SERVER_URL', 'http://privatekeyshouldbereplaced:something@localhost/intraface.dk/tests/xmlrpcservers/');
 
+if (!file_exists($GLOBALS['test_path_temp'])) {
+    mkdir($GLOBALS['test_path_temp']);
+}
+
 // Directory to move files to temporary in tests
-define('TEST_PATH_TEMP', '/var/lib/www/intraface_test/tmp/');
+define('TEST_PATH_TEMP', $GLOBALS['test_path_temp']);
 
 set_include_path(dirname(__FILE__) . '/' . PATH_SEPARATOR . PATH_ROOT. PATH_SEPARATOR . get_include_path());
 

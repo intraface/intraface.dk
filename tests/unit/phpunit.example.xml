@@ -5,6 +5,8 @@
         <var name="db_username" value="root"/>
         <var name="db_password" value=""/>
         <var name="db_name" value="intraface_test"/>
+        <var name="path_upload" value="./upload"/>
+        <var name="test_path_temp" value="./temp"/>
         <ini name="memory_limit" value="2048M"/>
     </php>
 
