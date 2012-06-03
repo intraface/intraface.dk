@@ -32,6 +32,7 @@ before_script:
   - pear install pear/XML_RPC2-1.1.1
   - pear install intrafacepublic/Ilib_RandomKeyGenerator-0.3.1
   - pear install --force intrafacepublic/Ilib_DBQuery-0.1.10
+  - pear install intrafacepublic/IntrafacePublic_Client_XMLRPC
   - pear install --force intrafacepublic/Ilib_Variable-1.0.1
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
