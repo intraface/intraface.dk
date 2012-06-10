@@ -81,13 +81,10 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
     function postForm()
     {
         $module = $this->getKernel()->module('product');
-
         $product = $this->getProduct();
-
-        if (!empty($_POST['save']) || !empty($_POST['save_and_close'])) {
-
-            if (isset($_POST['variation']) && is_array($_POST['variation'])) {
-                foreach ($_POST['variation'] AS $variation_data) {
+        if ($this->body('save') || $this->body('save_and_close')) {
+            if (is_array($this->body('variation'))) {
+                foreach ($this->body('variation') AS $variation_data) {
 
                     if (isset($variation_data['used'])) {
                         if (!empty($variation_data['id'])) {
@@ -96,14 +93,14 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
 
                         } else {
                             $variation = $product->getVariation();
-                            $variation->product_id = $_POST['id'];
+                            $variation->product_id = $this->getProduct()->getId();
                             $variation->setAttributesFromArray($variation_data['attributes']);
                             $variation->save();
 
                         }
 
                         $detail = $variation->getDetail();
-                        $detail->price_difference = 0; /* Can be reimplemented: intval($variation_data['price_difference']); */
+                        $detail->price_difference = 0; // Can be reimplemented: intval($variation_data['price_difference']);
                         $detail->weight_difference = intval($variation_data['weight_difference']);
                         $detail->save();
 
@@ -114,14 +111,14 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
                 }
             }
 
-            if (!empty($_POST['save_and_close'])) {
+            if ($this->body('save_and_close')) {
                 return new k_SeeOther($this->url('../'));
             }
 
             return new k_SeeOther($this->url());
         }
-
-        return $this->render();
+        
+        return new k_SeeOther($this->url(null, array($this->subview(), 'flare' => 'An error occurred. Probably too much data in the POST request. Solve it by having fewer variations.')));
 
     }
 

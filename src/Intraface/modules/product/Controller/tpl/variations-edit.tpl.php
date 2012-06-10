@@ -5,6 +5,10 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
+<?php if ($context->query('flare')): ?>
+<div class="warning"><?php e(t($context->query('flare'))); ?></div>
+<?php endif; ?>
+
 
 <?php if (count($groups) == 0): ?>
     <p><?php e(t('No attribute groups has been selected.')); ?> <a href="<?php e(url('select_attribute_group')); ?>"><?php e(t('Choose attribute groups')); ?></a>.</p>
