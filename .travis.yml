@@ -37,12 +37,14 @@ before_script:
   - sudo pear install --alldeps --force Intraface-1.0.0.tgz
   - sudo rm Intraface-1.0.0.tgz
   - php tests/unit/setup_database.php
+  - pear install --force intrafacepublic/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator-0.1.2
+  - php tests/selenium/generate_test_suite.php
   - pear install phpunit/PHPUnit_Selenium
   - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
-  - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.15.0.jar
-  - java -jar selenium-server-standalone-2.15.0.jar > /dev/null 2>&1 &
+  - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.22.0.jar
+  - java -jar selenium-server-standalone-2.22.0.jar > /dev/null 2>&1 &
   - sleep 30  # to wait for Selenium to be up and running
   - cd tests/unit
   - phpunit --version  

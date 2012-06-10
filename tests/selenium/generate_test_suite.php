@@ -5,7 +5,7 @@ $writer = new Ilib_Testing_Selenium_Selenese_TestSuiteGenerator;
 $writer->addReplacement('##path_test_root##', dirname(__FILE__));
 $writer->addReplacement('@@dirctory_separator@@', DIRECTORY_SEPARATOR);
 if ($writer->write()) {
-    echo "Success, wrote content to file testSuite.html\n";
+    echo "Success: added selenese files to testSuite.html\n";
 } else {
-    echo "Failire, did not write content to file testSuite.html\n";
+    echo "Failure: could not add selenese files to file testSuite.html\n";
 }
