@@ -2,7 +2,7 @@
 /**
  * Signup
  *
- * @todo Kunne let laves s� man kunne oprette sig p� et intranet, man havde f�et lov til med en eller anden kode.
+ * @todo Could easily be changed so one could create oneself on an intranet, you have a code for
  *
  * @package Intraface
  * @author  Lars Olesen <lars@legestue.net>
@@ -98,7 +98,6 @@ class Intraface_Controller_Signup extends k_Component
                     foreach ($sub_access AS $module) {
                         $res = $db->query("SELECT id, module_id FROM module_sub_access WHERE name = ".$db->quote($module, 'text')." LIMIT 1");
                         if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-
                             $res = $db->query("INSERT INTO permission SET intranet_id = ".$db->quote($intranet_id, 'integer').", module_sub_access_id = ".$db->quote($row['id'], 'integer').", module_id = ".$db->quote($row['module_id'], 'integer').", user_id = ".$db->quote($user_id, 'integer'));
                             if (PEAR::isError($res)) {
                                 throw new Exception($res->getUserInfo());

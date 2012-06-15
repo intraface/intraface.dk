@@ -4,17 +4,19 @@ class Intraface_Controller_Index extends k_Component
     protected $kernel_gateway;
     protected $user_gateway;
     protected $template;
+    protected $auth;
 
     function __construct(k_TemplateFactory $template, Intraface_Auth $auth, Intraface_KernelGateway $gateway, Intraface_UserGateway $user_gateway)
     {
         $this->kernel_gateway = $gateway;
         $this->user_gateway = $user_gateway;
         $this->template = $template;
+        $this->auth = $auth;
     }
 
     protected function map($name)
     {
-        if ($name == 'logout') { // skal sikkert være fra restricted controller i stedet
+        if ($name == 'logout') { // @todo Maybe move to a restricted controller instead
             return 'Intraface_Controller_Logout';
         } elseif ($name == 'login') {
             return 'Intraface_Controller_Login';
@@ -40,16 +42,6 @@ class Intraface_Controller_Index extends k_Component
         return new k_SeeOther($this->url('restricted'));
     }
 
-    function getKernel()
-    {
-        return $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
-    }
-
-    function getModules()
-    {
-        return $this->getKernel()->getModules();
-    }
-
     function wrapHtml($content)
     {
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/outside');
@@ -60,5 +52,15 @@ class Intraface_Controller_Index extends k_Component
     function execute()
     {
         return $this->wrap(parent::execute());
+    }
+
+    function getKernel()
+    {
+        return $this->kernel_gateway->findByUserobject($this->user_gateway->findByUsername($this->identity()->user()));
+    }
+
+    function getModules()
+    {
+        return $this->getKernel()->getModules();
     }
 }

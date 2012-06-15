@@ -9,7 +9,7 @@ class Intraface_Controller_Restricted extends k_Component
     protected $template;
     protected $cache;
 
-    function __construct(Cache_Lite $cache, DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway, k_TemplateFactory $template /*k_Registry $registry*/)
+    function __construct(Cache_Lite $cache, DB_Sql $db_sql, MDB2_Driver_Common $mdb2, Intraface_UserGateway $gateway, Intraface_KernelGateway $kernel_gateway, k_TemplateFactory $template)
     {
         $this->mdb2 = $mdb2; // this is here to make sure set names utf8 is run as the first thing in the app
         $this->db_sql = $db_sql;
@@ -100,6 +100,22 @@ class Intraface_Controller_Restricted extends k_Component
         return $smarty->render($this, $data);
     }
 
+    function wrapHtml($content)
+    {
+        if ($this->document()->title() == 'No Title') {
+            $this->document->setTitle('Intraface.dk');
+        }
+
+        $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
+        $content = $tpl->render($this, array('content' => $content));
+        return new k_HttpResponse(200, $content);
+    }
+
+    function execute()
+    {
+        return $this->wrap(parent::execute());
+    }
+
     function getTweets()
     {
         $identifier = 'tweets_frontpage';
@@ -118,8 +134,8 @@ class Intraface_Controller_Restricted extends k_Component
     }
 
     /**
-     * Hvad med at flytte det hele over i et userobject, der implementerer getIntranet()
-     * I $intranet har vi s� de transiente gateways.
+     * @todo Maybe move to a user object implementing getIntranet()
+     * In $intranet we can have the transient gateways.
      *
      * class component_ShowProduct {
   	 *   protected $user_gateway;
@@ -239,23 +255,7 @@ class Intraface_Controller_Restricted extends k_Component
     {
         return $this->getKernel()->intranet->get('name');;
     }
-
-    function wrapHtml($content)
-    {
-        if ($this->document()->title() == 'No Title') {
-            $this->document->setTitle('Intraface.dk');
-        }
-
-        $tpl = $this->template->create(dirname(__FILE__) . '/templates/main');
-        $content = $tpl->render($this, array('content' => $content));
-        return new k_HttpResponse(200, $content);
-    }
-
-    function execute()
-    {
-        return $this->wrap(parent::execute());
-    }
-
+    
     function getThemeKey()
     {
         return $this->getKernel()->setting->get('user', 'theme');

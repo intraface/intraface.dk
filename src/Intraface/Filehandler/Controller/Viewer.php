@@ -52,9 +52,7 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
 
         settype($query_parts[3], 'string');
         $this->fileviewer = new FileViewer($this->file, $query_parts[3]);
-
         if ($this->fileviewer->needLogin()) {
-            // session_start();
             $auth = new Intraface_Auth($this->session()->sessionId());
             if (!$auth->hasIdentity()) {
                 $response = new k_TextResponse('You are not correctly logged in');
