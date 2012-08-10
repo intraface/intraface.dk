@@ -49,4 +49,6 @@ before_script:
   - cd tests/unit
   - phpunit --version  
   - phpenv rehash
-script: phpunit --configuration phpunit.example.xml --coverage-text SeleniumTests.php
+script: 
+  - phpunit --configuration phpunit.example.xml --coverage-text .
+  - java -jar ../../selenium-server-standalone-2.15.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "../../Result.html"
