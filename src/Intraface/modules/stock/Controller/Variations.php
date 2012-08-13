@@ -16,12 +16,7 @@ class Intraface_modules_stock_Controller_Variations extends k_Component
         $this->document->setTitle('Set stock for variations for product ' . $this->getProduct()->get('name'));
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/variations');
-        return $smarty->render($this, array('variations' => $this->context->getProduct()->getVariations(), 'product' => $this->context->getProduct()));
-    }
-
-    function getProduct()
-    {
-        return $this->context->getProduct();
+        return $smarty->render($this, array('variations' => $this->getProduct()->getVariations(), 'product' => $this->context->getProduct()));
     }
 
     function postForm()
@@ -43,6 +38,11 @@ class Intraface_modules_stock_Controller_Variations extends k_Component
             return new k_SeeOther($this->url('../../'));
         }
         return $this->render();
+    }
+
+    function getProduct()
+    {
+        return $this->context->getProduct();
     }
 
     function getKernel()

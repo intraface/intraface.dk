@@ -16,7 +16,7 @@ if (basename($_SERVER['SCRIPT_NAME']) == basename(__FILE__)) {
 $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.local.php';
 
 if (!file_exists($config_file)) {
-    die('The config.local.php file is missing. Please create it.');
+    $config_file = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.local.default.php';
 }
 
 require_once $config_file;
