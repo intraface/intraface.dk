@@ -1,10 +1,8 @@
 <?php
 /**
- * H�ndterer poster i kladden
+ * Handles posts
  *
- * Det er lovm�ssigt bestemt, at man ikke m� lave om i selve
- * de bogf�rte poster, s� der skal ikke v�re metoder til at �ndre eller
- * slette i bogf�ringen.
+ * It is not allowed to change existing accounting posts.
  *
  * @package Intraface_Accounting
  * @author Lars Olesen
@@ -24,6 +22,8 @@ class Post extends Intraface_Standard
      *
      * @param $year_object (object)
      * @param $post_id (int) refererer til en enkelt post
+     *
+     * @return void
      */
     function __construct($voucher, $post_id = 0)
     {
@@ -80,14 +80,14 @@ class Post extends Intraface_Standard
     {
         $validator = new Intraface_Validator($this->error);
 
-        // M�rkeligt at denne ikke validerer korrekt - isDate accepterer ikke: 2006-07-15
+        // @todo Strange that this does not validate - isDate does not accept: 2006-07-15
         // $validator->isDate($date, 'Datoen ' . $date .  ' er ikke en gyldig dato');
         $validator->isNumeric($account_id, 'Kontoen er ikke et tal');
         $validator->isString($text, 'Teksten er ikke gyldig');
 
         // Validerer 29.5 forkert
-        //$validator->isDouble($debet, 'Debetbel�bet '.$debet.' er ikke gyldigt');
-        //$validator->isDouble($credit, 'Kreditbel�bet '.$credit .' er ikke gyldigt');
+        //$validator->isDouble($debet, 'Debetbeløbet '.$debet.' er ikke gyldigt');
+        //$validator->isDouble($credit, 'Kreditbeløbet '.$credit .' er ikke gyldigt');
 
         if ($this->error->isError()) {
             return 0;
@@ -97,7 +97,7 @@ class Post extends Intraface_Standard
     }
 
     /**
-     * Bogf�rer selve posterne
+     * States the posts
      *
      * @param integer $year_id
      * @param string  $date
@@ -165,45 +165,12 @@ class Post extends Intraface_Standard
     {
         $gateway = new Intraface_modules_accounting_PostGateway($this->voucher);
         return $gateway->getList($type);
-        /*
-        $db = new DB_Sql;
-        $sql = "SELECT voucher.reference, post.id, post.text, post.voucher_id, post.date, post.account_id, post.debet, post.credit, post.stated, DATE_FORMAT(post.date, '%d-%m-%Y') AS date_dk FROM accounting_post post INNER JOIN accounting_voucher voucher ON post.voucher_id = voucher.id WHERE post.year_id = " . $this->voucher->year->get('id') . " AND post.intranet_id = " . $this->voucher->year->kernel->intranet->get('id');
-        if ($type == 'stated') {
-            $sql .= " AND post.stated = 1";
-        } elseif ($type == 'draft') {
-            $sql .= " AND post.stated = 0";
-        }
-        $db->query($sql . " ORDER BY post.voucher_id DESC, post.id DESC");
-
-        $i = 0;
-        $this->value['list_saldo'] = 0;
-        $list = array();
-        while ($db->nextRecord()) {
-            $post = new Post($this->voucher, $db->f('id'));
-            $list[$i]['id'] = $db->f('id');
-            $list[$i]['text'] = $db->f('text');
-            $list[$i]['voucher_id'] = $db->f('voucher_id');
-            $list[$i]['date'] = $db->f('date');
-            $list[$i]['reference'] = $db->f('reference');
-            $list[$i]['date_dk'] = $db->f('date_dk');
-            $list[$i]['voucher_number'] = $post->get('voucher_number');
-            $list[$i]['account_id'] = $db->f('account_id');
-            $list[$i]['account_number'] = $post->get('account_number');
-            $list[$i]['account_name'] = $post->get('account_name');
-            $list[$i]['debet'] = $db->f('debet');
-            $list[$i]['credit'] = $db->f('credit');
-            $list[$i]['stated'] = $db->f('stated');
-            $this->value['list_saldo'] += $list[$i]['debet'] - $list[$i]['credit'];
-            $i++;
-        }
-        return $list;
-        */
     }
 
     public function setStated()
     {
         if ($this->id == 0) {
-            $this->error->set('Kan ikke s�tte stated, n�r id = o');
+            $this->error->set('Kan ikke sætte stated, når id = o');
             return false;
         }
 
