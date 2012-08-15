@@ -40,6 +40,7 @@ before_script:
   - pear install --force intrafacepublic/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator-0.1.2
   - php tests/selenium/generate_test_suite.php
   - pear install phpunit/PHPUnit_Selenium
+  - pear install PHP_CodeSniffer
   - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
   - sh -e /etc/init.d/xvfb start
   - export DISPLAY=:99.0
@@ -52,3 +53,4 @@ before_script:
 script: 
   - phpunit --configuration phpunit.example.xml .
   - java -jar ../../selenium-server-standalone-2.15.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "../../Result.html"
+  - phpcs src
