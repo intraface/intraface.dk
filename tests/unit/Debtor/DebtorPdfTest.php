@@ -4,18 +4,20 @@ require_once dirname(__FILE__) .'/stubs/Debtor.php';
 require_once dirname(__FILE__) .'/stubs/DebtorLongProductText.php';
 require_once dirname(__FILE__) .'/../Contact/stubs/Contact.php';
 require_once dirname(__FILE__) .'/../Contact/stubs/ContactPerson.php';
+require_once dirname(__FILE__) . '/../Stub/Fake/Ilib/Variable/Float.php';
 
 class DebtorPdfTest extends PHPUnit_Framework_TestCase
 {
     function setup()
     {
+        $this->debtor_pdf_path = TEST_PATH_TEMP . '/debtor.pdf';
         $this->tearDown();
     }
 
     function tearDown()
     {
         if (file_exists(TEST_PATH_TEMP.'debtor.pdf')) {
-            unlink(TEST_PATH_TEMP.'debtor.pdf');
+            @unlink($this->debtor_pdf_path);
         }
     }
 
@@ -50,68 +52,50 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
 
     function testVisit()
     {
-        error_reporting(E_ALL);
-
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();
         $pdf->visit($debtor);
-        $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
+        $pdf->output('file', $this->debtor_pdf_path);
         $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor.pdf', 1);
-        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
-
-
+        $actual = file_get_contents($this->debtor_pdf_path);
         $this->assertEquals(strlen($expected), strlen($actual));
     }
 
     function testVisitWithPayment()
     {
-        error_reporting(E_ALL);
-
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();
         $debtor->values['payment_total'] = 2125;
         $pdf->visit($debtor);
-        $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
+        $pdf->output('file', $this->debtor_pdf_path);
         $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor_with_payment.pdf', 1);
-        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
-
-
+        $actual = file_get_contents($this->debtor_pdf_path);
         $this->assertEquals(strlen($expected), strlen($actual));
     }
 
     function testVisitWithLongProductText()
     {
-        error_reporting(E_ALL);
-
         $pdf = $this->createPdf();
         $debtor = $this->createDebtorLongProductText();
         $pdf->visit($debtor);
-        $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
+        $pdf->output('file', $this->debtor_pdf_path);
         $expected = file_get_contents(dirname(__FILE__) .'/expected_debtor_with_long_text.pdf', 1);
-        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
-
-
+        $actual = file_get_contents($this->debtor_pdf_path);
         $this->assertEquals(strlen($expected), strlen($actual));
     }
 
     /*
     function testVisitWithOnlinePayment()
     {
-        error_reporting(E_ALL);
-
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();
         $debtor->values['payment_online'] = 2125;
         $pdf->visit($debtor);
-        $pdf->output('file', TEST_PATH_TEMP.'debtor.pdf');
+        $pdf->output('file', $this->debtor_pdf_path);
         $expected = file_get_contents('tests/unit/debtor/expected_debtor_with_payment.pdf', 1);
-        $actual = file_get_contents(TEST_PATH_TEMP.'debtor.pdf');
-
-
+        $actual = file_get_contents($this->debtor_pdf_path);
         $this->assertEquals(strlen($expected), strlen($actual));
     }
     */
-
 }
 
-?>

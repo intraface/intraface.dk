@@ -154,11 +154,12 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", ".")), $this->doc->get('y'), $this->doc->get("font_size"), number_format($items[$i]["quantity"], 2, ",", "."));
                 $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), $this->translation->get($items[$i]["unit"], 'product'));
                 if ($debtor->getCurrency()) {
-                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocal('da_dk', 2));
+                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocale('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price_currency"]->getAsLocale('da_dk', 2));
                 } else {
-                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price"]->getAsLocal('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price"]->getAsLocal('da_dk', 2));
+                    $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), $items[$i]["price"]->getAsLocale('da_dk', 2)), $this->doc->get('y'), $this->doc->get("font_size"), $items[$i]["price"]->getAsLocale('da_dk', 2));
                 }
             }
+            
             if ($debtor->getCurrency()) {
                 $amount =  $items[$i]["quantity"] * $items[$i]["price_currency"]->getAsIso(2);
             } else {
