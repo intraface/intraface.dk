@@ -62,10 +62,10 @@ class Intraface_Pdf extends Document_Cpdf
     private function calculateDynamicValues()
     {
         // Sets values based on the predefined values.
-        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til h�jre-margin
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width from 0 to right margen        
         $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
 
-        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fra 0 til h�jre-margin
+        $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fom 0 to right margen
         $this->value['content_height'] = $this->page_height - $this->value['margin_bottom'] - $this->value['margin_top']; // content_height
 
         $this->value['font_spacing'] = $this->value['font_size'] + $this->value['font_padding_top'] + $this->value['font_padding_bottom'];
