@@ -16,7 +16,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
     function visit($reminder)
     {
         if ($reminder->get('id') == 0) {
-            throw new Exception("Reminder->pdf skal v�re loaded for at lave pdf");
+            throw new Exception("Reminder->pdf must be loaded to create a PDF");
         }
 
         $this->doc = $this->getDocument();
@@ -52,9 +52,9 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $this->docinfo[0]["label"] = "Dato:";
         $this->docinfo[0]["value"] = $reminder->get("dk_this_date");
 
-        $this->addRecieverAndSender($contact , $intranet, "P�mindelse om betaling", $this->docinfo);
+        $this->addRecieverAndSender($contact , $intranet, "Reminder about payment", $this->docinfo);
 
-        $this->doc->setY('-20'); // mellemrum til vareoversigt
+        $this->doc->setY('-20'); // space to the product list
 
         $text = explode("\r\n", $reminder->get("text"));
         foreach ($text AS $line) {
@@ -69,8 +69,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
 
                     $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
                     $line = $this->doc->addTextWrap($this->doc->get('x'), $this->doc->get('y'), $this->doc->get("right_margin_position") - $this->doc->get('x'), $this->doc->get("font_size"), $line); // $this->doc->get("right_margin_position") - $this->doc->get('x')
-                    // $this->doc->line($this->doc->get('x'), $this->doc->get('y'), $this->doc->get('x') + $this->doc->get("right_margin_position") - $this->doc->get('x'), $this->doc->get('y'));
-
+              
                     $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
 
                     if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
@@ -80,9 +79,9 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
             }
         }
 
-        // Overskrifter - Vareudskrivning
+        // Headlines for products
 
-        $this->doc->setY('-20'); // mellemrum til vareoversigt
+        $this->doc->setY('-20'); // space to product list
 
         if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 3) {
             $this->doc->nextPage(true);
@@ -96,10 +95,9 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
 
 
         $this->doc->addText($apointX["text"], $this->doc->get('y'), $this->doc->get("font_size"), "Beskrivelse");
-        //$this->doc->addText($apointX["tekst"], $this->doc->get('y'), $this->doc->get("font_size"), "Tekst");
         $this->doc->addText($apointX["invoice_date"], $this->doc->get('y'), $this->doc->get("font_size"), "Dato");
         $this->doc->addText($apointX["due_date"], $this->doc->get('y'), $this->doc->get("font_size"), "Forfaldsdato");
-        $this->doc->addText($apointX["amount"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Bel�b") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Bel�b");
+        $this->doc->addText($apointX["amount"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Beløb") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Bel�b");
 
         $this->doc->setY('-'.($this->doc->get("font_spacing") - $this->doc->get("font_size")));
 
@@ -204,7 +202,6 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
 
 
         $this->addPaymentCondition($reminder->get("payment_method_key"), $parameter, $reminder->getPaymentInformation());
-        // $this->doc->stream();
 
     }
 }
