@@ -8,7 +8,6 @@ class Intraface_Pdf extends Document_Cpdf
 {
     protected $value;
     protected $page;
-    //protected $kernel;
     protected $page_height;
     protected $page_width;
 
@@ -17,10 +16,10 @@ class Intraface_Pdf extends Document_Cpdf
         $this->page_width = 595;
         $this->page_height = 841;
 
-        // Foruddefineret v�rdier
+        // Predefined values.
         $this->value['margin_top'] = 50;
         $this->value['margin_right'] = 42;
-        $this->value['margin_left'] = 42; // Fra 0 til kanten i venstre side
+        $this->value['margin_left'] = 42; // From 0 to the edge in the left side
         $this->value['margin_bottom'] = 50;
 
         $this->value['header_height'] = 51;
@@ -33,15 +32,15 @@ class Intraface_Pdf extends Document_Cpdf
 
         $this->page = 1;
 
-        // Opretter en nyt A4 dokument
+        // Creates a new A4 document
         parent::__construct(array(0, 0, $this->page_width, $this->page_height));
 
-        // Omskrivning af placering p� specielle tegn: æ, ø, å, Æ, Ø, Å�
-        // Efter Cpdf dokumentation
-        // Tabel for tegnenes placering fundet her: http://www.fingertipsoft.com/3dkbd/ansitable.html
-        // Tabel for deres navn fundet her: http://www.gust.org.pl/fonty/qx-table2.htm
-        // Bemærk at placeringen af tegnene er forskellige fra de 2 tabeller. Den �verste har den rigtige placering.
-
+        // Rewrites the placement of Danish characters æ, ø, å, Æ, Ø, Å
+        // After the Cpdf documentation
+        // Table for the characters placements can be found here: http://www.fingertipsoft.com/3dkbd/ansitable.html
+        // Table for their names is found here: http://www.gust.org.pl/fonty/qx-table2.htm
+        // Notice that the placement of the characters are different in the two tables. Placement is correct in the first.
+        
         $diff = array(230 => 'ae',
                       198 => 'AE',
                       248 => 'oslash',
@@ -62,7 +61,7 @@ class Intraface_Pdf extends Document_Cpdf
      */
     private function calculateDynamicValues()
     {
-        // S�tter v�rdier p� baggrund af faste v�rdier
+        // Sets values based on the predefined values.
         $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width fra 0 til h�jre-margin
         $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
 
@@ -87,7 +86,7 @@ class Intraface_Pdf extends Document_Cpdf
     public function setValue($key, $value)
     {
         $this->value[$key] = $value;
-        //Every time we change a fixed value we need to update the dynamic values
+        // Every time we change a fixed value we need to update the dynamic values
         if (in_array($key, array('margin_right', 'margin_left', 'margin_top', 'margin_bottom', 'font_size', 'font_padding_top', 'font_padding_bottom'))) {
             $this->calculateDynamicValues();
         }
@@ -122,7 +121,6 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function setY($value)
     {
-
         if (is_int($value)) {
             $this->value['y'] = $this->page_height - $this->get('margin_top') - $value;
         } elseif (is_string($value) && substr($value, 0, 1) == "+") {
@@ -198,7 +196,6 @@ class Intraface_Pdf extends Document_Cpdf
      */
     public function writeDocument($data, $filnavn)
     {
-        //$file = fopen("files/".$filnavn, "wb");
         $file = fopen($filnavn, 'wb');
         fwrite($file, $data);
         fclose($file);
@@ -224,7 +221,6 @@ class Intraface_Pdf extends Document_Cpdf
         }
         parent::newPage();
         $this->setY(0);
-        // $pointY = $this->value["page_height"] - 30;  // lige lidt afstand p� n�ste side til starten
         $this->page++;
         return $this->get('y');
     }
