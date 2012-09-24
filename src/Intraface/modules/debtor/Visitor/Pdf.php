@@ -57,7 +57,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         $contact['number'] = $debtor->contact->get('number');
 
         $intranet_address = $debtor->getIntranetAddress();
-        // $intranet_address = new Intraface_Address($debtor->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
         $intranet = array_merge($intranet, $debtor->getContactInformation());
@@ -100,8 +99,8 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             }
         }
 
-        // Overskrifter - Vareudskrivning
-        $this->doc->setY('-40'); // mellemrum til vareoversigt
+        // Headlines for the products
+        $this->doc->setY('-40'); // space to the product list
 
         $apointX["varenr"] = 80;
         $apointX["tekst"] = 90;
@@ -116,7 +115,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         $this->doc->addText($apointX["varenr"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Varenr."), $this->doc->get('y'), $this->doc->get("font_size"), "Varenr.");
         $this->doc->addText($apointX["tekst"], $this->doc->get('y'), $this->doc->get("font_size"), "Tekst");
         $this->doc->addText($apointX["antal"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Antal"), $this->doc->get('y'), $this->doc->get("font_size"), "Antal");
-        // $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), "Enhed");
         $this->doc->addText($apointX["pris"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Pris"), $this->doc->get('y'), $this->doc->get("font_size"), "Pris");
         $this->doc->addText($apointX["beloeb"] - $this->doc->getTextWidth($this->doc->get("font_size"), "Beløb") -3, $this->doc->get('y'), $this->doc->get("font_size"), "Beløb");
 
@@ -124,7 +122,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
 
-        // vareoversigt
+        // products
         $items = $debtor->getItems();
 
         $total = 0;
@@ -138,8 +136,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             $vat = 0;
         }
 
-        // $line_padding = 4;
-        // $line_height = $this->doc->get("font_size") + $line_padding * 2;
         $bg_color = 0;
 
         for ($i = 0, $max = count($items); $i <  $max; $i++) {
@@ -197,8 +193,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             }
 
             if ($items[$i]["description"] != "") {
-
-                // Laver lige et mellem rum ned til teksten
+                // space to the text
                 $this->doc->setY('-'.($this->doc->get("font_spacing")/2));
                 if ($bg_color == 1) {
                     $this->doc->setColor(0.8, 0.8, 0.8);
@@ -244,10 +239,9 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 $this->doc->nextPage(true);
             }
 
-            // Hvis der har v�ret poster med VAT, og n�ste post er uden, s� tilskriver vi moms.
-            // if ($vat == 1 && $items[$i+1]["vat"] == 0) {
+            // If products with VAT and next post is without we add VAT.
             if (($vat == 1 && isset($items[$i+1]["vat"]) && $items[$i+1]["vat"] == 0) || ($vat == 1 && $i+1 >= $max)) {
-                // Hvis der er moms p� nuv�rende produkt, men n�ste produkt ikke har moms, eller hvis vi har moms og det er sidste produkt
+                // If VAT on current product, but next has no VAT OR if VAT and last product
 
                 ($bg_color == 1) ? $bg_color = 0 : $bg_color = 1;
 
@@ -287,8 +281,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             $debtor_total = $debtor->get("total");
         }
 
-
-
         if ($debtor->get("round_off") == 1 && $debtor->get("type") == "invoice" && $total != $debtor_total) {
             $this->doc->setY('-'.($this->doc->get("font_size") + $this->doc->get("font_padding_top")));
             $this->doc->addText($apointX["enhed"], $this->doc->get('y'), $this->doc->get("font_size"), "I alt:");
@@ -310,7 +302,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
         $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
         $this->doc->line($apointX["enhed"], $this->doc->get('y'), $this->doc->get('right_margin_position'), $this->doc->get('y'));
 
-        // paymentcondition
+        // payment condition
         if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
 
             $parameter = array(
@@ -341,7 +333,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 $this->doc->nextPage(true);
             }
 
-            //$text = explode("\r\n", $debtor->kernel->setting->get('intranet', 'debtor.invoice.text'));
             $text = explode("\r\n", $debtor->getInvoiceText());
             foreach ($text AS $line) {
                 if ($line == "") {
