@@ -51,5 +51,5 @@ before_script:
   - phpenv rehash
 script: 
   - phpunit --configuration phpunit.example.xml .
-  - java -jar ../../selenium-server-standalone-2.15.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "../../Result.html"
-  - phpcs src
+  - #java -jar ../../selenium-server-standalone-2.15.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "../../Result.html"
+  - #phpcs src
