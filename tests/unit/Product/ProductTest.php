@@ -144,13 +144,10 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
         $product = new Product($this->kernel, $id);
         $values = $product->get();
-        //print_r($values);
-
 
         $data = array('state_account_id' => 20);
         $product->save($data);
         $values = $product->get();
-        //print_r($values);
 
         $this->assertEquals(1, $values['number']);
         $this->assertEquals($name, $values['name']);
@@ -176,13 +173,10 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
         $product = new Product($this->kernel, $id);
         $values = $product->get();
-        //print_r($values);
-
 
         $data = array('state_account_id' => 20);
         $product->save($data);
         $values = $product->get();
-        //print_r($values);
 
         $this->assertEquals(1, $values['number']);
         $this->assertEquals($name, $values['name']);
@@ -285,8 +279,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
         try {
             $product->setAttributeGroup(1);
             $this->assertTrue(false, 'An excpetion is not thrown');
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             $this->assertEquals('You can not set attribute group for a product without variations!', $e->getMessage());
         }
     }
@@ -320,7 +313,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $group->load();
         $product->setAttributeGroup($group->getId());
 
-
         $expected = array(
             0 => array(
                 'id' => 1,
@@ -348,11 +340,9 @@ class ProductTest extends PHPUnit_Framework_TestCase
         try {
             $product->getVariation();
             $this->assertTrue(false, 'No exception thrown');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->assertTrue(true);
         }
-
     }
 
     function testGetVariation()
@@ -365,8 +355,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $product->setAttributeGroup($group->getId());
 
         $this->assertTrue(is_object($product->getVariation()));
-
-
     }
 
     function testGetVariations()
@@ -405,7 +393,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
         $detail->weight_difference = 0;
         $detail->save();
 
-
         $variations = $product->getVariations();
 
         $this->assertEquals(2, $variations->count());
@@ -416,7 +403,6 @@ class ProductTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('small', $variation->attribute2->attribute->getName());
         $this->assertEquals('size', $variation->attribute2->attribute->group->getName());
-
     }
 
     function testGetPriceInCurrency()
@@ -426,17 +412,12 @@ class ProductTest extends PHPUnit_Framework_TestCase
         require_once dirname(__FILE__) .'/../Stub/Fake/Intraface/modules/currency/Currency/ExchangeRate.php';
         $currency->product_price_exchange_rate = new Fake_Intraface_modules_currency_Currency_ExchangeRate;
         require_once dirname(__FILE__) .'/../Stub/Fake/Ilib/Variable/Float.php';
-        $currency->product_price_exchange_rate->rate = new Fake_Ilib_Variable_Float;
-        $currency->product_price_exchange_rate->rate->iso = 745.23;
+        $currency->product_price_exchange_rate->rate = new Fake_Ilib_Variable_Float(745.23);
 
         $product = new Product($this->kernel);
         $product->save(array('name' => 'test', 'price' => 200, 'unit' => 1));
         $product->load();
 
         $this->assertEquals(26.84, $product->getDetails()->getPriceInCurrency($currency)->getAsIso());
-
-
-
     }
-
 }
