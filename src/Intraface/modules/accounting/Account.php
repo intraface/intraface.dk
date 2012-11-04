@@ -265,18 +265,18 @@ class Account extends Intraface_Standard
 
         $sql = $sql_type . "SET
             number = '".(int)$var['number']."',
-            intranet_id = ".$this->year->kernel->intranet->get('id').",
-            user_id = ".$this->year->kernel->user->get("id").",
-            type_key='".$var['type_key']."',
-            year_id = ".$this->year->get('id').",
-            use_key = '".$var['use_key']."',
-            name = '".$var['name']."',
-            comment = '".$var['comment']."',
-            vat_percent = '".$var['vat_percent']."',
-            sum_to_account_number = '".$var['sum_to']."',
-            sum_from_account_number = '".$var['sum_from']."',
+            intranet_id = " . $this->year->kernel->intranet->get('id') . ",
+            user_id = " . $this->year->kernel->user->get("id") . ",
+            type_key='" . $var['type_key']."',
+            year_id = " . $this->year->get('id').",
+            use_key = '" . $var['use_key']."',
+            name = '" . $var['name']."',
+            comment = '" . $var['comment']."',
+            vat_percent = '" . $var['vat_percent'] . "',
+            sum_to_account_number = " . (int)$var['sum_to'] . ",
+            sum_from_account_number = " . (int)$var['sum_from'] . ",
             date_changed = NOW(),
-            vat_key=".(int)$var['vat_key']." " . $sql_end;
+            vat_key=" . (int)$var['vat_key'] . " " . $sql_end;
 
         $this->db->query($sql);
 
