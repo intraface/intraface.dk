@@ -4,19 +4,9 @@
 
     <fieldset>
     <?php
-        if ($context->query('flare')) { ?>
+        if ($context->query('flare')): ?>
             <p><?php e(t($context->query('flare'))); ?></p>
-        <?php }
-        /*
-        else {
-            $actual = SystemDisturbance::getActual();
-            if (count($actual) > 0 && $actual['important'] == 1) {
-                echo '<p id="system_message">'.htmlspecialchars($actual['description']).'</p>';
-            }
-        }
-        */
-
-        ?>
+        <?php endif; ?>
 
         <div class="align-left">
             <label for="email" id="email_label"><?php e(t('Email')); ?></label>
@@ -30,7 +20,6 @@
         <div>
             <input type="submit" value="<?php e(t('Login')); ?>" id="submit" />
             <a href="<?php e(url('../retrievepassword')); ?>"><?php e(t('Forgotten password')); ?></a>
-            <a href="<?php e(url('../signup')); ?>"><?php e(t('Register')); ?></a>
         </div>
 
     </fieldset>
