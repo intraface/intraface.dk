@@ -102,7 +102,7 @@ class Voucher extends Intraface_Standard
         if (!empty($var['reference'])) {
             $validator->isString($var['reference'], 'Reference er ikke en streng', '', 'allow_empty');
         }
-        $validator->isString($var['text'], 'Beskrivelsen skal v�re en tekststreng');
+        $validator->isString($var['text'], 'Beskrivelsen skal være en tekststreng');
 
         if ($this->error->isError()) {
             return false;
@@ -270,6 +270,7 @@ class Voucher extends Intraface_Standard
     /**
      * @return array
      */
+
      function getList($filter = '')
      {
         $gateway = new Intraface_modules_accounting_VoucherGateway($this->year);
@@ -315,7 +316,7 @@ class Voucher extends Intraface_Standard
         // behandles dermed på samme måde som momsen af varekøb foretaget i Danmark.
 
         if ($this->get('vat_off') == 0) {
-            // gemme moms hvis det er n�dvendigt
+            // gemme moms hvis det er nødvendigt
             if (isset($buy_all_abroad) && is_array($buy_all_abroad) AND in_array($this->get('debet_account_id'), $buy_all_abroad)) {
                 // så skal beløbet ganges med momsprocenten og smides på moms af varekøb i udlandet
                 $credit = new Post($this);
