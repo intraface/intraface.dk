@@ -1,4 +1,4 @@
-<h1><?php e(t('Retrieve password')); ?></h1>
+<h1><span><?php e(t('Retrieve password')); ?></span></h1>
 
 <?php if (isset($context->msg)): ?>
 	<p class="error"><?php echo $context->msg; ?></p>
