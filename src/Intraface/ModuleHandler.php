@@ -49,7 +49,8 @@ class Intraface_ModuleHandler
             if (is_object($module)) {
                 $this->primary_module_name = $module_name;
 
-                // Finder afh�ngige moduller - Dette kunne flyttes til useModule, hvorfor er den egentlig ikke det? /Sune 06-07-2006
+                // Finds dependent modules
+                // @todo Maybe this should be moved to useModule()
                 $dependent_modules = $module->getDependentModules();
 
                 foreach ($dependent_modules as $dependent) {
@@ -87,9 +88,7 @@ class Intraface_ModuleHandler
 
         $this->modules[$module_name] = $module_name;
 
-        // @todo check whether a module has any limitations in access here?
-        //       we have not asked for shared
-
+        // @todo check whether a module has any limitations in access here? - we have not asked for shared
 
         // access control here
         $access = false;
@@ -166,7 +165,6 @@ class Intraface_ModuleHandler
             throw new Exception($shared_name . ' cannot be found on ' . $main_shared_path . ' with PATH_INCLUDE_SHARED: ' . PATH_INCLUDE_SHARED);
         }
     }
-
 
     /**
      * getModule()
