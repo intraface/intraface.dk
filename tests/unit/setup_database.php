@@ -25,6 +25,7 @@ try {
 	$install = new Intraface_Install;
 	$install->dropDatabase();
 	$install->createDatabaseSchema();
+	$install->createStartingValues();
 } catch (Exception $e) {
 	echo $e->getMessage();	
 	exit(1);
