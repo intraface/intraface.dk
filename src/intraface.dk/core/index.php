@@ -202,8 +202,9 @@ class k_Translation2Translator implements k_Translator
         } else {
             $translation2 = $factory->new_Translation2();
             $res = $translation2->setLang($lang);
+
             if (PEAR::isError($res)) {
-                throw new Exception('Could not setLang()');
+                throw new Exception('Could not setLang():' . $res->getMessage());
             }
 
             $this->page = $translation2->getPage('common');
@@ -220,22 +221,6 @@ class k_Translation2Translator implements k_Translator
 
     function translate($phrase, k_Language $language = null)
     {
-        /*
-        $lang = $this->translation2->getLang();
-        if (PEAR::isError($lang)) {
-            $res = $this->translation2->setLang($language->isoCode());
-        }
-        */
-        /*
-        if ($this->page_id !== null) {
-            if ($phrase != $this->translation2->get($phrase, $this->page_id)) {
-                return utf8_encode($this->translation2->get($phrase, $this->page_id));
-            }
-        }
-
-        return utf8_encode($this->translation2->get($phrase, 'common'));
-        */
-
         if (isset($this->page[$phrase])) {
             return utf8_encode($this->page[$phrase]);
         }
