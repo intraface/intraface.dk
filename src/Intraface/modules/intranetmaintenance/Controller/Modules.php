@@ -21,10 +21,10 @@ class Intraface_modules_intranetmaintenance_Controller_Modules extends k_Compone
 
     function putForm()
     {
-        // @todo should probably be created using put instead of this
         $this->module_msg = $this->getModuleMaintenance()->registerAll();
-        $this->getKernel()->user->clearCachedPermission(); // S�rger for at permissions bliver reloaded.
+        $this->getKernel()->user->clearCachedPermission(); // reloads all permissions
 
+        // using $this->render() to be able to show the message
         return $this->render();
     }
 
