@@ -310,6 +310,7 @@ class YearEnd extends Intraface_Standard
 
                 $voucher = new Voucher($this->year, $this->get('operating_reset_voucher_id'));
                 $voucher->save(array(
+                    'date' => $this->year->get('to_date_dk'),
                     'text' => 'Årsafslutning. Overførsel af driftskonti til resultatopgørelse'
                 ));
 
