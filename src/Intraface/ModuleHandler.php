@@ -63,7 +63,6 @@ class Intraface_ModuleHandler
                 throw new Exception('Du har ikke adgang til modulet');
             }
         }
-
     }
 
     /**
@@ -120,8 +119,8 @@ class Intraface_ModuleHandler
             throw new Exception('You need access to a required module to see this page, maybe it is ' . $module_name);
         }
 
-        $main_class_name = "Main".ucfirst($module_name);
-        $main_class_path = PATH_INCLUDE_MODULE.$module_name."/".$main_class_name.".php";
+        $main_class_name = "Main" . ucfirst($module_name);
+        $main_class_path = PATH_INCLUDE_MODULE . $module_name . "/" . $main_class_name . ".php";
 
         if (file_exists($main_class_path)) {
             require_once($main_class_path);
@@ -130,6 +129,7 @@ class Intraface_ModuleHandler
             $this->modules[$module_name] = $object;
             return $object;
         } else {
+            // @TODO this should not fail as hard - but what should happen then?
             throw new Exception('ModuleHandler: ' . $main_class_path . ' does not exist');
         }
     }
