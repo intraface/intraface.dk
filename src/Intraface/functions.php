@@ -18,9 +18,8 @@ if (!function_exists('amountToOutput')) {
 $GLOBALS['_global_function_callback_amountToOutput'] = 'intraface_AmountToOutput';
 
 /**
- * Funktion til at outputte et bel�b landespecifik notation
- * Det kunne jo v�re gavnligt om metoden ogs� indeholdte noget om,
- * hvilket land der er tale om.
+ * Outputs country specific notation
+ * @todo Add information about the country
  */
 function amountToOutput($amount)
 {
@@ -47,7 +46,7 @@ $GLOBALS['_global_function_callback_amountToForm'] = 'intraface_AmountToForm';
 
 
 /**
- * Funktion til at outputte et bel�b landespecifik notation i en formular
+ * Outputs country specific amounts in the forms
  */
 function intraface_amountToForm($amount)
 {
@@ -108,7 +107,6 @@ function intraface_autohtml($text)
 }
 
 $GLOBALS['_global_function_callback_autohtml'] = 'intraface_autohtml';
-
 
 // Dynamic global functions
 if (!function_exists('safeToDb')) {
@@ -172,25 +170,39 @@ $GLOBALS['_global_function_callback_filesize_readable'] = 'intraface_filesize_re
  */
 function intraface_filesize_readable($size, $retstring = null)
 {
-        // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
-        $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-        if ($retstring === null) { $retstring = '%01.2f %s'; }
-        $lastsizestring = end($sizes);
-        foreach ($sizes as $sizestring) {
-                if ($size < 1024) { break; }
-                if ($sizestring != $lastsizestring) { $size /= 1024; }
+    // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
+    $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+    if ($retstring === null) {
+        $retstring = '%01.2f %s'; 
+    }
+    $lastsizestring = end($sizes);
+    foreach ($sizes as $sizestring) {
+        if ($size < 1024) { 
+            break; 
         }
-        if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
-        return sprintf($retstring, $size, $sizestring);
+        if ($sizestring != $lastsizestring) { 
+            $size /= 1024; 
+        }
+    }
+    if ($sizestring == $sizes[0]) { 
+        // Bytes aren't normally fractional
+        $retstring = '%01d %s'; 
+    } 
+    return sprintf($retstring, $size, $sizestring);
 }
 
 function intrafaceBackendErrorhandler($errno, $errstr, $errfile, $errline, $errcontext)
 {
-    if (!defined('ERROR_LOG')) define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
+    if (!defined('ERROR_LOG')) {
+        define('ERROR_LOG', dirname(__FILE__) . '/../log/error.log');
+    }
     $errorhandler = new ErrorHandler;
-    if (!defined('ERROR_LEVEL_CONTINUE_SCRIPT')) define('ERROR_LEVEL_CONTINUE_SCRIPT', E_ALL);
+    if (!defined('ERROR_LEVEL_CONTINUE_SCRIPT')) {
+        define('ERROR_LEVEL_CONTINUE_SCRIPT', E_ALL);
+    }
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
-    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+    $errorhandler->addObserver(new ErrorHandler_Observer_Echo, ~ ERROR_LEVEL_CONTINUE_SCRIPT);
     return $errorhandler->handleError($errno, $errstr, $errfile, $errline, $errcontext);
 }
 
@@ -207,7 +219,8 @@ function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $err
     $errorhandler = new ErrorHandler;
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+        // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); 
     } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
     }
