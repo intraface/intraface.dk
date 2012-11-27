@@ -32,7 +32,7 @@ class Intraface_Install
         }
 
         while ($line = $result->fetchRow(MDB2_FETCHMODE_ASSOC)) {
-            $drop = $this->db->exec('DROP TABLE ' . $line['Tables_in_'.DB_NAME]);
+            $drop = $this->db->exec('DROP TABLE ' . $line['tables_in_' . DB_NAME]);
             if (PEAR::IsError($drop)) {
                 throw new Exception($drop->getUserInfo());
             }
