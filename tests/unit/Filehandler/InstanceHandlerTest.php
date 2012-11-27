@@ -16,7 +16,6 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         if (file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
             unlink(PATH_UPLOAD.'/1/1.jpeg');
         }
-
     }
 
     function createKernel()
@@ -42,29 +41,30 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
     }
     ////////////////////////////////////////////////////////////////
 
-    function testCreateFile() {
+    function testCreateFile() 
+    {
         $file = $this->createFile('wideonball.jpg');
 
         $this->assertEquals('wideonball.jpg', $file->get('file_name'));
     }
 
-
-    function testConstructWithoutParameters() {
-
+    function testConstructWithoutParameters()
+    {
         $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance();
         $this->assertTrue(is_object($filehandler->instance));
-
     }
 
-    function testConstructWithTypeSquare() {
+    function testConstructWithTypeSquare()
+    {
         $filehandler = $this->createFile('wideonball.jpg');
         $filehandler->createInstance('square');
 
         $this->assertEquals(3846, $filehandler->instance->get('file_size'), '', 10);
     }
 
-    function testConstructWithTypeSquareAndCropParams() {
+    function testConstructWithTypeSquareAndCropParams()
+    {
         $filehandler = $this->createFile('wideonball.jpg');
 
         $crop = array('crop_offset_x' => 200,
@@ -89,21 +89,18 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testCreateCustomInstanceCreaterThanImage() {
-
+    function testCreateCustomInstanceCreaterThanImage() 
+    {
         $im = new InstanceManager($this->createKernel());
 
         $this->assertEquals(1000, $im->save(array('name' => 'wide', 'max_height' => 280, 'max_width' => 720, 'resize_type' => 'strict')));
 
         $filehandler = $this->createFile('idraetshoejskolen9.jpg');
         $filehandler->createInstance('wide');
-        // we add 10 bytes delta
-        $this->assertEquals(54510, filesize($filehandler->instance->get('file_path')), '', 10);
+        // we add 20 bytes delta
+        $this->assertEquals(54510, filesize($filehandler->instance->get('file_path')), '', 20);
         $size = getimagesize($filehandler->instance->get('file_path'));
         $this->assertEquals(720, $size[0]);
         $this->assertEquals(280, $size[1]);
     }
-
-
 }
-?>
