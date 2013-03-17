@@ -98,7 +98,7 @@ $pfm->setPearinstallerDep('1.8.1');
 
 // installer
 $pfm->addPackageDepWithChannel('required', 'Config', 'pear.php.net', '1.10.12');
-$pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.6');
+$pfm->addPackageDepWithChannel('required', 'Swift', 'pear.swiftmailer.org', '4.0.7', '4.0.7');
 
 // Kernel
 $pfm->addPackageDepWithChannel('required', 'MDB2', 'pear.php.net', '2.4.1');
