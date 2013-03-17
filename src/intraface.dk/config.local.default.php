@@ -37,6 +37,7 @@ set_include_path(PATH_INCLUDE_PATH);
 // error logs
 define('ERROR_LOG', '/var/log/intraface/error.log'); // exact directory and filename
 define('K2_LOG', '/var/log/intraface/k2.log');
+define('TRANSLATION_ERROR_LOG', ERROR_LOG);
 
 // smtp
 define('SMTP_USERNAME', '');
