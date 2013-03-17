@@ -225,7 +225,7 @@ class k_Translation2Translator implements k_Translator
             return utf8_encode($this->page[$phrase]);
         }
 
-        $logger = new ErrorHandler_Observer_File(ERROR_LOG);
+        $logger = new ErrorHandler_Observer_File(TRANSLATION_ERROR_LOG);
         $details = array(
                 'date' => date('r'),
                 'type' => 'Translation2',
