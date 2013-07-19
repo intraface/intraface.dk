@@ -49,52 +49,52 @@ class Intraface_Controller_Restricted extends k_Component
         $_advice[] = array();
         $_attention_needed[] = array();
         if (in_array($this->query('message'), array('hide'))) {
-			$this->getKernel()->setting->set('user', 'homepage.message', 'hide');
-		}
+            $this->getKernel()->setting->set('user', 'homepage.message', 'hide');
+        }
 
-		$kernel = $this->getKernel();
+        $kernel = $this->getKernel();
 
         // getting stuff to show on the dashboard
         $modules = $this->getKernel()->getModules();
 
         foreach ($modules as $module) {
 
-        	if (!$this->getKernel()->intranet->hasModuleAccess(intval($module['id']))) {
-        		continue;
-        	}
-        	if (!$this->getKernel()->user->hasModuleAccess(intval($module['id']))) {
-        		continue;
-        	}
+            if (!$this->getKernel()->intranet->hasModuleAccess(intval($module['id']))) {
+                continue;
+            }
+            if (!$this->getKernel()->user->hasModuleAccess(intval($module['id']))) {
+                continue;
+            }
 
-        	$module = $this->getKernel()->useModule($module['name']);
-        	$frontpage_files = $module->getFrontpageFiles();
+            $module = $this->getKernel()->useModule($module['name']);
+            $frontpage_files = $module->getFrontpageFiles();
 
-        	if (!is_array($frontpage_files) OR count($frontpage_files) == 0) {
-        		continue;
-        	}
+            if (!is_array($frontpage_files) OR count($frontpage_files) == 0) {
+                continue;
+            }
 
-        	foreach ($frontpage_files AS $file) {
-        		$file = PATH_INCLUDE_MODULE . $module->getName() . '/' .$file;
-        		if (file_exists($file)) {
-        			include($file);
-        		}
-        	}
+            foreach ($frontpage_files AS $file) {
+                $file = PATH_INCLUDE_MODULE . $module->getName() . '/' .$file;
+                if (file_exists($file)) {
+                    include($file);
+                }
+            }
         }
         // Adds link for id user details is filled in. They are going to be in the top.
         if ($this->getKernel()->user->hasModuleAccess('controlpanel')) {
             if (!$this->getKernel()->user->isFilledIn()) {
-            	$_advice[] = array(
-            		'msg' => 'all information about you has not been filled in',
-            		'link' => $this->url('core/restricted/module/controlpanel/user', array('edit')),
-            		'module' => 'dashboard'
-            	);
+                $_advice[] = array(
+                    'msg' => 'all information about you has not been filled in',
+                    'link' => $this->url('core/restricted/module/controlpanel/user', array('edit')),
+                    'module' => 'dashboard'
+                );
             }
         }
 
         $data = array(
-        	'_attention_needed' => $_attention_needed,
-        	'_advice' => $_advice,
-            'tweets' => $this->getTweets());
+            '_attention_needed' => $_attention_needed,
+            '_advice' => $_advice
+        );
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/restricted');
         return $smarty->render($this, $data);
@@ -116,29 +116,12 @@ class Intraface_Controller_Restricted extends k_Component
         return $this->wrap(parent::execute());
     }
 
-    function getTweets()
-    {
-        $identifier = 'tweets_frontpage';
-
-        if (!$data = unserialize($this->cache->get($identifier))) { // cache hit !
-            try {
-                $twitterSearch = new Zend_Service_Twitter_Search('json');
-                $data = $twitterSearch->search('#intraface', array('rpp' => 5));
-            } catch (Exception $e) {
-                return array();
-            }
-
-            $this->cache->save(serialize($data), $identifier);
-        }
-        return $data['results'];
-    }
-
     /**
      * @todo Maybe move to a user object implementing getIntranet()
      * In $intranet we can have the transient gateways.
      *
      * class component_ShowProduct {
-  	 *   protected $user_gateway;
+     *   protected $user_gateway;
      *   function __construct(UserGateway $user_gateway) {
      *     $this->user_gateway = $user_gateway;
      *   }
@@ -166,9 +149,9 @@ class Intraface_Controller_Restricted extends k_Component
 
     function getLastView()
     {
-		$last_view = $this->getKernel()->setting->get('user', 'homepage.last_view');
-		$this->getKernel()->setting->set('user', 'homepage.last_view', date('Y-m-d H:i:s'));
-    	return $last_view;
+        $last_view = $this->getKernel()->setting->get('user', 'homepage.last_view');
+        $this->getKernel()->setting->set('user', 'homepage.last_view', date('Y-m-d H:i:s'));
+        return $last_view;
     }
 
     function getUserMenu()
