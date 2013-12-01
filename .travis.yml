@@ -66,15 +66,16 @@ install:
   - sleep 10 # to wait for Selenium to be up and running
 
   # Start simple HTTP-Server
+  - cd src/intraface.dk
   - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
   
 before_script:
 
-  - cd tests/unit
+  - cd ../../tests/unit
   - phpunit --version  
   - phpenv rehash
 
 script: 
   - phpunit --verbose --configuration phpunit.example.xml .
-#  - java -jar ../../selenium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "../../Result.html"
+  - java -jar senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"
 #  - phpcs src
