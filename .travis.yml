@@ -17,7 +17,7 @@ install:
   - pear channel-discover pear.saltybeagle.com
   - pear channel-discover pear.pdepend.org
   - pear channel-discover pear.phpmd.org
-  - pear channel-discover pear.docblox-project.org
+  - pear channel-discover pear.phpdoc.org
   - pear channel-discover pear.domain51.com
   - pear channel-discover public.intraface.dk
   - pear channel-discover htmlpurifier.org
