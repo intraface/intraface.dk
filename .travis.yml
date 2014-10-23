@@ -14,7 +14,7 @@ install:
   - pear channel-discover zend.googlecode.com/svn
   - pear channel-discover pear.swiftmailer.org
   - pear channel-discover pear.doctrine-project.org
-  - pear channel-discover pear.saltybeagle.com
+#  - pear channel-discover pear.saltybeagle.com
   - pear channel-discover pear.pdepend.org
   - pear channel-discover pear.phpmd.org
   - pear channel-discover pear.phpdoc.org
