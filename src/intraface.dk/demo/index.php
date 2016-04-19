@@ -51,7 +51,8 @@ class SimpleTranslator implements k_Translator
 
 class SimpleTranslatorLoader implements k_TranslatorLoader
 {
-    function load(k_Context $context) {
+    function load(k_Context $context)
+    {
         // Default to English
         $phrases = array(
             'Hello' => 'Hello',

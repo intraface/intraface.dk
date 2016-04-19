@@ -17,4 +17,3 @@ $options = array('prefix' => 'cms.',
 XML_RPC2_Backend::setBackend('php');
 $server = XML_RPC2_Server::create(new Intraface_XMLRPC_CMS_Server(), $options);
 $server->handleCall();
-?>

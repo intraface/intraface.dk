@@ -25,7 +25,7 @@ class TodoServer extends IXR_Server {
      * Tjekker om forespørgslen må foretages
      *
      * @param struct $credentials
-     * 	- intranet_id = integer
+     *  - intranet_id = integer
      *  - key_code = session_id
      * @return true ved succes ellers object med fejlen
      */

@@ -6,16 +6,18 @@ require_once 'bucket.inc.php';
 
 set_error_handler('k_exceptions_error_handler');
 
-class MyIdentityLoader extends k_BasicHttpIdentityLoader {
-  function selectUser($username, $password) {
-    $users = array(
-      'sune@intraface.dk' => '7f5c04fb811783c71d951302e3314d62',
-      'lars@intraface.dk' => 'e9127ee5efd3a78a5837f22a5bc4ef10'
-    );
-    if (isset($users[$username]) && $users[$username] == md5($password)) {
-      return new k_AuthenticatedUser($username);
+class MyIdentityLoader extends k_BasicHttpIdentityLoader
+{
+    function selectUser($username, $password)
+    {
+        $users = array(
+        'sune@intraface.dk' => '7f5c04fb811783c71d951302e3314d62',
+        'lars@intraface.dk' => 'e9127ee5efd3a78a5837f22a5bc4ef10'
+        );
+        if (isset($users[$username]) && $users[$username] == md5($password)) {
+            return new k_AuthenticatedUser($username);
+        }
     }
-  }
 }
 
 require_once 'MDB2.php';
@@ -113,19 +115,19 @@ class Tools_TemplateFactory extends k_DefaultTemplateFactory
 }
 
 
-function create_container() {
-  $factory = new ToolsFactory();
-  $container = new bucket_Container($factory);
-  $factory->db_dsn = 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
-  $factory->error_log = ERROR_LOG;
-  return $container;
+function create_container()
+{
+    $factory = new ToolsFactory();
+    $container = new bucket_Container($factory);
+    $factory->db_dsn = 'mysql://' . DB_USER . ':' . DB_PASS . '@' . DB_HOST . '/' . DB_NAME;
+    $factory->error_log = ERROR_LOG;
+    return $container;
 }
 
 
 if (realpath($_SERVER['SCRIPT_FILENAME']) == __FILE__) {
-  k()
+    k()
       ->setIdentityLoader(new MyIdentityLoader())
       ->setComponentCreator(new k_InjectorAdapter(create_container()))
       ->run('Intraface_Tools_Controller_Root')->out();
 }
-
