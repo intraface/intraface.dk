@@ -94,7 +94,9 @@ class TodoItem extends Intraface_Standard
      */
     public function save($var, $user_id = 0)
     {
-        if (empty($var)) return;
+        if (empty($var)) {
+            return;
+        }
         $var = safeToDb($var);
         $user_id = intval($user_id);
 

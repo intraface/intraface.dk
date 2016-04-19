@@ -109,8 +109,8 @@ class ContactReminder extends Intraface_Standard
     private $dbquery;
 
     /**
-     * @param 	object contact: Class contact
-     * @param 	int id: id of reminder.
+     * @param   object contact: Class contact
+     * @param   int id: id of reminder.
      */
     function __construct($contact, $id = 0)
     {
@@ -187,8 +187,8 @@ class ContactReminder extends Intraface_Standard
     }
 
     /**
-     * @param 	array $input: array of data to store/update
-     * @return	boolean true or false
+     * @param   array $input: array of data to store/update
+     * @return  boolean true or false
      */
     public function update($input)
     {
@@ -210,9 +210,7 @@ class ContactReminder extends Intraface_Standard
 
         if ($this->id != 0) {
             $result = $this->db->exec("UPDATE contact_reminder_single SET ".$sql." WHERE intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer')." AND id = ".$this->db->quote($this->id, 'integer'));
-
         } else {
-
             $result = $this->db->exec("INSERT INTO contact_reminder_single SET ".$sql.", ".
                 "intranet_id = ".$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer')."," .
                 "contact_id = ".$this->db->quote($this->contact->get('id'), 'integer')."," .
@@ -223,17 +221,17 @@ class ContactReminder extends Intraface_Standard
             $this->id = $this->db->lastInsertID();
         }
 
-         if (PEAR::isError($result)) {
-             throw new Exception('Could not save information in ContactReminder->update' . $result->getUserInfo());
-             return false;
-         }
+        if (PEAR::isError($result)) {
+            throw new Exception('Could not save information in ContactReminder->update' . $result->getUserInfo());
+            return false;
+        }
          return $this->id;
     }
 
     /**
      * postpone the reminder at certain periode.
      *
-     * @param string $date	date to be postponed to
+     * @param string $date  date to be postponed to
      * @return boolean true or false
      */
 
@@ -243,10 +241,10 @@ class ContactReminder extends Intraface_Standard
          * @todo: validation needed - not crucial as we are setting the postpone date
          */
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), reminder_date = ' .$this->db->quote($date, 'date').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
-         if (PEAR::isError($result)) {
-             throw new Exception('Could not postphone reminder' . $result->getUserInfo());
-             return false;
-         }
+        if (PEAR::isError($result)) {
+            throw new Exception('Could not postphone reminder' . $result->getUserInfo());
+            return false;
+        }
          $this->load();
          return true;
     }
@@ -255,7 +253,7 @@ class ContactReminder extends Intraface_Standard
      * TO BE WRITTEN
      * Return all upcoming reminders on all contacts
      *
-     * @return array	with reminders.
+     * @return array    with reminders.
      */
     public function upcomingReminders($kernel)
     {
@@ -272,15 +270,14 @@ class ContactReminder extends Intraface_Standard
                 'INNER JOIN contact ON (contact_reminder_single.contact_id = contact.id AND contact.intranet_id = '.$db->quote($kernel->intranet->get('id'), 'integer') . ' AND contact.active = 1) '.
                 'LEFT JOIN address ON (address.belong_to_id = contact.id AND address.type = 3 AND address.active = 1) ' .
                 'WHERE contact_reminder_single.reminder_date < DATE_ADD(NOW(), INTERVAL 30 DAY) AND contact_reminder_single.intranet_id = ' .$db->quote($kernel->intranet->get('id'), 'integer').' AND contact_reminder_single.active = 1 AND contact_reminder_single.status_key = 1 ' .
-                'ORDER BY contact_reminder_single.reminder_date ASC'
-            );
-         if (PEAR::isError($result)) {
-             die($result->getUserInfo());
-             return false;
-         }
-         if ($result->numRows() == 0) {
-             return array();
-         }
+                'ORDER BY contact_reminder_single.reminder_date ASC');
+        if (PEAR::isError($result)) {
+            die($result->getUserInfo());
+            return false;
+        }
+        if ($result->numRows() == 0) {
+            return array();
+        }
          return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
 
     }
@@ -288,7 +285,7 @@ class ContactReminder extends Intraface_Standard
     /**
      * setStatus
      *
-     * @param string $status	Status as either created, seen, or cancelled
+     * @param string $status    Status as either created, seen, or cancelled
      * @return boolean true or false
      */
     public function setStatus($status)
@@ -296,10 +293,10 @@ class ContactReminder extends Intraface_Standard
         $status_key = array_search($status, $this->status_types);
 
         $result = $this->db->exec('UPDATE contact_reminder_single SET date_changed = NOW(), status_key = ' .$this->db->quote($status_key, 'integer').' WHERE intranet_id = '.$this->db->quote($this->contact->kernel->intranet->get('id'), 'integer').' AND id = '.$this->db->quote($this->id, 'integer'));
-         if (PEAR::isError($result)) {
-             throw new Exception('Could not postphone reminder' . $result->getUserInfo());
-             return false;
-         }
+        if (PEAR::isError($result)) {
+            throw new Exception('Could not postphone reminder' . $result->getUserInfo());
+            return false;
+        }
          $this->load();
          return true;
 

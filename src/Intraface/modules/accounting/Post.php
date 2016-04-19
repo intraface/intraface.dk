@@ -126,7 +126,6 @@ class Post extends Intraface_Standard
         if ($this->id > 0) {
             $sql_type = "UPDATE";
             $sql_end = " WHERE id = " . $this->id;
-
         } else {
             $sql_type = "INSERT INTO";
             $sql_end = "";
@@ -182,7 +181,7 @@ class Post extends Intraface_Standard
 
     public function delete()
     {
-        if ($this->id == 0 OR $this->get('stated') == 1) {
+        if ($this->id == 0 or $this->get('stated') == 1) {
             return false;
         }
 
@@ -194,6 +193,6 @@ class Post extends Intraface_Standard
 
     function getId()
     {
-    	return $this->id;
+        return $this->id;
     }
 }

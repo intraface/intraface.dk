@@ -18,10 +18,10 @@ foreach ($files as $file) {
         <tbody>
             <tr>
                 <td rowspan="5" style="width: 280px;">
-                    <?php if ($this_filemanager->get('is_picture')): ?>
+                    <?php if ($this_filemanager->get('is_picture')) : ?>
                         <?php $this_filemanager->createInstance('small');?>
                         <img src="<?php e($this_filemanager->instance->get('file_uri')); ?>" alt="" />
-                    <?php else: ?>
+                    <?php else : ?>
                         <img src="<?php e($this_filemanager->get('icon_uri')); ?>" alt="" />
                     <?php endif; ?>
                 </td>
@@ -40,7 +40,11 @@ foreach ($files as $file) {
             </tr>
             <tr>
                 <th><?php e(t('file accessibility')); ?></th>
-                <td><input type="radio" id="accessibility[<?php e($file['id']); ?>]_public" name="accessibility[<?php e($file['id']); ?>]" value="public" <?php if (isset($file['accessibility']) && $file['accessibility'] == 'public') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_public"><?php e(t('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php e($file['id']); ?>]_intranet" name="accessibility[<?php e($file['id']); ?>]" value="intranet" <?php if (isset($file['accessibility']) && $file['accessibility'] == 'intranet') e('checked="checked"'); ?> /><label for="accessibility[<?php e($file['id']); ?>]_intranet"><?php e(t('intranet')); ?></label></td>
+                <td><input type="radio" id="accessibility[<?php e($file['id']); ?>]_public" name="accessibility[<?php e($file['id']); ?>]" value="public" <?php if (isset($file['accessibility']) && $file['accessibility'] == 'public') {
+                    e('checked="checked"');
+} ?> /><label for="accessibility[<?php e($file['id']); ?>]_public"><?php e(t('public')); ?></label> &nbsp; &nbsp; <input type="radio" id="accessibility[<?php e($file['id']); ?>]_intranet" name="accessibility[<?php e($file['id']); ?>]" value="intranet" <?php if (isset($file['accessibility']) && $file['accessibility'] == 'intranet') {
+    e('checked="checked"');
+} ?> /><label for="accessibility[<?php e($file['id']); ?>]_intranet"><?php e(t('intranet')); ?></label></td>
             </tr>
         </tbody>
     </table>

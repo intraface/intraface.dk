@@ -54,7 +54,7 @@ class OnlinePayment extends Intraface_Standard
     {
         $gateway = new Intraface_modules_onlinepayment_OnlinePaymentGateway($kernel);
 
-        switch($type) {
+        switch ($type) {
             case 'settings':
                 return $gateway->findBySettings();
                 break;
@@ -81,7 +81,6 @@ class OnlinePayment extends Intraface_Standard
                 DATE_FORMAT(date_reversed, '%d-%m-%Y') AS dk_date_reversed
             FROM onlinepayment WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         if ($db->nextRecord()) {
-
             $this->value['id'] = $db->f('id');
             $this->value['dk_date_created'] = $db->f('dk_date_created');
             $this->value['date_created'] = $db->f('date_created');
@@ -160,7 +159,7 @@ class OnlinePayment extends Intraface_Standard
         }
 
         if (!isset($input['text'])) {
-        	$input['text'] = '';
+            $input['text'] = '';
         }
 
         if ($input['transaction_status'] == $this->transaction_status_authorized) {
@@ -228,7 +227,6 @@ class OnlinePayment extends Intraface_Standard
         if ($this->id > 0) {
             $db->query("UPDATE onlinepayment SET ".$sql." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         } else {
-
             $db->query("INSERT INTO onlinepayment SET ".$sql.",
                 intranet_id = ".$this->kernel->intranet->get('id').",
                 date_created = NOW()");
@@ -340,7 +338,7 @@ class OnlinePayment extends Intraface_Standard
             throw new Exception("Kan ikke skifte til lavere eller samme status i OnlinePayment->setStatus()");
         }
 
-        switch($status) {
+        switch ($status) {
             case "authorized":
                 $date_field = "date_authorized";
                 break;
@@ -408,7 +406,6 @@ class OnlinePayment extends Intraface_Standard
                 $db->query("UPDATE onlinepayment SET captured_in_currency_payment_exchange_rate_id = ".$this->getCurrency()->getPaymentExchangeRate()->getId()." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
             }
             return true;
-
         } else {
             $this->error->merge($payment->error->getMessage());
             return false;
@@ -424,7 +421,7 @@ class OnlinePayment extends Intraface_Standard
      * @todo better description of this, what is it used for. I think that the label
      *       has to go by the way.
      *
-     * @return array	with actions to perform on onlinepayment.
+     * @return array    with actions to perform on onlinepayment.
      */
     function getTransactionActions()
     {
@@ -572,7 +569,8 @@ class OnlinePayment extends Intraface_Standard
                     ->getPaymentExchangeRate(
                         $this->get('captured_in_currency_payment_exchange_rate_id')
                     )
-                    ->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
+                    ->convertAmountFromCurrency($this->getAmount())->getAsIso(2)
+                );
             } else {
                 return new Ilib_Variable_Float($this->getCurrency()->getPaymentExchangeRate()->convertAmountFromCurrency($this->getAmount())->getAsIso(2));
             }

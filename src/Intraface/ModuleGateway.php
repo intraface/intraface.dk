@@ -52,7 +52,6 @@ class Intraface_ModuleGateway
 
         if (!file_exists($main_class_path)) {
             $this->error->set("Filen ".$main_class_path." eksistere ikke!");
-
         } else {
             include_once $main_class_path;
             $module = new $main_class_name;

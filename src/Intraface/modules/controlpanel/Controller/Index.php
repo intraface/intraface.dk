@@ -26,7 +26,7 @@ class Intraface_modules_controlpanel_Controller_Index extends k_Component
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     function getModules()

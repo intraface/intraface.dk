@@ -1,10 +1,19 @@
 <?php
 session_start();
 
-class FakeAuthObserver {}
-class FakeAuthUser {
-    function clearCachedPermission() { return true; }
-    function getId() { return 1; }
+class FakeAuthObserver
+{
+}
+class FakeAuthUser
+{
+    function clearCachedPermission()
+    {
+        return true;
+    }
+    function getId()
+    {
+        return 1;
+    }
 }
 
 class FakeAuthAdapter
@@ -24,9 +33,9 @@ class FakeAuthAdapter
 class AuthTest extends PHPUnit_Framework_TestCase
 {
     const SESSION_LOGIN = 'thissessionfirstlog';
-	private $auth;
+    private $auth;
     private $db;
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function setUp()
     {
@@ -41,27 +50,27 @@ class AuthTest extends PHPUnit_Framework_TestCase
         unset($this->auth);
     }
 
-	function testConstructionOfAuth()
-	{
-	    $this->assertTrue(is_object($this->auth));
-	}
+    function testConstructionOfAuth()
+    {
+        $this->assertTrue(is_object($this->auth));
+    }
 
-	function testAuthMethodReturnsAnObjectOnSuccessFullAuthentication()
-	{
-	    $this->assertTrue(is_object($this->auth->authenticate(new FakeAuthAdapter)));
-	}
+    function testAuthMethodReturnsAnObjectOnSuccessFullAuthentication()
+    {
+        $this->assertTrue(is_object($this->auth->authenticate(new FakeAuthAdapter)));
+    }
 
-	function testAfterAuthenticationTheIdentityCanBeGrappedUsingGetIdentity()
-	{
-		$db = MDB2::singleton();
-	    $db->query('INSERT INTO user SET email="start@intraface.dk", session_id="'.self::SESSION_LOGIN.'"');
-	    // @todo lidt dum da der skal v�re en Intraface_User tilg�ngelig.
-	    $this->auth->authenticate(new FakeAuthAdapter);
-		$identity = $this->auth->getIdentity($this->db);
-	    $this->assertTrue(is_object($identity));
-	}
+    function testAfterAuthenticationTheIdentityCanBeGrappedUsingGetIdentity()
+    {
+        $db = MDB2::singleton();
+        $db->query('INSERT INTO user SET email="start@intraface.dk", session_id="'.self::SESSION_LOGIN.'"');
+        // @todo lidt dum da der skal v�re en Intraface_User tilg�ngelig.
+        $this->auth->authenticate(new FakeAuthAdapter);
+        $identity = $this->auth->getIdentity($this->db);
+        $this->assertTrue(is_object($identity));
+    }
 
-	function createUserInDatabase()
+    function createUserInDatabase()
     {
         // first we add a user.
         require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';

@@ -1,7 +1,7 @@
 <?php
 /**
  * This class manage the user instance types that it is possibe to get
- * 
+ *
  * @author sune
  * @version 0.0.1
  * @package filehandler
@@ -41,11 +41,11 @@ class InstanceManager
     
     /**
      * init function
-     * 
+     *
      * @param object kernel
      * @param object id
      */
-    public function __construct($kernel, $type_key = 0) 
+    public function __construct($kernel, $type_key = 0)
     {
         $this->error = new Ilib_Error;
         $this->db = MDB2::singleton(DB_DSN);
@@ -59,13 +59,13 @@ class InstanceManager
     
     /**
      * load data about intance type
-     * 
+     *
      * @return boolean true on success or false
      */
-    public function load() 
-    {        
+    public function load()
+    {
         $standard_types = $this->getStandardTypes();
-        foreach ($standard_types AS $tmp_standard_type) {
+        foreach ($standard_types as $tmp_standard_type) {
             if ($tmp_standard_type['type_key'] == $this->type_key) {
                 $standard_type = $tmp_standard_type;
                 break;
@@ -86,20 +86,17 @@ class InstanceManager
             $this->value['resize_type'] = $resize_types[$this->value['resize_type_key']];
             $this->value['origin'] = 'overwritten';
             return true;
-        }
-        elseif (isset($standard_type)) {
+        } elseif (isset($standard_type)) {
             $this->value = $standard_type;
             $this->value['origin'] = 'standard';
-            return true;           
-        }
-        elseif (isset($custom_type)) {
+            return true;
+        } elseif (isset($custom_type)) {
             $this->value = $custom_type;
             $resize_types = $this->getResizeTypes();
             $this->value['resize_type'] = $resize_types[$this->value['resize_type_key']];
             $this->value['origin'] = 'custom';
             return true;
-        }
-        else {
+        } else {
             $this->type_key = 0;
             $this->value['type_key'] = 0;
             return false;
@@ -108,18 +105,18 @@ class InstanceManager
     
     /**
      * saves a new custom instance
-     * 
+     *
      * @param array input array with instance that should be saved
      * @return boolean true on success or false on failure
      */
-    function save($input) 
+    function save($input)
     {
         
         $validator = new Ilib_Validator($this->error);
         
         if ($this->type_key != 0) {
             $standard_types = $this->getStandardTypes();
-            foreach ($standard_types AS $standard_type) {
+            foreach ($standard_types as $standard_type) {
                 if ($standard_type['type_key'] == $this->type_key) {
                     // then we set the name to the standard type name
                     $input['name'] = $standard_type['name'];
@@ -164,8 +161,7 @@ class InstanceManager
         if ($this->type_key == 0 || $this->get('origin') == 'standard') {
             if ($this->type_key == 0) {
                 $type_key = $this->getNextFreeTypeKey();
-            }
-            else {
+            } else {
                 $type_key = $this->type_key;
             }
             
@@ -183,8 +179,7 @@ class InstanceManager
             }
             $this->type_key = $type_key;
             return $this->type_key;
-        }
-        else {
+        } else {
             $result = $this->db->exec('UPDATE file_handler_instance_type SET '.$sql.' ' .
                     'WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' ' .
                             'AND type_key = '.$this->db->quote($this->type_key, 'integer'));
@@ -203,7 +198,7 @@ class InstanceManager
      *
      * @return array
      */
-    private function getStandardTypes() 
+    private function getStandardTypes()
     {
         return array(
             0 => array('type_key' => 0, 'name' => 'custom', 'fixed' => true, 'hidden' => true), // Manuelt st�rrelse
@@ -218,21 +213,21 @@ class InstanceManager
             9 => array('type_key' => 9, 'name' => 'system-small', 'fixed' => true, 'hidden' => true, 'max_width' => 240, 'max_height' => 160, 'resize_type' => 'relative'),
             10 => array('type_key' => 10, 'name' => 'system-medium', 'fixed' => true, 'hidden' => true, 'max_width' => 500, 'max_height' => 333, 'resize_type' => 'relative'),
             11 => array('type_key' => 11, 'name' => 'system-large', 'fixed' => true, 'hidden' => true, 'max_width' => 1024, 'max_height' => 683, 'resize_type' => 'relative')
-        ); 
+        );
     }
     
     /**
      * Checks whether a name is free to use
-     * 
-     * @param string $name 
+     *
+     * @param string $name
      * @param integer $id integer which should not be checked
      * @return boolean true or false
      */
-    private function isNameFree($name, $type_key = 0) 
+    private function isNameFree($name, $type_key = 0)
     {
         
         $standard_types = $this->getStandardTypes();
-        foreach ($standard_types AS $standard_type) {
+        foreach ($standard_types as $standard_type) {
             if ($standard_type['name'] == $name && $standard_type['type_key'] != $type_key) {
                 return false;
             }
@@ -248,7 +243,7 @@ class InstanceManager
             return false;
         }
         
-        if ($result->numRows() > 0) {            
+        if ($result->numRows() > 0) {
             return false;
         }
         
@@ -258,10 +253,10 @@ class InstanceManager
     
     /**
      * returns the next free type key
-     * 
+     *
      * @return integer type_key
      */
-    private function getNextFreeTypeKey() 
+    private function getNextFreeTypeKey()
     {
         // We do not active = 1, then it is possible to recreate deleted items without messing everything up.
         $result = $this->db->query('SELECT MAX(type_key) AS max_key FROM file_handler_instance_type WHERE ' .
@@ -275,19 +270,18 @@ class InstanceManager
         
         if ($row['max_key'] >= InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE) {
             return $row['max_key'] + 1;
+        } else {
+            return InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE;
         }
-        else {
-            return InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE; 
-        }  
     }
     
     /**
      * returns a list of custom instances
-     * 
+     *
      * @param string $show either 'visible' (do not show the hidden ones) or 'include_hidden' (to show all)
      * @return array instance types
      */
-    public function getList($show = 'visible') 
+    public function getList($show = 'visible')
     {
         if (!in_array($show, array('visible', 'include_hidden'))) {
             throw new Exception('First parameter to InstanceManager->getList should either be visibe or include_hidden');
@@ -310,11 +304,10 @@ class InstanceManager
         $c = 0; // index for custom_types;
         
         while (isset($standard_types[$s]) || isset($custom_types[$c])) {
-            
             if (isset($standard_types[$s])) {
                 if ($standard_types[$s]['hidden'] && $show == 'visible') {
                     $s++;
-                    CONTINUE;
+                    continue;
                 }
                 
                 if (isset($custom_types[$c]['type_key']) && $standard_types[$s]['type_key'] == $custom_types[$c]['type_key']) {
@@ -322,23 +315,19 @@ class InstanceManager
                     $type[$i]['resize_type'] = $resize_types[$type[$i]['resize_type_key']];
                     $type[$i]['origin'] = 'overwritten';
                     $c++;
-                }
-                else {
+                } else {
                     $type[$i] = $standard_types[$s];
                     $type[$i]['origin'] = 'standard';
                 }
+            } else {
+                $type[$i] = $custom_types[$c];
+                $type[$i]['resize_type'] = $resize_types[$type[$i]['resize_type_key']];
+                $type[$i]['origin'] = 'custom';
+                $c++;
             }
-            else {
-               $type[$i] = $custom_types[$c];
-               $type[$i]['resize_type'] = $resize_types[$type[$i]['resize_type_key']];
-               $type[$i]['origin'] = 'custom';
-               $c++; 
-            } 
             
             $i++;
             $s++;
-            
-            
         }
         
         return $type;
@@ -346,10 +335,11 @@ class InstanceManager
     
     /**
      * delete an instance type
-     * 
+     *
      * @return boolean true or false
      */
-    public function delete() {
+    public function delete()
+    {
         if ($this->type_key == 0) {
             throw new Exception('You can not delete an instancetype without setting a type_key!');
             return false;
@@ -366,33 +356,31 @@ class InstanceManager
     
     /**
      * returns the resize types
-     * 
+     *
      * @return array resize types
      */
-    public function getResizeTypes() {
-        return array(0 => 'relative', 1 => 'strict'); 
+    public function getResizeTypes()
+    {
+        return array(0 => 'relative', 1 => 'strict');
     }
     
     
     /**
      * returns values
-     * 
+     *
      * @param string $key
      * @return mixed value
      */
-    function get($key = '') 
+    function get($key = '')
     {
         
         if (!empty($key)) {
             if (isset($this->value[$key])) {
                 return($this->value[$key]);
-            }
-            else {
+            } else {
                 return '';
             }
         }
         return $this->value;
     }
- 
 }
-?>

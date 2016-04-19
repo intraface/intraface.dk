@@ -18,12 +18,12 @@ class Intraface_modules_language_Languages extends Doctrine_Record
 
     function getTypeKey()
     {
-    	return $this->type_key;
+        return $this->type_key;
     }
 
     function getChosen()
     {
-    	return Doctrine::getTable('Intraface_modules_language_Languages')->findByIntranetId($GLOBALS['intraface_doctrine_intranet_id']);
+        return Doctrine::getTable('Intraface_modules_language_Languages')->findByIntranetId($GLOBALS['intraface_doctrine_intranet_id']);
     }
 
     function getChosenAsArray()
@@ -31,16 +31,16 @@ class Intraface_modules_language_Languages extends Doctrine_Record
         $langs = array();
         $gateway = new Intraface_modules_language_Gateway;
 
-    	foreach ($this->getChosen() as $lang) {
+        foreach ($this->getChosen() as $lang) {
             $langs[$lang->type_key] = $gateway->getByKey($lang->type_key);
-    	}
+        }
 
         return $langs;
     }
 
     function flush()
     {
-    	$q = Doctrine_Query::create();
+        $q = Doctrine_Query::create();
         $rows = $q->delete()
           ->from('Intraface_modules_language_Languages')
           ->where('intranet_id = ?', $GLOBALS['intraface_doctrine_intranet_id'])

@@ -2,12 +2,13 @@
 /**
  * This package is used to store the action in the database, so that it can be executed when payment
  * is recieved
- * 
+ *
  * @package Intraface_modules_modulepackage
  * @author sune
  * @version 0.0.1
  */
-class Intraface_modules_modulepackage_ActionStore {
+class Intraface_modules_modulepackage_ActionStore
+{
     
     /**
      * @var integer intranet id
@@ -25,19 +26,20 @@ class Intraface_modules_modulepackage_ActionStore {
     private $id;
     
     /**
-     * 
+     *
      * @var string $identifier
      */
     private $identifier;
     
     /**
      * Constructor
-     * 
+     *
      * @param integer intranet_id
-     * 
-     * @return void 
+     *
+     * @return void
      */
-    function __construct($intranet_id) {
+    function __construct($intranet_id)
+    {
         $this->intranet_id = (int)$intranet_id;
         $this->db = MDB2::singleton(DB_DSN);
         $this->id = 0;
@@ -46,12 +48,12 @@ class Intraface_modules_modulepackage_ActionStore {
     
     /**
      * Store the action object in the database
-     * 
+     *
      * @param object action     An action object
-     * 
+     *
      * @return boolean true or false
      */
-    public function store($action) 
+    public function store($action)
     {
         
         if (!is_object($action) || strtolower(get_class($action)) != 'intraface_modules_modulepackage_action') {
@@ -87,12 +89,12 @@ class Intraface_modules_modulepackage_ActionStore {
     
     /**
      * Restore an action on the basis of an earlier identifier.
-     * 
+     *
      * @param string identifier
-     * 
+     *
      * @return object Action
      */
-    public function restore($identifier) 
+    public function restore($identifier)
     {
         
         $result = $this->db->query('SELECT id, action, identifier FROM module_package_action WHERE ' .
@@ -123,12 +125,12 @@ class Intraface_modules_modulepackage_ActionStore {
     
     /**
      * Restore an action on the basis of an earlier identifier.
-     * 
+     *
      * @param string identifier
-     * 
+     *
      * @return object Action
      */
-    static public function restoreFromIdentifier($db, $identifier) 
+    public static function restoreFromIdentifier($db, $identifier)
     {
         
         $result = $db->query('SELECT id, action, identifier FROM module_package_action WHERE ' .
@@ -156,12 +158,12 @@ class Intraface_modules_modulepackage_ActionStore {
     
     /**
      * Delete an stored action from the database
-     * 
+     *
      * @param integer id
-     * 
+     *
      * @return boolean true or false
      */
-    public function delete() 
+    public function delete()
     {
         if ($this->id == 0) {
             return false;
@@ -181,21 +183,21 @@ class Intraface_modules_modulepackage_ActionStore {
     
     /**
      * Returns the store id which is generated on store and restore.
-     * 
+     *
      * @return integer action store id
-     */ 
-    public function getId() {
+     */
+    public function getId()
+    {
         return $this->id;
     }
     
 /**
      * Returns the store identifier which is generated on store and restore.
-     * 
+     *
      * @return string action store identifier
-     */ 
-    public function getIdentifier() {
+     */
+    public function getIdentifier()
+    {
         return $this->identifier;
     }
 }
-
-?>

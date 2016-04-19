@@ -144,20 +144,20 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
         $i = 0;
         $return_limiters = array();
 
-        foreach ($limiters AS $limiter => $limit) {
+        foreach ($limiters as $limiter => $limit) {
             if (isset($_limiter[$module][$limiter])) {
                 $return_limiters[$i] = $_limiter[$module][$limiter];
                 $return_limiters[$i]['limiter'] = $limiter;
                 $return_limiters[$i]['limit'] = $limit;
-                switch($return_limiters[$i]['limit_type']) {
+                switch ($return_limiters[$i]['limit_type']) {
                     case 'file_size':
                         $return_limiters[$i]['limit_readable'] = filesize_readable($limit);
                         break;
                 }
                 $i++;
-             } else {
+            } else {
                 throw new Exception('limiter '.$limiter.' in tabel module_package_module for module '.$module.' is not valid!');
-             }
+            }
         }
 
         return $return_limiters;
@@ -170,12 +170,12 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
      *
      * @return void
      */
-    public function getDBQuery($kernel = NULL)
+    public function getDBQuery($kernel = null)
     {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if ($kernel == NULL) {
+        if ($kernel == null) {
             throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'module_package', 'module_package.active = 1');
@@ -210,9 +210,9 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
              $list[$i]['group'] = $db->f('group_name');
              $list[$i]['group_id'] = $db->f('group_id');
              $list[$i]['product_id'] = $db->f('product_id');
-             if ($db->f('product_id') != 0) {
-                 $product_ids[] = $db->f('product_id');
-             }
+            if ($db->f('product_id') != 0) {
+                $product_ids[] = $db->f('product_id');
+            }
              $list[$i]['modules'] = $this->getModules($db->f('id'));
              $list[$i]['product'] = array();
              $i++;
@@ -226,13 +226,13 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
         // we apply the products to the aray
         if (is_array($products) && count($products) > 0) {
             for ($i = 0, $max = count($list); $i < $max; $i++) {
-                 if ($list[$i]['product_id'] != 0) {
-                     foreach ($products['products'] AS $product) {
-                         if ($product['id'] == $list[$i]['product_id']) {
-                             $list[$i]['product'] = $product;
-                         }
-                     }
-                 }
+                if ($list[$i]['product_id'] != 0) {
+                    foreach ($products['products'] as $product) {
+                        if ($product['id'] == $list[$i]['product_id']) {
+                            $list[$i]['product'] = $product;
+                        }
+                    }
+                }
             }
         }
 
@@ -240,7 +240,7 @@ class Intraface_modules_modulepackage_ModulePackage extends Intraface_Standard
             return $list;
         } elseif ($list_type == 'matrix') {
             $matrix = array();
-            foreach ($list AS $entry) {
+            foreach ($list as $entry) {
                 $matrix[$entry['group_id']][$entry['plan_id']] = $entry;
             }
             return $matrix;

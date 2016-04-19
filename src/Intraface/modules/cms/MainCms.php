@@ -1,9 +1,9 @@
 <?php
 /**
  * @package Intraface_CMS
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 class MainCms extends Intraface_Main
 {
@@ -49,8 +49,7 @@ class MainCms extends Intraface_Main
             1 => 'draft',
             2 => 'hidden',
             3 => 'published'
-            )
-        );
+            ));
 
         $this->addSetting('element_types', array(
             1 => 'htmltext',
@@ -67,8 +66,7 @@ class MainCms extends Intraface_Main
             12 => 'wikitext',
             13 => 'randompicture',
             14 => 'twitter'
-            )
-        );
+            ));
 
         $this->addSetting('section_types', array(
             0 => '_invalid_',

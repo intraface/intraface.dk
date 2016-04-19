@@ -2,23 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="da">
 <head>
 	<title><?php e($context->document()->title()); ?></title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<style type="text/css">
-		@import "<?php e(url('/css/stylesheet.php', array('theme' => $this->theme_key, 'fontsize' => $this->fontsize))); ?>";
-	</style>
-	<link rel="stylesheet" href="<?php e(url('/css/print.css')); ?>" type="text/css" media="print" title="Printvenlig" />
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <style type="text/css">
+        @import "<?php e(url('/css/stylesheet.php', array('theme' => $this->theme_key, 'fontsize' => $this->fontsize))); ?>";
+    </style>
+    <link rel="stylesheet" href="<?php e(url('/css/print.css')); ?>" type="text/css" media="print" title="Printvenlig" />
 
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo-min.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/event/event-min.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/yui/dom/dom-min.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/main.js')); ?>"></script>
-	<script type="text/javascript" src="<?php e(url('/javascript/stripe.js')); ?>"></script>
-	<!--[if lt IE 7.]>
-	<script defer type="text/javascript" src="<?php e(url('/javascript/pngfix.js')); ?>"></script>
-	<![endif]-->
+    <script type="text/javascript" src="<?php e(url('/javascript/yui/yahoo/yahoo-min.js')); ?>"></script>
+    <script type="text/javascript" src="<?php e(url('/javascript/yui/event/event-min.js')); ?>"></script>
+    <script type="text/javascript" src="<?php e(url('/javascript/yui/dom/dom-min.js')); ?>"></script>
+    <script type="text/javascript" src="<?php e(url('/javascript/main.js')); ?>"></script>
+    <script type="text/javascript" src="<?php e(url('/javascript/stripe.js')); ?>"></script>
+    <!--[if lt IE 7.]>
+    <script defer type="text/javascript" src="<?php e(url('/javascript/pngfix.js')); ?>"></script>
+    <![endif]-->
 
-	<?php //echo $javascript; ?>
-	<link rel="start" href="http://www.intraface.dk/" title="Home" />
+    <?php //echo $javascript; ?>
+    <link rel="start" href="http://www.intraface.dk/" title="Home" />
 
     <link href="<?php e(url('/images/favicon.ico')); ?>" rel="icon" />
     <link href="<?php e(url('/images/favicon.ico')); ?>" rel="shortcut icon"/>
@@ -26,70 +26,80 @@
 
 </head>
 
-<body id="onlinefaktura-dk"<?php if (!empty($module_name)) echo ' class="' . $module_name . '"'; ?>>
+<body id="onlinefaktura-dk"<?php if (!empty($module_name)) {
+    echo ' class="' . $module_name . '"';
+} ?>>
 
-	<div id="container" class="clearfix">
+    <div id="container" class="clearfix">
 
-		<?php if (!empty($system_message)) { ?><p id="system_message"><?php e($system_message); ?></p><?php } ?>
+        <?php if (!empty($system_message)) {
+?><p id="system_message"><?php e($system_message); ?></p><?php
+} ?>
 
-		<div id="branding" class="vcard">
-			<h1 id="head" class="fn"><?php e($context->getKernel()->intranet->getName()); ?></h1>
-			<div><span class="street-address"><?php e(str_replace("\n", ', ', $context->getKernel()->intranet->address->get('address'))); ?></span>
-			<?php if ($context->getKernel()->intranet->address->get('postcode') != "" || $context->getKernel()->intranet->address->get('city')): ?>
-			&bull; <span class="postal-code"><?php e($context->getKernel()->intranet->address->get('postcode')); ?></span>
-			<span class="location"><?php e($context->getKernel()->intranet->address->get('city')); ?></span>
-			<?php endif; ?>
-			<?php if ($context->getKernel()->intranet->address->get('cvr') != ""): ?>
-				&bull; <span>CVR <?php e( $context->getKernel()->intranet->address->get('cvr'));	?> </span>
-			<?php endif; ?>
-			</div>
-		</div>
+        <div id="branding" class="vcard">
+            <h1 id="head" class="fn"><?php e($context->getKernel()->intranet->getName()); ?></h1>
+            <div><span class="street-address"><?php e(str_replace("\n", ', ', $context->getKernel()->intranet->address->get('address'))); ?></span>
+            <?php if ($context->getKernel()->intranet->address->get('postcode') != "" || $context->getKernel()->intranet->address->get('city')) : ?>
+            &bull; <span class="postal-code"><?php e($context->getKernel()->intranet->address->get('postcode')); ?></span>
+            <span class="location"><?php e($context->getKernel()->intranet->address->get('city')); ?></span>
+            <?php endif; ?>
+            <?php if ($context->getKernel()->intranet->address->get('cvr') != "") : ?>
+                &bull; <span>CVR <?php e($context->getKernel()->intranet->address->get('cvr'));    ?> </span>
+            <?php endif; ?>
+            </div>
+        </div>
 
-		<ul id="navigation-site" class="clearfix">
-            <?php $first = true; foreach ($context->getMenu() as $menuitem): ?>
-				<li<?php if ($first) echo ' class="first-child"'; ?>><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
-            <?php $first = false; endforeach; ?>
-		</ul>
+        <ul id="navigation-site" class="clearfix">
+            <?php $first = true; foreach ($context->getMenu() as $menuitem) : ?>
+                <li<?php if ($first) {
+                    echo ' class="first-child"';
+} ?>><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
+            <?php $first = false;
+endforeach; ?>
+        </ul>
 
-		<?php if (count($context->getSubMenu()) > 0): ?>
-			<ul id="navigation-sub" class="clearfix">
-			<?php $first = true; foreach ($context->getSubMenu() as $menuitem): ?>
-				<li<?php if ($first) echo ' class="first-child"'; ?>><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
-			<?php $first = false; endforeach; ?>
-			</ul>
-		<?php endif; ?>
+        <?php if (count($context->getSubMenu()) > 0) : ?>
+            <ul id="navigation-sub" class="clearfix">
+            <?php $first = true; foreach ($context->getSubMenu() as $menuitem) : ?>
+                <li<?php if ($first) {
+                    echo ' class="first-child"';
+} ?>><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
+            <?php $first = false;
+endforeach; ?>
+            </ul>
+        <?php endif; ?>
 
-	<div id="content" class="clearfix">
-		<div id="content-main">
+    <div id="content" class="clearfix">
+        <div id="content-main">
 
 <?php echo $content; ?>
 
-		</div><!-- content-main -->
+        </div><!-- content-main -->
 
-	</div><!-- pagebody -->
+    </div><!-- pagebody -->
 
 
-	<ul id="navigation-user" class="clearfix">
+    <ul id="navigation-user" class="clearfix">
 
-		<?php foreach ($context->getUserMenu() as $menuitem) { ?>
-			<li><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
-		<?php } ?>
-	</ul>
+        <?php foreach ($context->getUserMenu() as $menuitem) { ?>
+            <li><a href="<?php e($menuitem['url']); ?>"><?php e($menuitem['name']); ?></a></li>
+        <?php } ?>
+    </ul>
 
-	<div id="footer" class="clearfix">
-	</div>
+    <div id="footer" class="clearfix">
+    </div>
 
-	<?php if (defined('MDB2_DEBUG') AND MDB2_DEBUG) { ?>
-		<div style="margin: 1em;"><h2>MDB2-queries</h2>
-		<code>
+    <?php if (defined('MDB2_DEBUG') and MDB2_DEBUG) { ?>
+        <div style="margin: 1em;"><h2>MDB2-queries</h2>
+        <code>
         <?php
-		$db = MDB2::singleton(DB_DSN);
-		echo str_replace("\n\n\n\n\t", "<br />", $db->getDebugOutput());
+        $db = MDB2::singleton(DB_DSN);
+        echo str_replace("\n\n\n\n\t", "<br />", $db->getDebugOutput());
         ?>
-		</code></div>
+        </code></div>
         <?php
-		}
-	?>
+}
+    ?>
 </div><!-- container -->
 
 </body>

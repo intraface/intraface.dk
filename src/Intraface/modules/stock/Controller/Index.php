@@ -23,7 +23,7 @@ class Intraface_modules_stock_Controller_Index extends k_Component
 
     function postForm()
     {
-        foreach ($_POST['id'] AS $key=>$values) {
+        foreach ($_POST['id'] as $key => $values) {
             /*
             NOTE!!!
             Pointen i det hele er man udv�lger et array, som man genneml�ber - i dette tilf�lde

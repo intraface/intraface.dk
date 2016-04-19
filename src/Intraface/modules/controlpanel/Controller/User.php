@@ -77,7 +77,7 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
 
     function getValues()
     {
-         if ($this->body()) {
+        if ($this->body()) {
             $value = $this->body();
             $address_value['name'] = $this->body('address_name');
             $address_value['email'] = $this->body('address_email');

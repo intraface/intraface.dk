@@ -1,7 +1,6 @@
 <?php
 require_once 'Intraface/modules/contact/PdfLabel.php';
 require_once 'Intraface/Pdf.php';
-require_once 'Document/Cpdf.php';
 
 class PdfLabelTest extends PHPUnit_Framework_TestCase
 {
@@ -12,7 +11,8 @@ class PdfLabelTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    function getPdfLabel() {
+    function getPdfLabel()
+    {
         return new Intraface_modules_contact_PdfLabel(0);
     }
 

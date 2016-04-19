@@ -195,7 +195,8 @@ class AccountTest extends PHPUnit_Framework_TestCase
 
         $account_new = $this->createAccount();
         $data = $account->get();
-        $data['number'] = rand(1, 1000000);;
+        $data['number'] = rand(1, 1000000);
+        ;
         $account_new->save($data);
         $this->assertEquals(25, $account_new->get('vat_percent'));
     }
@@ -210,7 +211,7 @@ class AccountTest extends PHPUnit_Framework_TestCase
 
     function testValidForStateReturnsFalseIfTypeKeyIsNotSet()
     {
-    	$account = $this->createAccount();
+        $account = $this->createAccount();
         $res = $account->validForState();
         $this->assertFalse($res);
     }
@@ -233,5 +234,4 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($res);
 
     }
-
 }

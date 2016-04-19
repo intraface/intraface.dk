@@ -41,7 +41,7 @@ class Intraface_modules_cms_element_Longtext extends CMS_Element
     public static function convertArrayToTags($array)
     {
         $tags = '';
-        foreach ($array AS $tag) {
+        foreach ($array as $tag) {
             $tags .= '<'.$tag.'>';
         }
         return $tags;

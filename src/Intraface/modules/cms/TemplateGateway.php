@@ -13,9 +13,9 @@ class Intraface_modules_cms_TemplateGateway
     function findById($id)
     {
                 $this->db->query("SELECT site_id, id FROM cms_template WHERE id = " . $id . " AND intranet_id = " . $this->kernel->intranet->get('id'));
-                if (!$this->db->nextRecord()) {
-                    return false;
-                }
+        if (!$this->db->nextRecord()) {
+            return false;
+        }
 
                 $cmssite = new CMS_Site($this->kernel, $this->db->f('site_id'));
 

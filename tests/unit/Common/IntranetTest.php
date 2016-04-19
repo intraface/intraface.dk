@@ -57,8 +57,7 @@ class IntranetTest extends PHPUnit_Framework_TestCase
         try {
             $this->intranet->hasModuleAccess('nevervalid');
             $this->assertTrue(false, 'Exception should have been thrown');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->assertTrue(true, 'Exception was correctly thrown');
         }
     }

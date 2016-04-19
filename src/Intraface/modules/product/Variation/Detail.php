@@ -65,7 +65,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
 
     function getIntranetId()
     {
-    	return $this->intranet_id;
+        return $this->intranet_id;
     }
 
     /**
@@ -83,7 +83,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
             return new Ilib_Variable_Float(round($product->getDetails()->getPrice()->getAsIso() + $this->getPriceDifference(), 2));
         } else {
             return new Ilib_Variable_Float(round($product->get('price') + $this->getPriceDifference(), 2));
-        } 
+        }
     }
 
     /**
@@ -99,7 +99,7 @@ class Intraface_modules_product_Variation_Detail extends Doctrine_Record
      */
     public function getPriceInCurrency($currency, $exchange_rate_id = 0, $product)
     {
-        return new Ilib_Variable_Float(round($this->getPrice($product)->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100) , 2));
+        return new Ilib_Variable_Float(round($this->getPrice($product)->getAsIso() / ($currency->getProductPriceExchangeRate((int)$exchange_rate_id)->getRate()->getAsIso() / 100), 2));
     }
 
     /**

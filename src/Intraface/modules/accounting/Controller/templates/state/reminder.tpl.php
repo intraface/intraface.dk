@@ -4,10 +4,10 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')) ?></a></li>
 </ul>
 
-<?php if (!$year->readyForState($reminder->get('this_date'))): ?>
+<?php if (!$year->readyForState($reminder->get('this_date'))) : ?>
     <?php echo $year->error->view(); ?>
     <p><?php e(t('go to the')); ?> <a href="<?php e($accounting_module->getPath().'years.php'); ?>"><?php e(t('accounts')); ?></a></p>
-<?php else: ?>
+<?php else : ?>
 
     <p class="message"><?php e(t('This function will only state the reminder fee on this reminder. all invoices and earlier reminder fees on the reminder should be stated on the corresponding invoices and reminders.')); ?></p>
 
@@ -28,7 +28,7 @@
         </table>
     </fieldset>
 
-    <?php  if ($reminder->readyForState($year)): ?>
+    <?php  if ($reminder->readyForState($year)) : ?>
         <form action="<?php e(url()); ?>" method="post">
         <fieldset>
             <legend><?php e(t('Information to state')); ?></legend>
@@ -64,14 +64,20 @@
                     $x = 0;
                     $default_account_id = $context->getKernel()->setting->get('intranet', 'reminder.state.account');
 
-                    foreach ($accounts AS $a):
-                        if (strtolower($a['type']) == 'sum') continue;
-                        if (strtolower($a['type']) == 'headline') continue;
+                    foreach ($accounts as $a) :
+                        if (strtolower($a['type']) == 'sum') {
+                            continue;
+                        }
+                        if (strtolower($a['type']) == 'headline') {
+                            continue;
+                        }
                         ?>
                         <option value="<?php e($a['number']); ?>"
-                        <?php if ($default_account_id == $a['number']) echo ' selected="selected"'; ?>
+                        <?php if ($default_account_id == $a['number']) {
+                            echo ' selected="selected"';
+} ?>
                         ><?php e($a['name']); ?></option>
-                    <?php endforeach;
+                    <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             endforeach;
                     ?>
                 </select>
             </div>

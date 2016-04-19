@@ -53,7 +53,7 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'))
-            );
+        );
         // maybe attach some items!
         return $invoice_id;
     }
@@ -93,7 +93,7 @@ class ReminderTest extends PHPUnit_Framework_TestCase
                 'due_date' => date('d-m-Y'),
                 'send_as' => 'pdf',
                 'checked_invoice' => array($this->createAnInvoice($contact_id)))
-            ) > 0);
+        ) > 0);
     }
 
     function testSetStatus()
@@ -260,7 +260,4 @@ class ReminderTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($reminder->isStated());
         $this->assertFalse($reminder->readyForState($year));
     }
-
 }
-
-?>

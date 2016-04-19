@@ -1,9 +1,10 @@
 <?php
-class PrivateKeyLoginTest extends PHPUnit_Framework_TestCase {
+class PrivateKeyLoginTest extends PHPUnit_Framework_TestCase
+{
 
     const SESSION_LOGIN = 'thissessionfirstlog';
-	private $db;
-	private $adapter;
+    private $db;
+    private $adapter;
 
     function setUp()
     {

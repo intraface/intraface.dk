@@ -98,4 +98,3 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     }
     */
 }
-

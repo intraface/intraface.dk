@@ -1,7 +1,7 @@
 <?php
 /**
- * @author		Sune Jensen <sune@intraface.dk>
- * @version	1.0
+ * @author      Sune Jensen <sune@intraface.dk>
+ * @version     1.0
  *
  */
 class Intraface_modules_email_Controller_Settings extends k_Component
@@ -36,7 +36,6 @@ class Intraface_modules_email_Controller_Settings extends k_Component
         $this->context->getKernel()->useModule('email');
 
         if (!empty($_POST)) {
-
             $error = $this->getError();
             $validator = new Intraface_Validator($error);
 
@@ -51,7 +50,6 @@ class Intraface_modules_email_Controller_Settings extends k_Component
                 $this->context->getKernel()->getSetting()->set('user', 'email.custom_signature', $_POST['custom_signature']);
                 return new k_SeeOther($this->url('../'));
             }
-
         }
 
         return $this->render();

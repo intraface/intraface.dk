@@ -28,4 +28,3 @@ if (!empty($_GET['theme']) AND array_key_exists($_GET['theme'], $themes) AND is_
 }
 
 exit;
-?>

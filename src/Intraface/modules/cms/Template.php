@@ -163,7 +163,6 @@ class CMS_Template extends Intraface_Standard
         if ($this->id == 0) {
             $this->id = $db->insertedId();
             $this->getPosition($db)->moveToMax($this->id);
-
         }
 
         $this->load();
@@ -171,7 +170,7 @@ class CMS_Template extends Intraface_Standard
         return $this->id;
     }
 
-    function getList($for_page_type = NULL)
+    function getList($for_page_type = null)
     {
         $db = new DB_Sql;
         if (is_int($for_page_type)) {

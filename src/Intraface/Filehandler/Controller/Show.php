@@ -10,7 +10,7 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function dispatch()
     {
-        if ($this->getFile()->getId() == 0 AND !$this->query('restore')) {
+        if ($this->getFile()->getId() == 0 and !$this->query('restore')) {
             throw new k_PageNotFound();
         }
 
@@ -124,6 +124,6 @@ class Intraface_Filehandler_Controller_Show extends k_Component
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 }

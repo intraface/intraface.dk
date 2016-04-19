@@ -22,7 +22,7 @@ class Intraface_modules_cms_section_Shorttext extends CMS_Section
 
     function validate_section($var)
     {
-        if (!empty($var['text']) AND strlen($var['text']) > $this->template_section->get('size')) {
+        if (!empty($var['text']) and strlen($var['text']) > $this->template_section->get('size')) {
             $this->error->set('error in text - you wrote to many characters');
         }
 

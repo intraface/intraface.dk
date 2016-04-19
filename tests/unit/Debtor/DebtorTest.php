@@ -7,11 +7,16 @@ require_once 'Intraface/Date.php';
 
 Intraface_Doctrine_Intranet::singleton(1);
 
-class FakeDebtorAddress {
-    function get($key = '') {
+class FakeDebtorAddress
+{
+    function get($key = '')
+    {
         $info = array('name' => 'Lars Olesen', 'address' => 'Gr�svangen 8, Syvsten', 'postcode' => 9300, 'city' => 'Aarhus N', 'cvr' => '', 'ean' => '', 'phone' => '75820811', 'email' => 'lars@legestue.net', 'address_id' => 1);
-        if (empty($key)) return $info;
-        else return $info[$key];
+        if (empty($key)) {
+            return $info;
+        } else {
+            return $info[$key];
+        }
     }
 }
 
@@ -21,7 +26,8 @@ class FakeDebtorUser
     {
         return true;
     }
-    function get(){
+    function get()
+    {
         return 1;
     }
 }
@@ -29,13 +35,18 @@ class FakeDebtorUser
 class FakeDebtorIntranet
 {
     public $address;
-    function __construct() {
+    function __construct()
+    {
         $this->address = new FakeDebtorAddress;
     }
-    function get($key = '') {
+    function get($key = '')
+    {
         $info = array('name' => 'Intranetname', 'contact_person' => '','id' => 1);
-        if (empty($key)) return $info;
-        else return $info[$key];
+        if (empty($key)) {
+            return $info;
+        } else {
+            return $info[$key];
+        }
     }
 
     function getId()
@@ -43,20 +54,22 @@ class FakeDebtorIntranet
         return 1;
     }
 
-    function hasModuleAccess() {
+    function hasModuleAccess()
+    {
         return true;
     }
 }
 
-class FakeDebtorSetting {
+class FakeDebtorSetting
+{
 
-    function get($type, $setting) {
+    function get($type, $setting)
+    {
 
         $info = array('intranet' => array('onlinepayment.provider_key' => 1));
 
         return $info[$type][$setting];
     }
-
 }
 
 class DebtorTest extends PHPUnit_Framework_TestCase
@@ -64,7 +77,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
     private $kernel;
     protected $db;
 
-    function setUp() {
+    function setUp()
+    {
 
         $this->db = MDB2::singleton(DB_DSN);
 
@@ -96,7 +110,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         return new Debtor($this->kernel, 'order');
     }
 
-    function createContact() {
+    function createContact()
+    {
         $this->kernel->useModule('contact');
         $contact = new Contact($this->kernel);
 
@@ -117,8 +132,7 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
         try {
             $currency->save();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             print_r($currency->getErrorStack());
             die;
         }
@@ -143,7 +157,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($debtor));
     }
 
-    function testGetDBQuery() {
+    function testGetDBQuery()
+    {
         $debtor = $this->createDebtor();
         $this->assertEquals('Intraface_DBQuery', get_class($debtor->getDBQuery()));
     }
@@ -167,7 +182,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
     }
 
 
-    function testUpdate() {
+    function testUpdate()
+    {
         $debtor = $this->createDebtor();
 
 
@@ -177,18 +193,18 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'description' =>'test',
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'))
-            ) > 0);
+        ) > 0);
     }
 
-    function testUpdateWithCurrency() {
+    function testUpdateWithCurrency()
+    {
         $debtor = $this->createDebtor();
 
         $currency = new Intraface_modules_currency_Currency;
         $currency->setType(new Intraface_modules_currency_Currency_Type_Eur);
         try {
             $currency->save();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             print_r($currency->getErrorStack());
             die;
         }
@@ -206,11 +222,12 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'currency' => $currency)
-            ) > 0);
+        ) > 0);
 
     }
 
-    function testGetCurrency() {
+    function testGetCurrency()
+    {
         $debtor = $this->createDebtor();
 
         $debtor->update(
@@ -220,14 +237,15 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y'),
                 'currency' => $this->createCurrency())
-            );
+        );
         $debtor->load();
 
         $this->assertEquals('Intraface_modules_currency_Currency', get_class($debtor->getCurrency()));
 
     }
 
-    function testSetStatus() {
+    function testSetStatus()
+    {
 
         $debtor = $this->createDebtor();
 
@@ -240,7 +258,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->setStatus('sent'));
     }
 
-    function testGetStatusAfterStatusChange() {
+    function testGetStatusAfterStatusChange()
+    {
 
         $debtor = $this->createDebtor();
 
@@ -266,7 +285,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->setNewContact($this->createContact()));
     }
 
-    function testCreate() {
+    function testCreate()
+    {
 
         $quotation = new Debtor($this->kernel, 'quotation');
 
@@ -280,7 +300,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($order->create($quotation) > 0);
     }
 
-    function testCreateWithCurrency() {
+    function testCreateWithCurrency()
+    {
 
         $quotation = new Debtor($this->kernel, 'quotation');
 
@@ -296,7 +317,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Intraface_modules_currency_Currency', get_class($order->getCurrency()));
     }
 
-    function testDelete() {
+    function testDelete()
+    {
         $debtor = $this->createDebtor();
 
         $debtor->update(array(
@@ -308,7 +330,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->delete());
     }
 
-    function testAnyWithContact() {
+    function testAnyWithContact()
+    {
 
         // we make sure there is a debtor first
 
@@ -323,7 +346,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($debtor->any('contact', $contact_id) > 0);
     }
 
-    function testAnyWithProduct() {
+    function testAnyWithProduct()
+    {
 
         $debtor = $this->createDebtor();
         $contact_id = $this->createContact();
@@ -424,7 +448,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(3.35, $debtor->getArrearsInCurrency()->getAsIso());
     }
 
-    function testGetMaxNumber() {
+    function testGetMaxNumber()
+    {
 
         $debtor = $this->createDebtor();
 
@@ -439,7 +464,8 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($debtor->get('number'), $debtor->getMaxNumber());
     }
 
-    function testSetFrom() {
+    function testSetFrom()
+    {
         $debtor = $this->createDebtor();
         $this->assertEquals(1, $debtor->update(array(
                 'contact_id' => $this->createContact(),
@@ -447,7 +473,4 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'this_date' => date('d-m-Y'),
                 'due_date' => date('d-m-Y')), 'quotation'));
     }
-
 }
-
-?>

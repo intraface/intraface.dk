@@ -98,10 +98,10 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         }
 
         $data = array(
-        	'procurement' => $this->getProcurement(),
-        	'kernel' => $this->getKernel(),
-        	'append_file' => $append_file,
-        	'filehandler' => $filehandler);
+            'procurement' => $this->getProcurement(),
+            'kernel' => $this->getKernel(),
+            'append_file' => $append_file,
+            'filehandler' => $filehandler);
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
         return $tpl->render($this, $data);
     }
@@ -113,9 +113,9 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
         $this->document->addScript('procurement/edit.js');
 
         $data = array(
-        	'procurement' => $this->getProcurement(),
-        	'kernel' => $this->getKernel(),
-        	'title' => $this->t("Edit procurement"),
+            'procurement' => $this->getProcurement(),
+            'kernel' => $this->getKernel(),
+            'title' => $this->t("Edit procurement"),
             'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
             'values' => $this->getValues());
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/procurement-edit');
@@ -245,8 +245,8 @@ class Intraface_modules_procurement_Controller_Show extends k_Component
     {
         $this->getProcurement()->loadItem();
         $this->getProcurement()->item->save(array(
-        	'product_id' => $product['product_id'],
-        	'product_variation_id' => $product['product_variation_id'],
-        	'quantity' => intval($quantity)));
+            'product_id' => $product['product_id'],
+            'product_variation_id' => $product['product_variation_id'],
+            'quantity' => intval($quantity)));
     }
 }

@@ -51,19 +51,19 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 
     function postForm()
     {
-        if (!empty($_POST['start']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        if (!empty($_POST['start']) and !empty($_POST['id']) and is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
             return new k_SeeOther($this->url('daybook'));
-        } elseif (!empty($_POST['primobalance']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        } elseif (!empty($_POST['primobalance']) and !empty($_POST['id']) and is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
             return new k_SeeOther($this->url('primosaldo'));
-        } elseif (!empty($_POST['manual_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        } elseif (!empty($_POST['manual_accountplan']) and !empty($_POST['id']) and is_numeric($_POST['id'])) {
             $year = $this->getYear();
             $year->setYear();
             return new k_SeeOther($this->url('account'));
-        } elseif (!empty($_POST['standard_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        } elseif (!empty($_POST['standard_accountplan']) and !empty($_POST['id']) and is_numeric($_POST['id'])) {
             $this->getYear()->setYear();
             if (!$this->getYear()->createAccounts('standard')) {
                 throw new Exception('Kunne ikke oprette standardkontoplanen');
@@ -71,12 +71,11 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 
             $values = $this->getYear()->get();
             return new k_SeeOther($this->url());
-
-        } elseif (!empty($_POST['transfer_accountplan']) AND !empty($_POST['id']) AND is_numeric($_POST['id'])) {
+        } elseif (!empty($_POST['transfer_accountplan']) and !empty($_POST['id']) and is_numeric($_POST['id'])) {
             // kontoplanen fra sidste �r hentes
             $year = $this->getYear();
             $year->setYear();
-            if (empty($_POST['accountplan_year']) OR !is_numeric($_POST['accountplan_year'])) {
+            if (empty($_POST['accountplan_year']) or !is_numeric($_POST['accountplan_year'])) {
                 $year->error->set('Du kan ikke oprette kontoplanen, for du har ikke valgt et �r at g�re det fra');
             } else {
                 if (!$year->createAccounts('transfer_from_last_year', $_POST['accountplan_year'])) {
@@ -95,17 +94,17 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
 
     function getYears()
     {
-    	return $this->getYear()->getList();
+        return $this->getYear()->getList();
     }
 
     function getAccount()
     {
-    	return new Account($this->getYear());
+        return new Account($this->getYear());
     }
 
     function getVatPeriod()
     {
-    	return new VatPeriod($this->getYear());
+        return new VatPeriod($this->getYear());
     }
 
     function getYearGateway()
@@ -133,5 +132,4 @@ class Intraface_modules_accounting_Controller_Year_Show extends k_Component
     {
         return $this->context->getKernel();
     }
-
 }

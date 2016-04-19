@@ -70,8 +70,7 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
             '&x1=' . $params['crop_offset_x'] .
             '&y1=' . $params['crop_offset_y'] .
             '&x2=' . ($params['crop_offset_x'] + $params['crop_width']) .
-            '&y2=' . ($params['crop_offset_y'] + $params['crop_height'])
-        );
+            '&y2=' . ($params['crop_offset_y'] + $params['crop_height']));
 
         $data = array('translation' => $translation,
                       'type' => $type,
@@ -115,8 +114,8 @@ class Intraface_Filehandler_Controller_Crop extends k_Component
             if (!$filemanager->error->isError()) {
                 return new k_SeeOther($this->context->url());
             }
-       }
-       throw new Exception($filemanager->error->view());
+        }
+        throw new Exception($filemanager->error->view());
     }
 
     function getFile()

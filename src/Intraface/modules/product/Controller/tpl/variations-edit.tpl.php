@@ -5,14 +5,14 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if ($context->query('flare')): ?>
+<?php if ($context->query('flare')) : ?>
 <div class="warning"><?php e(t($context->query('flare'))); ?></div>
 <?php endif; ?>
 
 
-<?php if (count($groups) == 0): ?>
+<?php if (count($groups) == 0) : ?>
     <p><?php e(t('No attribute groups has been selected.')); ?> <a href="<?php e(url('select_attribute_group')); ?>"><?php e(t('Choose attribute groups')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
 
 <form action="<?php e(url(null, array($context->subview()))); ?>" method="post">
 <input type="hidden" name="id" value="<?php e($product->getId()); ?>" />
@@ -35,44 +35,57 @@
             if (isset($groups[1]) && is_array($groups[1]) && !empty($groups[1]['id'])) {
                 $attributes2 = $group_gateway->findById($groups[1]['id'])->getAttributes();
             } else {
-                $attributes2 = array(NULL);
+                $attributes2 = array(null);
             }
 
             $count = 0;
             ?>
-            <?php foreach ($attributes1 AS $a1): ?>
-                <?php foreach ($attributes2 AS $a2): ?>
+            <?php foreach ($attributes1 as $a1) : ?>
+                <?php foreach ($attributes2 as $a2) : ?>
                     <tr>
                         <td>
                             <?php
                             $attributes['attribute1'] = $a1->getId();
-                            if ($a2 != NULL) {
+                            if ($a2 != null) {
                                 $attributes['attribute2'] = $a2->getId();
                             }
                             try {
                                 $variation = $product->getVariationFromAttributes($attributes);
-
                             } catch (Intraface_Gateway_Exception $e) {
-                                $variation = NULL;
+                                $variation = null;
                             } catch (Exception $e) {
-                                $variation = NULL;
+                                $variation = null;
                             }
                             ?>
-                            <input type="checkbox" name="variation[<?php e($count); ?>][used]" value="1" <?php if ($variation !== NULL) echo 'checked="checked"'; ?> />
-                            <input type="hidden" name="variation[<?php e($count); ?>][id]" value="<?php if ($variation !== NULL) e($variation->getId()); ?>" />
+                            <input type="checkbox" name="variation[<?php e($count); ?>][used]" value="1" <?php if ($variation !== null) {
+                                echo 'checked="checked"';
+} ?> />
+                            <input type="hidden" name="variation[<?php e($count); ?>][id]" value="<?php if ($variation !== null) {
+                                e($variation->getId());
+} ?>" />
                             <input type="hidden" name="variation[<?php e($count); ?>][attributes][attribute1]" value="<?php e($a1->getId()); ?>" />
-                            <?php if ($a2 != NULL): ?> <input type="hidden" name="variation[<?php e($count); ?>][attributes][attribute2]" value="<?php e($a2->getId()); ?>" /><?php endif; ?>
+                            <?php if ($a2 != null) :
+?> <input type="hidden" name="variation[<?php e($count); ?>][attributes][attribute2]" value="<?php e($a2->getId()); ?>" /><?php
+endif; ?>
                         </td>
-                        <td><?php if ($variation !== NULL): e($variation->getNumber()); else: e('-'); endif; ?>
+                        <td><?php if ($variation !== null) :
+                            e($variation->getNumber());
+else :
+    e('-');
+endif; ?>
                         </td>
                         <td>
                             <?php
                             e($groups[0]['name'].': '.$a1->getName());
-                            if ($a2 != NULL) e(', '.$groups[1]['name'].': '.$a2->getName());
+                            if ($a2 != null) {
+                                e(', '.$groups[1]['name'].': '.$a2->getName());
+                            }
                             ?>
                         </td>
                         <?php /* can be reimplemented: <td><input type="text" name="variation[<?php e($count); ?>][price_difference]" value="<?php if ($variation !== NULL) e($variation->getDetail()->getPriceDifference()); ?>" size="4"/></td> */ ?>
-                        <td><input type="text" name="variation[<?php e($count); ?>][weight_difference]" value="<?php if ($variation !== NULL) e($variation->getDetail()->getWeightDifference()); ?>" size="4" /></td>
+                        <td><input type="text" name="variation[<?php e($count); ?>][weight_difference]" value="<?php if ($variation !== null) {
+                            e($variation->getDetail()->getWeightDifference());
+} ?>" size="4" /></td>
                     </tr>
                     <?php
                     $count++;

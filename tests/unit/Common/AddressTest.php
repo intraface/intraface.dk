@@ -14,28 +14,33 @@ class AddressTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE address');
     }
 
-    function getValidAddress() {
+    function getValidAddress()
+    {
         return array('name' => 'test', 'address' => 'road 1', 'postcode' => '0123', 'city' => 'Mycity', 'country' => '', 'email' => 'sj@sunet.dk', 'cvr' => '', 'website' => '', 'phone' => '', 'ean' => '');
     }
 
-    function testValidateWithValidAddress() {
+    function testValidateWithValidAddress()
+    {
 
         $address = Intraface_Address::factory('intranet', 1);
         $this->assertTrue($address->validate($this->getValidAddress()));
     }
 
-    function testValidateWithInvalidAddress() {
+    function testValidateWithInvalidAddress()
+    {
         $address = Intraface_Address::factory('intranet', 1);
         $this->assertFalse($address->validate(array()));
     }
 
-    function testSaveOnEmptyDB() {
+    function testSaveOnEmptyDB()
+    {
         $address = Intraface_Address::factory('intranet', 1);
         $this->assertTrue($address->save($this->getValidAddress()));
         $this->assertEquals(1, $address->get('address_id')); // on empty database this must be 1
     }
 
-    function testSaveWithSaveTwoTimeWithSameData() {
+    function testSaveWithSaveTwoTimeWithSameData()
+    {
         $address = Intraface_Address::factory('intranet', 1);
         $address->save($this->getValidAddress());
 
@@ -45,7 +50,8 @@ class AddressTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $address->get('address_id')); // on empty database this must be 1
     }
 
-    function testSaveWithChangeInName() {
+    function testSaveWithChangeInName()
+    {
         $address = Intraface_Address::factory('intranet', 1);
 
         $address_array = $this->getValidAddress();
@@ -58,7 +64,8 @@ class AddressTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $address->get('address_id')); // on empty database this must be 1
     }
 
-    function testUpdate() {
+    function testUpdate()
+    {
         /*
         Da metoden er fjernet fra klassen er testen ogs� fjernet.
         $address = Address::factory('intranet', 1);
@@ -68,7 +75,8 @@ class AddressTest extends PHPUnit_Framework_TestCase
         */
     }
 
-    function testLoad() {
+    function testLoad()
+    {
         $address = Intraface_Address::factory('intranet', 1);
         $address->save($this->getValidAddress());
 
@@ -76,4 +84,3 @@ class AddressTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $address->get('address_id'));
     }
 }
-?>

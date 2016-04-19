@@ -8,6 +8,6 @@
  * @author Lars Olesen
  * @version 1.1
  */
-class Intraface_Error Extends Ilib_Error
+class Intraface_Error extends Ilib_Error
 {
 }

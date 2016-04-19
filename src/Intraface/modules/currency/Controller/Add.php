@@ -14,7 +14,6 @@ class Intraface_modules_currency_Controller_Add extends k_Component
         $this->document->setTitle('Add currency');
 
         if (is_numeric($this->context->name())) {
-
         }
 
         $type_gateway = new Intraface_modules_currency_Currency_Type;

@@ -15,7 +15,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('The intranet does not have access to the cms module', -2);
         }
-        if (empty($site_id) OR !is_numeric($site_id)) { // -5
+        if (empty($site_id) or !is_numeric($site_id)) { // -5
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Invalid site id supplied', -5);
         }
@@ -48,7 +48,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
             'site_id' => $site_id
         );
         $cmspage = CMS_Page::factory($this->cmssite->kernel, 'identifier', $send_array);
-        if (!isset($cmspage) OR !is_object($cmspage) OR !$cmspage->get('id') > 0) {
+        if (!isset($cmspage) or !is_object($cmspage) or !$cmspage->get('id') > 0) {
             // det er muligt at dette kan have fejlsideindhold
             // m�ske skal man kunne v�lge en side til en 404 mv., som s� bare hentes i stedet.
             $values['http_header_status'] = 'HTTP/1.0 404 Not Found';
@@ -58,9 +58,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
             $values['css_header'] = '';
             $values['sections'] = array(); // this could be the 404
             $values['comments'] = array();
-
         } else {
-
             $cmspage->value['http_header_status'] = 'HTTP/1.0 200 OK';
 
             //
@@ -68,7 +66,7 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
             // niveau 9999 g�r at den ikke kan genkende den, og tager top_level.
             // 0 der ellers skulle v�re topmenu virker af en m�rkelig grund ikke. Variablen er ikke registeret som sat!
             //
-            $cmspage->value['navigation_toplevel'] = $cmspage->navigation->build(9999, 'array');	// 'toplevel'
+            $cmspage->value['navigation_toplevel'] = $cmspage->navigation->build(9999, 'array');    // 'toplevel'
             $cmspage->value['navigation_sublevel'] = $cmspage->navigation->build(1, 'array'); // 'sublevel'
             $cmspage->value['sections'] = $cmspage->collect();
             $cmspage->value['comments'] = $cmspage->getComments();
@@ -111,7 +109,6 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
         if (isset($search['keyword'])) {
             $cmspage->getDBQuery()->setKeyword($search['keyword']);
         }
-
         return $this->prepareResponseData($cmspage->getList());
     }
 

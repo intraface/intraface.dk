@@ -28,12 +28,12 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         $this->document->setTitle('State procurement #' . $this->getProcurement()->get('id'));
 
         $data = array(
-        	'procurement' => $this->getProcurement(),
-        	'year' => $this->getYear(),
+            'procurement' => $this->getProcurement(),
+            'year' => $this->getYear(),
             'account' => new Account($this->getYear()),
-        	'voucher' => new Voucher($this->getYear()),
-        	'items' => $this->getProcurement()->getItems(),
-        	'value' => $this->getValues(),
+            'voucher' => new Voucher($this->getYear()),
+            'items' => $this->getProcurement()->getItems(),
+            'value' => $this->getValues(),
             'vat_account' => new Account($this->getYear(), $this->getYear()->getSetting('vat_in_account_id')));
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/procurement');
@@ -68,7 +68,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
                 array_push($this->value['debet_account'], array('text' => '', 'amount' => '0,00'));
                 return $this->value;
             } elseif ($this->body('remove_line')) {
-                foreach ($this->body('remove_line') AS $key => $void) {
+                foreach ($this->body('remove_line') as $key => $void) {
                     array_splice($this->value['debet_account'], $key, 1);
                 }
                 return $this->value;
@@ -81,14 +81,14 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
             $this->value = $procurement->get();
             if ($procurement->get('price_items') - $items_amount > 0) {
                 $this->value['debet_account'][$i++] = array(
-                	'text' => '',
+                    'text' => '',
                     'amount' => number_format($procurement->get('price_items') - $items_amount, 2, ',', '.'));
             }
 
             if ($procurement->get('price_shipment_etc') > 0) {
                 $this->value['debet_account'][$i++] = array(
-                	'text' => $this->t('shipment etc'),
-                	'amount' => $procurement->get('dk_price_shipment_etc'));
+                    'text' => $this->t('shipment etc'),
+                    'amount' => $procurement->get('dk_price_shipment_etc'));
             }
         }
 
@@ -115,7 +115,7 @@ class Intraface_modules_accounting_Controller_State_Procurement extends k_Compon
         return $object = $this->context->getModel();
     }
     
-    function getProposeButton() 
+    function getProposeButton()
     {
         if ($this->add_propose_button === true) {
             return '<input type="submit" name="propose_changes" value="' . $this->t('Propose changes') . '" />';

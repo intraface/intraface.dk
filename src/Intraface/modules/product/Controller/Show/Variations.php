@@ -23,7 +23,7 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
         } elseif ($name == 'select_attribute_groups') {
             // @todo check whether product has attributes
             return 'Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups';
-        } else if (is_numeric($name)) {
+        } elseif (is_numeric($name)) {
             return 'Intraface_modules_product_Controller_Variation';
         }
     }
@@ -84,26 +84,22 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
         $product = $this->getProduct();
         if ($this->body('save') || $this->body('save_and_close')) {
             if (is_array($this->body('variation'))) {
-                foreach ($this->body('variation') AS $variation_data) {
-
+                foreach ($this->body('variation') as $variation_data) {
                     if (isset($variation_data['used'])) {
                         if (!empty($variation_data['id'])) {
                             // update existing
                             $variation = $product->getVariation($variation_data['id']);
-
                         } else {
                             $variation = $product->getVariation();
                             $variation->product_id = $this->getProduct()->getId();
                             $variation->setAttributesFromArray($variation_data['attributes']);
                             $variation->save();
-
                         }
 
                         $detail = $variation->getDetail();
                         $detail->price_difference = 0; // Can be reimplemented: intval($variation_data['price_difference']);
                         $detail->weight_difference = intval($variation_data['weight_difference']);
                         $detail->save();
-
                     } elseif (!empty($variation_data['id'])) {
                         $variation = $product->getVariation($variation_data['id']);
                         $variation->delete();

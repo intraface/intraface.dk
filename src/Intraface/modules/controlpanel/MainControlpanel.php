@@ -2,9 +2,9 @@
 /**
  *
  * @package Intraface_Administration
- * @author	Lars Olesen <lars@legestue.net>
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   1.0
+ * @version 1.0
  *
  */
 class MainControlpanel extends Intraface_Main

@@ -5,9 +5,9 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
 </ul>
 
-<?php if (count($templates) == 0): ?>
+<?php if (count($templates) == 0) : ?>
     <p><?php e(t('No templates found')); ?></p>
-<?php else: ?>
+<?php else : ?>
 <table>
 <caption><?php e(t('Templates')); ?></caption>
 <thead>
@@ -24,16 +24,18 @@ require_once 'Intraface/modules/cms/Page.php';
 $page_types = CMS_Page::getTypesWithBinaryIndex();
 ?>
 
-<?php foreach ($templates AS $s): ?>
+<?php foreach ($templates as $s) : ?>
     <tr>
         <td><a href="<?php e(url($s['id'])); ?>"><?php e($s['name']);  ?></a></td>
         <td><?php e($s['identifier']); ?></td>
         <td>
             <?php
             $return = '';
-            foreach ($page_types AS $page_key => $page_type){
+            foreach ($page_types as $page_key => $page_type) {
                 if ($page_key & $s['for_page_type']) {
-                    if ($return != '') $return .= ', ';
+                    if ($return != '') {
+                        $return .= ', ';
+                    }
                     $return .= t($page_type);
                 }
             }

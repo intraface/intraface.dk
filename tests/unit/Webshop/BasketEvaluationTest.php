@@ -2,7 +2,8 @@
 require_once 'Intraface/modules/webshop/BasketEvaluation.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 
-class FakeEvaluationWebshop {
+class FakeEvaluationWebshop
+{
     public $kernel;
 }
 
@@ -102,7 +103,8 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('at_least', $evaluation->get('evaluate_method'));
     }
 
-    function testDelete() {
+    function testDelete()
+    {
         $evaluation = $this->createBasketEvaluation();
 
         $valid_data = array(
@@ -159,4 +161,3 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     }
 }
-?>

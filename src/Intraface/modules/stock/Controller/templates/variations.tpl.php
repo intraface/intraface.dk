@@ -12,7 +12,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($variations AS $variation): ?>
+                <?php foreach ($variations as $variation) : ?>
                     <tr>
                         <td><?php e($variation->getNumber()); ?></td>
                         <td><?php e($variation->getName()); ?></td>
@@ -21,6 +21,6 @@
                     </tr>
                 <?php endforeach; ?>
             </table>
-	<input name="submit" type="submit"  value="<?php e(t('Regulate')); ?>" />
-	<a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
+    <input name="submit" type="submit"  value="<?php e(t('Regulate')); ?>" />
+    <a href="<?php e(url('../../')); ?>"><?php e(t('Cancel')); ?></a>
 </form>

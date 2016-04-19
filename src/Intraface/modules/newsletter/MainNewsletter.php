@@ -1,9 +1,9 @@
 <?php
 /**
  * @package Intraface_Newsletter
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 class MainNewsletter extends Intraface_Main
 {

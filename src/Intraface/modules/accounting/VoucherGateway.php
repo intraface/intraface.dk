@@ -25,8 +25,8 @@ class Intraface_modules_accounting_VoucherGateway
 
     public function findFromId($id)
     {
-        require_once dirname (__FILE__) . '/Voucher.php';
-    	return new Voucher($this->year, $id);
+        require_once dirname(__FILE__) . '/Voucher.php';
+        return new Voucher($this->year, $id);
     }
 
     /**
@@ -51,8 +51,8 @@ class Intraface_modules_accounting_VoucherGateway
     /**
      * @return (array)
      */
-     function getList($filter = '')
-     {
+    function getList($filter = '')
+    {
         $sql = "SELECT *, DATE_FORMAT(voucher.date, '%d-%m-%Y') AS date_dk
             FROM accounting_voucher voucher
             WHERE voucher.active = 1 AND voucher.year_id = ".$this->year->get('id')."
@@ -61,17 +61,19 @@ class Intraface_modules_accounting_VoucherGateway
         switch ($filter) {
             case 'lastfive':
                 $sql .= " ORDER BY voucher.number DESC, voucher.id DESC LIMIT 5";
-             break;
+                break;
             default:
                 $sql .= " ORDER BY voucher.number DESC, voucher.id DESC";
                 break;
         }
 
-         $db = new Db_Sql;
+        $db = new Db_Sql;
 
         $db->query($sql);
 
-        if ($db->numRows() == 0) { return array(); }
+        if ($db->numRows() == 0) {
+            return array();
+        }
 
         $list = array();
         $i = 0;
@@ -83,19 +85,19 @@ class Intraface_modules_accounting_VoucherGateway
             $i++;
         }
         return $list;
-     }
+    }
 
-     function getMaxNumber()
-     {
-         $db = new DB_Sql;
+    function getMaxNumber()
+    {
+        $db = new DB_Sql;
 
-         $db->query("SELECT MAX(number) AS max_voucher_number
+        $db->query("SELECT MAX(number) AS max_voucher_number
             FROM accounting_voucher
             WHERE intranet_id = " . $this->year->kernel->intranet->get('id') . "
                 AND year_id = " . $this->year->get('id'));
-         if (!$db->nextRecord()) {
-             return 0;
-         }
-         return $db->f('max_voucher_number');
-     }
+        if (!$db->nextRecord()) {
+            return 0;
+        }
+        return $db->f('max_voucher_number');
+    }
 }

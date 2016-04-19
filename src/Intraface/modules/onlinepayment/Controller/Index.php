@@ -30,12 +30,12 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
         $onlinepayment = OnlinePayment::factory($this->context->getKernel());
 
         if (isset($_GET['status'])) {
-        	$onlinepayment->getDBQuery()->setFilter('status', $_GET['status']);
+            $onlinepayment->getDBQuery()->setFilter('status', $_GET['status']);
         } else {
             $onlinepayment->getDBQuery()->setFilter('status', 2);
         }
         if (isset($_GET['text'])) {
-        	$onlinepayment->getDBQuery()->setFilter('text', $_GET['text']);
+            $onlinepayment->getDBQuery()->setFilter('text', $_GET['text']);
         }
         if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
             $onlinepayment->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
@@ -47,9 +47,9 @@ class Intraface_modules_onlinepayment_Controller_Index extends k_Component
         $payments = $onlinepayment->getList();
 
         $data = array(
-        	'kernel' => $this->getKernel(),
-        	'payments' => $payments,
-        	'onlinepayment' => $onlinepayment);
+            'kernel' => $this->getKernel(),
+            'payments' => $payments,
+            'onlinepayment' => $onlinepayment);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');
         return $smarty->render($this, $data);

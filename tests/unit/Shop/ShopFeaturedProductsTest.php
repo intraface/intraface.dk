@@ -10,7 +10,7 @@ class FakeShopFeaturedProductsKeyword
 class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
 {
     private $featured;
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function setUp()
     {
@@ -45,5 +45,4 @@ class ShopFeaturedProductsTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->featured->delete(1));
         $this->assertEquals(0, count($this->featured->getAll()));
     }
-
 }

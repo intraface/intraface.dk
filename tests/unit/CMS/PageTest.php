@@ -83,7 +83,8 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($site_array['cc_license'], $site->get('cc_license'));
     }
 
-    function testSaveWithSuccessWithTemplateWithKeywords() {
+    function testSaveWithSuccessWithTemplateWithKeywords()
+    {
 
         $template_id = $this->createTemplate();
 
@@ -131,5 +132,4 @@ class PageTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->page->setStatus('published'));
         $this->assertEquals('published', $this->page->getStatus());
     }
-
 }

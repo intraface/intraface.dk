@@ -8,15 +8,15 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         $this->template = $template;
     }
 
-	function renderHtml()
-	{
+    function renderHtml()
+    {
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/end');
         return $smarty->render($this);
-	}
+    }
 
     function renderXls()
     {
-    	$module = $this->getKernel()->module('accounting');
+        $module = $this->getKernel()->module('accounting');
         $module->includeFile('YearEnd.php');
 
         $kernel = $this->getKernel();
@@ -55,25 +55,23 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
         $i += 2;
         if (count($accounts) > 0) {
-        	foreach ($accounts AS $account) {
-        		$style = '';
-        		if ($account['type'] == 'headline') {
-        			$style = $format_bold;
-        		}
-        		elseif ($account['type'] == 'sum') {
-        			$style = $format_italic;
-        		}
-        		else {
-        			$style = $format;
-        		}
+            foreach ($accounts as $account) {
+                $style = '';
+                if ($account['type'] == 'headline') {
+                    $style = $format_bold;
+                } elseif ($account['type'] == 'sum') {
+                    $style = $format_italic;
+                } else {
+                    $style = $format;
+                }
 
-        		$worksheet->write($i, 0, $account['number'], $style);
-        		$worksheet->write($i, 1, $account['name'], $style);
-        		if ($account['type'] != 'headline') {
-        			$worksheet->write($i, 2, abs(round($account['saldo'])), $style);
-        		}
-        		$i++;
-        	}
+                $worksheet->write($i, 0, $account['number'], $style);
+                $worksheet->write($i, 1, $account['name'], $style);
+                if ($account['type'] != 'headline') {
+                    $worksheet->write($i, 2, abs(round($account['saldo'])), $style);
+                }
+                $i++;
+            }
         }
 
         $accounts = $year_end->getStatement('balance');
@@ -82,122 +80,108 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
 
         $i += 2;
         if (count($accounts) > 0) {
-        	foreach ($accounts AS $account) {
-        		$style = '';
-        		if ($account['type'] == 'headline') {
-        			$style = $format_bold;
-        		}
-        		elseif ($account['type'] == 'sum') {
-        			$style = $format_italic;
-        		}
-        		else {
-        			$style = $format;
-        		}
+            foreach ($accounts as $account) {
+                $style = '';
+                if ($account['type'] == 'headline') {
+                    $style = $format_bold;
+                } elseif ($account['type'] == 'sum') {
+                    $style = $format_italic;
+                } else {
+                    $style = $format;
+                }
 
-        		$worksheet->write($i, 0, $account['number'], $style);
-        		$worksheet->write($i, 1, $account['name'], $style);
-        		if ($account['type'] != 'headline') {
-        			$worksheet->write($i, 2, abs(round($account['saldo'])), $style);
-        		}
-        		$i++;
-        	}
-
-
+                $worksheet->write($i, 0, $account['number'], $style);
+                $worksheet->write($i, 1, $account['name'], $style);
+                if ($account['type'] != 'headline') {
+                    $worksheet->write($i, 2, abs(round($account['saldo'])), $style);
+                }
+                $i++;
+            }
         }
 
         $worksheet->hideGridLines();
         $workbook->close();
     }
     
-	function postForm()
-	{
+    function postForm()
+    {
         $year = $this->getYear();
         $account = new Account($year);
         $year_end = new YearEnd($year);
         $post = new Post(new Voucher($year));
         $vat_period = new VatPeriod($year);
 
-	    // These makes it possible to switch between steps
+        // These makes it possible to switch between steps
         if (!empty($_POST['previous'])) {
-        	$year_end = new YearEnd($year);
-        	$year_end->setStep($_POST['step'] - 2);
-
-        }
-        elseif (!empty($_POST['next'])) {
-        	$year_end = new YearEnd($year);
-        	$year_end->setStep($_POST['step']);
+            $year_end = new YearEnd($year);
+            $year_end->setStep($_POST['step'] - 2);
+        } elseif (!empty($_POST['next'])) {
+            $year_end = new YearEnd($year);
+            $year_end->setStep($_POST['step']);
         }
 
         // reacts to the different steps
         if (!empty($_POST['step_save_result'])) {
-        	$year_end = new YearEnd($year);
+            $year_end = new YearEnd($year);
 
-        	if (!$year_end->saveStatement('operating')) {
-        		throw new Exception('Kunne ikke gemme resultatopgørelsen');
-        	}
-        	// @todo save "resultatopgørelsen"
+            if (!$year_end->saveStatement('operating')) {
+                throw new Exception('Kunne ikke gemme resultatopgørelsen');
+            }
+            // @todo save "resultatopgørelsen"
 
-        	$year_end->setStep($_POST['step']);
-        }
+            $year_end->setStep($_POST['step']);
+        } elseif (!empty($_POST['step_save_balance'])) {
+            $year_end = new YearEnd($year);
 
-        elseif (!empty($_POST['step_save_balance'])) {
-        	$year_end = new YearEnd($year);
+            if (!$year_end->saveStatement('balance')) {
+                throw new Exception('Kunne ikke gemme balancen');
+            }
 
-        	if (!$year_end->saveStatement('balance')) {
-        		throw new Exception('Kunne ikke gemme balancen');
-        	}
+            $year_end->setStep($_POST['step']);
+        } elseif (!empty($_POST['step_transfer_result'])) {
+            $year_end = new YearEnd($year);
 
-        	$year_end->setStep($_POST['step']);
-        }
-        elseif (!empty($_POST['step_transfer_result'])) {
-        	$year_end = new YearEnd($year);
+            if (!$year_end->resetYearResult()) {
+                throw new Exception('Kunne ikke nulstille årets resultat');
+            }
 
-        	if (!$year_end->resetYearResult()) {
-        		throw new Exception('Kunne ikke nulstille årets resultat');
-        	}
-
-        	$year_end->setStep($_POST['step']);
-        }
-        elseif (!empty($_POST['step_reverse_result_account_reset'])) {
-        	$year_end = new YearEnd($year);
-        	if (!$year_end->resetYearResult('reverse')) {
-        		echo $year_end->error->view();
-        		throw new Exception('Kunne ikke tilbageføre årets resultat');
-        	}
-        	$year_end->setStep($_POST['step'] - 1);
-        }
-
-        // step 1
+            $year_end->setStep($_POST['step']);
+        } elseif (!empty($_POST['step_reverse_result_account_reset'])) {
+            $year_end = new YearEnd($year);
+            if (!$year_end->resetYearResult('reverse')) {
+                echo $year_end->error->view();
+                throw new Exception('Kunne ikke tilbageføre årets resultat');
+            }
+            $year_end->setStep($_POST['step'] - 1);
+        } // step 1
         elseif (!empty($_POST['step_things_stated'])) {
-        	$year_end = new YearEnd($year);
-        	$year_end->setStep($_POST['step']);
-        }
-
-        // transfer "resultatopgørelsen"
+            $year_end = new YearEnd($year);
+            $year_end->setStep($_POST['step']);
+        } // transfer "resultatopgørelsen"
         elseif (!empty($_POST['step_result'])) {
-        	$year_end = new YearEnd($year);
-        	$account = new Account($year);
-        	$year->setSetting('result_account_id', $_POST['result_account_id']);
+            $year_end = new YearEnd($year);
+            $account = new Account($year);
+            $year->setSetting('result_account_id', $_POST['result_account_id']);
 
-        	if ($year_end->resetOperatingAccounts()) {
-        		$year_end->setStep($_POST['step']);
-        	} else {
-        		echo $year_end->error->view();
-        	}
+            if ($year_end->resetOperatingAccounts()) {
+                $year_end->setStep($_POST['step']);
+            } else {
+                echo $year_end->error->view();
+            }
         } elseif (!empty($_POST['step_lock_year'])) {
-        	if (!empty($_POST['lock']) AND $_POST['lock'] == '1') {
-        		$year->lock();
-        	}
-        	$year_end = new YearEnd($year);
-        	$year_end->setStep($_POST['step']);
+            if (!empty($_POST['lock']) and $_POST['lock'] == '1') {
+                $year->lock();
+            }
+            $year_end = new YearEnd($year);
+            $year_end->setStep($_POST['step']);
         } elseif (!empty($_POST['step_reverse_result_reset'])) {
-        	$year_end = new YearEnd($year);
-        	$year_end->resetOperatingAccounts('reverse');
-        	$year_end->setStep($_POST['step'] - 1);
+            $year_end = new YearEnd($year);
+            $year_end->resetOperatingAccounts('reverse');
+            $year_end->setStep($_POST['step'] - 1);
         }
 
         return $this->render();
-	}
+    }
 
     function getAccount()
     {
@@ -205,28 +189,28 @@ class Intraface_modules_accounting_Controller_Year_End extends k_Component
         return $account = new Account($year);
     }
 
-	function getPost()
-	{
+    function getPost()
+    {
         return $post = new Post(new Voucher($this->getYear()));
-	}
+    }
 
-	function getVatPeriod()
-	{
+    function getVatPeriod()
+    {
         return $vat_period = new VatPeriod($this->getYear());
-	}
+    }
 
-	function getYearEnd()
-	{
+    function getYearEnd()
+    {
         return $year_end = new YearEnd($this->getYear());
-	}
+    }
 
-	function getYear()
-	{
-	    return $this->context->getYear();
-	}
+    function getYear()
+    {
+        return $this->context->getYear();
+    }
 
-	function getKernel()
-	{
-	    return $this->context->getKernel();
-	}
+    function getKernel()
+    {
+        return $this->context->getKernel();
+    }
 }

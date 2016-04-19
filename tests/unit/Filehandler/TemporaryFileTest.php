@@ -2,16 +2,17 @@
 require_once 'Intraface/modules/filemanager/TemporaryFile.php';
 require_once 'file_functions.php';
 
-class FakeTemporaryFileFileHandler {
+class FakeTemporaryFileFileHandler
+{
 
     public $upload_path;
     public $tempdir_path;
 
-    function __construct() {
+    function __construct()
+    {
         $this->upload_path = PATH_UPLOAD.'1'. DIRECTORY_SEPARATOR;
         $this->tempdir_path = $this->upload_path.PATH_UPLOAD_TEMPORARY;
     }
-
 }
 
 class TemporaryFileTest extends PHPUnit_Framework_TestCase
@@ -24,7 +25,8 @@ class TemporaryFileTest extends PHPUnit_Framework_TestCase
     }
 
 
-    function setUp() {
+    function setUp()
+    {
 
     }
 
@@ -81,5 +83,4 @@ class TemporaryFileTest extends PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($file_path1, $file_path2);
     }
-
 }

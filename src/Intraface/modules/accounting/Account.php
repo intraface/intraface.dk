@@ -4,9 +4,9 @@
  *
  * @package Intraface_Accounting
  *
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 require_once 'Intraface/functions.php';
 
@@ -179,7 +179,6 @@ class Account extends Intraface_Standard
                 $this->value['vat'] = $this->vat[$this->db->f('vat_key')];
                 $this->value['vat_percent'] = 0;
                 $this->value['vat_shorthand'] = 'ingen';
-
             } else { // hvis der er moms p� �ret
                 $this->value['vat_key'] = $this->db->f('vat_key');
                 $this->value['vat'] = $this->vat[$this->db->f('vat_key')];
@@ -197,7 +196,7 @@ class Account extends Intraface_Standard
                     $this->value['vat_account_id'] = 0;
                 }
                 $this->value['vat_shorthand'] = $this->value['vat'];
-             }
+            }
         }
 
         return $this->get('id');
@@ -244,8 +243,8 @@ class Account extends Intraface_Standard
 
         $validator->isString($var['name'], 'Kontonavnet kan kune v�re en tekststreng.');
         $validator->isNumeric($var['vat_key'], 'Ugyldig moms', 'allow_empty');
-        $validator->isNumeric($var['sum_to'], 'sum_to' , 'allow_empty');
-        $validator->isNumeric($var['sum_from'], 'sum_from' , 'allow_empty');
+        $validator->isNumeric($var['sum_to'], 'sum_to', 'allow_empty');
+        $validator->isNumeric($var['sum_from'], 'sum_from', 'allow_empty');
 
         settype($var['comment'], 'integer');
         $validator->isString($var['comment'], 'Error in comment', '', 'allow_empty');
@@ -284,7 +283,7 @@ class Account extends Intraface_Standard
             $this->id = $this->db->insertedId();
         }
 
-        if (!empty($var['created_from_id']) AND is_numeric($var['created_from_id'])) {
+        if (!empty($var['created_from_id']) and is_numeric($var['created_from_id'])) {
             $this->db->query("UPDATE accounting_account SET created_from_id = ".$var['created_from_id']." WHERE id = " . $this->id);
         }
 
@@ -367,7 +366,7 @@ class Account extends Intraface_Standard
     public function validForState()
     {
         if ($this->id > 0) {
-            if ($this->get('type_key') == array_search('operating', $this->types) OR $this->get('type_key') == array_search('balance, asset', $this->types) OR $this->get('type_key') == array_search('balance, liability', $this->types)) {
+            if ($this->get('type_key') == array_search('operating', $this->types) or $this->get('type_key') == array_search('balance, asset', $this->types) or $this->get('type_key') == array_search('balance, liability', $this->types)) {
                 return true;
             }
         }
@@ -489,54 +488,52 @@ class Account extends Intraface_Standard
                     AND DATE_FORMAT(post.date, '%Y-%m-%d') >= '".$date_from."'
                     AND DATE_FORMAT(post.date, '%Y-%m-%d') <= '".$date_to."'
                     AND account.year_id = ".$this->year->get('id');
-            if ($type == 'stated') {
-                $sql .= ' AND post.stated = 1';
-            } elseif ($type == 'draft') {
-                $sql .= ' AND post.stated = 0';
-            }
+        if ($type == 'stated') {
+            $sql .= ' AND post.stated = 1';
+        } elseif ($type == 'draft') {
+            $sql .= ' AND post.stated = 0';
+        }
 
             $sql .= " GROUP BY post.account_id";
 
-            if ($this->get('type_key') == array_search('sum', $this->types)) {
-                $db2 = new DB_Sql;
-                $sql = "SELECT id FROM accounting_account
+        if ($this->get('type_key') == array_search('sum', $this->types)) {
+            $db2 = new DB_Sql;
+            $sql = "SELECT id FROM accounting_account
                     WHERE number >= " . $this->get('sum_from') . "
                         AND type_key != ".array_search('sum', $this->types)."
                         AND number <= " . $this->get('sum_to') . "
                         AND year_id = ".$this->year->get('id')."
                         AND intranet_id = " . $this->year->kernel->intranet->get('id');
-                $db2->query($sql);
-                $total = 0;
-                while ($db2->nextRecord()) {
-                    // $sub = 0;
-                    $sAccount = new Account($this->year, $db2->f('id'));
-                    $sAccount->getSaldo();
-                    $total = $total + $sAccount->get('saldo');
-                }
-                $this->value['saldo'] = $total;
-                $total_saldo = $total_saldo + $total;
-            } else {
-
-                $this->db->query($sql);
-                if (!$this->db->nextRecord()) {
-                    $this->value['debet'] = $primo['debet'];
-                    $this->value['credit'] = $primo['credit'];
-                    $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
-                } else {
-
-                    if ($type == 'draft') {
-                        $this->value['debet_draft'] = $this->db->f('debet_total');
-                        $this->value['credit_draft'] = $this->db->f('credit_total');
-                        $this->value['saldo_draft'] = $this->value['debet_draft'] - $this->value['credit_draft'];
-                    } else {
-                        $this->value['debet'] = $primo['debet'] + $this->db->f('debet_total');
-                        $this->value['credit'] = $primo['credit'] + $this->db->f('credit_total');
-                        $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
-                    }
-                }
-                // Det her kan sikkert laves lidt smartere. Den skal egentlig laves inden
-                // alt det ovenover tror jeg - alst� if-s�tningen
+            $db2->query($sql);
+            $total = 0;
+            while ($db2->nextRecord()) {
+                // $sub = 0;
+                $sAccount = new Account($this->year, $db2->f('id'));
+                $sAccount->getSaldo();
+                $total = $total + $sAccount->get('saldo');
             }
+            $this->value['saldo'] = $total;
+            $total_saldo = $total_saldo + $total;
+        } else {
+            $this->db->query($sql);
+            if (!$this->db->nextRecord()) {
+                $this->value['debet'] = $primo['debet'];
+                $this->value['credit'] = $primo['credit'];
+                $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
+            } else {
+                if ($type == 'draft') {
+                    $this->value['debet_draft'] = $this->db->f('debet_total');
+                    $this->value['credit_draft'] = $this->db->f('credit_total');
+                    $this->value['saldo_draft'] = $this->value['debet_draft'] - $this->value['credit_draft'];
+                } else {
+                    $this->value['debet'] = $primo['debet'] + $this->db->f('debet_total');
+                    $this->value['credit'] = $primo['credit'] + $this->db->f('credit_total');
+                    $this->value['saldo'] = $this->value['debet'] - $this->value['credit'];
+                }
+            }
+            // Det her kan sikkert laves lidt smartere. Den skal egentlig laves inden
+            // alt det ovenover tror jeg - alst� if-s�tningen
+        }
 
             return true;
     }
@@ -612,7 +609,6 @@ class Account extends Intraface_Standard
             //$posts[$i]['stated'] = $db2->f('stated');
             //$posts[$i]['account_id'] = $db2->f('account_id');
             $i++;
-
         } // while
         return $posts;
     }
@@ -642,6 +638,6 @@ class Account extends Intraface_Standard
 
     public function getNumber()
     {
-    	return $this->get('number');
+        return $this->get('number');
     }
 }

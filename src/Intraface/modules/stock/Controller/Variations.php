@@ -33,7 +33,6 @@ class Intraface_modules_stock_Controller_Variations extends k_Component
                         echo $this->getProduct()->error->view();
                     }
                 }
-
             }
             return new k_SeeOther($this->url('../../'));
         }

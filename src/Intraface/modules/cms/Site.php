@@ -8,8 +8,8 @@
  *
  * @package Intraface_CMS
  * @author Lars Olesen <lars@legestue.net>
- * @since	1.0
- * @version	1.0
+ * @since   1.0
+ * @version     1.0
  */
 require_once 'Stylesheet.php';
 
@@ -43,7 +43,7 @@ class CMS_Site extends Intraface_Standard
             $this->error->set('error in url - has to end with a slash');
         }
         $validator->isUrl($var['url'], 'error in url', 'allow_empty');
-        if (substr($var['url'], 0, 7) != 'http://' AND substr($var['url'], 0, 8) != 'https://') {
+        if (substr($var['url'], 0, 7) != 'http://' and substr($var['url'], 0, 8) != 'https://') {
             $this->error->set('error in url - start with http');
         }
         $validator->isNumeric($var['cc_license'], 'error in cc license');

@@ -39,7 +39,7 @@ abstract class CMS_Section extends Intraface_Standard
         $cms_module = $this->cmspage->kernel->module('cms');
         $this->section_types = $cms_module->getSetting('section_types');
 
-        if (!empty($this->value['type']) AND is_string($this->value['type']) AND in_array($this->value['type'], $this->section_types)) {
+        if (!empty($this->value['type']) and is_string($this->value['type']) and in_array($this->value['type'], $this->section_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->section_types);
         }
 

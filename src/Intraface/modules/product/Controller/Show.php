@@ -66,11 +66,10 @@ class Intraface_modules_product_Controller_Show extends k_Component
                 $append_file = new Appender($kernel, 'product', $product->get('id'));
                 $array_files = $redirect->getParameter('file_handler_id');
                 if (is_array($array_files)) {
-                    foreach ($array_files AS $file_id) {
+                    foreach ($array_files as $file_id) {
                         $append_file->addFile(new FileHandler($kernel, $file_id));
                     }
                 }
-
             }
             return new k_SeeOther($this->url());
         } elseif ($this->query('remove_appended_category') && $this->getKernel()->user->hasModuleAccess('shop')) {
@@ -91,11 +90,9 @@ class Intraface_modules_product_Controller_Show extends k_Component
         $product = new Product($this->getKernel(), $this->name());
 
         if ($this->body('append_file_submit')) {
-
             $append_file = $this->getFileAppender();
 
             if (isset($_FILES['new_append_file'])) {
-
                 $filehandler = new FileHandler($this->getKernel());
 
                 $filehandler->createUpload();
@@ -109,13 +106,11 @@ class Intraface_modules_product_Controller_Show extends k_Component
                     if (!$append_file->addFile(new FileHandler($this->getKernel(), $id))) {
                         throw new Exception('Could not add file');
                     }
-
                 }
             }
             if (!$filehandler->error->isError()) {
                 return new k_SeeOther($this->url());
             }
-
         }
 
         if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {

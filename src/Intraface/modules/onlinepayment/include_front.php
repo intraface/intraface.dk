@@ -3,7 +3,6 @@
  * @package Intraface_OnlinePayment
  */
 if ($kernel->user->hasModuleAccess('onlinepayment')) {
-
     $onlinepayment_module = $kernel->useModule('onlinepayment');
     $onlinepayment = OnlinePayment::factory($kernel);
     $onlinepayment->getDBQuery()->setFilter('status', 2);
@@ -14,5 +13,4 @@ if ($kernel->user->hasModuleAccess('onlinepayment')) {
             'module' => $onlinepayment_module->getName()
         );
     }
-
 }

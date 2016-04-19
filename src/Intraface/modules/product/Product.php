@@ -204,12 +204,12 @@ class Product extends Intraface_Standard
             throw new Exception('You cannot get stock from product with variations. Use stock for variation');
         }
 
-        if (isset($this->value['stock']) AND $this->value['stock'] == 0 AND isset($this->value['do_show']) AND $this->value['do_show'] == 1) {
+        if (isset($this->value['stock']) and $this->value['stock'] == 0 and isset($this->value['do_show']) and $this->value['do_show'] == 1) {
             $this->value['stock_status'] = array('for_sale' => 100); // kun til at stock_status
         }
         // hvis det er en lagervare og intranettet har adgang til stock skal det startes op
 
-        if ($this->kernel->intranet->hasModuleAccess('stock') AND $this->get('stock') == 1) {
+        if ($this->kernel->intranet->hasModuleAccess('stock') and $this->get('stock') == 1) {
             if (!is_object($this->stock)) {
                 // hvis klassen ikke er startet op skal det ske
                 $module = $this->kernel->useModule('stock', true); // true ignorere bruger adgang
@@ -223,7 +223,7 @@ class Product extends Intraface_Standard
 
     function getKernel()
     {
-    	return $this->kernel;
+        return $this->kernel;
     }
 
     /**
@@ -257,7 +257,6 @@ class Product extends Intraface_Standard
                         $this->value['pictures'][$key][$instance['name']]['name']     = $instance['name'];
                         $this->value['pictures'][$key][$instance['name']]['width']    = $instance['width'];
                         $this->value['pictures'][$key][$instance['name']]['height']   = $instance['height'];
-
                     }
                 }
             }
@@ -282,7 +281,7 @@ class Product extends Intraface_Standard
         $this->value['pictures'] = array();
 
         if (count($appendix_list) > 0) {
-            foreach ($appendix_list AS $key => $appendix) {
+            foreach ($appendix_list as $key => $appendix) {
                 $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
                 $this->value['pictures'][$key]['id']                   = $appendix['file_handler_id'];
                 $this->value['pictures'][$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
@@ -295,18 +294,16 @@ class Product extends Intraface_Standard
                 if ($tmp_filehandler->get('is_image')) {
                     $tmp_filehandler->createInstance();
                     $instances = $tmp_filehandler->instance->getList('include_hidden');
-                    foreach ($instances AS $instance) {
+                    foreach ($instances as $instance) {
                         $this->value['pictures'][$key][$instance['name']]['file_uri'] = $instance['file_uri'];
                         $this->value['pictures'][$key][$instance['name']]['name']     = $instance['name'];
                         $this->value['pictures'][$key][$instance['name']]['width']    = $instance['width'];
                         $this->value['pictures'][$key][$instance['name']]['height']   = $instance['height'];
-
                     }
                 }
                 $tmp_filehandler->__destruct();
                 unset($tmp_filehandler);
             }
-
         }
         return $this->value['pictures'];
     }
@@ -352,12 +349,12 @@ class Product extends Intraface_Standard
      */
     public function save($array_var)
     {
-        if ($this->id > 0 AND $this->get('locked') == 1) {
+        if ($this->id > 0 and $this->get('locked') == 1) {
             $this->error->set('Produktet er l�st og kan ikke opdateres');
             return 0;
         }
 
-        if (empty($array_var['number']) AND $this->get('number') > 0) {
+        if (empty($array_var['number']) and $this->get('number') > 0) {
             $array_var['number'] = $this->get('number');
         }
 
@@ -405,7 +402,7 @@ class Product extends Intraface_Standard
             $sql_end  = ", intranet_id = " . $this->intranet->getId();
         }
 
-        $this->db->query($sql_type . " product SET ".$sql." changed_date = NOW()"	 . $sql_end);
+        $this->db->query($sql_type . " product SET ".$sql." changed_date = NOW()"    . $sql_end);
 
         if (empty($this->id)) {
             $this->id = $this->db->insertedId();
@@ -451,8 +448,8 @@ class Product extends Intraface_Standard
 
         // Relaterede produkter
         $related = $this->getRelatedProducts();
-        if (is_array($related) AND count($related) > 0) {
-            foreach ($related AS $p) {
+        if (is_array($related) and count($related) > 0) {
+            foreach ($related as $p) {
                 $product->setRelatedProduct($p['id']);
             }
         }
@@ -627,14 +624,20 @@ class Product extends Intraface_Standard
      */
     public function setRelatedProduct($id, $status = 'relate')
     {
-        if (empty($status)) $status = 'remove';
+        if (empty($status)) {
+            $status = 'remove';
+        }
 
         $db = new DB_Sql;
 
         if ($status == 'relate') {
             $db->query("SELECT * FROM product_related WHERE product_id=" . $this->id  . " AND related_product_id = " . (int)$id . " AND intranet_id =" .$this->intranet->getId());
-            if ($db->nextRecord()) return true;
-            if ($id == $this->id) return false;
+            if ($db->nextRecord()) {
+                return true;
+            }
+            if ($id == $this->id) {
+                return false;
+            }
             $db->query("INSERT INTO product_related SET product_id = " . $this->id . ", related_product_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
             return true;
         } else {
@@ -689,7 +692,7 @@ class Product extends Intraface_Standard
         while ($db->nextRecord()) {
             $product                      = new Product($this->kernel, $db->f('related_product_id'));
             if ($product->get('id') == 0 || $product->get('active') == 0 || ($show == 'webshop' && $product->get('do_show') == 0)) {
-                CONTINUE;
+                continue;
             }
             $products[$key]               = $product->get();
             $products[$key]['related_id'] = $db->f('related_product_id');
@@ -710,11 +713,11 @@ class Product extends Intraface_Standard
                 }
             }
 
-            if (!$product->hasVariation() AND is_object($product->getStock())) {
+            if (!$product->hasVariation() and is_object($product->getStock())) {
                 $products[$key]['stock_status'] = $product->getStock()->get();
             } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
-                if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
+                if ($product->get('stock') == 0 and $product->get('do_show') == 1) {
                     $products[$key]['stock_status'] = array('for_sale' => 100); // kun til at stock_status
                 } else {
                     $products[$key]['stock_status'] = array();
@@ -722,13 +725,12 @@ class Product extends Intraface_Standard
             }
             // den her skal vist lige kigges igennem, for den tager jo alt med p� nettet?
             // 0 = only stock
-            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND !empty($which) AND $which=='webshop') { // only stock
-                if (array_key_exists('for_sale', $products[$key]['stock_status']) AND $products[$key]['stock_status']['for_sale'] <= 0) {
+            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 and !empty($which) and $which=='webshop') { // only stock
+                if (array_key_exists('for_sale', $products[$key]['stock_status']) and $products[$key]['stock_status']['for_sale'] <= 0) {
                     continue;
                 }
             }
             $key++;
-
         }
         return $products;
     }
@@ -752,12 +754,14 @@ class Product extends Intraface_Standard
         }
 
         $db = MDB2::singleton(DB_DSN);
-        $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
+        $result = $db->query("SELECT id FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id);
         if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
 
-        if ($result->numRows() > 0) return true;
+        if ($result->numRows() > 0) {
+            return true;
+        }
         $result = $db->exec("INSERT INTO product_x_attribute_group SET product_id = " . $this->getId() . ", product_attribute_group_id = " . (int)$id . ", intranet_id = " . $this->intranet->getId());
         if (PEAR::isError($result)) {
             throw new Exception('Error in insert :'.$result->getUserInfo());
@@ -780,7 +784,7 @@ class Product extends Intraface_Standard
         }
 
         $db = MDB2::singleton(DB_DSN);
-        $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id );
+        $result = $db->exec("DELETE FROM product_x_attribute_group WHERE intranet_id = ".$db->quote($this->intranet->getId())." AND product_id=" . $this->getId()  . " AND product_attribute_group_id = " . (int)$id);
         if (PEAR::isError($result)) {
             throw new Exception('Error in query :'.$result->getUserInfo());
         }
@@ -1056,5 +1060,4 @@ class Product extends Intraface_Standard
     {
         return ProductDetail::getUnits();
     }
-
 }

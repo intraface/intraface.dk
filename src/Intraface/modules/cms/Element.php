@@ -52,7 +52,7 @@ abstract class CMS_Element extends Intraface_Standard
         $cms_module = $this->section->kernel->module('cms');
         $this->element_types = $cms_module->getSetting('element_types');
 
-        if (is_string($this->value['type']) AND in_array($this->value['type'], $this->element_types)) {
+        if (is_string($this->value['type']) and in_array($this->value['type'], $this->element_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->element_types);
         }
 
@@ -159,7 +159,6 @@ abstract class CMS_Element extends Intraface_Standard
             */
         } elseif ($this->get('elm_properties') == 'newline') {
             $this->value['extra_style'] .= ' clear: both;';
-
         }
         if ($this->get('elm_adjust')) {
             $this->value['extra_class'] .= ' cms-align-' . $this->get('elm_adjust');
@@ -187,7 +186,7 @@ abstract class CMS_Element extends Intraface_Standard
     {
         // validere om section overhovedet findes
         // validere type
-        if (!empty($var['elm_box']) AND $var['elm_box'] != 'box') {
+        if (!empty($var['elm_box']) and $var['elm_box'] != 'box') {
             $this->error->set('error in elm_box');
         }
         if (!array_key_exists($var['elm_properties'], $this->properties)) {
@@ -196,7 +195,7 @@ abstract class CMS_Element extends Intraface_Standard
         if (!array_key_exists($var['elm_adjust'], $this->alignment)) {
             $this->error->set('error in elm_adjust');
         }
-        if (!empty($var['elm_width']) AND !strstr($var['elm_width'], '%') AND !strstr($var['elm_width'], 'em') AND !strstr($var['elm_width'], 'px')) {
+        if (!empty($var['elm_width']) and !strstr($var['elm_width'], '%') and !strstr($var['elm_width'], 'em') and !strstr($var['elm_width'], 'px')) {
             $this->error->set('error in elm_width - use %, em or px');
         }
 
@@ -225,7 +224,7 @@ abstract class CMS_Element extends Intraface_Standard
             return false;
         }
 
-        if (empty($var['date_publish']) OR $var['date_publish'] == '0000-00-00 00:00:00') {
+        if (empty($var['date_publish']) or $var['date_publish'] == '0000-00-00 00:00:00') {
             $date_publish = 'NOW()';
         } else {
             $date_publish = '"'.safeToDb($var['date_publish']).'"';
@@ -281,7 +280,7 @@ abstract class CMS_Element extends Intraface_Standard
         $this->save_element($var);
 
         return $this->id;
-  }
+    }
 
     /**
      * Deactivates an element

@@ -48,8 +48,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Attribute extends k_C
             try {
                 $attribute->save();
                 return new k_SeeOther($this->url());
-            }
-            catch (Doctrine_Validator_Exception $e) {
+            } catch (Doctrine_Validator_Exception $e) {
                 $this->attribute = $attribute;
                 $this->getError()->attachErrorStack($attribute->getErrorStack());
             }
@@ -87,5 +86,4 @@ class Intraface_modules_product_Controller_AttributeGroups_Attribute extends k_C
 
         throw new Exception('Could not delete');
     }
-
 }

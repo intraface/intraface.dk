@@ -66,14 +66,15 @@
     */ ?>
 
     <?php
-    if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')) {
-
+    if ($kernel->user->hasModuleAccess("stock") and $product->get('stock')) {
         $stock = $variation->getStock($product);
         if (isset($_GET['adaptation']) && $_GET['adaptation'] == 'true') {
             $stock->adaptation();
         }
         ?>
-        <div id="stock" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'stock') echo ' fade'; ?>">
+        <div id="stock" class="box<?php if (!empty($_GET['from']) and $_GET['from'] == 'stock') {
+            echo ' fade';
+} ?>">
             <h2><?php e(t('stock')); ?></h2>
 
             <table>

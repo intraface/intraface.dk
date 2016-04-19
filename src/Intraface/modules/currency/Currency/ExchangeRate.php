@@ -10,8 +10,10 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
         $this->hasColumn('rate', 'double', 11, array('greaterthan' => 0));
         $this->hasColumn('date_created', 'timestamp', array('notnull'));
 
-        $this->hasOne('Intraface_modules_currency_Currency as currency',
-            array('local' => 'currency_id', 'foreign' => 'id'));
+        $this->hasOne(
+            'Intraface_modules_currency_Currency as currency',
+            array('local' => 'currency_id', 'foreign' => 'id')
+        );
 
         $this->setSubclasses(array(
             'Intraface_modules_currency_Currency_ExchangeRate_ProductPrice'  => array('used_for_key' => 1),
@@ -32,7 +34,7 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
 
     public function preSave()
     {
-        if ($this->date_created == NULL) {
+        if ($this->date_created == null) {
             $this->date_created = date('Y-m-d h:i:s');
         }
     }
@@ -88,7 +90,7 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
     public function convertAmountFromCurrency($amount)
     {
         return new Ilib_Variable_Float($amount->getAsIso() * ($this->getRate()->getAsIso() / 100));
-    }    
+    }
 
     public function getUsedForTypes()
     {

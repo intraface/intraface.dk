@@ -25,24 +25,36 @@ echo $reminder->error->view("html");
 
     <div class="formrow">
         <label for="description"><?php e(t('Description')); ?></label>
-       <input type="text" name="description" value="<?php if (isset($value['description'])) e($value["description"]); ?>" size="60" />
+       <input type="text" name="description" value="<?php if (isset($value['description'])) {
+            e($value["description"]);
+} ?>" size="60" />
     </div>
 
     <div class="formrow">
         <label for="date"><?php e(t('Date')); ?></label>
-        <input class="input" name="this_date" id="this_date" value="<?php if (isset($value['dk_this_date'])) e($value["dk_this_date"]); ?>" size="10" />
+        <input class="input" name="this_date" id="this_date" value="<?php if (isset($value['dk_this_date'])) {
+            e($value["dk_this_date"]);
+} ?>" size="10" />
     </div>
     <div class="formrow">
         <label for="due_date"><?php e(t('Due date')); ?></label>
-        <input class="input" name="due_date" id="due_date" value="<?php if (isset($value['dk_due_date'])) e($value["dk_due_date"]); ?>" size="10" />
+        <input class="input" name="due_date" id="due_date" value="<?php if (isset($value['dk_due_date'])) {
+            e($value["dk_due_date"]);
+} ?>" size="10" />
     </div>
     <div class="formrow">
         <label for="reminder_fee"><?php e(t('Reminder fee')); ?></label>
         <select id="reminder_fee" name="reminder_fee">
-            <option value="0" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 0) print("selected=\"selected\""); ?> >Ingen</option>
-            <option value="50" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 50) print("selected=\"selected\""); ?> >50 kr.</option>
-            <option value="100" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 100) print("selected=\"selected\""); ?> >100 kr.</option>
-            <?php if (isset($value["reminder_fee"]) && !($value["reminder_fee"] == 0 || $value["reminder_fee"] == 50 || $value["reminder_fee"] == 100)): ?>
+            <option value="0" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 0) {
+                print("selected=\"selected\"");
+} ?> >Ingen</option>
+            <option value="50" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 50) {
+                print("selected=\"selected\"");
+} ?> >50 kr.</option>
+            <option value="100" <?php if (isset($value["reminder_fee"]) && $value["reminder_fee"] == 100) {
+                print("selected=\"selected\"");
+} ?> >100 kr.</option>
+            <?php if (isset($value["reminder_fee"]) && !($value["reminder_fee"] == 0 || $value["reminder_fee"] == 50 || $value["reminder_fee"] == 100)) : ?>
                 <option value="<?php e($value["reminder_fee"]); ?>" selected="selected"><?php e($value["reminder_fee"]); ?></option>
             <?php endif; ?>
         </select>
@@ -50,7 +62,9 @@ echo $reminder->error->view("html");
 
     <div class="formrow">
         <label for="text"><?php e(t('Text for the contact')); ?></label>
-           <textarea name="text" id="text" style="width: 400px; height: 100px;"><?php if (isset($value['text'])) e($value["text"]); ?></textarea>
+           <textarea name="text" id="text" style="width: 400px; height: 100px;"><?php if (isset($value['text'])) {
+                e($value["text"]);
+} ?></textarea>
     </div>
 
 </fieldset>
@@ -74,7 +88,9 @@ echo $reminder->error->view("html");
 
                 for ($i = 0, $max = count($persons); $i < $max; $i++) {
                     ?>
-                    <option value="<?php e($persons[$i]["id"]); ?>" <?php if (isset($value["contact_person_id"]) && $value["contact_person_id"] == $persons[$i]["id"]) print('selected="selected"'); ?> ><?php e($persons[$i]["name"]); ?></option>
+                    <option value="<?php e($persons[$i]["id"]); ?>" <?php if (isset($value["contact_person_id"]) && $value["contact_person_id"] == $persons[$i]["id"]) {
+                        print('selected="selected"');
+} ?> ><?php e($persons[$i]["name"]); ?></option>
                     <?php
                 }
                 ?>
@@ -127,43 +143,47 @@ echo $reminder->error->view("html");
                 ?>
                 <tr>
                     <td>
-                    <input type="checkbox" name="checked_invoice[]" value="<?php e($invoices[$i]["id"]); ?>" <?php if (in_array($invoices[$i]["id"], $checked_invoice) === true || empty($_GET["id"])) print("checked=\"checked\""); ?> /></td>
+                    <input type="checkbox" name="checked_invoice[]" value="<?php e($invoices[$i]["id"]); ?>" <?php if (in_array($invoices[$i]["id"], $checked_invoice) === true || empty($_GET["id"])) {
+                        print("checked=\"checked\"");
+} ?> /></td>
                     <td class="number"><?php e($invoices[$i]["number"]); ?></td>
                     <td><?php e($invoices[$i]["description"]); ?></td>
                     <td class="date"><?php e($invoices[$i]["dk_due_date"]); ?></td>
-                    <td class="amount"><?php e(number_format($invoices[$i]["arrears"], 2, ",",".")); ?></td>
+                    <td class="amount"><?php e(number_format($invoices[$i]["arrears"], 2, ",", ".")); ?></td>
                 </tr>
                 <?php
             }
-      $reminder->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
-      $reminder->getDBQuery()->setSorting('this_date');
+            $reminder->getDBQuery()->setCondition("contact_id = ".$contact->get("id")." AND status = 1 AND due_date < NOW() AND reminder_fee > 0"); // status: 1 = sent
+            $reminder->getDBQuery()->setSorting('this_date');
 
             $reminders = $reminder->getList();
-        if (!empty($reminders)) {
-       ?>
-            <tr>
+            if (!empty($reminders)) {
+                ?>
+                <tr>
                 <td colspan="5"><b><?php e(t('Reminders with no payments')); ?></b></td>
             </tr>
             <?php
-              for ($i = 0, $max = count($reminders); $i < $max; $i++) {
-                  $total += $reminders[$i]["reminder_fee"];
-                  if ($reminder->get("id") == $reminders[$i]["id"]) {
-                      // Hvis man retter en reminder skal den selv ikke med p� listen over mulige remindere!
-                      continue;
-                  }
-                  ?>
-                  <tr>
-                      <td>
-                      <input type="checkbox" name="checked_reminder[]" value="<?php e($reminders[$i]["id"]); ?>" <?php if (array_search($reminders[$i]["id"], $checked_reminder) !== FALSE || empty($_GET["id"])) print("checked=\"checked\""); ?> /></td>
-                      <td class="number"><?php e($reminders[$i]["number"]); ?></td>
-                      <td><?php e($reminders[$i]["description"]); ?></td>
-                      <td class="date"><?php e($reminders[$i]["dk_due_date"]); ?></td>
-                      <td class="amount"><?php e(number_format($reminders[$i]["reminder_fee"], 2, ",",".")); ?></td>
-                  </tr>
-                  <?php
-              }
-      }
-      ?>
+            for ($i = 0, $max = count($reminders); $i < $max; $i++) {
+                $total += $reminders[$i]["reminder_fee"];
+                if ($reminder->get("id") == $reminders[$i]["id"]) {
+                    // Hvis man retter en reminder skal den selv ikke med p� listen over mulige remindere!
+                    continue;
+                }
+                ?>
+                <tr>
+                  <td>
+                  <input type="checkbox" name="checked_reminder[]" value="<?php e($reminders[$i]["id"]); ?>" <?php if (array_search($reminders[$i]["id"], $checked_reminder) !== false || empty($_GET["id"])) {
+                        print("checked=\"checked\"");
+} ?> /></td>
+                  <td class="number"><?php e($reminders[$i]["number"]); ?></td>
+                  <td><?php e($reminders[$i]["description"]); ?></td>
+                  <td class="date"><?php e($reminders[$i]["dk_due_date"]); ?></td>
+                  <td class="amount"><?php e(number_format($reminders[$i]["reminder_fee"], 2, ",", ".")); ?></td>
+                </tr>
+                <?php
+            }
+            }
+        ?>
 
         </tbody>
         <tfoot>
@@ -172,7 +192,7 @@ echo $reminder->error->view("html");
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
                 <td><?php e(t('Total')); ?></td>
-                <td class="amount"><?php e(number_format($total, 2, ",",".")); ?></td>
+                <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
             </tr>
         </tfoot>
     </table>
@@ -187,25 +207,31 @@ if ($contact->address->get('email')) {
   <legend>Send som</legend>
   <div>
   <!--
-    <input type="radio" name="send_as" id="send_as_email" value="email" <?php if (isset($value['send_as']) && $value['send_as'] == 'email') { echo ' checked="checked"'; } ?> />
+    <input type="radio" name="send_as" id="send_as_email" value="email" <?php if (isset($value['send_as']) && $value['send_as'] == 'email') {
+        echo ' checked="checked"';
+} ?> />
       <label for="send_as_email">Email</label><br />
-    <input type="radio" name="send_as" id="send_as_pdf" value="pdf" <?php if (isset($value['send_as']) && $value['send_as'] == 'pdf') { echo ' checked="checked"'; } ?> />
+    <input type="radio" name="send_as" id="send_as_pdf" value="pdf" <?php if (isset($value['send_as']) && $value['send_as'] == 'pdf') {
+        echo ' checked="checked"';
+} ?> />
        <label for="send_as_pdf">PDF</label>
     -->
 <?php
-    if (!isset($value['send_as'])) {
-        // 0 is not set and 2 is email
-        if ($contact->get('preferred_invoice') == 0 OR $contact->get('preferred_invoice') == 2) {
-            $value['send_as'] = 'email';
-        }
+if (!isset($value['send_as'])) {
+    // 0 is not set and 2 is email
+    if ($contact->get('preferred_invoice') == 0 or $contact->get('preferred_invoice') == 2) {
+        $value['send_as'] = 'email';
     }
-    foreach ($send_as as $as) {
+}
+foreach ($send_as as $as) {
 ?>
-    <input type="radio" name="send_as" id="send_as_<?php e($as); ?>" value="<?php e($as); ?>" <?php if (isset($value['send_as']) && $value['send_as'] == $as) { echo ' checked="checked"'; } ?> />
-    <label for="send_as_<?php e($as); ?>"><?php e($as); ?></label><br />
+<input type="radio" name="send_as" id="send_as_<?php e($as); ?>" value="<?php e($as); ?>" <?php if (isset($value['send_as']) && $value['send_as'] == $as) {
+    echo ' checked="checked"';
+} ?> />
+<label for="send_as_<?php e($as); ?>"><?php e($as); ?></label><br />
 
 <?php
-    }
+}
     ?>
   </div>
   </fieldset>
@@ -222,32 +248,42 @@ if ($contact->address->get('email')) {
     <legend><?php e(t('Payment information')); ?></legend>
     <p>Hvilke betalingsoplysninger skal vises på rykkeren</p>
     <div>
-        <input class="input" id="none" type="radio" name="payment_method_key" value="0" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 0) print("checked=\"CHECKED\""); ?> />
+        <input class="input" id="none" type="radio" name="payment_method_key" value="0" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 0) {
+            print("checked=\"CHECKED\"");
+} ?> />
         <label for="none">Ingen</label>
     </div>
-    <?php if ($kernel->setting->get('intranet', 'bank_account_number')): ?>
+    <?php if ($kernel->setting->get('intranet', 'bank_account_number')) : ?>
     <div>
-        <input class="input" id="account" type="radio" name="payment_method_key" value="1" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 1) print("checked=\"CHECKED\""); ?> />
+        <input class="input" id="account" type="radio" name="payment_method_key" value="1" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 1) {
+            print("checked=\"CHECKED\"");
+} ?> />
         <label for="account">Kontooverførsel</label>
     </div>
     <?php endif; ?>
-    <?php if ($kernel->setting->get('intranet', 'giro_account_number')): ?>
+    <?php if ($kernel->setting->get('intranet', 'giro_account_number')) : ?>
     <div>
-        <input class="input" type="radio" id="giro01" name="payment_method_key" value="2" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 2) print("checked=\"CHECKED\""); ?> />
+        <input class="input" type="radio" id="giro01" name="payment_method_key" value="2" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 2) {
+            print("checked=\"CHECKED\"");
+} ?> />
         <label for="giro01">Girokort +01</label>
     </div>
     <div>
-        <input class="input" id="giro71" type="radio" name="payment_method_key" value="3" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 3) print("checked=\"CHECKED\""); ?> />
+        <input class="input" id="giro71" type="radio" name="payment_method_key" value="3" <?php if (isset($value["payment_method_key"]) && $value["payment_method_key"] == 3) {
+            print("checked=\"CHECKED\"");
+} ?> />
         <label for="giro71">Girokort +71</label> &lt;
-        <label for="girocode" style="display: none;">Girokode</label> <input class="input" name="girocode" id="girocode" value="<?php if (isset($value["girocode"])) e($value["girocode"]); ?>" size="16" onfocus="if (document.getElementById) document.getElementById('giro71').checked = true;" /> + <?php e($kernel->setting->get("intranet", "giro_account_number")); ?>&lt;
+        <label for="girocode" style="display: none;">Girokode</label> <input class="input" name="girocode" id="girocode" value="<?php if (isset($value["girocode"])) {
+            e($value["girocode"]);
+} ?>" size="16" onfocus="if (document.getElementById) document.getElementById('giro71').checked = true;" /> + <?php e($kernel->setting->get("intranet", "giro_account_number")); ?>&lt;
     </div>
     <?php endif; ?>
 </fieldset>
 
 <input type="submit" name="submit" value="<?php e(t('Save')); ?>" class="save" />
-<?php if ($reminder->get('id') > 0): ?>
+<?php if ($reminder->get('id') > 0) : ?>
 <a href="<?php e(url()); ?>"><?php e(t('Cancel')); ?></a>
-<?php else: ?>
+<?php else : ?>
 <a href="<?php e(url('../../contact/' . $contact->get('id'))); ?>"><?php e(t('Cancel')); ?></a>
 <?php endif; ?>
 

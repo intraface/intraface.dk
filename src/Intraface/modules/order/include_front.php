@@ -3,8 +3,7 @@
  * @package Intraface_Order
  */
 
-if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess('order')) {
-
+if ($kernel->user->hasModuleAccess('debtor') and $kernel->user->hasModuleAccess('order')) {
     $debtor_module = $kernel->useModule('debtor');
     $order_module = $kernel->useModule('order');
     $order = new Order($kernel);
@@ -27,8 +26,4 @@ if ($kernel->user->hasModuleAccess('debtor') AND $kernel->user->hasModuleAccess(
             );
         }
     }
-
-
 }
-
-?>

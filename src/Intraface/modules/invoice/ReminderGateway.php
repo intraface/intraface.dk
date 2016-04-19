@@ -104,9 +104,8 @@ class Intraface_modules_invoice_ReminderGateway
                     // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $this->dbquery->setCondition("status < 2");
                 }
-
             } else {
-                switch($this->dbquery->getFilter("status")) {
+                switch ($this->dbquery->getFilter("status")) {
                     case "0":
                         $to_date_field = "date_created";
                         break;
@@ -140,7 +139,7 @@ class Intraface_modules_invoice_ReminderGateway
         $db = $this->dbquery->getRecordset("id", "", false);
 
         $list = array();
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $reminder = new Reminder($this->kernel, $db->f("id"));
             $list[$i] = $reminder->get();
             if (is_object($reminder->contact->address)) {

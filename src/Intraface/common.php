@@ -10,25 +10,33 @@
  * @version @package-version@
  */
 // required files
-require_once 'Ilib/ClassLoader.php';
-require_once 'ErrorHandler.php';
-require_once 'ErrorHandler/Observer/BlueScreen.php';
-require_once 'Log.php';
-require_once 'Doctrine.php';
-spl_autoload_register(array('Doctrine', 'autoload'));
+require_once dirname(__FILE__) . '/../../vendor/autoload.php';
 require_once 'Intraface/functions.php';
-require_once 'bucket.inc.php';
 
 // paths
-if (!defined('PATH_INCLUDE_IHTML')) define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);
-if (!defined('PATH_INCLUDE_MODULE')) define('PATH_INCLUDE_MODULE', PATH_ROOT.'Intraface/modules' . DIRECTORY_SEPARATOR);
-if (!defined('PATH_INCLUDE_SHARED')) define('PATH_INCLUDE_SHARED', PATH_ROOT.'Intraface/shared' . DIRECTORY_SEPARATOR);
-if (!defined('PATH_INCLUDE_CONFIG')) define('PATH_INCLUDE_CONFIG', PATH_ROOT.'/Intraface/config'.DIRECTORY_SEPARATOR);
-if (!defined('PATH_UPLOAD')) define('PATH_UPLOAD', PATH_ROOT . 'upload/'); // Directory for upload of files.
-if (!defined('PATH_UPLOAD_TEMPORARY')) define('PATH_UPLOAD_TEMPORARY', 'tempdir/'); // Mappen i Upload_path, under intranetid, hvor temp-filer placeres.
-if (!defined('PATH_CAPTCHA')) define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
-if (!defined('PATH_CACHE')) define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
-if (!defined('PATH_INCLUDE_BACKUP')) define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup/');
+if (!defined('PATH_INCLUDE_IHTML')) {
+    define('PATH_INCLUDE_IHTML', PATH_ROOT.'Intraface/ihtml' . DIRECTORY_SEPARATOR);
+}
+if (!defined('PATH_INCLUDE_MODULE')) {
+    define('PATH_INCLUDE_MODULE', PATH_ROOT.'Intraface/modules' . DIRECTORY_SEPARATOR);
+}
+if (!defined('PATH_INCLUDE_SHARED')) {
+    define('PATH_INCLUDE_SHARED', PATH_ROOT.'Intraface/shared' . DIRECTORY_SEPARATOR);
+}
+if (!defined('PATH_INCLUDE_CONFIG')) {
+    define('PATH_INCLUDE_CONFIG', PATH_ROOT.'/Intraface/config'.DIRECTORY_SEPARATOR);
+}
+if (!defined('PATH_UPLOAD')) {
+    define('PATH_UPLOAD', PATH_ROOT . 'upload/'); // Directory for upload of files.
+}if (!defined('PATH_UPLOAD_TEMPORARY')) {
+    define('PATH_UPLOAD_TEMPORARY', 'tempdir/'); // Mappen i Upload_path, under intranetid, hvor temp-filer placeres.
+}if (!defined('PATH_CAPTCHA')) {
+    define('PATH_CAPTCHA', PATH_ROOT . 'captcha/'); // remember trailing slash - used for the demo formular
+}if (!defined('PATH_CACHE')) {
+    define('PATH_CACHE', PATH_ROOT . 'cache/'); // remember trailing slash - path to cache
+}if (!defined('PATH_INCLUDE_BACKUP')) {
+    define('PATH_INCLUDE_BACKUP', PATH_ROOT . 'backup/');
+}
 
 // paths on www
 if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
@@ -43,10 +51,14 @@ if (defined('NET_SCHEME') && defined('NET_HOST') && defined('NET_DIRECTORY')) {
 $bucket = new bucket_Container(new Intraface_Factory());
 
 // filehandler
-if (!defined('IMAGE_LIBRARY')) define('IMAGE_LIBRARY', 'GD');
+if (!defined('IMAGE_LIBRARY')) {
+    define('IMAGE_LIBRARY', 'GD');
+}
 
 // database
-if (!defined('DB_DSN')) define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
+if (!defined('DB_DSN')) {
+    define('DB_DSN', 'mysql://'.DB_USER.':'.DB_PASS.'@'.DB_HOST.'/'.DB_NAME.'');
+}
 if (!defined('MDB2_DEBUG')) {
     define('MDB2_DEBUG', false);
 }

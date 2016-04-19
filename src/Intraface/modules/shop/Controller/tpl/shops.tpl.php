@@ -7,7 +7,7 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($shops as $shop): ?>
+    <?php foreach ($shops as $shop) : ?>
     <tr>
         <th><a href="<?php e(url($shop->id)); ?>"><?php e($shop->name); ?></a></th>
         <th><?php e($shop->identifier); ?></th>

@@ -73,7 +73,6 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
                 } else {
                     return new k_SeeOther($this->url());
                 }
-
             } else {
                 $filehandler->error->view();
                 $voucher_file->error->set('Kunne ikke uploade filen');
@@ -89,22 +88,22 @@ class Intraface_modules_accounting_Controller_Voucher_Show extends k_Component
             $this->getVoucher()->stateVoucher();
             return new k_SeeOther($this->url());
         } elseif ($this->body('action') == 'counter_entry') {
-        	$posts = $this->getVoucher()->getPosts();
+            $posts = $this->getVoucher()->getPosts();
 
-        	foreach ($posts as $post) {
-        		if (is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
-        			$new_post = new Post($this->getVoucher());
-        			$new_post->save($post['date'], $post['account_id'], $post['text'].' - '.$this->t('counter entry'), $post['credit'], $post['debet']);
-        		}
-        	}
+            foreach ($posts as $post) {
+                if (is_array($_POST['selected']) && in_array($post['id'], $_POST['selected'])) {
+                    $new_post = new Post($this->getVoucher());
+                    $new_post->save($post['date'], $post['account_id'], $post['text'].' - '.$this->t('counter entry'), $post['credit'], $post['debet']);
+                }
+            }
 
-        	return new k_SeeOther($this->url());
+            return new k_SeeOther($this->url());
         }
 
-    	if ($this->getVoucher()->save($_POST)) {
-    	    return new k_SeeOther($this->url(null));
-    	}
-    	return $this->render();
+        if ($this->getVoucher()->save($_POST)) {
+            return new k_SeeOther($this->url(null));
+        }
+        return $this->render();
     }
 
     function appendFile($selected_file_id)

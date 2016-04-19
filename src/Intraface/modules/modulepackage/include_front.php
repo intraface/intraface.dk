@@ -3,7 +3,6 @@
  * @package Intraface_Invoice
  */
 if ($kernel->user->hasModuleAccess('modulepackage')) {
-
     $modulepackage_module = $kernel->useModule('modulepackage');
     $manager = new Intraface_modules_modulepackage_Manager($kernel->intranet);
 
@@ -11,7 +10,6 @@ if ($kernel->user->hasModuleAccess('modulepackage')) {
     $list = $manager->getList();
 
     if (count($list) == 0) {
-
         $_attention_needed[] = array(
             'module' => $modulepackage_module->getName(),
             'link' => $this->url('module/modulepackage'),
@@ -19,7 +17,7 @@ if ($kernel->user->hasModuleAccess('modulepackage')) {
             'no_translation' => true
         );
     } else {
-        foreach ($list AS $key => $module) {
+        foreach ($list as $key => $module) {
             // check whether there is any expering within a month and if there is no other packages comming up in the same group.
             if (strtotime($module['end_date']) < strtotime('+1 month') && (!isset($list[$key+1]) || $module['group'] != $list[$key+1]['group'])) {
                 $_advice[] = array(

@@ -1,5 +1,5 @@
 <?php
-class Fake_Ilib_Variable_Float 
+class Fake_Ilib_Variable_Float
 {
     protected $iso;
     protected $amount;
@@ -9,7 +9,7 @@ class Fake_Ilib_Variable_Float
         $this->amount = $amount;
     }
     
-    function getAsIso() 
+    function getAsIso()
     {
         return $this->amount;
     }

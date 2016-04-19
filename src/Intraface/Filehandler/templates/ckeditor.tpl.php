@@ -16,15 +16,27 @@
         <label><?php e(t('Filtration')); ?>
         <select name="filtration">
             <option value="0"><?php e(t('All')); ?></option>
-            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(t('uploaded today')); ?></option>
-            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(t('uploaded yesterday')); ?></option>
-            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(t('uploaded this week')); ?></option>
-            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e(t('edited today')); ?></option>
-            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(t('edited yesterday')); ?></option>
+            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded today')); ?></option>
+            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded yesterday')); ?></option>
+            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded this week')); ?></option>
+            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) {
+                echo ' selected="selected"';
+}?>><?php e(t('edited today')); ?></option>
+            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) {
+                echo ' selected="selected"';
+}?>><?php e(t('edited yesterday')); ?></option>
         </select>
         </label>
         <label><?php e(t('only pictures')); ?>:
-            <input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
+            <input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) {
+                echo 'checked="checked"';
+} ?> />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('Find')); ?>" />
@@ -33,30 +45,29 @@
         <?php
 
         $selected_keywords = $filemanager->getDBQuery()->getKeyword();
-    $keyword = $filemanager->getKeywordAppender();
-    $keywords = $keyword->getUsedKeywords();
+        $keyword = $filemanager->getKeywordAppender();
+        $keywords = $keyword->getUsedKeywords();
 
-    if (count($keywords) > 0) {
-        echo '<div>Nøgleord: <ul style="display: inline;">';
-      foreach ($keywords AS $value) {
-            if (in_array($value['id'], $selected_keywords) === true) {
+        if (count($keywords) > 0) {
+            echo '<div>Nøgleord: <ul style="display: inline;">';
+            foreach ($keywords as $value) {
+                if (in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
-                }
-                else {
+                } else {
                     $checked = "";
                 }
                 echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$value['id'].'"><input type="checkbox" name="keyword[]" value="'.$value['id'].'" id="keyword_'.$value['id'].'" '.$checked.' />&nbsp;'.$value['keyword'].'</label></li>';
+            }
+              echo '</ul></div>';
         }
-      echo '</ul></div>';
-    }
     ?>
 
     </fieldset>
 </form>
 
 
-			<script type="text/javascript">
-			//<![CDATA[
+            <script type="text/javascript">
+            //<![CDATA[
 // Helper function to get parameters from the query string.
 function getUrlParam(paramName)
 {
@@ -67,8 +78,8 @@ function getUrlParam(paramName)
 }
 var funcNum = getUrlParam('CKEditorFuncNum');
 
-			//]]>
-			</script>
+            //]]>
+            </script>
 
 <?php echo $filemanager->getDBQuery()->display('character'); ?>
 

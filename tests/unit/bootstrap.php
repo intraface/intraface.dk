@@ -1,5 +1,5 @@
 <?php
-error_reporting(E_ALL &~E_DEPRECATED);
+error_reporting(E_ALL & ~(E_DEPRECATED | E_STRICT));
 
 define('DB_HOST', $GLOBALS['db_host']);
 define('DB_PASS', $GLOBALS['db_password']);
@@ -30,11 +30,7 @@ if (!file_exists($GLOBALS['test_path_temp'])) {
 // Directory to move files to temporary in tests
 define('TEST_PATH_TEMP', $GLOBALS['test_path_temp']);
 
-set_include_path(dirname(__FILE__) . '/' . PATH_SEPARATOR . PATH_ROOT. PATH_SEPARATOR . get_include_path());
-
-require_once 'Ilib/ClassLoader.php';
-require_once 'Doctrine.php';
-spl_autoload_register(array('Doctrine', 'autoload'));
+set_include_path(dirname(__FILE__) . '/' . PATH_SEPARATOR . dirname(__FILE__) . '/../../vendor/intraface/error/src/' . PATH_SEPARATOR . dirname(__FILE__) . '/../../vendor/troelskn/konstrukt/lib/' . PATH_SEPARATOR . PATH_ROOT. PATH_SEPARATOR . get_include_path());
 
 $db = MDB2::singleton(DB_DSN);
 $db->setOption('debug', 0);

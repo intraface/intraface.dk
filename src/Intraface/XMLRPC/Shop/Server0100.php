@@ -76,40 +76,39 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (isset($mixed['offset']) AND is_numeric($mixed['offset']) AND $mixed['offset'] > 0) {
+        if (isset($mixed['offset']) and is_numeric($mixed['offset']) and $mixed['offset'] > 0) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        } elseif (isset($mixed['use_stored']) AND array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (isset($mixed['use_stored']) and array_key_exists('use_stored', $mixed) and $mixed['use_stored'] == 'true') {
             $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
-            if (array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
+            if (array_key_exists('search', $mixed) and !empty($mixed['search'])) {
                 $product->getDBQuery()->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
             }
 
-            if (array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
+            if (array_key_exists('keywords', $mixed) and !empty($mixed['keywords'])) {
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
-            if (array_key_exists('category', $mixed) AND !empty($mixed['category'])) {
+            if (array_key_exists('category', $mixed) and !empty($mixed['category'])) {
                 $product->getDBQuery()->setFilter('shop_id', $shop_id);
                 $product->getDBQuery()->setFilter('category', $mixed['category']);
                 $debug2 .= 'category ' . $mixed['category'];
             }
 
-            if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+            if (isset($mixed['ids']) and array_key_exists('ids', $mixed) and is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }
 
-            if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
+            if (array_key_exists('sorting', $mixed) and !empty($mixed['sorting'])) {
                 $product->getDBQuery()->setFilter('sorting', $mixed['sorting']);
                 $debug2 .= 'sorting ' . $mixed['sorting'];
             }
-
         }
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
@@ -144,7 +143,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $search['area'] = 'category_'.$category_id;
         if ($results_per_page > 0) {
             $search['use_paging'] = 'true';
-        }else {
+        } else {
             $search['use_paging'] = 'false';
         }
 
@@ -235,7 +234,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             );
         }
 
-        $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getDoctrine(), NULL);
+        $gateway = new Intraface_modules_product_ProductDoctrineGateway($this->getDoctrine(), null);
         $doctrine_products = $gateway->findByVariationAttributeId($this->processRequestData($attribute_id));
 
         return $this->prepareResponseData(
@@ -244,7 +243,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 'products' => $this->createDoctrineProductsListArray($doctrine_products, $attribute_id),
                 'attribute_group' => $this->createAttributeGroupArray($attribute_group)
             )
-
         );
     }
 
@@ -254,7 +252,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
      * @param object $doctrine_products Doctrine_Collection
      * @return array with products
      */
-    private function createDoctrineProductsListArray($doctrine_products, $attribute_id = NULL)
+    private function createDoctrineProductsListArray($doctrine_products, $attribute_id = null)
     {
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
             $currencies = $currency_gateway->findAllWithExchangeRate();
@@ -267,7 +265,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $products = array();
         $key = 0;
-        foreach ($doctrine_products AS $p) {
+        foreach ($doctrine_products as $p) {
             $products[$key]['id'] = $p->getId();
             $products[$key]['number'] = $p->getDetails()->getNumber();
             $products[$key]['name'] = $p->getDetails()->getTranslation('da')->name;
@@ -295,7 +293,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
             $products[$key]['pictures'] = $this->getProductPictures($p);
 
-            if ($p->hasVariation() && $p->hasStock() && $attribute_id != NULL) {
+            if ($p->hasVariation() && $p->hasStock() && $attribute_id != null) {
                 try {
                     $variaton_gateway = new Intraface_modules_product_Variation_Gateway($p);
                     $variations = $variaton_gateway->findWithAttributeId($attribute_id);
@@ -306,7 +304,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 $stub_product = new Intraface_XMLRPC_Shop_Server0100_Product($p, $this->webshop->kernel);
                 $products[$key]['attribute_stock_for_sale'] = 0;
 
-                foreach ($variations AS $variation) {
+                foreach ($variations as $variation) {
                     $stock = $variation->getStock($stub_product)->get();
                     $products[$key]['attribute_stock_for_sale'] += $stock['for_sale'];
                 }
@@ -342,7 +340,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $pictures = array();
 
         if (count($appendix_list) > 0) {
-            foreach ($appendix_list AS $key => $appendix) {
+            foreach ($appendix_list as $key => $appendix) {
                 $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
                 $pictures[$key]['id']                   = $appendix['file_handler_id'];
                 $pictures[$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
@@ -355,12 +353,11 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 if ($tmp_filehandler->get('is_image')) {
                     $tmp_filehandler->createInstance();
                     $instances = $tmp_filehandler->instance->getList('include_hidden');
-                    foreach ($instances AS $instance) {
+                    foreach ($instances as $instance) {
                         $pictures[$key][$instance['name']]['file_uri'] = $instance['file_uri'];
                         $pictures[$key][$instance['name']]['name']     = $instance['name'];
                         $pictures[$key][$instance['name']]['width']    = $instance['width'];
                         $pictures[$key][$instance['name']]['height']   = $instance['height'];
-
                     }
                 }
                 $tmp_filehandler->__destruct();
@@ -373,7 +370,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
     private function createAttributeGroupArray($attribute_group)
     {
-        foreach ($attribute_group->attribute AS $attribute) {
+        foreach ($attribute_group->attribute as $attribute) {
             $attributes[] = array(
                 'id' => $attribute->getId(),
                 'name' => $attribute->getName());
@@ -396,8 +393,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
     private function cleanUpProductList($products)
     {
         $return = array();
-        foreach ($products AS $key => $p) {
-
+        foreach ($products as $key => $p) {
             $return[$key]['id'] = $p['id'];
             $return[$key]['number'] = $p['number'];
             $return[$key]['name'] = $p['name'];
@@ -412,7 +408,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             $return[$key]['has_variation'] = $p['has_variation'];
             $return[$key]['stock_status'] = $p['stock_status'];
 
-            foreach ($p['currency'] AS $k => $c) {
+            foreach ($p['currency'] as $k => $c) {
                 $return[$key]['currency'][$k]['price'] = $c['price']->getAsIso(2);
                 $return[$key]['currency'][$k]['price_incl_vat'] = $c['price_incl_vat']->getAsIso(2);
                 $return[$key]['currency'][$k]['before_price'] = $c['before_price']->getAsIso(2);
@@ -422,7 +418,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
             if (isset($p['pictures'])) {
                 $return[$key]['pictures'] = $p['pictures'];
             }
-
         }
 
         return $return;
@@ -465,7 +460,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $return['product']['currency']['DKK']['before_price_incl_vat'] = $product->getDetails()->getBeforePriceIncludingVat()->getAsIso(2);
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
-            foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
+            foreach ($currency_gateway->findAllWithExchangeRate() as $currency) {
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price'] = $product->getDetails()->getPriceInCurrency($currency)->getAsIso(2);
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['price_incl_vat'] = $product->getDetails()->getPriceIncludingVatInCurrency($currency)->getAsIso(2);
                 $return['product']['currency'][$currency->getType()->getIsoCode()]['before_price'] = $product->getDetails()->getBeforePriceInCurrency($currency)->getAsIso(2);
@@ -478,10 +473,8 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         if ($product->get('has_variation')) {
-
             $variations = $product->getVariations();
             foreach ($variations as $variation) {
-
                 if ($product->get('stock')) {
                     $stock = $variation->getStock($product)->get();
                 } else {
@@ -493,11 +486,15 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 $attributes_array = $variation->getAttributesAsArray();
 
                 foreach ($attributes_array as $attribute) {
-                    if ($attribute_string != '') $attribute_string .= '-';
+                    if ($attribute_string != '') {
+                        $attribute_string .= '-';
+                    }
                     $attribute_string .= $attribute['id'];
 
                     // We calculate all products which is on stock with this attribute to be able to mark unused attributes in list.
-                    if (!isset($attribute_for_sale[$attribute['id']])) $attribute_for_sale[$attribute['id']] = 0;
+                    if (!isset($attribute_for_sale[$attribute['id']])) {
+                        $attribute_for_sale[$attribute['id']] = 0;
+                    }
                     if ($stock !== false) {
                         // If for_sale is less than zero we add zero.
                         $attribute_for_sale[$attribute['id']] += (($stock['for_sale'] < 0) ? 0 : $stock['for_sale']);
@@ -511,7 +508,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 $variation_currency['DKK']['price_incl_vat'] = $detail->getPriceIncludingVat($product)->getAsIso(2);
 
                 if (isset($currency_gateway) && is_object($currency_gateway)) {
-                    foreach ($currency_gateway->findAllWithExchangeRate() AS $currency) {
+                    foreach ($currency_gateway->findAllWithExchangeRate() as $currency) {
                         $variation_currency[$currency->getType()->getIsoCode()]['price'] = $detail->getPriceInCurrency($currency, 0, $product)->getAsIso(2);
                         $variation_currency[$currency->getType()->getIsoCode()]['price_incl_vat'] = $detail->getPriceIncludingVatInCurrency($currency, 0, $product)->getAsIso(2);
                     }
@@ -541,8 +538,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                 $return['attribute_groups'][$key]['id'] = $group['id'];
                 $return['attribute_groups'][$key]['name'] = $group['name'];
                 $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
-                foreach ($attributes AS $attribute) {
-
+                foreach ($attributes as $attribute) {
                     // No products has attribute on stock we remove it from the list.
                     if (isset($attribute_for_sale[$attribute->getId()]) && $attribute_for_sale[$attribute->getId()] == 0) {
                         $is_used = 0;
@@ -556,7 +552,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
                         'is_used' => $is_used
                     );
                 }
-
             }
         }
 
@@ -682,8 +677,11 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         $this->_factoryWebshop($shop_id);
-        $category = new Intraface_Category($this->kernel, MDB2::singleton(DB_DSN),
-            new Intraface_Category_Type('shop', $shop_id));
+        $category = new Intraface_Category(
+            $this->kernel,
+            MDB2::singleton(DB_DSN),
+            new Intraface_Category_Type('shop', $shop_id)
+        );
 
         return $this->prepareResponseData($category->getAllCategories());
     }
@@ -711,29 +709,29 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
             $append_file = new AppendFile($this->kernel, 'category', $category_id);
             $appendix_list = $append_file->getList();
-            foreach ($appendix_list as $key => $appendix) {
-                $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
-                $pictures[$key]['id']                   = $appendix['file_handler_id'];
-                $pictures[$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
-                $pictures[$key]['original']['name']     = $tmp_filehandler->get('file_name');
-                $pictures[$key]['original']['width']    = $tmp_filehandler->get('width');
-                $pictures[$key]['original']['height']   = $tmp_filehandler->get('height');
-                $pictures[$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
-                $pictures[$key]['appended_file_id']     = $appendix['id'];
+        foreach ($appendix_list as $key => $appendix) {
+            $tmp_filehandler = new FileHandler($this->kernel, $appendix['file_handler_id']);
+            $pictures[$key]['id']                   = $appendix['file_handler_id'];
+            $pictures[$key]['original']['icon_uri'] = $tmp_filehandler->get('icon_uri');
+            $pictures[$key]['original']['name']     = $tmp_filehandler->get('file_name');
+            $pictures[$key]['original']['width']    = $tmp_filehandler->get('width');
+            $pictures[$key]['original']['height']   = $tmp_filehandler->get('height');
+            $pictures[$key]['original']['file_uri'] = $tmp_filehandler->get('file_uri');
+            $pictures[$key]['appended_file_id']     = $appendix['id'];
 
-                if ($tmp_filehandler->get('is_image')) {
-                    $tmp_filehandler->createInstance();
-                    $instances = $tmp_filehandler->instance->getList('include_hidden');
-                    foreach ($instances AS $instance) {
-                        $pictures[$key][$instance['name']]['file_uri'] = $instance['file_uri'];
-                        $pictures[$key][$instance['name']]['name']     = $instance['name'];
-                        $pictures[$key][$instance['name']]['width']    = $instance['width'];
-                        $pictures[$key][$instance['name']]['height']   = $instance['height'];
-                    }
+            if ($tmp_filehandler->get('is_image')) {
+                $tmp_filehandler->createInstance();
+                $instances = $tmp_filehandler->instance->getList('include_hidden');
+                foreach ($instances as $instance) {
+                    $pictures[$key][$instance['name']]['file_uri'] = $instance['file_uri'];
+                    $pictures[$key][$instance['name']]['name']     = $instance['name'];
+                    $pictures[$key][$instance['name']]['width']    = $instance['width'];
+                    $pictures[$key][$instance['name']]['height']   = $instance['height'];
                 }
-                //$tmp_filehandler->__destruct();
-                unset($tmp_filehandler);
-           }
+            }
+            //$tmp_filehandler->__destruct();
+            unset($tmp_filehandler);
+        }
 
         return $this->prepareResponseData($pictures);
     }
@@ -794,7 +792,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $this->_factoryWebshop($shop_id);
 
-        if (!is_numeric($product_id) AND !is_numeric($quantity)) {
+        if (!is_numeric($product_id) and !is_numeric($quantity)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
@@ -869,7 +867,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
 
         $values = $this->processRequestData($values);
 
-        if (!is_array($this->webshop->getBasket()->getItems()) OR count($this->webshop->getBasket()->getItems()) <= 0) {
+        if (!is_array($this->webshop->getBasket()->getItems()) or count($this->webshop->getBasket()->getItems()) <= 0) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
@@ -1189,7 +1187,7 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $currency['currencies']['DKK'] = 'Danish Krone';
 
         if (false !== ($currency_gateway = $this->getCurrencyGateway())) {
-            foreach ($currency_gateway->findAllWithExchangeRate() AS $c) {
+            foreach ($currency_gateway->findAllWithExchangeRate() as $c) {
                 $currency['currencies'][$c->getType()->getIsoCode()] = $c->getType()->getDescription();
             }
         }
@@ -1269,7 +1267,8 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
  * @author sune
  *
  */
-class Intraface_XMLRPC_Shop_Server0100_Product {
+class Intraface_XMLRPC_Shop_Server0100_Product
+{
 
     public $kernel;
     private $product;

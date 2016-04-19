@@ -62,44 +62,43 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (isset($mixed['offset']) AND array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
+        if (isset($mixed['offset']) and array_key_exists('offset', $mixed) and is_numeric($mixed['offset'])) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        } elseif (isset($mixed['use_stored']) AND array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (isset($mixed['use_stored']) and array_key_exists('use_stored', $mixed) and $mixed['use_stored'] == 'true') {
             $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
-            if (array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
+            if (array_key_exists('search', $mixed) and !empty($mixed['search'])) {
                 $product->getDBQuery()->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
             }
 
-            if (array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
+            if (array_key_exists('keywords', $mixed) and !empty($mixed['keywords'])) {
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
-            if (array_key_exists('category', $mixed) AND !empty($mixed['category'])) {
+            if (array_key_exists('category', $mixed) and !empty($mixed['category'])) {
                 $product->getDBQuery()->setFilter('shop_id', $shop_id);
                 $product->getDBQuery()->setFilter('category', $mixed['category']);
                 $debug2 .= 'category ' . $mixed['category'];
             }
 
-            if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+            if (isset($mixed['ids']) and array_key_exists('ids', $mixed) and is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }
 
-            if (array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
+            if (array_key_exists('sorting', $mixed) and !empty($mixed['sorting'])) {
                 $product->getDBQuery()->setFilter('sorting', $mixed['sorting']);
                 $debug2 .= 'sorting ' . $mixed['sorting'];
             }
-
         }
 
         $products = array();
-        foreach ($product->getList('webshop') AS $p) {
+        foreach ($product->getList('webshop') as $p) {
             // Make sure we only include necessary data. Several things more might be left out. Mostly we remove description.
             $products[] = array(
                 'id' => $p['id'],
@@ -161,22 +160,20 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
 
         if ($product->get('has_variation')) {
-
             // We should make a Doctrine Product_X_AttributeGroup class and get all the groups i one sql
             $groups = $product->getAttributeGroups();
             $group_gateway = new Intraface_modules_product_Attribute_Group_Gateway;
-            foreach ($groups AS $key => $group) {
+            foreach ($groups as $key => $group) {
                 // Make sure we only include necessary data
                 $return['attribute_groups'][$key]['id'] = $group['id'];
                 $return['attribute_groups'][$key]['name'] = $group['name'];
                 $attributes = $group_gateway->findById($group['id'])->getAttributesUsedByProduct($product);
-                foreach ($attributes AS $attribute) {
+                foreach ($attributes as $attribute) {
                     $return['attribute_groups'][$key]['attributes'][] = array(
                         'id' => $attribute->getId(),
                         'name' => $attribute->getName()
                     );
                 }
-
             }
 
             $variations = $product->getVariations();
@@ -185,7 +182,9 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
                 $attribute_string = '';
                 $attributes_array = $variation->getAttributesAsArray();
                 foreach ($attributes_array as $attribute) {
-                    if ($attribute_string != '') $attribute_string .= '-';
+                    if ($attribute_string != '') {
+                        $attribute_string .= '-';
+                    }
                     $attribute_string .= $attribute['id'];
                 }
 
@@ -315,8 +314,11 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
         }
 
         $this->_factoryWebshop($shop_id);
-        $category = new Intraface_Category($this->kernel, MDB2::singleton(DB_DSN),
-            new Intraface_Category_Type('shop', $shop_id));
+        $category = new Intraface_Category(
+            $this->kernel,
+            MDB2::singleton(DB_DSN),
+            new Intraface_Category_Type('shop', $shop_id)
+        );
 
         return $this->prepareResponseData($category->getAllCategories());
     }
@@ -377,7 +379,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         $this->_factoryWebshop($shop_id);
 
-        if (!is_numeric($product_id) AND !is_numeric($quantity)) {
+        if (!is_numeric($product_id) and !is_numeric($quantity)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
@@ -446,7 +448,7 @@ class Intraface_XMLRPC_Shop_Server2 extends Intraface_XMLRPC_Server
 
         $values = $this->processRequestData($values);
 
-        if (!is_array($this->webshop->getBasket()->getItems()) OR count($this->webshop->getBasket()->getItems()) <= 0) {
+        if (!is_array($this->webshop->getBasket()->getItems()) or count($this->webshop->getBasket()->getItems()) <= 0) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }

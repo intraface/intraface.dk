@@ -1,5 +1,6 @@
 <?php
-class DebtorAccount extends Intraface_Standard {
+class DebtorAccount extends Intraface_Standard
+{
     
     /**
      * @var object debtor or reminder
@@ -16,7 +17,7 @@ class DebtorAccount extends Intraface_Standard {
      */
     public $account_for;
 
-    function __construct($object) 
+    function __construct($object)
     {
 
         if (!is_object($object)) {
@@ -37,10 +38,10 @@ class DebtorAccount extends Intraface_Standard {
     
     /**
      * returns Payment object
-     * 
+     *
      * @return object Payment
      */
-    private function getPayment() 
+    private function getPayment()
     {
         require_once 'Intraface/modules/invoice/Payment.php';
         return new Payment($this->object);
@@ -48,10 +49,10 @@ class DebtorAccount extends Intraface_Standard {
     
     /**
      * returns depreciation object
-     * 
+     *
      * @return object Depreciation
      */
-    private function getDepreciation() 
+    private function getDepreciation()
     {
         require_once 'Intraface/modules/invoice/Depreciation.php';
         return new Depreciation($this->object);
@@ -59,10 +60,10 @@ class DebtorAccount extends Intraface_Standard {
     
     /**
      * Returns Credit note object
-     * 
+     *
      * @return object creditnote
      */
-    private function getCreditNote() 
+    private function getCreditNote()
     {
         require_once 'Intraface/modules/invoice/CreditNote.php';
         return new CreditNote($this->object->kernel);
@@ -71,10 +72,10 @@ class DebtorAccount extends Intraface_Standard {
     
     /**
      * returns payments, credit_notes and depreciations for an invoice or reminder
-     * 
+     *
      * @return array payments, credit_notes and depreciations
      */
-    function getList() 
+    function getList()
     {
     
         // payments
@@ -103,8 +104,7 @@ class DebtorAccount extends Intraface_Standard {
         $cre_max = count($credit_notes);
         
         $i = 0;
-        while($pay < $pay_max || $cre < $cre_max || $dep < $dep_max) {
-
+        while ($pay < $pay_max || $cre < $cre_max || $dep < $dep_max) {
             $date['payment'] = (!empty($payments[$pay]["payment_date"])) ? strtotime($payments[$pay]["payment_date"]) : 0;
             $date['depreciation'] = (!empty($depreciations[$dep]["payment_date"])) ? strtotime($depreciations[$dep]["payment_date"]) : 0;
             $date['credit_note'] = (!empty($credit_notes[$cre]["this_date"])) ? strtotime($credit_notes[$cre]["this_date"]) : 0;
@@ -117,7 +117,7 @@ class DebtorAccount extends Intraface_Standard {
             asort($date); // sorts the array with the smallest first
             $next = each($date); // takes the first entry and converts to array.
             
-            switch($next['key']) {
+            switch ($next['key']) {
                 case 'payment':
                     $value[$i] = $payments[$pay];
                     $value[$i]["date"] = $payments[$pay]["payment_date"];
@@ -137,8 +137,7 @@ class DebtorAccount extends Intraface_Standard {
                     $value[$i]["dk_date"] = $credit_notes[$cre]["dk_this_date"];
                     if ($credit_notes[$cre]["description"] != "") {
                         $value[$i]["description"] = $credit_notes[$cre]["description"];
-                    }
-                    else {
+                    } else {
                         $value[$i]["description"] = "[Ingen beskrivelse]";
                     }
                     $value[$i]["amount"] = $credit_notes[$cre]["total"];

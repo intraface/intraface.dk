@@ -20,14 +20,14 @@ class Intraface_Keyword_Controller_Connect extends k_Component
 
         // finds chosen keywords
         $checked = array();
-        foreach ($keyword->getConnectedKeywords() AS $key) {
+        foreach ($keyword->getConnectedKeywords() as $key) {
             $checked[] = $key['id'];
         }
         $data = array(
-        	'object' => $this->context->getModel(),
-        	'keyword' => $keyword,
-        	'keywords' => $keywords,
-        	'checked' => $checked);
+            'object' => $this->context->getModel(),
+            'keyword' => $keyword,
+            'keywords' => $keywords,
+            'checked' => $checked);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/connect');
         return $smarty->render($this, $data);
@@ -49,7 +49,7 @@ class Intraface_Keyword_Controller_Connect extends k_Component
         }
 
         // list with keywordsd
-        if ($this->body('keyword') AND is_array($this->body('keyword')) AND count($this->body('keyword')) > 0) {
+        if ($this->body('keyword') and is_array($this->body('keyword')) and count($this->body('keyword')) > 0) {
             foreach ($this->body('keyword') as $k) {
                 $keyword = new Keyword($this->context->getModel(), $k);
                 $appender->addKeyword($keyword);

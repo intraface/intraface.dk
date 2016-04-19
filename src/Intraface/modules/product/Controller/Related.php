@@ -18,9 +18,9 @@ class Intraface_modules_product_Controller_Related extends k_Component
 
     function postForm()
     {
-        foreach ($this->body('product') as $key=>$value) {
+        foreach ($this->body('product') as $key => $value) {
             $product = $this->getProduct();
-            if (!empty($_POST['relate'][$key]) AND $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
+            if (!empty($_POST['relate'][$key]) and $product->setRelatedProduct($_POST['product'][$key], $_POST['relate'][$key])) {
             }
         }
         if ($this->body('close')) {
@@ -39,14 +39,13 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product = $this->getProduct();
 
         $related_product_ids = array();
-        foreach ($product->getRelatedProducts() AS $related) {
+        foreach ($product->getRelatedProducts() as $related) {
             $related_product_ids[] = $related['id'];
         }
 
         $keywords = $product->getKeywordAppender();
 
         if ($this->query("search") || $this->query("keyword_id")) {
-
             if ($this->query("search")) {
                 $product->getDBQuery()->setFilter("search", $this->query("search"));
             }
@@ -75,7 +74,7 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product = $this->context->getProduct();
 
         $related_product_ids = array();
-        foreach ($product->getRelatedProducts() AS $related) {
+        foreach ($product->getRelatedProducts() as $related) {
             $related_product_ids[] = $related['id'];
         }
 
@@ -87,7 +86,7 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product = $this->context->getProduct();
 
         $related_product_ids = array();
-        foreach ($product->getRelatedProducts() AS $related) {
+        foreach ($product->getRelatedProducts() as $related) {
             $related_product_ids[] = $related['id'];
         }
         return $related_product_ids;
@@ -98,14 +97,13 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product = $this->context->getProduct();
 
         $related_product_ids = array();
-        foreach ($product->getRelatedProducts() AS $related) {
+        foreach ($product->getRelatedProducts() as $related) {
             $related_product_ids[] = $related['id'];
         }
 
         $keywords = $product->getKeywordAppender();
 
         if ($this->query("search") || $this->query("keyword_id")) {
-
             if ($this->query("search")) {
                 $product->getDBQuery()->setFilter("search", $this->query("search"));
             }
@@ -133,5 +131,4 @@ class Intraface_modules_product_Controller_Related extends k_Component
         $product->deleteRelatedProduct($this->query('del_related'));
         return new k_SeeOther($this->url('../'));
     }
-
 }

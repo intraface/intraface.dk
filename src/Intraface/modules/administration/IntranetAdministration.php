@@ -2,10 +2,10 @@
 /**
  *
  * @package Intraface_Administration
- * @author	Lars Olesen <lars@legestue.net>
- * @author	Sune Jensen <sj@sunet.dk>
+ * @author  Lars Olesen <lars@legestue.net>
+ * @author  Sune Jensen <sj@sunet.dk>
  *
- * @since	 1.0
+ * @since    1.0
  * @version 1.0
  *
  * @todo VIGTIGT: Tilpasse til Kernel. Lige nu er $kernel bare smidt ind, fordi
@@ -74,8 +74,9 @@ class IntranetAdministration extends Intraface_Intranet
 
     function isFilledIn()
     {
-        if (empty($this->value['name']) || !isset($this->address) || !$this->address->get('address') || !$this->address->get('email')) return 0;
+        if (empty($this->value['name']) || !isset($this->address) || !$this->address->get('address') || !$this->address->get('email')) {
+            return 0;
+        }
         return 1;
     }
-
 }

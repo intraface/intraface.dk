@@ -133,17 +133,18 @@ class Intraface_modules_product_Gateway
                 'INNER',
                 'ilib_category_append',
                 'ilib_category_append.object_id = product.id',
-                'ilib_category_append.intranet_id = '.$this->kernel->intranet->getId());
+                'ilib_category_append.intranet_id = '.$this->kernel->intranet->getId()
+            );
             $this->getDBQuery()->setJoin(
                 'INNER',
                 'ilib_category',
                 'ilib_category_append.category_id = ilib_category.id',
                 'ilib_category.intranet_id = '.$this->kernel->intranet->getId(). ' ' .
                     'AND ilib_category.belong_to = '.$category_type->getBelongTo().' ' .
-                    'AND ilib_category.belong_to_id = '.$category_type->getBelongToId());
+                'AND ilib_category.belong_to_id = '.$category_type->getBelongToId()
+            );
 
             $this->getDBQuery()->setCondition('ilib_category.id = '.$this->getDBQuery()->getFilter("category"));
-
         }
 
         if ($ids = $this->getDBQuery()->getFilter("ids")) {
@@ -168,7 +169,7 @@ class Intraface_modules_product_Gateway
             case 'all': // fall through
             default:
                 $sql = '';
-             break;
+                break;
         }
 
         $i        = 0; // til at give arrayet en key
@@ -193,22 +194,21 @@ class Intraface_modules_product_Gateway
                 }
             }
 
-            if (!$product->get('has_variation') AND is_object($product->getStock()) AND strtolower(get_class($product->getStock())) == "stock") {
+            if (!$product->get('has_variation') and is_object($product->getStock()) and strtolower(get_class($product->getStock())) == "stock") {
                 $products[$i]['stock_status'] = $product->getStock()->get();
             } else {
                 // alle ikke lagervarer der skal vises i webshop skal have en for_sale
-                if ($product->get('stock') == 0 AND $product->get('do_show') == 1) {
+                if ($product->get('stock') == 0 and $product->get('do_show') == 1) {
                     $products[$i]['stock_status'] = array('for_sale' => 100); // kun til at stock_status
                 } else {
                     $products[$i]['stock_status'] = array();
                 }
-
             }
 
             // den her skal vist lige kigges igennem, for den tager jo alt med p� nettet?
             // 0 = only stock
-            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 AND $which=='webshop') { // only stock
-                if (array_key_exists('for_sale', $products[$i]['stock_status']) AND $products[$i]['stock_status']['for_sale'] <= 0) {
+            if ($this->kernel->setting->get('intranet', 'webshop.show_online') == 0 and $which=='webshop') { // only stock
+                if (array_key_exists('for_sale', $products[$i]['stock_status']) and $products[$i]['stock_status']['for_sale'] <= 0) {
                     continue;
                 }
             }
@@ -224,7 +224,8 @@ class Intraface_modules_product_Gateway
      * @param mixed $keyword_id integer or array with keyword ids
      * @return array
      */
-    public function getProductIdsWithKeywordForShop($keyword_id) {
+    public function getProductIdsWithKeywordForShop($keyword_id)
+    {
 
         $this->getDBQuery()->setKeyword($keyword_id);
         $this->getDBQuery()->setCondition("product.do_show = 1");

@@ -26,8 +26,8 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
         $instances = $instance_manager->getList();
 
         $data = array(
-        	'instance_manager' => $instance_manager,
-        	'instances' => $instances);
+            'instance_manager' => $instance_manager,
+            'instances' => $instances);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/sizes');
         return $tpl->render($this, $data);
@@ -44,8 +44,8 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
         $this->document->setTitle('Add instance type');
 
         $data = array(
-        	'instance_manager' => $instance_manager,
-        	'value' => $value);
+            'instance_manager' => $instance_manager,
+            'value' => $value);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/sizes-edit');
         return $tpl->render($this, $data);
@@ -66,10 +66,10 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
     function DELETE()
     {
-    	if ($this->body('all_files')) {
+        if ($this->body('all_files')) {
             $manager = new Ilib_Filehandler_Manager($this->getKernel());
             $manager->deleteAllInstances();
-    	}
+        }
 
         return new k_SeeOther($this->url(null, array('flare' => 'Instances has been deleted')));
     }
@@ -81,6 +81,6 @@ class Intraface_Filehandler_Controller_Sizes extends k_Component
 
     function getFilehandler()
     {
-    	return new Ilib_Filehandler($this->getKernel());
+        return new Ilib_Filehandler($this->getKernel());
     }
 }

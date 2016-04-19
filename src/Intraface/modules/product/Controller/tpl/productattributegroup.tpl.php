@@ -5,11 +5,13 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if (isset($error)) echo $error->view('html'); ?>
+<?php if (isset($error)) {
+    echo $error->view('html');
+} ?>
 
-<?php if ($groups->count() == 0): ?>
+<?php if ($groups->count() == 0) : ?>
     <p><?php e(t('No attribute groups has been created.')); ?> <a href="attribute_group_edit.php"><?php e(t('Create attribute group')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
 
 <form action="<?php e(url()); ?>" method="post">
 <input type="hidden" name="id" value="<?php e($product->getId()); ?>" />
@@ -22,14 +24,19 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($groups AS $group): ?>
+            <?php foreach ($groups as $group) : ?>
                 <tr>
                     <td>
-                        <input type="checkbox" id="product-attribute-<?php e($group->getId()); ?>" value="<?php e($group->getId()); ?>" name="selected[]" <?php if (in_array($group->getId(), $existing_groups)) echo 'checked="checked"'; ?> />
+                        <input type="checkbox" id="product-attribute-<?php e($group->getId()); ?>" value="<?php e($group->getId()); ?>" name="selected[]" <?php if (in_array($group->getId(), $existing_groups)) {
+                            echo 'checked="checked"';
+} ?> />
                     </td>
-                    <td><?php e($group->getName()); if ($group->getDescription() != '') e(' ('.$group->getDescription().')'); ?></td>
+                    <td><?php e($group->getName());
+                    if ($group->getDescription() != '') {
+                        e(' ('.$group->getDescription().')');
+                    } ?></td>
                 </tr>
-             <?php endforeach; ?>
+                <?php endforeach; ?>
         </tbody>
     </table>
     <input type="submit" name="select" value="<?php e(t('Select')); ?>" />

@@ -34,7 +34,7 @@ class Intraface_Kernel implements Intraface_Identity
      */
     function __construct($session = null)
     {
-        if ($session == NULL) {
+        if ($session == null) {
             $this->_session = md5(uniqid(rand(), true));
         } else {
             $this->_session = $session;
@@ -58,9 +58,9 @@ class Intraface_Kernel implements Intraface_Identity
     function getModuleHandler()
     {
         if (!empty($this->modulehandler)) {
-        	return $this->modulehandler;
+            return $this->modulehandler;
         }
-    	return ($this->modulehandler = new Intraface_ModuleHandler($this->intranet, $this->user));
+        return ($this->modulehandler = new Intraface_ModuleHandler($this->intranet, $this->user));
     }
 
     /**
@@ -114,7 +114,7 @@ class Intraface_Kernel implements Intraface_Identity
     /**
      * Use another module besides the primary
      *
-     * @param string  $module_name	      Navn p� det modullet der skal loades
+     * @param string  $module_name        Navn p� det modullet der skal loades
      * @param boolean $ignore_user_access Ved true, tjekker den ikke om brugeren har adgang, men kun om intranettet har. Benyttes bla. til n�r der skal tr�kkes vare fra lageret fra gennem faktura.
      *
      * @return object or false Hvis man har adgang returnere den et object, ellers returnere den 0;
@@ -167,7 +167,7 @@ class Intraface_Kernel implements Intraface_Identity
      *
      * @param $count (integer) how many characters to return?
      *
-     * @return 	random key (string) only letters
+     * @return  random key (string) only letters
      */
     function randomKey($length = 1)
     {
@@ -177,7 +177,7 @@ class Intraface_Kernel implements Intraface_Identity
 
     function getIntranet()
     {
-    	return $this->intranet;
+        return $this->intranet;
     }
 
     function getSetting()

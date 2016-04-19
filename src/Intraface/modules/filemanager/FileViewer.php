@@ -14,7 +14,8 @@
  */
 
 
-class FileViewer {
+class FileViewer
+{
 
     /**
      * @var string file_name
@@ -37,7 +38,8 @@ class FileViewer {
     private $filehandler;
 
 
-    public function __construct($filehandler, $instance = '') {
+    public function __construct($filehandler, $instance = '')
+    {
 
         if (!is_object($filehandler)) {
             throw new Exception('the first parameter needs to be filehandler in FileViewet->__construct');
@@ -58,7 +60,8 @@ class FileViewer {
         }
     }
 
-    public function needLogin() {
+    public function needLogin()
+    {
         return $this->filehandler->get('accessibility') != 'public';
     }
 
@@ -82,7 +85,8 @@ class FileViewer {
         return file_get_contents($this->file_path);
     }
 
-    public function out() {
+    public function out()
+    {
 
         if (!file_exists($this->file_path)) {
             return 'invalid file';
@@ -97,5 +101,4 @@ class FileViewer {
         header('Pragma:');
         return readfile($this->file_path);
     }
-
 }

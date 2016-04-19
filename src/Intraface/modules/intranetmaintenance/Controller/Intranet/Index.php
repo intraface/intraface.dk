@@ -50,16 +50,16 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
         $intranet = new IntranetMaintenance();
 
-    	$value = $_POST;
-    	$address_value = $_POST;
-    	$address_value["name"] = $_POST["address_name"];
+        $value = $_POST;
+        $address_value = $_POST;
+        $address_value["name"] = $_POST["address_name"];
 
-    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
-    		if ($intranet->address->save($address_value)) {
-    			return new k_SeeOther($this->url($intranet->getId()));
-    		}
-    	}
-    	return $this->render();
+        if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
+            if ($intranet->address->save($address_value)) {
+                return new k_SeeOther($this->url($intranet->getId()));
+            }
+        }
+        return $this->render();
     }
 
     function getIntranets()
@@ -89,7 +89,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     function getIntranet()
@@ -99,9 +99,9 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Index extends k_
 
     function getValues()
     {
-   		$intranet = new IntranetMaintenance();
-   		$value = array();
-   		$address_value = array();
+        $intranet = new IntranetMaintenance();
+        $value = array();
+        $address_value = array();
 
         $array = array_merge($value, $address_value);
         return $array;

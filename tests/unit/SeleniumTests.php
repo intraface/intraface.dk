@@ -5,7 +5,7 @@ class SeleniumTests extends PHPUnit_Extensions_Selenium2TestCase
 {
     public static $seleneseDirectory = '../selenium/';
     //protected $coverageScriptUrl = 'http://workspace/phpunit_coverage.php';
-    protected $captureScreenshotOnFailure = TRUE;
+    protected $captureScreenshotOnFailure = true;
     protected $screenshotPath = '/home/lsolesen/workspace/screenshots';
     protected $screenshotUrl = 'http://localhost/screenshots';
     
@@ -18,17 +18,16 @@ class SeleniumTests extends PHPUnit_Extensions_Selenium2TestCase
 
     function assertConfirmation()
     {
-    	return $this->assertPromptPresent();
+        return $this->assertPromptPresent();
     }
 
     function assertSelectedValue($selectLocator, $option)
     {
-    	return $this->assertSelected($selectLocator, $option);
+        return $this->assertSelected($selectLocator, $option);
     }
 
     function verifyValue($pattern)
     {
-    	return $this->assertTextPresent($pattern);
+        return $this->assertTextPresent($pattern);
     }
-
 }

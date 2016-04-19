@@ -10,4 +10,3 @@ $_setting['product.ftp.hostname'] = '';
 $_setting['product.ftp.username'] = '';
 $_setting['product.ftp.password'] = '';
 $_setting['product.ftp.directory'] = '';
-?>

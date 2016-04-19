@@ -1,15 +1,15 @@
 <h1><?php e(t('Import contacts')); ?></h1>
 
-<?php if (!empty($context->errors)): ?>
-    <?php if (count($context->errors) > 0): ?>
+<?php if (!empty($context->errors)) : ?>
+    <?php if (count($context->errors) > 0) : ?>
     <h3><?php e(t('Errors')); ?></h3>
-        <?php foreach ($context->errors AS $error): ?>
+        <?php foreach ($context->errors as $error) : ?>
             <div><?php e(sprintf(t('error in line %d. unable to import %s <%s>'), $error['line'], $error['name'], $error['email'])); ?></div>
             <?php echo $error['error']->view($translation); ?>
         <?php endforeach; ?>
     <?php endif; ?>
 
-<?php else: ?>
+<?php else : ?>
 
     <form action="<?php e(url()); ?>" method="post">
 

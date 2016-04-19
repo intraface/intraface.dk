@@ -75,7 +75,8 @@ class Intraface_modules_accounting_Controller_Account_Show extends k_Component
 
     function getValues()
     {
-        return $this->getAccount()->get();;
+        return $this->getAccount()->get();
+        ;
     }
 
     function getAccount()

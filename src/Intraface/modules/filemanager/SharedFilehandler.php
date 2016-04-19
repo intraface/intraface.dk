@@ -2,14 +2,14 @@
 /**
  *
  * @package Intraface
- * @author	<Sune>
- * @since	1.0
- * @version	1.0
+ * @author  <Sune>
+ * @since   1.0
+ * @version     1.0
  *
  */
-class SharedFilehandler extends Intraface_Shared 
+class SharedFilehandler extends Intraface_Shared
 {
-    function __construct() 
+    function __construct()
     {
         $this->shared_name = 'filehandler'; // Navn på på mappen med modullet
         $this->active = 1; // Er shared aktivt
@@ -28,5 +28,3 @@ class SharedFilehandler extends Intraface_Shared
         $this->includeSettingFile('settings.php');
     }
 }
-
-?>

@@ -137,7 +137,6 @@ class NewsletterSubscriber extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("SELECT * FROM newsletter_subscriber WHERE id = " . $this->id." and active = 1");
         if (!$db->nextRecord()) {
-
             $this->id = 0;
             $this->value['id'] = 0;
             return false;
@@ -286,7 +285,6 @@ class NewsletterSubscriber extends Intraface_Standard
                     AND list_id = " . $this->list->get("id") . "
                     AND intranet_id = " . $this->list->kernel->intranet->get('id'));
             //code =  '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."'
-
         } else {
             $contact = Contact::factory($this->list->kernel, 'email', $input['email']);
 
@@ -312,7 +310,6 @@ class NewsletterSubscriber extends Intraface_Standard
                     date_submitted=NOW(),
                     code= '" . md5($input['email'] . date('Y-m-d H:i:s') . $input['ip'])."',
                     intranet_id = ".$this->list->kernel->intranet->get('id'));
-
         }
 
         if ($this->id == 0) {
@@ -321,7 +318,6 @@ class NewsletterSubscriber extends Intraface_Standard
 
         // sender kun optinbrev, hvis man ikke er opted in
         if (!$this->optedIn()) {
-
             // TODO replace by observer
             if (!$this->sendOptInEmail()) {
                 $this->error->set('could not send optin email');
@@ -572,7 +568,7 @@ class NewsletterSubscriber extends Intraface_Standard
      */
     public function notifyObservers($state)
     {
-        foreach ($this->getObservers() AS $observer) {
+        foreach ($this->getObservers() as $observer) {
             $observer->update($this, $state);
         }
     }

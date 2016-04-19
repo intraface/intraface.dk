@@ -7,9 +7,11 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($languages as $language): ?>
+    <?php foreach ($languages as $language) : ?>
     <tr>
-        <th><input type="checkbox" value="<?php e($language->getKey()); ?>" name="language[]" <?php if (isset($chosen[$language->getKey()]) AND $chosen[$language->getKey()]->getKey() == $language->getKey()) echo ' checked="checked"'; ?>/></th>
+        <th><input type="checkbox" value="<?php e($language->getKey()); ?>" name="language[]" <?php if (isset($chosen[$language->getKey()]) and $chosen[$language->getKey()]->getKey() == $language->getKey()) {
+            echo ' checked="checked"';
+} ?>/></th>
         <th><?php e($language->getDescription()); ?></th>
     </tr>
     <?php endforeach; ?>

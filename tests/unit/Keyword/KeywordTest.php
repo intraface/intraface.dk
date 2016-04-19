@@ -67,4 +67,3 @@ class KeywordTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('test', $keywords[0]['keyword']);
     }
 }
-

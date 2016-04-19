@@ -32,7 +32,7 @@ class Intraface_modules_accounting_PostGateway
 
     function findFromId($id)
     {
-    	return new Post($this->voucher, $id);
+        return new Post($this->voucher, $id);
     }
 
     public static function getFromYearAndPostId($year, $post_id)

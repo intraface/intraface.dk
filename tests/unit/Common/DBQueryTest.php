@@ -1,9 +1,4 @@
 <?php
-require_once 'Intraface/DBQuery.php';
-require_once 'Ilib/DBQuery.php';
-require_once 'Intraface/Error.php';
-require_once 'DB/Sql.php';
-
 /**
  * Notice this should only be tests to ensure that the extend from Ilib_DBQuery works
  * The actual tests of DBQuery should be in Intraface_3Party
@@ -34,8 +29,7 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         */
 
         $result = $this->db->exec('CREATE TABLE ' . $this->table . '(
-            id int(11) NOT NULL auto_increment, name varchar(255) NOT NULL, PRIMARY KEY  (id))'
-        );
+            id int(11) NOT NULL auto_increment, name varchar(255) NOT NULL, PRIMARY KEY  (id))');
 
         if (PEAR::isError($result)) {
             die($result->getUserInfo());
@@ -117,7 +111,8 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, $paging['next']);
     }
 
-    function testGetRecordset() {
+    function testGetRecordset()
+    {
         $dbquery = $this->createDBQuery();
 
         $dbquery->setCondition('id > 2');
@@ -133,7 +128,8 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(19, count($result));
     }
 
-    function testUseStoreOnTopLevel() {
+    function testUseStoreOnTopLevel()
+    {
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
         $dbquery->storeResult("use_stored", 'unittest', "toplevel");
@@ -153,7 +149,8 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(11, count($result));
     }
 
-    function testUseStoreOnTopLevelWithAnotherOneInBetween() {
+    function testUseStoreOnTopLevelWithAnotherOneInBetween()
+    {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');
@@ -179,7 +176,8 @@ class DBQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(21, count($result));
     }
 
-    function testUseStoreOnSublevelNotChangingToplevel() {
+    function testUseStoreOnSublevelNotChangingToplevel()
+    {
         // the first page
         $dbquery = $this->createDBQuery();
         $dbquery->setCondition('id > 10');

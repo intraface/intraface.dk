@@ -55,7 +55,7 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
     public static function convertArrayToTags($array)
     {
         $tags = '';
-        foreach ($array AS $tag) {
+        foreach ($array as $tag) {
             $tags .= '<'.$tag.'>';
         }
         return $tags;

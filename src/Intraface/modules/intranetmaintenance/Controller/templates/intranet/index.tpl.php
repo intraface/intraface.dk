@@ -26,7 +26,7 @@
     </tr>
 </thead>
 <tbody>
-    <?php foreach ($intranets as $intranet): ?>
+    <?php foreach ($intranets as $intranet) : ?>
         <tr>
             <td><a href="<?php e(url($intranet["id"])); ?>"><?php e($intranet["name"]); ?></a></td>
             <td class="buttons">

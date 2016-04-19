@@ -4,21 +4,21 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('shop');
-        $this->hasColumn('name',                         'string',  255);
-        $this->hasColumn('description',                  'string',  65555);
-        $this->hasColumn('identifier',                   'string',  255);
-        $this->hasColumn('show_online',                  'integer', 1);
-        $this->hasColumn('send_confirmation',            'integer', 1);
-        $this->hasColumn('confirmation_subject',         'string',  255);
-        $this->hasColumn('confirmation_greeting',        'string',  255);
-        $this->hasColumn('confirmation',                 'string',  65555);
+        $this->hasColumn('name', 'string', 255);
+        $this->hasColumn('description', 'string', 65555);
+        $this->hasColumn('identifier', 'string', 255);
+        $this->hasColumn('show_online', 'integer', 1);
+        $this->hasColumn('send_confirmation', 'integer', 1);
+        $this->hasColumn('confirmation_subject', 'string', 255);
+        $this->hasColumn('confirmation_greeting', 'string', 255);
+        $this->hasColumn('confirmation', 'string', 65555);
         $this->hasColumn('confirmation_add_contact_url', 'integer', 1);
-        $this->hasColumn('receipt',                      'string',  65555);
-        $this->hasColumn('payment_link',                 'string',  255);
-        $this->hasColumn('payment_link_add',             'integer', 1);
-        $this->hasColumn('terms_of_trade_url',           'string',  255);
-        $this->hasColumn('default_currency_id',          'integer');
-        $this->hasColumn('language_key',                 'integer');
+        $this->hasColumn('receipt', 'string', 65555);
+        $this->hasColumn('payment_link', 'string', 255);
+        $this->hasColumn('payment_link_add', 'integer', 1);
+        $this->hasColumn('terms_of_trade_url', 'string', 255);
+        $this->hasColumn('default_currency_id', 'integer');
+        $this->hasColumn('language_key', 'integer');
 
     }
 
@@ -93,6 +93,6 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
 
     function getLanguage()
     {
-    	return Intraface_modules_language_Gateway::getByKey($this->language_key);
+        return Intraface_modules_language_Gateway::getByKey($this->language_key);
     }
 }

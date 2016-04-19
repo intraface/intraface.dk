@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--suppress XmlUnboundNsPrefix -->
+<ruleset name="Intraface">
+  <description>Intraface coding standards is based on the PSR-2 coding standard.</description>
+  <rule ref="PSR2"/>
+  <rule ref="Generic.Files.LineLength.TooLong">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Scope.MethodScope.Missing">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR2.Classes.PropertyDeclaration.ScopeMissing">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR1.Files.SideEffects.FoundWithSymbols">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR1.Methods.CamelCapsMethodName.NotCamelCaps">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR2.Classes.PropertyDeclaration.VarUsed">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR2.Classes.PropertyDeclaration.Underscore">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+    <severity>0</severity>
+  </rule>
+  <rule ref="PEAR.Functions.ValidDefaultValue.NotAtEnd">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.WhiteSpace.ScopeClosingBrace.Indent">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Generic.NamingConventions.UpperCaseConstantName.ClassConstantNotUpperCase">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword">
+    <severity>0</severity>
+  </rule>
+</ruleset>

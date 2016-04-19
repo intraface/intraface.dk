@@ -15,7 +15,6 @@ class Intraface_Controller_Payment extends k_Component
             $text[1] = 'Du er nu ved at betale for ordre nummer';
             $text[2] = 'I alt hæves %s på fra dit kort';
             $text[3] = 'Betalingen foretages over Quickpay\'s sikker betalingsserver.';
-
         } else {
             $text[0] = 'Intraface Payment';
             $text[1] = 'You are now about to pay for order number';

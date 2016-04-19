@@ -16,13 +16,14 @@ class FakeShopEvaluationShop
     }
 }
 
-class FakeShopEvaluationWebshop {
+class FakeShopEvaluationWebshop
+{
     public $kernel;
 }
 
 class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function setUp()
     {
@@ -58,10 +59,13 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $webshop = new FakeShopEvaluationWebshop();
         $webshop->kernel = $kernel;
 
-        return new Intraface_modules_shop_Basket(MDB2::singleton(DB_DSN),
+        return new Intraface_modules_shop_Basket(
+            MDB2::singleton(DB_DSN),
             new Stub_Intranet,
             new FakeShopEvaluationCoordinator($this->createKernel()),
-            new FakeShopEvaluationShop, 'some session');
+            new FakeShopEvaluationShop,
+            'some session'
+        );
     }
 
     function saveEvaluation()
@@ -119,7 +123,8 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('at_least', $evaluation->get('evaluate_method'));
     }
 
-    function testDelete() {
+    function testDelete()
+    {
         $evaluation = $this->createBasketEvaluation();
 
         $valid_data = array(
@@ -176,4 +181,3 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     }
 }
-?>

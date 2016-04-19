@@ -118,137 +118,136 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
         $modul = $this->getKernel()->module("intranetmaintenance");
         $intranet = new IntranetMaintenance(intval($_POST["id"]));
 
-    	$value = $_POST;
-    	$address_value = $_POST;
-    	$address_value["name"] = $_POST["address_name"];
+        $value = $_POST;
+        $address_value = $_POST;
+        $address_value["name"] = $_POST["address_name"];
 
-    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
-    		if ($intranet->address->save($address_value)) {
-    			return new k_SeeOther($this->url(null));
-    		}
-    	}
-    	return $this->render();
+        if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
+            if ($intranet->address->save($address_value)) {
+                return new k_SeeOther($this->url(null));
+            }
+        }
+        return $this->render();
     }
 
     function DELETE()
     {
-    	$db = new DB_Sql;
-    	$db2 = new DB_Sql;
+        $db = new DB_Sql;
+        $db2 = new DB_Sql;
 
-    	$intranet_id = intval($_POST['intranet_id']);
+        $intranet_id = intval($_POST['intranet_id']);
 
-    	if (!array_key_exists($intranet_id, $allowed_delete)) {
-    		throw new Exception('Du kan kun slette bambus beta og bambus - sune og lars');
-    	}
+        if (!array_key_exists($intranet_id, $allowed_delete)) {
+            throw new Exception('Du kan kun slette bambus beta og bambus - sune og lars');
+        }
 
-    	$db->query("DELETE FROM accounting_account WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_post WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_vat_period WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_voucher WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_voucher_file WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_year WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_year_end WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM accounting_year_end_action WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_account WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_post WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_vat_period WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_voucher WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_voucher_file WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_year WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_year_end WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM accounting_year_end_action WHERE intranet_id = " . $intranet_id);
 
-    	// her skulle vi slette noget address
+        // her skulle vi slette noget address
 
-    	$db->query("DELETE FROM contact WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM contact_person WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM contact_message WHERE intranet_id  = " . $intranet_id);
+        $db->query("DELETE FROM contact WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM contact_person WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM contact_message WHERE intranet_id  = " . $intranet_id);
 
-    	$db->query("DELETE FROM cms_element WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_page WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_parameter WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_section WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_site WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_template WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM cms_template_section WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_element WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_page WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_parameter WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_section WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_site WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_template WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM cms_template_section WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM comment WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM comment WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM debtor WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM debtor_item WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM debtor WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM debtor_item WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM email WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM email_attachment WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM email WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM email_attachment WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM file_handler WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM file_handler_instance WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM filehandler_append_file WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM file_handler WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM file_handler_instance WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM filehandler_append_file WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM invoice_payment WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM invoice_reminder WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM invoice_reminder_item WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM invoice_reminder_unpaid_reminder WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM invoice_payment WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM invoice_reminder WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM invoice_reminder_item WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM invoice_reminder_unpaid_reminder WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM keyword WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM keyword_x_object WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM keyword WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM keyword_x_object WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM newsletter_archieve WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM newsletter_list WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM newsletter_subscriber WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM newsletter_archieve WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM newsletter_list WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM newsletter_subscriber WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM onlinepayment WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM onlinepayment WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM procurement WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM procurement_item WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM procurement WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM procurement_item WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM product WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM product_detail WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM product_related WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM product WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM product_detail WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM product_related WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM stock_adaptation WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM stock_regulation WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM stock_adaptation WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM stock_regulation WHERE intranet_id = " . $intranet_id);
 
-    	$db->query("DELETE FROM todo_list WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM todo_item WHERE intranet_id = " . $intranet_id);
-    	$db->query("DELETE FROM todo_contact WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM todo_list WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM todo_item WHERE intranet_id = " . $intranet_id);
+        $db->query("DELETE FROM todo_contact WHERE intranet_id = " . $intranet_id);
 
-    	$this->removeDir('/home/intraface/upload/' . $intranet_id . '/');
+        $this->removeDir('/home/intraface/upload/' . $intranet_id . '/');
     }
 
     protected function removeDir($path)
     {
-		// Add trailing slash to $path if one is not there
-		if (substr($path, -1, 1) != "/") {
-			$path .= "/";
-		}
+        // Add trailing slash to $path if one is not there
+        if (substr($path, -1, 1) != "/") {
+            $path .= "/";
+        }
 
-		$normal_files = glob($path . "*");
-		$hidden_files = glob($path . "\.?*");
-		$all_files = array_merge($normal_files, $hidden_files);
+        $normal_files = glob($path . "*");
+        $hidden_files = glob($path . "\.?*");
+        $all_files = array_merge($normal_files, $hidden_files);
 
-		foreach ($all_files as $file) {
-			# Skip pseudo links to current and parent dirs (./ and ../).
-			if (preg_match("/(\.|\.\.)$/", $file)) {
-               continue;
-			}
+        foreach ($all_files as $file) {
+            # Skip pseudo links to current and parent dirs (./ and ../).
+            if (preg_match("/(\.|\.\.)$/", $file)) {
+                continue;
+            }
 
-			if (is_file($file) === TRUE) {
-				// Remove each file in this Directory
-				unlink($file);
-				echo "Removed File: " . $file . "<br>";
-			}
-			else if (is_dir($file) === TRUE) {
-				// If this Directory contains a Subdirectory, run this Function on it
-				removeDir($file);
-			}
-		}
-		// Remove Directory once Files have been removed (If Exists)
-		if (is_dir($path) === TRUE) {
-			rmdir($path);
-			//echo "<br>Removed Directory: " . $path . "<br><br>";
-		}
-	}
+            if (is_file($file) === true) {
+                // Remove each file in this Directory
+                unlink($file);
+                echo "Removed File: " . $file . "<br>";
+            } elseif (is_dir($file) === true) {
+                // If this Directory contains a Subdirectory, run this Function on it
+                removeDir($file);
+            }
+        }
+        // Remove Directory once Files have been removed (If Exists)
+        if (is_dir($path) === true) {
+            rmdir($path);
+            //echo "<br>Removed Directory: " . $path . "<br><br>";
+        }
+    }
 
     function getValues()
     {
         $intranet = new IntranetMaintenance($this->name());
         $value = $intranet->get();
         if (isset($intranet->address)) {
-        	$address_value = $intranet->address->get();
+            $address_value = $intranet->address->get();
         } else {
-        	$address_value = array();
+            $address_value = array();
         }
 
         return array_merge($value, $address_value);
@@ -307,5 +306,3 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Show extends k_C
     }
     */
 }
-
-

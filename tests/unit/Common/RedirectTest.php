@@ -19,7 +19,6 @@ class FakeRedirectIntranet
     {
         return 1;
     }
-
 }
 
 class FakeRedirectKernel
@@ -32,7 +31,8 @@ class FakeRedirectKernel
         $this->intranet = new FakeRedirectIntranet();
     }
 
-    function getSessionId() {
+    function getSessionId()
+    {
         return 'dfp323ewrjif2309f32f30f23vcjtjkjw';
     }
 }
@@ -596,7 +596,8 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         return new Intraface_Redirect(new FakeRedirectKernel);
     }
 
-    function getVarsFromUrl($url) {
+    function getVarsFromUrl($url)
+    {
 
         $parts = explode('?');
         if (!isset($parts[1])) {
@@ -608,7 +609,7 @@ class RedirectTest extends PHPUnit_Framework_TestCase
         }
 
         $param = array();
-        foreach ($params AS $p) {
+        foreach ($params as $p) {
             $parts = explode('=', $p);
             if (is_array($parts) && count($parts) == 2) {
                 $param[$parts[0]] = $parts[1];

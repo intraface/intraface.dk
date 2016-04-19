@@ -2,9 +2,9 @@
 /**
  *
  * @package <SystemMessage>
- * @author	<Sune>
- * @since	1.0
- * @version	1.0
+ * @author  <Sune>
+ * @since   1.0
+ * @version     1.0
  *
  */
 class SharedEmail extends Intraface_Shared

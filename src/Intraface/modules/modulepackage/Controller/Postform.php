@@ -38,7 +38,7 @@ class Intraface_modules_modulepackage_Controller_PostForm extends k_Component
 
         if (substr($url, 0, 7) != 'http://' && substr($url, 0, 8) != 'https://') {
             $form_action = '';
-        }  else {
+        } else {
             $form_action = $url;
         }
 

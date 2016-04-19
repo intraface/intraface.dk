@@ -9,7 +9,7 @@ class CMS_Stylesheet extends Intraface_Standard
 
     function __construct($cmssite)
     {
-        if (!is_object($cmssite) OR strtolower(get_class($cmssite)) != 'cms_site') {
+        if (!is_object($cmssite) or strtolower(get_class($cmssite)) != 'cms_site') {
             throw new Exception('CMS_Stylesheet::__construct needs CMS_Site - got ' . get_class($cmssite));
         }
         $this->cmssite = $cmssite;
@@ -54,5 +54,4 @@ class CMS_Stylesheet extends Intraface_Standard
         $this->value['css'] .= $this->value['css_own'];
         $this->value['header'] = 'Content-type: text/css';
     }
-
 }

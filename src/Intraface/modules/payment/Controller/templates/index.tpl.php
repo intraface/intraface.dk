@@ -21,8 +21,10 @@
                 '3' => 'Canceled'
             );
             ?>
-            <?php foreach ($status_list as $status => $text): ?>
-                <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) echo ' selected="selected"';?>><?php e(t($text))?></option>
+            <?php foreach ($status_list as $status => $text) : ?>
+                <option value="<?php e($status); ?>" <?php if ($gateway->getDBQuery()->getFilter("status") == $status) {
+                    echo ' selected="selected"';
+}?>><?php e(t($text))?></option>
             <?php endforeach; ?>
          </select>
         </label>
@@ -33,7 +35,9 @@
             <input type="text" name="to_date" value="<?php e($gateway->getDBQuery()->getFilter("to_date")); ?>" />
         </label>
         <label><?php e(t('Not stated')); ?>
-            <input type="checkbox" name="not_stated" value="1" <?php if ($gateway->getDBQuery()->getFilter("not_stated") == 1) { echo ' checked="checked"'; } ?> />
+            <input type="checkbox" name="not_stated" value="1" <?php if ($gateway->getDBQuery()->getFilter("not_stated") == 1) {
+                echo ' checked="checked"';
+} ?> />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('Find')); ?>" />
@@ -51,7 +55,7 @@
         <th><?php e(t('Amount')); ?></th>
         <th><?php e(t('Is stated')); ?></th>
     </tr>
-<?php foreach ($payments as $payment): ?>
+<?php foreach ($payments as $payment) : ?>
     <tr>
 
         <td><?php e($payment['payment_for']); ?> #<?php e($payment['payment_for_id']); ?></td>
@@ -59,9 +63,9 @@
         <td><?php e($payment['description']); ?></td>
         <td><?php e($payment['dk_payment_date']); ?></td>
         <td><?php e($payment['amount']); ?></td>
-        <?php if ($payment['is_stated']): ?>
+        <?php if ($payment['is_stated']) : ?>
         <td><?php e(t('Yes')); ?></td>
-        <?php else: ?>
+        <?php else : ?>
         <td><a href="<?php e(url($payment['id'] . '/state')); ?>"><?php e(t('No')); ?></a></td>
         <?php endif; ?>
 

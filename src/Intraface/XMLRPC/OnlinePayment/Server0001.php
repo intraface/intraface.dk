@@ -40,7 +40,7 @@ class Intraface_XMLRPC_OnlinePayment_Server0001 extends Intraface_XMLRPC_Server
         $onlinepayment->getDBQuery()->setFilter('status', 2);
 
         $parameter['payment_online'] = 0;
-        foreach ($onlinepayment->getlist() AS $p) {
+        foreach ($onlinepayment->getlist() as $p) {
             $parameter['payment_online'] += $p["amount"];
         }
 
@@ -127,13 +127,15 @@ class Intraface_XMLRPC_OnlinePayment_Server0001 extends Intraface_XMLRPC_Server
                       'belong_to'  => $payment_id);
 
         if (!$email->save($data)) {
-            throw new Exception('Could not save email to onlinepayment');;
+            throw new Exception('Could not save email to onlinepayment');
+            ;
             return false;
         }
 
         if (!$email->queue()) {
             $this->error->merge($email->error->getMessage());
-            throw new Exception('Could not send email to ' . $debtor->getContact()->getId());;
+            throw new Exception('Could not send email to ' . $debtor->getContact()->getId());
+            ;
             return false;
         }
 

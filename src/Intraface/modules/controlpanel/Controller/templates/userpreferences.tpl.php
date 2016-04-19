@@ -42,8 +42,10 @@
         <div class="formrow">
         <label for="language"><?php e(t('language')); ?></label>
         <select name="language" id="language">
-            <?php foreach ($context->getKernel()->getTranslation()->getLangs() AS $key => $lang): ?>
-                <option value="<?php e($key); ?>"<?php if (!empty($value['language']) AND $value['language'] == $key) echo ' selected="selected"'; ?>><?php e($lang); ?></option>
+            <?php foreach ($context->getKernel()->getTranslation()->getLangs() as $key => $lang) : ?>
+                <option value="<?php e($key); ?>"<?php if (!empty($value['language']) and $value['language'] == $key) {
+                    echo ' selected="selected"';
+} ?>><?php e($lang); ?></option>
             <?php endforeach; ?>
         </select>
         </div>
@@ -71,9 +73,14 @@
     <fieldset id="labelsize" class="radiobuttons">
         <legend><?php e(t('labels')); ?></legend>
         <p><?php e(t('choose which labels you use - when printing from acrobat reader remember to set page scaling to none')); ?></p>
-            <?php foreach ($context->getLabelStandards() AS $key => $v): ?>
-                <label for="<?php e($key); ?>" class="<?php e($key); if ($value['label'] == $key) echo ' selected'; ?>">
-                    <input type="radio" name="label" id="<?php e($key); ?>" value="<?php e($key); ?>" <?php if ($value['label'] == $key) echo ' checked="checked"'; ?> /> <?php e($v); ?>
+            <?php foreach ($context->getLabelStandards() as $key => $v) : ?>
+                <label for="<?php e($key); ?>" class="<?php e($key);
+                if ($value['label'] == $key) {
+                    echo ' selected';
+                } ?>">
+                    <input type="radio" name="label" id="<?php e($key); ?>" value="<?php e($key); ?>" <?php if ($value['label'] == $key) {
+                        echo ' checked="checked"';
+} ?> /> <?php e($v); ?>
                 </label>
             <?php endforeach; ?>
     </fieldset>

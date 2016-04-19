@@ -2,27 +2,27 @@
 
 <ul class="options">
     <li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('edit site settings')); ?></a></li>
-    <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
+    <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')) : ?>
     <li><a class="template" href="<?php e(url('templates')); ?>"><?php e(t('templates')); ?></a></li>
     <?php endif; ?>
-    <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')): ?>
+    <?php if ($kernel->user->hasSubAccess('cms', 'edit_stylesheet')) : ?>
     <li><a class="stylesheet" href="<?php e(url('stylesheet')); ?>"><?php e(t('stylesheet')); ?></a></li>
     <?php endif; ?>
     <li><a class="close" href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if (count($cmspage->getTemplate()->getList()) == 0): ?>
+<?php if (count($cmspage->getTemplate()->getList()) == 0) : ?>
 
     <p class="message-dependent">
         <?php e(t('you have to create a template')); ?>
-        <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')): ?>
+        <?php if ($kernel->user->hasSubAccess('cms', 'edit_templates')) : ?>
             <a href="<?php e(url('templates', array('create'))); ?>"><?php e(t('create template')); ?></a>.
-        <?php else: ?>
+        <?php else : ?>
             <strong><?php e(t('please ask your administrator to do that')); ?></strong>
         <?php endif; ?>
     </p>
 
-<?php else: ?>
+<?php else : ?>
 
 <div class="message">
     <p><?php e(t('your website can consist of the following types of content:')); ?></p>

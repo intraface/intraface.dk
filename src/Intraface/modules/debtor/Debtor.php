@@ -307,7 +307,9 @@ class Debtor extends Intraface_Standard
 
         for ($i = 0, $max = count($item), $total = 0, $total_currency = 0; $i<$max; $i++) {
             $total += $item[$i]["amount"]->getAsIso();
-            if ($currency) $total_currency += $item[$i]['amount_currency']->getAsIso();
+            if ($currency) {
+                $total_currency += $item[$i]['amount_currency']->getAsIso();
+            }
         }
 
         // no round off of curreny yet!
@@ -325,7 +327,7 @@ class Debtor extends Intraface_Standard
         $this->value['payment_total'] = 0;
 
         if ($this->value["type"] == "invoice") {
-            foreach ($this->getDebtorAccount()->getList() AS $payment) {
+            foreach ($this->getDebtorAccount()->getList() as $payment) {
                 $this->value['payment_total'] += $payment["amount"];
             }
         }
@@ -448,7 +450,6 @@ class Debtor extends Intraface_Standard
       // user_id = ".$this->kernel->user->get('id').", // skal puttes p�, men kun hvis det ikke er fra webshop.
         $db = new DB_Sql;
         if ($this->id == 0) {
-
             $infinite_check = 0;
             $random = new Ilib_RandomKeyGenerator();
             do {
@@ -492,7 +493,7 @@ class Debtor extends Intraface_Standard
             $this->setFrom($from, $from_id);
         }
 
-        if (is_object($this->kernel->user) AND strtolower(get_class($this->kernel->user)) == 'user') {
+        if (is_object($this->kernel->user) and strtolower(get_class($this->kernel->user)) == 'user') {
             $db->query("UPDATE debtor SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
         }
 
@@ -508,7 +509,7 @@ class Debtor extends Intraface_Standard
      */
     public function delete()
     {
-        if ($this->id > 0 AND $this->get("locked") == true) {
+        if ($this->id > 0 and $this->get("locked") == true) {
             $this->error->set('Posten er l�st og kan ikke slettes');
             return false;
         }
@@ -566,7 +567,7 @@ class Debtor extends Intraface_Standard
         switch ($this->type) {
             case "invoice":
                 $values['due_date'] = date("d-m-Y", time() + 24 * 60 * 60 * $debtor_object->contact->get("paymentcondition"));
-                if (empty($values['payment_method']) AND $this->kernel->setting->get('intranet', 'bank_account_number')) {
+                if (empty($values['payment_method']) and $this->kernel->setting->get('intranet', 'bank_account_number')) {
                     $values['payment_method'] = 1;
                 }
                 break;
@@ -579,7 +580,7 @@ class Debtor extends Intraface_Standard
         if ($new_debtor_id = $this->update($values, $debtor_object->get("type"), $debtor_object->get('id'))) {
             $items = $debtor_object->getItems();
 
-            foreach ($items AS $item) {
+            foreach ($items as $item) {
                 $this->loadItem();
                 $debtor_object->loadItem($item['id']);
                 $item_values = $debtor_object->item->get();
@@ -601,7 +602,7 @@ class Debtor extends Intraface_Standard
                 $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor_object->get('id'));
                 $payment_list = $onlinepayment->getlist();
 
-                foreach ($payment_list AS $p) {
+                foreach ($payment_list as $p) {
                     $tmp_onlinepayment = OnlinePayment::factory($this->kernel, 'id', $p['id']);
                     $tmp_onlinepayment->changeBelongTo('invoice', $new_debtor_id);
                 }
@@ -626,7 +627,7 @@ class Debtor extends Intraface_Standard
             if ($status_id === false) {
                 throw new Exception("Debtor->setStatus(): Ugyldig status (streng)");
             }
-        } else{
+        } else {
             $status_id = intval($status);
             $status_types = $this->getStatusTypes();
             if (isset($status_types[$status_id])) {
@@ -717,9 +718,9 @@ class Debtor extends Intraface_Standard
 
     function getFromShopId()
     {
-    	if ($this->value['where_from'] == 'webshop') {
-    		return $this->value['where_from_id'];
-    	}
+        if ($this->value['where_from'] == 'webshop') {
+            return $this->value['where_from_id'];
+        }
         throw new Exception('Not from a shop');
     }
 
@@ -743,7 +744,7 @@ class Debtor extends Intraface_Standard
                         AND contact_id = ".(int)$type_id."
               AND type='".$this->type_key."'
               AND active = 1";
-            break;
+                break;
             case 'product':
                 $sql = "SELECT DISTINCT(debtor.id)
                     FROM debtor
@@ -755,7 +756,7 @@ class Debtor extends Intraface_Standard
                         AND debtor_item.active = 1
                         AND debtor_item.product_id = ".(int)$type_id."
                         AND debtor_item.product_variation_id = ".(int)$variation_id;
-            break;
+                break;
             default:
                 throw new Exception("Ugyldg type i Debtor->any");
         }
@@ -838,7 +839,6 @@ class Debtor extends Intraface_Standard
         // alle ikke bogf�rte skal findes
         if ($this->dbquery->checkFilter("not_stated")) {
             $this->dbquery->setCondition("voucher_id = 0");
-
         }
 
 
@@ -846,7 +846,6 @@ class Debtor extends Intraface_Standard
             if ($this->dbquery->getFilter("status") == "-1") {
                 // Beh�ves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
-
             } elseif ($this->dbquery->getFilter("status") == "-2") {
                 // Not executed = �bne
                 if ($this->dbquery->checkFilter("to_date")) {
@@ -859,7 +858,6 @@ class Debtor extends Intraface_Standard
                     // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $this->dbquery->setCondition("debtor.status < 2");
                 }
-
             } elseif ($this->dbquery->getFilter("status") == "-3") {
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
@@ -882,7 +880,6 @@ class Debtor extends Intraface_Standard
                     $this->dbquery->setCondition("status = 1 OR status = 2");
                 }
             } else {
-
                 $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
 
                 /*
@@ -943,7 +940,6 @@ class Debtor extends Intraface_Standard
         $list = array();
 
         while ($db->nextRecord()) {
-
             $debtor = self::factory($this->kernel, (int)$db->f("id"));
             $list[$i] = $debtor->get();
 
@@ -958,12 +954,10 @@ class Debtor extends Intraface_Standard
                 $list[$i]['address'] = $debtor->contact->address->get('address');
                 $list[$i]['postalcode'] = $debtor->contact->address->get('postcode');
                 $list[$i]['city'] = $debtor->contact->address->get('city');
-
             }
             $debtor->destruct();
             unset($debtor);
             $i++;
-
         }
         unset($db);
         return $list;

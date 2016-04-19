@@ -31,7 +31,7 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
 
     function renderHtmlCreate()
     {
-    	$reminder = new ContactReminder($this->context->getKernel());
+        $reminder = new ContactReminder($this->context->getKernel());
         $contact = $reminder->contact;
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/memo-edit');
@@ -41,11 +41,11 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
     function postForm()
     {
         $contact = $this->context->getContact();
-   		$reminder = new ContactReminder($contact);
+        $reminder = new ContactReminder($contact);
 
-    	if ($id = $reminder->update($_POST)) {
-    		return new k_SeeOther($this->url('../'));
-    	}
+        if ($id = $reminder->update($_POST)) {
+            return new k_SeeOther($this->url('../'));
+        }
         return $this->render();
     }
 

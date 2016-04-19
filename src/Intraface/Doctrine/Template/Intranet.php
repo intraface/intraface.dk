@@ -20,7 +20,7 @@ class Intraface_Doctrine_Template_Intranet extends Doctrine_Template
      */
     public function setTableDefinition()
     {
-        $this->hasColumn('intranet_id',  'integer',  11);
+        $this->hasColumn('intranet_id', 'integer', 11);
         require_once 'Intraface/Doctrine/Template/Listener/Intranet.php';
         $this->addListener(new Intraface_Doctrine_Template_Listener_Intranet());
     }

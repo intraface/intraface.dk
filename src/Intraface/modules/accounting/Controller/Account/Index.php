@@ -11,9 +11,9 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
     protected function map($name)
     {
         if (is_numeric($name)) {
-        	return 'Intraface_modules_accounting_Controller_Account_Show';
+            return 'Intraface_modules_accounting_Controller_Account_Show';
         } elseif ($name == 'popup') {
-        	return 'Intraface_modules_accounting_Controller_Account_Popup';
+            return 'Intraface_modules_accounting_Controller_Account_Popup';
         }
     }
 
@@ -66,24 +66,24 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
         $worksheet->write($i, 0, $kernel->intranet->get('name'), $format_bold);
 
         $i = 2;
-        	foreach ($accounts AS $account) {
-        		$style = '';
-        		if ($account['type'] == 'headline') {
-        			$style = $format_bold;
-        		} elseif ($account['type'] == 'sum') {
-        			$style = $format_italic;
-        		} else {
-        			$style = $format;
-        		}
+        foreach ($accounts as $account) {
+            $style = '';
+            if ($account['type'] == 'headline') {
+                $style = $format_bold;
+            } elseif ($account['type'] == 'sum') {
+                $style = $format_italic;
+            } else {
+                $style = $format;
+            }
 
-        		$worksheet->write($i, 0, $account['number'], $style);
-        		$worksheet->write($i, 1, $account['name'], $style);
-        		$worksheet->write($i, 2, $account['type'], $style);
-        		if ($account['type'] != 'Headline') {
-        			$worksheet->write($i, 3, abs(round($account['saldo'])), $style);
-        		}
-        		$i++;
-        	}
+            $worksheet->write($i, 0, $account['number'], $style);
+            $worksheet->write($i, 1, $account['name'], $style);
+            $worksheet->write($i, 2, $account['type'], $style);
+            if ($account['type'] != 'Headline') {
+                $worksheet->write($i, 3, abs(round($account['saldo'])), $style);
+            }
+            $i++;
+        }
 
         $worksheet->hideGridLines();
 
@@ -126,12 +126,12 @@ class Intraface_modules_accounting_Controller_Account_Index extends k_Component
 
     function getAccount()
     {
-    	return new Account($this->getYear());
+        return new Account($this->getYear());
     }
 
     function getAccounts()
     {
-    	return $this->getAccountGateway()->findByType('stated', true);
+        return $this->getAccountGateway()->findByType('stated', true);
     }
 
     function getKernel()

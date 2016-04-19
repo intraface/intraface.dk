@@ -3,9 +3,9 @@
  * Backup
  *
  * @package Intraface_Backup
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 class MainBackup extends Intraface_Main
 {

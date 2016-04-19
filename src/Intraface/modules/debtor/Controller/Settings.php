@@ -8,8 +8,8 @@
  * Der skal laves noget lidt smartere med l�s-ind-bureau og elektronisk faktura
  * Tekst p� rykkere skal m�ske differentieres, s� der er standardtekster til forskellige rykkere
  *
- * @author		Lars Olesen <lars@legestue.net>
- * @version	1.0
+ * @author      Lars Olesen <lars@legestue.net>
+ * @version     1.0
  *
  */
 class Intraface_modules_debtor_Controller_Settings extends k_Component
@@ -78,19 +78,19 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
             $error = $this->getError();
             $validator = new Intraface_Validator($error);
 
-            if ($this->body('debtor_sender') == 'defined') {
-                $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
-                $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');
-            } else {
-                $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail', 'allow_empty');
-                $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name', '', 'allow_empty');
-            }
+        if ($this->body('debtor_sender') == 'defined') {
+            $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail');
+            $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name');
+        } else {
+            $validator->isEmail($_POST['debtor_sender_email'], 'Invalid e-mail in Sender e-mail', 'allow_empty');
+            $validator->isString($_POST['debtor_sender_name'], 'Error in Sender name', '', 'allow_empty');
+        }
 
-            if (!$error->isError()) {
-                $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender', $_POST['debtor_sender']);
-                $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender.email', $_POST['debtor_sender_email']);
-                $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender.name', $_POST['debtor_sender_name']);
-            }
+        if (!$error->isError()) {
+            $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender', $_POST['debtor_sender']);
+            $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender.email', $_POST['debtor_sender_email']);
+            $this->context->getKernel()->getSetting()->set('intranet', 'debtor.sender.name', $_POST['debtor_sender_name']);
+        }
 
             // reminder
             $this->context->getKernel()->getSetting()->set('intranet', 'reminder.first.text', $_POST['reminder_text']);
@@ -135,7 +135,6 @@ class Intraface_modules_debtor_Controller_Settings extends k_Component
                 $url = $redirect->setDestination($contact_module->getPath()."/".intval($_POST['scan_in_contact']), $debtor_module->getPath()."settings");
 
                 return new k_SeeOther($url);
-
             } else {
                 throw new Exception("Du har ikke adgang til modulet contact");
             }

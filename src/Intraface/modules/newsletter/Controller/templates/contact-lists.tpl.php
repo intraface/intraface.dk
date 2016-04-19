@@ -9,7 +9,7 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($lists as $list): ?>
+    <?php foreach ($lists as $list) : ?>
     <tr>
         <td><a href="<?php e(url('lists/' . $list['list']->get('id'))); ?>"><?php e($list['list']->get('title')); ?></a></td>
         <td class="options">

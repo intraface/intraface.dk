@@ -64,7 +64,7 @@ class Intraface_modules_cms_element_Flickr extends CMS_Element
         }
         */
 
-        $f = new phpFlickr($this->kernel->setting->get('system', 'flickr.api_key'), NULL, false);
+        $f = new phpFlickr($this->kernel->setting->get('system', 'flickr.api_key'), null, false);
         $f->setService($this->value['service']);
         $f->enableCache('db', DB_DSN);
 

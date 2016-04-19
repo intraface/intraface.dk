@@ -25,7 +25,7 @@ class Intraface_modules_currency_Controller_ExchangeRate_Index extends k_Compone
     {
         if ($name == 'productprice') {
             return 'Intraface_modules_currency_Controller_ExchangeRate_ProductPrice';
-        } else if ($name == 'payment') {
+        } elseif ($name == 'payment') {
             return 'Intraface_modules_currency_Controller_ExchangeRate_Payment';
         }
     }

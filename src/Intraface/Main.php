@@ -43,7 +43,7 @@ abstract class Intraface_Main
         $this->kernel = $kernel;
 
         if (is_array($this->required_shared) && count($this->required_shared) > 0) {
-            foreach ($this->required_shared AS $shared_name) {
+            foreach ($this->required_shared as $shared_name) {
                 $this->kernel->useShared($shared_name);
             }
         }

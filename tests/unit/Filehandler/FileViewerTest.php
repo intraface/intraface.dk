@@ -2,24 +2,30 @@
 require_once 'Intraface/modules/filemanager/FileViewer.php';
 require_once 'file_functions.php';
 
-class FakeFileViewerHandler{
-    function get($key) {
+class FakeFileViewerHandler
+{
+    function get($key)
+    {
         return 1;
     }
 
-    function createInstance() {
+    function createInstance()
+    {
         return new FakeInstanceHandler();
     }
 }
 
-class FakeInstanceHandler {
+class FakeInstanceHandler
+{
 
 
-    function checkType($type) {
+    function checkType($type)
+    {
         return $type == 'small';
     }
 
-    function get() {
+    function get()
+    {
         return '/path/to/file';
     }
 }

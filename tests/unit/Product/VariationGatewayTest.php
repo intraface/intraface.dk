@@ -1,11 +1,13 @@
 <?php
 Intraface_Doctrine_Intranet::singleton(1);
 
-class FakeVariationGatewayProduct {
+class FakeVariationGatewayProduct
+{
     
     private $groups;
     
-    public function __construct($groups) {
+    public function __construct($groups)
+    {
         $this->groups = $groups;
     }
     
@@ -69,8 +71,4 @@ class VariationGatewayTest extends PHPUnit_Framework_TestCase
         $object = new Intraface_modules_product_Variation_Gateway(new FakeVariationGatewayProduct(1));
         $this->assertTrue(is_object($object));
     }
-    
-    
-    
-    
 }

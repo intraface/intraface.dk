@@ -13,8 +13,8 @@ class Intraface_modules_todo_Controller_Setting extends k_Component
         $module = $this->getKernel()->module('todo');
         $translation = $this->getKernel()->getTranslation('todo');
 
-    	$value['publiclist'] = 	$kernel->setting->get('intranet','todo.publiclist');
-    	$value['emailstandardtext'] = 	$kernel->setting->get('user','todo.email.standardtext');
+        $value['publiclist'] =  $kernel->setting->get('intranet', 'todo.publiclist');
+        $value['emailstandardtext'] =   $kernel->setting->get('user', 'todo.email.standardtext');
 
         $data = array(
             'value' => $value
@@ -26,8 +26,8 @@ class Intraface_modules_todo_Controller_Setting extends k_Component
 
     function postForm()
     {
-    	$kernel->setting->set('intranet','todo.publiclist', $_POST['publiclist']);
-    	$kernel->setting->set('user','todo.email.standardtext', $_POST['emailstandardtext']);
-    	return new k_SeeOther($this->url('../'));
+        $kernel->setting->set('intranet', 'todo.publiclist', $_POST['publiclist']);
+        $kernel->setting->set('user', 'todo.email.standardtext', $_POST['emailstandardtext']);
+        return new k_SeeOther($this->url('../'));
     }
 }

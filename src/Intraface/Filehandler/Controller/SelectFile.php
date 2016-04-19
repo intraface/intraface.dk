@@ -95,7 +95,7 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
         if (intval($this->query("filtration")) != 0) {
             // Kun for at filtration igen vises i s�geboksen
             $filemanager->getDBQuery()->setFilter("filtration", $this->query("filtration"));
-            switch($this->query("filtration")) {
+            switch ($this->query("filtration")) {
                 case 1:
                     $filemanager->getDBQuery()->setFilter("uploaded_from_date", date("d-m-Y")." 00:00");
                     break;
@@ -213,11 +213,11 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
                     $file = $this->context->context->appendFile($file_id);
                 }
             }
-        } else if (method_exists($this->context->context, 'getFileAppender')) {
+        } elseif (method_exists($this->context->context, 'getFileAppender')) {
             $appender = $this->getFileAppender();
             foreach ($this->body('selected') as $file_id) {
                 $file = $gateway->getFromId($file_id);
-            	$appender->addFile($file);
+                $appender->addFile($file);
             }
         } else {
             throw new Exception('No valid fileappender found');
@@ -269,6 +269,6 @@ class Intraface_Filehandler_Controller_SelectFile extends Intraface_Filehandler_
 
     function getFileAppender()
     {
-    	return $this->context->context->getFileAppender();
+        return $this->context->context->getFileAppender();
     }
 }

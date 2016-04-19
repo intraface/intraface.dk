@@ -45,5 +45,3 @@ $_setting['cms.stylesheet.default'] = '
     padding: 1em;
 }
 ';
-
-?>

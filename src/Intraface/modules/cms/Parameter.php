@@ -49,13 +49,13 @@ class CMS_Parameter
         switch (strtolower($object->get('identify_as'))) {
             case 'cms_element':
                 $this->type_key = array_search('cms_element', $this->types);
-            break;
+                break;
             case 'cms_section':
                 $this->type_key = array_search('cms_section', $this->types);
-            break;
+                break;
             case 'cms_template_section':
                 $this->type_key = array_search('cms_element', $this->types);
-            break;
+                break;
 
             default:
                 throw new Exception('CMS_Parameter::__construct unknown type');
@@ -92,10 +92,10 @@ class CMS_Parameter
         // hvis parameteren tidligere er oprettet opdateres den!
         if (!empty($old_parameter)) {
             $db->query("UPDATE cms_parameter SET value='".$value."' WHERE type_key = ".$this->type_key." AND intranet_id = ".$this->object->kernel->intranet->get('id')." AND belong_to_id=". $this->object->get('id') . " AND parameter='".$parameter."'");
-        } elseif (!empty($value) AND empty($old_parameter)) {
+        } elseif (!empty($value) and empty($old_parameter)) {
             // hvis parameteren ikke findes oprettes den
             $db->query("INSERT INTO cms_parameter SET type_key=".$this->type_key.", belong_to_id = '".$this->object->get('id')."', parameter='".$parameter."', value='".$value."', intranet_id = ".$this->object->kernel->intranet->get('id'));
-        } elseif (empty($value) AND !empty($old_parameter)) {
+        } elseif (empty($value) and !empty($old_parameter)) {
             // hvis parametervvalue er tom skal den gamle parameter slettes
             $db->query("DELETE FROM cms_parameter WHERE belong_to_id = '".$this->object->get('id')."' AND parameter='".$parameter."' AND intranet_id = ".$this->object->kernel->intranet->get('id') . " AND type_key =" .$this->type_key);
         }
@@ -121,7 +121,7 @@ class CMS_Parameter
         $sql = "SELECT parameter, value FROM cms_parameter WHERE intranet_id = ".$this->object->kernel->intranet->get('id')." AND belong_to_id = " . $this->object->get('id') . " AND type_key = " . $this->type_key; //  . " AND parameter = '"  .$parameter . "'"
         $db->query($sql);
 
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $this->value[$db->f('parameter')] = $db->f('value');
         }
         $this->loaded = true;
@@ -137,7 +137,7 @@ class CMS_Parameter
      */
     public function get($parameter)
     {
-        if (!$this->loaded AND $this->object->getId() > 0) {
+        if (!$this->loaded and $this->object->getId() > 0) {
             $this->load();
         }
         if (array_key_exists($parameter, $this->value)) {

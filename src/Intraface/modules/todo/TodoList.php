@@ -251,7 +251,7 @@ class TodoList extends Intraface_Standard
             $todo = new TodoList($this->kernel, $db->f('id'));
             if ($type == 'done' and $todo->howManyLeft() > 0) {
                 continue;
-            } elseif ($type != 'done'  AND $todo->howManyLeft() == 0) {
+            } elseif ($type != 'done'  and $todo->howManyLeft() == 0) {
                 continue;
             }
             $ids[$i]['id'] = $db->f('id');

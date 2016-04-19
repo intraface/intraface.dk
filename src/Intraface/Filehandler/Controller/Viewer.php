@@ -81,5 +81,5 @@ class Intraface_Filehandler_Controller_Viewer extends k_Component
         $response->setHeader('Content-Disposition', 'inline;filename='.$this->fileviewer->getFileName());
         $response->setHeader('Pragma', 'cache');
         return $response;
-      }
+    }
 }

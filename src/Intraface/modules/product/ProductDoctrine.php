@@ -50,7 +50,6 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
         $this->changed_date = new Doctrine_Expression('NOW()');
         # If details are not valid, we do not want to save the product.
         if (is_object($this->active_details)) {
-
             /*
             # We make sure translation is added before insert as name is required
             if ($this->active_details->Translation->count() == 0) {
@@ -86,14 +85,14 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     {
         $stack =& $this->getErrorStack();
         if (is_object($this->active_details)) {
-            foreach ($this->active_details->getErrorStack() AS $field => $errors) {
-                foreach ($errors AS $error) {
+            foreach ($this->active_details->getErrorStack() as $field => $errors) {
+                foreach ($errors as $error) {
                     $stack->add($field, $error);
                 }
             }
-            foreach ($this->active_details->Translation AS $language => $translation) {
-                foreach ($translation->getErrorStack() AS $field => $errors) {
-                    foreach ($errors AS $error) {
+            foreach ($this->active_details->Translation as $language => $translation) {
+                foreach ($translation->getErrorStack() as $field => $errors) {
+                    foreach ($errors as $error) {
                         $stack->add($field.'_'.$language, $error);
                     }
                 }
@@ -111,14 +110,20 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
 
-        $this->hasMany('Intraface_modules_product_Product_Details as details',
-            array('local' => 'id', 'foreign' => 'product_id'));
+        $this->hasMany(
+            'Intraface_modules_product_Product_Details as details',
+            array('local' => 'id', 'foreign' => 'product_id')
+        );
 
-        $this->hasMany('Intraface_modules_product_Variation_UniversalAttributeGroups as variation',
-            array('local' => 'id', 'foreign' => 'product_id'));
+        $this->hasMany(
+            'Intraface_modules_product_Variation_UniversalAttributeGroups as variation',
+            array('local' => 'id', 'foreign' => 'product_id')
+        );
             
-        $this->hasMany('Intraface_modules_product_Product_X_Attribute_Group as x_attribute_group',
-            array('local' => 'id', 'foreign' => 'product_id'));
+        $this->hasMany(
+            'Intraface_modules_product_Product_X_Attribute_Group as x_attribute_group',
+            array('local' => 'id', 'foreign' => 'product_id')
+        );
     }
 
     /**
@@ -158,7 +163,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
 
     /**
      * returns variation
-     * 
+     *
      * @todo The variations should be loaded in the ProductGateway instead of here.
      */
     public function getVariation($id = 0)
@@ -204,16 +209,16 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
      *
      * @return object
      */
-    function getDetails($id = NULL)
+    function getDetails($id = null)
     {
-        if ($id == NULL) {
+        if ($id == null) {
             if (empty($this->active_details)) {
                 if ($this->details->count() == 0) {
                     // Add an empty details entry.
-                    $this->active_details = $this->details->get(NULL);
+                    $this->active_details = $this->details->get(null);
                 } else {
                     // Find the active details
-                    foreach ($this->details AS $details) {
+                    foreach ($this->details as $details) {
                         if ($details->active == 1) {
                             $this->active_details = $details;
                         }
@@ -226,7 +231,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
 
             return $this->active_details;
         } else {
-            foreach ($this->details AS $detail) {
+            foreach ($this->details as $detail) {
                 if ($detail->getId() == $id) {
                     return $this->active_details = $detail;
                 }
@@ -252,7 +257,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
      */
     public function refresh($depth = false)
     {
-        $this->active_details = NULL;
+        $this->active_details = null;
         parent::refresh($depth);
     }
     
@@ -279,7 +284,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
             return true;
         }
         
-        $cross = $this->x_attribute_group->get(NULL); // returns empty object
+        $cross = $this->x_attribute_group->get(null); // returns empty object
         $cross->product_attribute_group_id = $attribute_group->getId();
         $cross->save();
         
@@ -301,7 +306,7 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
             throw new Exception('You can not get attribute groups for a product without variations!');
         }
         
-        $cross = $this->x_attribute_group->get(NULL);
+        $cross = $this->x_attribute_group->get(null);
         $attribute_groups = $cross->attribute_group->getTable()
             ->createQuery()
             ->select('Intraface_modules_product_Attribute_Group.*')

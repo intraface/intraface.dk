@@ -22,7 +22,7 @@ class FakeVariationDetailTestProduct
 class VariationDetailTest extends PHPUnit_Framework_TestCase
 {
 
-    private $object = NULL;
+    private $object = null;
     protected $db;
 
     function setUp()
@@ -40,7 +40,7 @@ class VariationDetailTest extends PHPUnit_Framework_TestCase
 
     function createVariation()
     {
-        if ($this->object === NULL) {
+        if ($this->object === null) {
             $group = new Intraface_modules_product_Attribute_Group;
             $group->name = 'color';
             $group->attribute[0]->name = 'red';

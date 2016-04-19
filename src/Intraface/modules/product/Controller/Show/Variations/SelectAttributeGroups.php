@@ -20,7 +20,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
         $product = $this->context->context->getProduct();
         $this->error = new Intraface_Error;
         $this->existing_groups = array();
-        foreach ($product->getAttributeGroups() AS $group) {
+        foreach ($product->getAttributeGroups() as $group) {
             $this->existing_groups[] = $group['id'];
         }
         if (count($this->existing_groups) > 0) {
@@ -31,7 +31,6 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
                     return true;
                 }
             } catch (Intraface_Gateway_Exception $e) {
-
             }
         }
 
@@ -63,7 +62,7 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
         $content = $tpl->render($this, $data);
 
         $data = array(
-        	'groups' => $groups,
+            'groups' => $groups,
             'error' => $this->error,
             'content' => $content
         );
@@ -84,18 +83,18 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
 
             $product = $this->context->context->getProduct();
             $existing_groups = array();
-            foreach ($product->getAttributeGroups() AS $group) {
+            foreach ($product->getAttributeGroups() as $group) {
                 $existing_groups[] = $group['id'];
             }
 
             if (is_array($existing_groups) and is_array($new_groups)) {
-                foreach (array_diff($existing_groups, $new_groups) AS $id) {
+                foreach (array_diff($existing_groups, $new_groups) as $id) {
                     $product->removeAttributeGroup($id);
                 }
             }
 
             if (is_array($new_groups)) {
-                foreach ($new_groups AS $id) {
+                foreach ($new_groups as $id) {
                     $product->setAttributeGroup($id);
                 }
             }

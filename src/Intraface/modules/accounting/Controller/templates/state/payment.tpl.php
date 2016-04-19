@@ -5,12 +5,12 @@
     <li><a href="<?php e(url('../../../')); ?>">Luk</a></li>
 </ul>
 
-<?php if (!$year->readyForState($payment->get('payment_date'))): ?>
+<?php if (!$year->readyForState($payment->get('payment_date'))) : ?>
     <?php echo $year->error->view(); ?>
     <p>Gå til <a href="<?php e($accounting_module->getPath().'years'); ?>">regnskabet</a></p>
-<?php elseif ($payment->isStated()): ?>
+<?php elseif ($payment->isStated()) : ?>
     <p><?php e(t('the payment is alredy stated')); ?>. <a href="<?php e($context->getKernel()->useModule('accounting')->getPath()).'voucher/'.$payment->get('voucher_id'); ?>"><?php e(t('see the voucher')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
     <?php
     // need to be executed to generate errors!
     $payment->readyForState();
@@ -66,20 +66,26 @@
                 $x = 0;
                 $default_account_id = $kernel->setting->get('intranet', 'payment.state.'.$payment->get('type').'.account');
 
-                foreach ($accounts AS $a):
-                    if (strtolower($a['type']) == 'sum') continue;
-                    if (strtolower($a['type']) == 'headline') continue;
+                foreach ($accounts as $a) :
+                    if (strtolower($a['type']) == 'sum') {
+                        continue;
+                    }
+                    if (strtolower($a['type']) == 'headline') {
+                        continue;
+                    }
                     ?>
                     <option value="<?php e($a['number']); ?>"
-                    <?php if ($default_account_id == $a['number']) echo ' selected="selected"'; ?>
+                    <?php if ($default_account_id == $a['number']) {
+                        echo ' selected="selected"';
+} ?>
                     ><?php e($a['name']); ?></option>
-                <?php endforeach;
+                <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                 endforeach;
                 ?>
             </select>
         </div>
     </fieldset>
 
-    <?php  if ($payment->readyForState()): ?>
+    <?php  if ($payment->readyForState()) : ?>
         <div>
             <input type="submit" value="<?php e(t('State')); ?>" />
             <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>

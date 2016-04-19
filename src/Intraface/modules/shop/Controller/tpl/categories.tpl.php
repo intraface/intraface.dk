@@ -20,8 +20,8 @@ $level = 0;
         <th></th>
     </tr>
     </thead>
-    <?php while ($level >= 0): ?>
-        <?php foreach ($level_categories[$level] AS $category): ?>
+    <?php while ($level >= 0) : ?>
+        <?php foreach ($level_categories[$level] as $category) : ?>
             <?php array_shift($level_categories[$level]); ?>
             <tr>
                 <td><input id="category_<?php e($category['id']); ?>" type="checkbox" name="category[]" value="<?php e($category['id']); ?>" /></td>
@@ -31,7 +31,6 @@ $level = 0;
             <?php
             # If there is subcategories to the category
             if (is_array($category['categories']) && count($category['categories']) > 0) {
-
                 # We make the items for the next level the sub categories of this category
                 $level_categories[$level+1] = $category['categories'];
 
@@ -53,10 +52,10 @@ $level = 0;
         ?>
     <?php endwhile; ?>
 </table>
-<?php if (isset($product_id)): ?>
+<?php if (isset($product_id)) : ?>
     <input type="hidden" name="product_id" value="<?php e($product_id); ?>" />
     <input type="submit" name="append_product" value="<?php e(t('Select')); ?>" />
-<?php else: ?>
+<?php else : ?>
     <select name="action">
         <option value=""><?php e(t('Choose...')); ?></option>
         <option value="delete"><?php e(t('Delete selected')); ?></option>

@@ -8,11 +8,15 @@ class Intraface_modules_product_Variation_TwoAttributeGroups extends Intraface_m
     {
         parent::setUp();
         
-        $this->hasOne('Intraface_modules_product_Variation_X_Attribute as attribute1', 
-            array('local' => 'id', 'foreign' => 'product_variation_id'));
+        $this->hasOne(
+            'Intraface_modules_product_Variation_X_Attribute as attribute1',
+            array('local' => 'id', 'foreign' => 'product_variation_id')
+        );
         
-        $this->hasOne('Intraface_modules_product_Variation_X_Attribute as attribute2', 
-            array('local' => 'id', 'foreign' => 'product_variation_id'));
+        $this->hasOne(
+            'Intraface_modules_product_Variation_X_Attribute as attribute2',
+            array('local' => 'id', 'foreign' => 'product_variation_id')
+        );
                                             
         
         
@@ -50,7 +54,4 @@ class Intraface_modules_product_Variation_TwoAttributeGroups extends Intraface_m
             $this->attribute2->attribute->group->getName().': '.
             $this->attribute2->attribute->getName();
     }
-    
 }
-
-?>

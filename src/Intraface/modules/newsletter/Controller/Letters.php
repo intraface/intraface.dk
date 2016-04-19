@@ -38,15 +38,15 @@ class Intraface_modules_newsletter_Controller_Letters extends k_Component
 
     function postForm()
     {
-    	$module = $this->getKernel()->module("newsletter");
+        $module = $this->getKernel()->module("newsletter");
         $letter = new Newsletter($this->getList());
 
-    	if ($id = $letter->save($_POST)) {
-    		return new k_SeeOther($this->url($id));
-    	} else {
-    		$value = $_POST;
-    	}
-    	return $this->render();
+        if ($id = $letter->save($_POST)) {
+            return new k_SeeOther($this->url($id));
+        } else {
+            $value = $_POST;
+        }
+        return $this->render();
     }
 
     function getKernel()

@@ -197,8 +197,7 @@ class Invoice extends Debtor
 
 
         $total_with_vat = 0;
-        foreach ($items AS $item) {
-
+        foreach ($items as $item) {
             // produkterne
             // bem�rk at denne g�r ud fra at alt skal overf�res til debtorkontoen som standard
             $product = new Product($this->kernel, $item['product_id']);
@@ -242,7 +241,7 @@ class Invoice extends Debtor
         if ($total_with_vat > 0) {
             $voucher = Voucher::factory($year, $voucher_number);
             $credit_account = new Account($year, $year->getSetting('vat_out_account_id'));
-            $debet_account = 	new Account($year, $year->getSetting('debtor_account_id'));
+            $debet_account =    new Account($year, $year->getSetting('debtor_account_id'));
             $input_values = array(
                     'voucher_number' => $voucher_number,
                     'reference' => $this->get('number'),
@@ -287,5 +286,4 @@ class Invoice extends Debtor
     {
         $visitor->visit($this);
     }
-
 }

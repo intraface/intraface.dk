@@ -31,17 +31,17 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
 
     function postForm()
     {
-    	$debtor = $this->getDebtor();
-    	$contact = new Contact($this->getKernel(), $this->body("contact_id"));
+        $debtor = $this->getDebtor();
+        $contact = new Contact($this->getKernel(), $this->body("contact_id"));
 
-    	if ($this->body("contact_person_id") == "-1") {
-    		$contact_person = new ContactPerson($contact);
-    		$person["name"] = $_POST['contact_person_name'];
-    		$person["email"] = $_POST['contact_person_email'];
-    		$contact_person->save($person);
-    		$contact_person->load();
-    		$_POST["contact_person_id"] = $contact_person->get("id");
-    	}
+        if ($this->body("contact_person_id") == "-1") {
+            $contact_person = new ContactPerson($contact);
+            $person["name"] = $_POST['contact_person_name'];
+            $person["email"] = $_POST['contact_person_email'];
+            $contact_person->save($person);
+            $contact_person->load();
+            $_POST["contact_person_id"] = $contact_person->get("id");
+        }
 
         if ($this->getKernel()->intranet->hasModuleAccess('currency') && $this->body('currency_id')) {
             $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
@@ -54,11 +54,11 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
             $_POST['currency'] = $currency;
         }
 
-    	if ($debtor->update($_POST)) {
-    	    return new k_SeeOther($this->url('../' . $debtor->get('id')));
-    	}
+        if ($debtor->update($_POST)) {
+            return new k_SeeOther($this->url('../' . $debtor->get('id')));
+        }
 
-    	return $this->render();
+        return $this->render();
     }
 
     function getValues()
@@ -117,5 +117,4 @@ class Intraface_modules_debtor_Controller_Create extends k_Component
     {
         return $this->context->getKernel();
     }
-
 }

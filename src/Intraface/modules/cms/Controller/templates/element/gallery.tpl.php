@@ -41,8 +41,10 @@
                 $instances = $filehandler->instance->getList();
                 ?>
                 <select name="thumbnail_size">
-                    <?php foreach ($instances AS $key => $instance): ?>
-                    <option value="<?php e($key); ?>"<?php if (!empty($value['thumbnail_size']) AND $value['thumbnail_size'] == $key) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
+                    <?php foreach ($instances as $key => $instance) : ?>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['thumbnail_size']) and $value['thumbnail_size'] == $key) {
+                        echo ' selected="selected"';
+} ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -58,8 +60,10 @@
                 ?>
 
                 <select name="popup_size">
-                    <?php foreach ($instances AS $key => $instance): ?>
-                    <option value="<?php e($key); ?>"<?php if (!empty($value['popup_size']) AND $value['popup_size'] == $key) echo ' selected="selected"'; ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
+                    <?php foreach ($instances as $key => $instance) : ?>
+                    <option value="<?php e($key); ?>"<?php if (!empty($value['popup_size']) and $value['popup_size'] == $key) {
+                        echo ' selected="selected"';
+} ?>><?php e(t($instance['name'], 'filehandler')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -72,8 +76,10 @@
                 ?>
 
                 <select name="show_description">
-                    <?php foreach ($instances AS $instance): ?>
-                    <option value="<?php e($instance); ?>"<?php if (!empty($value['show_description']) AND $value['show_description'] == $instance) echo ' selected="selected"'; ?>><?php e(t($instance, 'cms')); ?></option>
+                    <?php foreach ($instances as $instance) : ?>
+                    <option value="<?php e($instance); ?>"<?php if (!empty($value['show_description']) and $value['show_description'] == $instance) {
+                        echo ' selected="selected"';
+} ?>><?php e(t($instance, 'cms')); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -86,10 +92,8 @@
                 <strong><?php e(t('single images')); ?></strong>
 
                 <?php
-                if (!empty($value['pictures']) AND is_array($value['pictures'])) {
-
-                    foreach ($value['pictures'] AS $key => $file) {
-
+                if (!empty($value['pictures']) and is_array($value['pictures'])) {
+                    foreach ($value['pictures'] as $key => $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
                         $filehandlerHTML->showFile(url(null, array('remove_gallery_append_file_id'=>$file['append_file_id'])), array('image_size' => 'small'));

@@ -3,7 +3,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class CurrencyTest extends PHPUnit_Framework_TestCase
 {
-    private $object = NULL;
+    private $object = null;
 
     function setUp()
     {
@@ -125,7 +125,7 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
 
         $currencies = $gateway->findAllWithExchangeRate();
 
-        foreach ($currencies AS $currency) {
+        foreach ($currencies as $currency) {
             if ($currency->getType()->getIsoCode() == 'EUR') {
                 $rate = $currency->getProductPriceExchangeRate(0);
                 $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
@@ -165,8 +165,7 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
         try {
             $currency->getProductPriceExchangeRate(2);
             $this->assertTrue(false);
-        }
-        catch (Intraface_Gateway_Exception $e) {
+        } catch (Intraface_Gateway_Exception $e) {
             $this->assertTrue(true);
         }
     }

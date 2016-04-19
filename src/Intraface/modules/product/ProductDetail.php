@@ -137,8 +137,12 @@ class ProductDetail extends Intraface_Standard
         $validator->isNumeric($array_var['pic_id'], 'Fejl i billedid', 'allow_empty');
         $validator->isNumeric($array_var['weight'], 'Fejl i vægt - skal være et helt tal', 'allow_empty');
 
-        if (isset($array_var['price'])) $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
-        if (isset($array_var['before_price'])) $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
+        if (isset($array_var['price'])) {
+            $validator->isNumeric($array_var['price'], 'Fejl i pris', 'allow_empty');
+        }
+        if (isset($array_var['before_price'])) {
+            $validator->isNumeric($array_var['before_price'], 'Fejl i førpris', 'allow_empty');
+        }
 
         if ($this->product->error->isError()) {
             return false;
@@ -229,18 +233,22 @@ class ProductDetail extends Intraface_Standard
             } else {
                 $array_var['description'] = $this->get('description');
             }
-
-
         } else {
             // der er ikke nogen tidligere poster, s� vi opdatere selvf�lgelig
             $do_update = 1;
             $sql       = '';
             // we make sure that unit is set to a valid unit.
-            if (empty($array_var['unit'])) $array_var['unit'] = 1;
+            if (empty($array_var['unit'])) {
+                $array_var['unit'] = 1;
+            }
             $sql .= "unit = ".intval($array_var['unit']).", ";
 
-            if (!isset($array_var['name'])) $array_var['name'] = '';
-            if (!isset($array_var['description'])) $array_var['description'] = '';
+            if (!isset($array_var['name'])) {
+                $array_var['name'] = '';
+            }
+            if (!isset($array_var['description'])) {
+                $array_var['description'] = '';
+            }
 
             foreach ($this->fields as $field) {
                 if (!array_key_exists($field, $array_var)) {
@@ -260,7 +268,6 @@ class ProductDetail extends Intraface_Standard
             // Hmmmmm, der er slet ikke nogen felter der er �ndret! S� gemmer vi ikke, men siger at det gik godt :-)
             return true;
         } else {
-
             // vi opdaterer produktet
             $this->db->query("UPDATE product_detail SET active = 0 WHERE product_id = " . $this->product->get('id'));
             $this->db->query("INSERT INTO product_detail SET ".$sql." active = 1, changed_date = NOW(), product_id = " . $this->product->get('id') . ", intranet_id = " . $this->product->intranet->getId());

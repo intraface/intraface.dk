@@ -5,7 +5,7 @@ class Intraface_Doctrine_ErrorRender
     private $errorstack = array();
     private $translation;
 
-    public function __construct($translation = NULL)
+    public function __construct($translation = null)
     {
         $this->translation = $translation;
     }
@@ -21,17 +21,17 @@ class Intraface_Doctrine_ErrorRender
     {
         // only html is implemented
         $display = '';
-        foreach ($this->errorstack AS $errorstack) {
-            foreach ($errorstack['errorstack'] AS $field_name => $error_codes) {
+        foreach ($this->errorstack as $errorstack) {
+            foreach ($errorstack['errorstack'] as $field_name => $error_codes) {
                 $display .= '<li>';
                 $display .= $this->translate('There was an error in', 'common').' ';
                 $display .= ( isset($errorstack['field_alias'][$field_name]) ?
                             $errorstack['field_alias'][$field_name] :
                             $field_name);
 
-                foreach ($error_codes AS $error_code) {
+                foreach ($error_codes as $error_code) {
                     $description = $this->getErrorDescription($error_code);
-                    $display .= ', '.$this->translate( $description !== NULL ? $description : $error_code, 'common');
+                    $display .= ', '.$this->translate($description !== null ? $description : $error_code, 'common');
                 }
                 $display .= '.</li>';
             }

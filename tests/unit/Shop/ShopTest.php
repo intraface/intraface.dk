@@ -8,11 +8,13 @@ class FakeShopShop
         return 1;
     }
 
-    function getConfirmationSubject() {
+    function getConfirmationSubject()
+    {
         return 'confirmation subject';
     }
 
-    function getConfirmationText() {
+    function getConfirmationText()
+    {
         return 'confirmation text';
     }
 
@@ -21,11 +23,13 @@ class FakeShopShop
         return 'confirmation greeting';
     }
 
-    function showPaymentUrl() {
+    function showPaymentUrl()
+    {
         return 1;
     }
 
-    function getPaymentUrl() {
+    function getPaymentUrl()
+    {
         return 'payment_url';
     }
     function sendConfirmation()
@@ -37,18 +41,21 @@ class FakeShopShop
     {
         return true;
     }
-
 }
 
-class FakeShopWeblogin {
-    function get() { return 1; }
+class FakeShopWeblogin
+{
+    function get()
+    {
+        return 1;
+    }
 }
 
 class ShopTest extends PHPUnit_Framework_TestCase
 {
     private $webshop;
     private $kernel;
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function setUp()
     {

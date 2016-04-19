@@ -6,12 +6,12 @@
 </ul>
 
     <?php
-        if (!empty($_GET['just_deleted']) AND is_numeric($_GET['just_deleted'])) {
-            echo '<p class="message">Elementet er blevet slettet. <a href="'.$_SERVER['PHP_SELF'].'?undelete='.$_GET['just_deleted'].'&amp;id='.$cmspage->get('id').'">Fortryd</a>.</p>';
-        }
+    if (!empty($_GET['just_deleted']) and is_numeric($_GET['just_deleted'])) {
+        echo '<p class="message">Elementet er blevet slettet. <a href="'.$_SERVER['PHP_SELF'].'?undelete='.$_GET['just_deleted'].'&amp;id='.$cmspage->get('id').'">Fortryd</a>.</p>';
+    }
     ?>
 
-<?php if (is_array($sections) AND count($sections) > 0): ?>
+<?php if (is_array($sections) and count($sections) > 0) : ?>
     <table>
         <caption><?php e(t('Sections')); ?></caption>
         <thead>
@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody>
-    <?php foreach ($sections as $s): ?>
+    <?php foreach ($sections as $s) : ?>
         <tr>
             <td><?php e($s['name']); ?></td>
             <td><?php e($s['identifier']); ?></td>

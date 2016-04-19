@@ -227,8 +227,6 @@ class UploadHandler extends Intraface_Standard
                 'image' => $mime_type['image'],
                 'icon' => $mime_type['icon']
                 );
-
-
         } elseif ($upload_type == 'temporary') {
             $id = $this->file_handler->save($prop['tmp_name'], $prop['real'], 'temporary', $mime_type['mime_type']);
             return $id;
@@ -287,7 +285,7 @@ class UploadHandler extends Intraface_Standard
             while (false !== ($file = readdir($handle))) {
                 print($file);
                 if ($file == ".." || $file == "." || is_dir($file)) {
-                    CONTINUE;
+                    continue;
                 }
 
                 $ext = substr($file, strrpos($file, ".")+1);
@@ -295,39 +293,39 @@ class UploadHandler extends Intraface_Standard
                 if (strlen($ext) < 3 || strlen($ext) > 4) {
                     $this->file_handler->error->set("Filen \"".$file."\" har ikke en gyldig endelse, f.eks. .pdf");
                     print("Filen \"".$file."\" har ikke en gyldig endelse, f.eks. .pdf<br />");
-                    CONTINUE;
+                    continue;
                 }
 
                 $file_size = filesize($dir.$file);
                 if ($file_size > $this->upload_setting['max_file_size']) {
                     $this->file_handler->error->set("Filen \"".$file."\" er st�rre end de tilladte ".$this->upload_setting['max_file_size']." Byte");
                     print("Filen \"".$file."\" er st�rre end de tilladte ".$this->upload_setting['max_file_size']." Byte<br/>");
-                    CONTINUE;
+                    continue;
                 }
 
                 $mime_type = $this->file_handler->_getMimeType(mime_content_type($dir.$file), 'mime_type');
                 if ($mime_type === false) {
                     $this->file_handler->error->set("Filen \"".$file."\" er ikke en gyldig filtype (Det er typen: ".mime_content_type($dir.'/'.$file).")");
                     print("Filen \"".$file."\" er ikke en gyldig filtype (Det er typen: ".mime_content_type($dir.'/'.$file).")<br />");
-                    CONTINUE;
+                    continue;
                 }
 
                 if ($mime_type['allow_user_upload'] == 0) {
                     $this->file_handler->error->set("Filen \"".$file."\" af typen \"".$mime_type['description']."\" kan ikke uploades");
                     print("Filen \"".$file."\" af typen \"".$mime_type['description']."\" kan ikke uploades<br />");
-                    CONTINUE;
+                    continue;
                 }
 
                 if ($this->upload_setting['allow_only_images'] == 1 && $mime_type['image'] == 0) {
                     $this->file_handler->error->set("Filen \"".$file."\" er ikke et billede. Du kan kun uploade billeder!");
                     print("Filen \"".$file."\" er ikke et billede. Du kan kun uploade billeder!<br />");
-                    CONTINUE;
+                    continue;
                 }
 
                 if ($this->upload_setting['allow_only_documents'] == 1 && $mime_type['image'] == 1) {
                     $this->file_handler->error->set("Filen \"".$file."\" er ikke et dokument. Du kan kun uploade dokumenter!");
                     print("Filen \"".$file."\" er ikke et dokument. Du kan kun uploade dokumenter!");
-                    CONTINUE;
+                    continue;
                 }
 
                 $file_handler = new FileHandler($this->file_handler->kernel);
@@ -358,7 +356,7 @@ class UploadHandler extends Intraface_Standard
                     $this->file_handler->error->set('Der opstod en fejl under flytningen af filen '.$file);
                     print('Der opstod en fejl under flytningen af filen '.$file.'<br />');
                     $file_handler->delete();
-                    CONTINUE;
+                    continue;
                 }
 
                 if (!chmod($this->upload_path.$server_file_name, 0644)) {

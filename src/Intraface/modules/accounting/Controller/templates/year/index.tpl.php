@@ -8,9 +8,9 @@
     <li><a class="new" href="<?php e(url('create')); ?>">Opret regnskabsår</a></li>
 </ul>
 
-<?php if (!$context->getYearGateway()->getList()): ?>
+<?php if (!$context->getYearGateway()->getList()) : ?>
     <p>Der er ikke oprettet nogen regnskabsår. Du kan oprette et ved at klikke på knappen ovenover.</p>
-<?php else: ?>
+<?php else : ?>
     <form action="<?php e(url('./')); ?>" method="post">
     <input type="hidden" name="_method" value="put" />
     <table>
@@ -25,9 +25,11 @@
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($context->getYearGateway()->getList() as $y): ?>
+        <?php foreach ($context->getYearGateway()->getList() as $y) : ?>
         <tr>
-            <td><input type="radio" name="id" value="<?php e($y['id']); ?>" <?php if ($context->getYear()->loadActiveYear() == $y['id']) { echo ' checked="checked"'; } ?>/></td>
+            <td><input type="radio" name="id" value="<?php e($y['id']); ?>" <?php if ($context->getYear()->loadActiveYear() == $y['id']) {
+                echo ' checked="checked"';
+} ?>/></td>
             <td><a href="<?php e(url($y['id'])); ?>"><?php e($y['label']); ?></a></td>
             <td><a href="<?php e(url($y['id'] . '/vat')); ?>"><?php e(t('Vat')); ?></a></td>
             <td><a href="<?php e(url($y['id'] . '/end')); ?>"><?php e(t('End year')); ?></a></td>            

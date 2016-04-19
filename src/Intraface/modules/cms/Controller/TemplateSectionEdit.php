@@ -16,7 +16,6 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
         if (is_numeric($this->name())) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $this->name());
             $value = $section->get();
-
         } else {
             // der skal valideres noget p� typen ogs�.
 
@@ -55,14 +54,14 @@ class Intraface_modules_cms_Controller_TemplateSectionEdit extends k_Component
 
         $template = CMS_Template :: factory($this->getKernel(), 'id', $_POST['template_id']);
 
-        if (!empty ($_POST['id'])) {
+        if (!empty($_POST['id'])) {
             $section = CMS_TemplateSection :: factory($template, 'template_and_id', $_POST['id']);
         } else {
             $section = CMS_TemplateSection :: factory($template, 'type', $_POST['type']);
         }
 
         if ($section->save($_POST)) {
-            if (!empty ($_POST['close'])) {
+            if (!empty($_POST['close'])) {
                 return new k_SeeOther($this->url('../../'));
             } else {
                 return new k_SeeOther($this->url());

@@ -11,5 +11,4 @@ class Quotation extends Debtor
     {
         parent::__construct($kernel, 'quotation', $id);
     }
-
 }

@@ -58,7 +58,6 @@ class Intraface_Controller_Restricted extends k_Component
         $modules = $this->getKernel()->getModules();
 
         foreach ($modules as $module) {
-
             if (!$this->getKernel()->intranet->hasModuleAccess(intval($module['id']))) {
                 continue;
             }
@@ -69,11 +68,11 @@ class Intraface_Controller_Restricted extends k_Component
             $module = $this->getKernel()->useModule($module['name']);
             $frontpage_files = $module->getFrontpageFiles();
 
-            if (!is_array($frontpage_files) OR count($frontpage_files) == 0) {
+            if (!is_array($frontpage_files) or count($frontpage_files) == 0) {
                 continue;
             }
 
-            foreach ($frontpage_files AS $file) {
+            foreach ($frontpage_files as $file) {
                 $file = PATH_INCLUDE_MODULE . $module->getName() . '/' .$file;
                 if (file_exists($file)) {
                     include($file);
@@ -203,7 +202,7 @@ class Intraface_Controller_Restricted extends k_Component
                     if ($all_submenu[$i]['sub_access'] != '') {
                         $sub = explode(":", $all_submenu[$i]['sub_access']);
 
-                        switch($sub[0]) {
+                        switch ($sub[0]) {
                             case 'sub_access':
                                 if ($this->getKernel()->user->hasSubAccess($this->primary_module->module_name, $sub[1])) {
                                     $access = true;
@@ -223,9 +222,9 @@ class Intraface_Controller_Restricted extends k_Component
                     }
 
                     if ($access) {
-                       $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label']);
-                       $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
-                       $j++;
+                        $this->submenu[$j]['name'] = $this->t($all_submenu[$i]['label']);
+                        $this->submenu[$j]['url'] = $this->primary_module->getPath(). $all_submenu[$i]['url'];
+                        $j++;
                     }
                 }
             }
@@ -236,7 +235,8 @@ class Intraface_Controller_Restricted extends k_Component
 
     function getIntranetName()
     {
-        return $this->getKernel()->intranet->get('name');;
+        return $this->getKernel()->intranet->get('name');
+        ;
     }
     
     function getThemeKey()

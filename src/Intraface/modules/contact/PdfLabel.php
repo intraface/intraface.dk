@@ -12,7 +12,7 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         parent::__construct();
         $this->setValue('font_size', 10);
         
-        switch($label_type) {
+        switch ($label_type) {
             case 1:
                 // 2x8 labels pr. ark
                 $this->setValue('margin_top', 0); // x/2,83 = mm
@@ -49,7 +49,7 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
     {
         
         // Search info on first label
-        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>Søgning</b>");
+        $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top, $this->get('font_size'), "<b>Søgning</b>");
         $line = 1;
         if ($search != "") {
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "Søgetekst: ".$search);
@@ -66,17 +66,13 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         // The contacts on labels
         
         for ($i = 0, $max = count($contacts); $i < $max; $i++) {
-        
-            
             // TODO -- hvorfor bruger vi ikke antallet af labels til at vide, hvorn�r
             // vi skifter linje? Vi kender faktisk ikke antallet af labels i en r�kke. Det kunne vi selvf�lgelig komme til
             if ($this->get('x') + $this->label_width  > $this->get('right_margin_position')) {
                 // For enden af linjen, ny linje
                 $this->setY("-".$this->label_height);
                 $this->setX(0);
-        
-            }
-            else {
+            } else {
                 // Vi rykker en label til h�jre
                 $this->setX("+".$this->label_width);
             }
@@ -89,11 +85,11 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
                 $this->setY(0);
             }
         
-            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top , $this->get('font_size'), "<b>".$contacts[$i]['number']."</b>");
+            $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top, $this->get('font_size'), "<b>".$contacts[$i]['number']."</b>");
             $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing'), $this->get('font_size'), "<b>".$contacts[$i]['name']."</b>");
             $line = 2;
             $address_lines = explode("\n", $contacts[$i]['address']['address']);
-            foreach ($address_lines AS $l) {
+            foreach ($address_lines as $l) {
                 if (trim($l) != "") {
                     $this->addText($this->get('x') + $this->label_padding_left, $this->get('y') - $this->label_padding_top - $this->get('font_spacing') * $line, $this->get('font_size'), $l);
                     $line++;
@@ -105,5 +101,3 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
         }
     }
 }
-
-?>

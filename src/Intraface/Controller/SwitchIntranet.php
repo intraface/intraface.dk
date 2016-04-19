@@ -22,16 +22,16 @@ class Intraface_Controller_SwitchIntranet extends k_Component
     {
         $this->document->setTitle('Switch intranet');
 
-        if ($this->query('id') AND $this->getKernel()->user->hasIntranetAccess($this->query('id'))) {
+        if ($this->query('id') and $this->getKernel()->user->hasIntranetAccess($this->query('id'))) {
             // @todo make sure a new user is stored in Auth, otherwise
             //       the access to the modules are not correctly maintained.
             //       Right now I just clear permisions when getting the new user
             //       which probably is the most clever solution.
-        	if ($this->getKernel()->user->setActiveIntranetId(intval($this->query('id')))) {
-        		return new k_SeeOther($this->url('../'));
-        	} else {
-        		throw new Exception('Could not change intranet');
-        	}
+            if ($this->getKernel()->user->setActiveIntranetId(intval($this->query('id')))) {
+                return new k_SeeOther($this->url('../'));
+            } else {
+                throw new Exception('Could not change intranet');
+            }
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/switchintranet');

@@ -6,7 +6,7 @@ class Intraface_modules_newsletter_Controller_Subscriber extends k_Component
         if ($this->query('remind') == 'true') {
             $subscriber = new NewsletterSubscriber($this->context->getList(), intval($this->name()));
             if (!$subscriber->sendOptInEmail()) {
-            	throw new Exception('Could not send the optin e-mail');
+                throw new Exception('Could not send the optin e-mail');
             }
             return new k_SeeOther($this->url(null, array('flare' => 'Reminder e-mail sent')));
         }

@@ -36,6 +36,3 @@ $_setting['comment.gravatar.default_size'] = 40;
 $_setting['flickr.api_key'] = 'a658de92e636bfeb228d47c9facfd2a9';
 
 $_setting['cc_license'] = 1; // den skrappeste licens
-
-
-?>

@@ -40,7 +40,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
 
         try {
             $variations = $product->getVariations();
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             if ($e->getMessage() == 'No groups is added to the product') {
                 $variations = array();
             } else {
@@ -49,7 +49,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
         }
 
         $data = array(
-        	'variations' => $variations,
+            'variations' => $variations,
             'product' => $product
         );
 
@@ -63,7 +63,7 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
 
         if ($this->body('submit') || $this->body('submit_close')) {
             if ($this->multiple && is_array($this->body('selected'))) {
-                foreach ($this->body('selected') AS $selected_id => $selected_value) {
+                foreach ($this->body('selected') as $selected_id => $selected_value) {
                     if ((int)$selected_value > 0) {
                         $selected = array('product_id' => $product->getId(), 'product_variation_id' => $selected_id);
                         //$this->context->context->removeItem($selected);
@@ -87,7 +87,6 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
                 return new k_SeeOther($this->url('../../'));
             }
             return new k_SeeOther($this->url());
-
         }
         return $this->render();
     }
@@ -95,7 +94,6 @@ class Intraface_modules_product_Controller_Selectproductvariation extends k_Comp
     function getProducts()
     {
         if ($this->query("search") || $this->query("keyword_id")) {
-
             if ($this->query("search")) {
                 $this->getProduct()->getDBQuery()->setFilter("search", $this->query("search"));
             }

@@ -10,7 +10,7 @@
  * Dette vil benytte FileHandler.
  *
  * @package Intraface
- * @author	Sune Jensen
+ * @author  Sune Jensen
  * @since   1.2
  */
 class FileHandler extends Intraface_Standard
@@ -148,7 +148,9 @@ class FileHandler extends Intraface_Standard
     public function __destruct()
     {
         unset($this->kernel);
-        if (isset($this->instance)) $this->instance->__destruct();
+        if (isset($this->instance)) {
+            $this->instance->__destruct();
+        }
         unset($this->instance);
         unset($this->image);
     }
@@ -223,7 +225,6 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("SELECT id, date_created, width, height, date_changed, description, file_name, server_file_name, file_size, access_key, accessibility_key, file_type_key, DATE_FORMAT(date_created, '%d-%m-%Y') AS dk_date_created, DATE_FORMAT(date_changed, '%d-%m-%Y') AS dk_date_changed FROM file_handler WHERE id = ".$this->id." AND intranet_id = ".$this->kernel->intranet->get('id'));
         if (!$db->nextRecord()) {
-
             $this->id = 0;
             $this->value['id'] = 0;
             return 0;
@@ -248,11 +249,11 @@ class FileHandler extends Intraface_Standard
         $this->value['accessibility'] = $this->accessibility_types[$db->f('accessibility_key')];
 
         if ($this->value['file_size'] >= 1000000) {
-            $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000000), 2, ",",".")." Mb";
-        } else if ($this->value['file_size'] >= 1000) {
-            $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000), 2, ",",".")." Kb";
+            $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000000), 2, ",", ".")." Mb";
+        } elseif ($this->value['file_size'] >= 1000) {
+            $this->value['dk_file_size'] = number_format(($this->value['file_size']/1000), 2, ",", ".")." Kb";
         } else {
-            $this->value['dk_file_size'] = number_format($this->value['file_size'], 2, ",",".")." byte";
+            $this->value['dk_file_size'] = number_format($this->value['file_size'], 2, ",", ".")." byte";
         }
 
         $this->value['file_type_key'] = (int)$db->f('file_type_key');
@@ -282,7 +283,7 @@ class FileHandler extends Intraface_Standard
         }
 
         if ($this->value['is_image'] == 1) {
-            if ($db->f('width') == NULL) {
+            if ($db->f('width') == null) {
                 $imagesize = getimagesize($this->get('file_path'));
                 $this->value['width'] = $imagesize[0]; // imagesx($this->get('file_uri'));
                 $db2 = new DB_sql;
@@ -291,7 +292,7 @@ class FileHandler extends Intraface_Standard
                 $this->value['width'] = $db->f('width');
             }
 
-            if ($db->f('height') == NULL) {
+            if ($db->f('height') == null) {
                 $imagesize = getimagesize($this->get('file_path'));
                 $this->value['height'] = $imagesize[1]; //imagesy($this->get('file_uri'));
                 $db2 = new DB_sql;
@@ -360,7 +361,7 @@ class FileHandler extends Intraface_Standard
      * @param string optional file name
      * @return object temporary file
      */
-    public function createTemporaryFile($file_name = NULL)
+    public function createTemporaryFile($file_name = null)
     {
         require_once 'Intraface/modules/filemanager/TemporaryFile.php';
         return new TemporaryFile($this, $file_name);
@@ -385,7 +386,6 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
 
         if ($this->get('server_file_name') != '' && file_exists($this->get('file_path'))) {
-
             if (!rename($this->get('file_path'), $this->upload_path.'_deleted_'.$this->get('server_file_name'))) {
                 throw new Exception("Kunne ikke omdøbe filen i FileHandler->delete()");
             }
@@ -409,7 +409,6 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
         $deleted_file_name = $this->upload_path . '_deleted_' . $this->get('server_file_name');
         if (file_exists($deleted_file_name)) {
-
             if (!rename($deleted_file_name, $this->upload_path.$this->get('server_file_name'))) {
                 throw new Exception("Kunne ikke omdøbe filen i FileHandler->undelete()");
             }
@@ -431,7 +430,7 @@ class FileHandler extends Intraface_Standard
      *
      * @return integer
      */
-    public function save($file, $file_name = '', $status = 'visible', $mime_type = NULL)
+    public function save($file, $file_name = '', $status = 'visible', $mime_type = null)
     {
         if (!is_file($file)) {
             $this->error->set("error in input - not valid file");
@@ -469,7 +468,7 @@ class FileHandler extends Intraface_Standard
         $file_size = filesize($file);
 
         // if mime type is not set as the parameter, we try to determine the mimetype
-        if ($mime_type === NULL) {
+        if ($mime_type === null) {
             // $mime_type = mime_content_type($file);
             $mime_type = MIME_Type::autoDetect($file);
             if (PEAR::isError($mime_type)) {
@@ -518,7 +517,6 @@ class FileHandler extends Intraface_Standard
             }
             $this->createInstance();
             $this->instance->deleteAll();
-
         } else {
             $db->query("INSERT INTO file_handler SET ".$sql.", date_created = NOW(), intranet_id = ".$this->kernel->intranet->get('id').", user_id = ".$this->kernel->user->get('id'));
             $id = $db->insertedId();
@@ -660,7 +658,7 @@ class FileHandler extends Intraface_Standard
 
     function getKernel()
     {
-    	return $this->kernel;
+        return $this->kernel;
     }
 
     /**
@@ -698,7 +696,4 @@ class FileHandler extends Intraface_Standard
     {
         return new Ilib_RandomKeyGenerator();
     }
-
 }
-
-?>

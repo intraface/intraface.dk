@@ -248,5 +248,4 @@ class CreditNoteTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($creditnote->isStated());
         $this->assertFalse($creditnote->readyForState($year));
     }
-
 }

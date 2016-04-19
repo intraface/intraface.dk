@@ -24,29 +24,29 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
         $translation = $this->getKernel()->getTranslation('intranetmaintenance');
         $intranet = new IntranetMaintenance(intval($_POST["id"]));
 
-    	$value = $_POST;
-    	$address_value = $_POST;
-    	$address_value["name"] = $_POST["address_name"];
+        $value = $_POST;
+        $address_value = $_POST;
+        $address_value["name"] = $_POST["address_name"];
 
-    	if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
-    		if ($intranet->address->save($address_value)) {
-    			return new k_SeeOther($this->url('../'));
-    		}
-    	}
+        if ($intranet->save($_POST) && $intranet->setMaintainedByUser($_POST['maintained_by_user_id'], $this->getKernel()->intranet->get('id'))) {
+            if ($intranet->address->save($address_value)) {
+                return new k_SeeOther($this->url('../'));
+            }
+        }
 
-    	return $this->render();
+        return $this->render();
     }
 
     function getValues()
     {
         if (is_numeric($this->context->name())) {
-    		$intranet = new IntranetMaintenance((int)$this->context->name());
-    		$value = $intranet->get();
-    		$address_value = $intranet->address->get();
+            $intranet = new IntranetMaintenance((int)$this->context->name());
+            $value = $intranet->get();
+            $address_value = $intranet->address->get();
         } else {
-    		$intranet = new IntranetMaintenance();
-    		$value = array();
-    		$address_value = array();
+            $intranet = new IntranetMaintenance();
+            $value = array();
+            $address_value = array();
         }
 
         $array = array_merge($value, $address_value);
@@ -55,7 +55,7 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Key extends k_Co
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     function getIntranet()

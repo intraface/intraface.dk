@@ -10,11 +10,17 @@ class FakeVoucherYear
         $this->kernel = new Stub_Kernel;
         $this->kernel->setting->set('intranet', 'vatpercent', 25);
     }
-    function get() { return 1; }
-    function vatAccountIsSet() { return true; }
+    function get()
+    {
+        return 1;
+    }
+    function vatAccountIsSet()
+    {
+        return true;
+    }
     function getSetting()
     {
-    	return 1;
+        return 1;
     }
 }
 
@@ -70,7 +76,7 @@ class VoucherTest extends PHPUnit_Framework_TestCase
 
     function testGetList()
     {
-    	$voucher = new Voucher($this->year);
+        $voucher = new Voucher($this->year);
         $this->assertTrue(is_array($voucher->getList()));
     }
 }

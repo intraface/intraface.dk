@@ -93,32 +93,32 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         $contact_id = $this->query('contact_id');
 
         if ($contact_id) {
-        	$contact = new Contact($this->getKernel(), $contact_id);
-        	$this->getGateway()->getDBQuery()->setFilter("contact_id", $contact->get("id"));
+            $contact = new Contact($this->getKernel(), $contact_id);
+            $this->getGateway()->getDBQuery()->setFilter("contact_id", $contact->get("id"));
         }
 
         if (isset($_GET["search"])) {
-        	if (isset($_GET["text"]) && $_GET["text"] != "") {
-        		$this->getGateway()->getDBQuery()->setFilter("text", $_GET["text"]);
-        	}
+            if (isset($_GET["text"]) && $_GET["text"] != "") {
+                $this->getGateway()->getDBQuery()->setFilter("text", $_GET["text"]);
+            }
 
-        	if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
-        		$this->getGateway()->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
-        	}
+            if (isset($_GET["from_date"]) && $_GET["from_date"] != "") {
+                $this->getGateway()->getDBQuery()->setFilter("from_date", $_GET["from_date"]);
+            }
 
-        	if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
-        		$this->getGateway()->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
-        	}
+            if (isset($_GET["to_date"]) && $_GET["to_date"] != "") {
+                $this->getGateway()->getDBQuery()->setFilter("to_date", $_GET["to_date"]);
+            }
 
-        	if (isset($_GET["status"])) {
-        		$this->getGateway()->getDBQuery()->setFilter("status", $_GET["status"]);
-        	}
+            if (isset($_GET["status"])) {
+                $this->getGateway()->getDBQuery()->setFilter("status", $_GET["status"]);
+            }
         } else {
-        	if ($this->getGateway()->getDBQuery()->checkFilter("contact_id")) {
+            if ($this->getGateway()->getDBQuery()->checkFilter("contact_id")) {
                 $this->getGateway()->getDBQuery()->setFilter("status", "-1");
             } else {
-        		$this->getGateway()->getDBQuery()->setFilter("status", "-2");
-        	}
+                $this->getGateway()->getDBQuery()->setFilter("status", "-2");
+            }
         }
 
         $this->getGateway()->getDBQuery()->usePaging("paging");
@@ -145,11 +145,11 @@ class Intraface_modules_debtor_Controller_Reminders extends k_Component
         }
 
         if ($reminder->save($_POST)) {
-             if ($_POST['send_as'] == 'email') {
-                 return new k_SeeOther($this->url($reminder->get("id"), array('email', 'flare' => 'Reminder has been created')));
-             } else {
-                 return new k_SeeOther($this->url($reminder->get("id"), array('flare' => 'Reminder has been created')));
-             }
+            if ($_POST['send_as'] == 'email') {
+                return new k_SeeOther($this->url($reminder->get("id"), array('email', 'flare' => 'Reminder has been created')));
+            } else {
+                return new k_SeeOther($this->url($reminder->get("id"), array('flare' => 'Reminder has been created')));
+            }
         }
 
         $value = $_POST;

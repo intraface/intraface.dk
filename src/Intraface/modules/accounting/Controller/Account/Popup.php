@@ -17,7 +17,7 @@ class Intraface_modules_accounting_Controller_Account_Popup extends k_Component
     function getAccounts()
     {
         $gateway = new Intraface_modules_accounting_AccountGateway($this->getYear());
-    	return $gateway->getAll();
+        return $gateway->getAll();
     }
 
     function renderHtml()

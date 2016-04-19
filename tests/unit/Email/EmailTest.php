@@ -1,7 +1,8 @@
 <?php
 require_once 'Intraface/shared/email/Email.php';
 
-class EmailTest extends PHPUnit_Framework_TestCase {
+class EmailTest extends PHPUnit_Framework_TestCase
+{
 
     private $kernel;
 
@@ -19,7 +20,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
     function testSave()
     {
         $belong_to_id = rand(1, 100000);
-        $type_id = rand(1,5);
+        $type_id = rand(1, 5);
         $contact_id = rand(1, 100000);
         $data = array(
             'subject' => 'Some subject',
@@ -34,7 +35,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         $email = new Email($this->kernel);
         $return = $email->save($data);
 
-        $this->assertTrue((is_numeric($return) AND $return > 0));
+        $this->assertTrue((is_numeric($return) and $return > 0));
         $this->assertEquals($email->get('subject'), $data['subject']);
         $this->assertEquals($email->get('body'), $data['body']);
         $this->assertEquals($email->get('belong_to_id'), $data['belong_to']);
@@ -48,7 +49,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
     function _testSaveWithEmptyFrom()
     {
         $belong_to_id = rand(1, 100000);
-        $type_id = rand(1,5);
+        $type_id = rand(1, 5);
         $contact_id = rand(1, 100000);
         $data = array(
             'subject' => 'Some subject',
@@ -63,7 +64,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         $email = new Email($this->kernel);
         $return = $email->save($data);
 
-        $this->assertTrue((is_numeric($return) AND $return > 0));
+        $this->assertTrue((is_numeric($return) and $return > 0));
         $this->assertEquals($email->get('subject'), $data['subject']);
         $this->assertEquals($email->get('body'), $data['body']);
         $this->assertEquals($email->get('belong_to_id'), $data['belong_to']);
@@ -79,7 +80,7 @@ class EmailTest extends PHPUnit_Framework_TestCase {
         $number = 200;
         for ($i = 0; $i<$number; $i++) {
             $belong_to_id = rand(1, 100000);
-            $type_id = rand(1,5);
+            $type_id = rand(1, 5);
             $contact_id = rand(1, 100000);
             $data = array(
                 'subject' => 'Some subject',

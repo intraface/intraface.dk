@@ -7,7 +7,7 @@
         <th></th>
     </tr>
     </thead>
-<?php foreach ($all as $feature): ?>
+<?php foreach ($all as $feature) : ?>
     <tr>
         <td><?php e($feature['headline']); ?></td>
         <td>
@@ -29,7 +29,7 @@
 
     <select id="keyword_id" name="keyword_id">
         <option value=""><?php e(t('Choose')); ?></option>
-        <?php foreach ($keywords as $keyword): ?>
+        <?php foreach ($keywords as $keyword) : ?>
         <option value="<?php e($keyword['id']); ?>"><?php e($keyword['keyword']); ?></option>
         <?php endforeach; ?>
 

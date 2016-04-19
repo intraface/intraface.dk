@@ -1,9 +1,9 @@
 <?php
 /**
  * Class that crosses attribute group with product
- * 
+ *
  * @todo Should be renamed Intraface_modules_product_Product_X_AttributeGroup
- * 
+ *
  * @author Sune Jensen <sune@intraface.dk>
  *
  */
@@ -22,8 +22,9 @@ class Intraface_modules_product_Product_X_Attribute_Group extends Doctrine_Recor
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         
-        $this->hasOne('Intraface_modules_product_Attribute_Group as attribute_group', 
-            array('local' => 'product_attribute_group_id','foreign' => 'id'));
+        $this->hasOne(
+            'Intraface_modules_product_Attribute_Group as attribute_group',
+            array('local' => 'product_attribute_group_id','foreign' => 'id')
+        );
     }
-    
 }

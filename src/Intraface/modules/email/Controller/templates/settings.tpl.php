@@ -10,9 +10,15 @@
         <div class="formrow">
             <label for="signature_type"><?php e(t('Signature')); ?></label>
             <select name="signature_type">
-                <option value="0" <?php if (isset($values['signature_type']) && $values['signature_type'] == 0) echo 'selected="selected"'; ?> ><?php e(__('None')); ?></option>
-                <option value="1" <?php if (isset($values['signature_type']) && $values['signature_type'] == 1) echo 'selected="selected"'; ?> ><?php e(__('Standard')); ?></option>
-                <option value="2" <?php if (isset($values['signature_type']) && $values['signature_type'] == 2) echo 'selected="selected"'; ?> ><?php e(__('Custom')); ?></option>
+                <option value="0" <?php if (isset($values['signature_type']) && $values['signature_type'] == 0) {
+                    echo 'selected="selected"';
+} ?> ><?php e(__('None')); ?></option>
+                <option value="1" <?php if (isset($values['signature_type']) && $values['signature_type'] == 1) {
+                    echo 'selected="selected"';
+} ?> ><?php e(__('Standard')); ?></option>
+                <option value="2" <?php if (isset($values['signature_type']) && $values['signature_type'] == 2) {
+                    echo 'selected="selected"';
+} ?> ><?php e(__('Custom')); ?></option>
             </select>
         </div>
 
@@ -24,6 +30,6 @@
 
     <div>
         <input type="submit" name="submit" value="<?php e(t('Save')); ?>" />
-	    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 </form>

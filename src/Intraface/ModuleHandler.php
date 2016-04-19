@@ -32,7 +32,7 @@ class Intraface_ModuleHandler
      */
     function getPrimaryModule()
     {
-        if (!empty($this->modules[$this->primary_module_name]) AND is_object($this->modules[$this->primary_module_name])) {
+        if (!empty($this->modules[$this->primary_module_name]) and is_object($this->modules[$this->primary_module_name])) {
             return($this->modules[$this->primary_module_name]);
         } else {
             return false;
@@ -41,7 +41,7 @@ class Intraface_ModuleHandler
 
     function setPrimaryModule($module_name)
     {
-        if (!empty($this->primary_module_object) AND is_object($this->primary_module_object)) {
+        if (!empty($this->primary_module_object) and is_object($this->primary_module_object)) {
             throw new Exception('Primary module has been set');
         } else {
             $module = $this->useModule($module_name);
@@ -81,7 +81,7 @@ class Intraface_ModuleHandler
             throw new Exception($module_name . ' is not a valid module name');
         }
 
-        if (!empty($this->modules[$module_name]) AND is_object($this->modules[$module_name])) {
+        if (!empty($this->modules[$module_name]) and is_object($this->modules[$module_name])) {
             return $this->modules[$module_name];
         }
 
@@ -148,7 +148,7 @@ class Intraface_ModuleHandler
         }
 
         // Tjekker om shared allerede er loaded
-        if (!empty($this->shared[$shared_name]) AND is_object($this->shared[$shared_name])) {
+        if (!empty($this->shared[$shared_name]) and is_object($this->shared[$shared_name])) {
             return $this->shared[$shared_name];
         }
 
@@ -189,7 +189,7 @@ class Intraface_ModuleHandler
      *
      * @return array
      */
-    static public function getModules($db, $order_by = 'frontpage_index')
+    public static function getModules($db, $order_by = 'frontpage_index')
     {
         $modules = array();
 
@@ -230,7 +230,7 @@ class Intraface_ModuleHandler
      * Function to check whether the module has been registered
      * Made temporarily for /main/index.php
      */
-    static public function exists($db, $module_id)
+    public static function exists($db, $module_id)
     {
         if (is_numeric($module_id)) {
             throw new Exception("Not yet implemented!");

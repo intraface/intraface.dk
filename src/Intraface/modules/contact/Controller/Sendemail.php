@@ -33,11 +33,11 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
 
     function postForm()
     {
-    	$validator = new Intraface_Validator($this->getContact()->error);
-    	$validator->isString($_POST['subject'], 'error in subject');
-    	$validator->isString($_POST['text'], 'error in text');
+        $validator = new Intraface_Validator($this->getContact()->error);
+        $validator->isString($_POST['subject'], 'error in subject');
+        $validator->isString($_POST['text'], 'error in text');
 
-    	$contact = new Contact($this->getKernel());
+        $contact = new Contact($this->getKernel());
         $keyword = $contact->getKeywords();
         $keywords = $keyword->getAllKeywords();
         $contact->getDBQuery()->defineCharacter('character', 'address.name');
@@ -45,37 +45,37 @@ class Intraface_modules_contact_Controller_Sendemail extends k_Component
         $contacts = $contact->getList("use_address");
 
         if (!$contact->error->isError()) {
-    		// valideret subject og body
-    		$j = 0;
+            // valideret subject og body
+            $j = 0;
 
-    		foreach ($contacts as $contact) {
-    			if (!$validator->isEmail($contact['email'], "")) {
-    				continue;
-    			}
+            foreach ($contacts as $contact) {
+                if (!$validator->isEmail($contact['email'], "")) {
+                    continue;
+                }
 
-    			$contact = $this->context->getGateway()->findById($contact['id']);
+                $contact = $this->context->getGateway()->findById($contact['id']);
 
-    			$email = new Email($this->getKernel());
-    			$input = array(
-    				'subject' => $_POST['subject'],
-    				'body' => $_POST['text'] . "\n\nLogin: " . $contact->get('login_url'),
-    				'from_email' => $this->getKernel()->user->get('email'),
-    				'from_name' => $this->getKernel()->user->get('name'),
-    				'contact_id' => $contact->get('id'),
-    				'type_id' => 11, // email til search
-    				'belong_to' => 0 // der er ikke nogen specifik id at s�tte
-    			);
+                $email = new Email($this->getKernel());
+                $input = array(
+                    'subject' => $_POST['subject'],
+                    'body' => $_POST['text'] . "\n\nLogin: " . $contact->get('login_url'),
+                    'from_email' => $this->getKernel()->user->get('email'),
+                    'from_name' => $this->getKernel()->user->get('name'),
+                    'contact_id' => $contact->get('id'),
+                    'type_id' => 11, // email til search
+                    'belong_to' => 0 // der er ikke nogen specifik id at s�tte
+                );
 
-    			$email->save($input);
-    			$email->queue();
-    			$j++;
-    		}
-    		$this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="'.$this->url('../').'">Tilbage til kontakter</a>.';
-    	} else {
-    		$value = $_POST;
-    	}
+                $email->save($input);
+                $email->queue();
+                $j++;
+            }
+            $this->msg = 'Emailen blev i alt sendt til ' . $j . ' kontakter. <a href="'.$this->url('../').'">Tilbage til kontakter</a>.';
+        } else {
+            $value = $_POST;
+        }
 
-    	return $this->render();
+        return $this->render();
     }
 
     function getContact()

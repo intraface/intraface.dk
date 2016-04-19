@@ -3,4 +3,4 @@
  * @package Intraface_Todo
  */
 
-// skal ikke længere bruges
+// not used anymore

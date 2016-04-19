@@ -21,14 +21,14 @@ if (!file_exists($install_class)) {
 }
 require $install_class;
 
-try { 
-	$install = new Intraface_Install;
-	$install->dropDatabase();
-	$install->createDatabaseSchema();
-	$install->createStartingValues();
+try {
+    $install = new Intraface_Install;
+    $install->dropDatabase();
+    $install->createDatabaseSchema();
+    $install->createStartingValues();
 } catch (Exception $e) {
-	echo $e->getMessage();	
-	exit(1);
+    echo $e->getMessage();
+    exit(1);
 }
 
 exit(0);

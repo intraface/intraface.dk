@@ -11,7 +11,7 @@
  * @author  Sune Jensen <sj@sunet.dk>
  * @author  Lars Olesen <lars@legestue.net>
  *
- * @version	@package-version@
+ * @version     @package-version@
  *
  */
 class IntranetMaintenance extends Intraface_Intranet
@@ -206,7 +206,6 @@ class IntranetMaintenance extends Intraface_Intranet
             $sql .= ", identifier = \"".$this->db->escape($input['identifier'], 'text')."\"";
         }
         if ($this->id == 0 || isset($input["generate_private_key"])) {
-
             $sql .= ", private_key = \"".$this->getRandomKeyGenerator()->generate(50)."\"";
         }
 

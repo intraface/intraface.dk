@@ -48,5 +48,4 @@ class Intraface_modules_cms_SectionGateway
         $class = $this->class_prefix . ucfirst($section_types[$this->db->f('type_key')]);
         return new $class($page, $this->db->f('id'));
     }
-
 }

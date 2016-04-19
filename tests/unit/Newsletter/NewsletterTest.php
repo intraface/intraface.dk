@@ -18,7 +18,7 @@ class TestableNewsletter extends Newsletter
 
     function getSubscribers()
     {
-        for ($i = 0; $i<10000;$i++) {
+        for ($i = 0; $i<10000; $i++) {
             $array[] = array(
                 'contact_id' => '1',
                 'contact_email' => 'test@email.dk'
@@ -85,4 +85,3 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
 
     }
 }
-?>

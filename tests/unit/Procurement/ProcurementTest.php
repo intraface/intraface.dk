@@ -82,7 +82,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
             'date_stated' => '00-00-0000',
             'dk_date_stated' => '00-00-0000',
             'paid_date' => '0000-00-00',
-        	'this_date' => '0000-00-00',
+            'this_date' => '0000-00-00',
             'dk_paid_date' => '00-00-0000',
             'number' => 1,
             'contact_id' => 0,
@@ -141,7 +141,7 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
 
         );
 
-        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new Stub_Translation), $procurement->error->view());
+        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state, 58000, new Stub_Translation), $procurement->error->view());
 
         $voucher = Voucher::factory($year, 1);
         $expected = array(
@@ -241,6 +241,6 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         );
 
 
-        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state,  58000, new Stub_Translation), $procurement->error->view());
+        $this->assertTrue($procurement->state($year, 1, '05-01-'.date('Y'), $state, 58000, new Stub_Translation), $procurement->error->view());
     }
 }

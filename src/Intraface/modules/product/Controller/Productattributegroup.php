@@ -16,7 +16,7 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
         $product = $this->getProduct();
 
         $existing_groups = array();
-        foreach ($product->getAttributeGroups() AS $group) {
+        foreach ($product->getAttributeGroups() as $group) {
             $existing_groups[] = $group['id'];
         }
 
@@ -24,12 +24,10 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
             try {
                 $variations = $product->getVariations();
                 if ($variations->count() > 0) {
-
                     $error = new Intraface_Error;
                     $error->set('You cannot change the attached attribute groups when variations has been created');
                 }
             } catch (Intraface_Gateway_Exception $e) {
-
             }
         }
         $groups = $group_gateway->findAll();
@@ -45,10 +43,11 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
         $product = $this->getProduct();
 
         if ($this->body('select')) {
-
             $existing_groups = array();
             $new_groups = array();
-            foreach ($product->getAttributeGroups() AS $group) $existing_groups[] = $group['id'];
+            foreach ($product->getAttributeGroups() as $group) {
+                $existing_groups[] = $group['id'];
+            }
 
             if (count($existing_groups) > 0) {
                 try {
@@ -66,11 +65,11 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
                     $new_groups = $this->body('selected');
                 }
 
-                foreach (array_diff($existing_groups, $new_groups) AS $id) {
+                foreach (array_diff($existing_groups, $new_groups) as $id) {
                     $product->removeAttributeGroup($id);
                 }
 
-                foreach ($new_groups AS $id) {
+                foreach ($new_groups as $id) {
                     $product->setAttributeGroup($id);
                 }
 
@@ -89,7 +88,7 @@ class Intraface_modules_product_Controller_Productattributegroup extends k_Compo
 
     function getProduct()
     {
-    	Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
+        Intraface_Doctrine_Intranet::singleton($this->getKernel()->intranet->getId());
 
         return new Product($this->getKernel(), $this->context->name());
     }

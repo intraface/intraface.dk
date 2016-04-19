@@ -4,12 +4,12 @@
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if (!$context->getYear()->readyForState($depreciation->get('payment_date'))): ?>
+<?php if (!$context->getYear()->readyForState($depreciation->get('payment_date'))) : ?>
     <?php echo $context->getYear()->error->view(); ?>
     <p>Gå til <a href="<?php e($accounting_module->getPath().'years.php'); ?>">regnskabet</a></p>
-<?php elseif ($depreciation->isStated()): ?>
+<?php elseif ($depreciation->isStated()) : ?>
     <p><?php e(t('the depreciation is alredy stated')); ?>. <a href="<?php e($accounting_module->getPath().'voucher/'.$depreciation->get('voucher_id')); ?>"><?php e(t('see the voucher')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
     <?php
     // need to be executed to generate errors!
     $depreciation->readyForState();
@@ -59,21 +59,27 @@
                 $x = 0;
                 $default_account_id = $context->getKernel()->setting->get('intranet', 'depreciation.state.account');
 
-                foreach ($accounts AS $a):
-                    if (strtolower($a['type']) == 'sum') continue;
-                    if (strtolower($a['type']) == 'headline') continue;
+                foreach ($accounts as $a) :
+                    if (strtolower($a['type']) == 'sum') {
+                        continue;
+                    }
+                    if (strtolower($a['type']) == 'headline') {
+                        continue;
+                    }
                 ?>
 
                     <option value="<?php e($a['number']); ?>"
-                    <?php if ($default_account_id == $a['number']) echo ' selected="selected"'; ?>
+                    <?php if ($default_account_id == $a['number']) {
+                        echo ' selected="selected"';
+} ?>
                     ><?php e($a['name']); ?></option>
-                <?php endforeach;
+                <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                 endforeach;
                 ?>
             </select>
         </div>
     </fieldset>
 
-    <?php  if ($depreciation->readyForState()): ?>
+    <?php  if ($depreciation->readyForState()) : ?>
         <div>
             <input type="submit" value="<?php e(t('State')); ?>" />
             <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>

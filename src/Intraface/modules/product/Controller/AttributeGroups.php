@@ -43,7 +43,7 @@ class Intraface_modules_product_Controller_AttributeGroups extends k_Component
                 $group->save();
                 $group->load();
                 return new k_SeeOther($this->url($group->getId()));
-            } catch(Doctrine_Validator_Exception $e) {
+            } catch (Doctrine_Validator_Exception $e) {
                 $this->getError()->attachErrorStack($group->getErrorStack());
             }
         }

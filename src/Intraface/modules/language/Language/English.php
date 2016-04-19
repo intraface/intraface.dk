@@ -15,5 +15,4 @@ class Intraface_modules_language_Language_English extends Intraface_modules_lang
     {
         return 'English';
     }
-
 }

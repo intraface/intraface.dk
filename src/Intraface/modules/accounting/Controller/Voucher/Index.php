@@ -15,9 +15,9 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
         if ($name == 'create') {
             return 'Intraface_modules_accounting_Controller_Voucher_Edit';
         } elseif (is_numeric($name)) {
-        	return 'Intraface_modules_accounting_Controller_Voucher_Show';
+            return 'Intraface_modules_accounting_Controller_Voucher_Show';
         } elseif ($name == 'popup') {
-        	return 'Intraface_modules_accounting_Controller_Voucher_Popup';
+            return 'Intraface_modules_accounting_Controller_Voucher_Popup';
         }
     }
 
@@ -75,7 +75,7 @@ class Intraface_modules_accounting_Controller_Voucher_Index extends k_Component
 
         $i = 3;
         if (count($posts) > 0) {
-            foreach ($posts AS $post) {
+            foreach ($posts as $post) {
                 $worksheet->write($i, 0, $post['date_dk'], $format);
                 $worksheet->write($i, 1, $post['voucher_number'], $format);
                 $worksheet->write($i, 2, $post['text'], $format);

@@ -5,9 +5,9 @@
  * @todo use this implementation for the active year
  *
  * @package Intraface_Accounting
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 class Intraface_modules_accouting_ActiveYear
 {

@@ -1,55 +1,55 @@
 <h1>
     <?php
         e(ucfirst(t($context->getType().'s')));
-        if (!empty($contact) AND is_object($contact) && $contact->address->get('name') != '') { ?>
+    if (!empty($contact) and is_object($contact) && $contact->address->get('name') != '') { ?>
             : <?php e($contact->address->get('name')); ?>
-        <?php }
+        <?php                                                                                                             }
 
-        if (!empty($product) AND is_object($product) && $product->get('name') != '') { ?>
+    if (!empty($product) and is_object($product) && $product->get('name') != '') { ?>
             <?php e(t('with product'))?>:
             <?php e($product->get('name')); ?>
-            <?php if (!empty($variation) AND is_object($variation) AND $variation->getName() != '') { ?>
+            <?php if (!empty($variation) and is_object($variation) and $variation->getName() != '') { ?>
                 - <?php e($variation->getName()); ?>
             <?php }
-        }
+    }
     ?>
 </h1>
 
-<?php if ($context->getKernel()->intranet->address->get('id') == 0): ?>
+<?php if ($context->getKernel()->intranet->address->get('id') == 0) : ?>
     <p>
-     <?php e(t('You have not filled in the address for your intranet. Do that before you can create your first')); ?>
-     <?php e(strtolower(t($context->getType()))); ?>.
-    <?php if ($context->getKernel()->user->hasModuleAccess('administration')): ?>
+        <?php e(t('You have not filled in the address for your intranet. Do that before you can create your first')); ?>
+        <?php e(strtolower(t($context->getType()))); ?>.
+    <?php if ($context->getKernel()->user->hasModuleAccess('administration')) : ?>
         <?php
         $module_administration = $context->getKernel()->useModule('administration');
         ?>
         <a href="<?php e(url('../../../administration/intranet', array('edit'))); ?>"><?php e(t('Fill in address')); ?></a>.
-    <?php else: ?>
-    	<?php e(t('You do not have access to edit the address information. Please ask your administrator to do that.')); ?>
-    	<?php e(strtolower(t($debtor->getType()))); ?>.
+    <?php else : ?>
+        <?php e(t('You do not have access to edit the address information. Please ask your administrator to do that.')); ?>
+        <?php e(strtolower(t($debtor->getType()))); ?>.
     <?php endif; ?>
     </p>
-<?php elseif (!$debtor->isFilledIn()): ?>
+<?php elseif (!$debtor->isFilledIn()) : ?>
 
-    <?php if ($debtor->getType() == 'credit_note'): ?>
+    <?php if ($debtor->getType() == 'credit_note') : ?>
         <p>
-        	<?php e(t('You have not created any. Credit notes are created from invoices.')); ?>
-    	</p>
-        	<?php else: ?>
+            <?php e(t('You have not created any. Credit notes are created from invoices.')); ?>
+        </p>
+            <?php else : ?>
 
         <p><?php e(t('None has been created yet')); ?>. <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create '.$context->getType())); ?></a>.</p>
 
     <?php endif; ?>
-<?php else: ?>
+<?php else : ?>
 
 <ul class="options">
-    <?php if (!empty($contact) AND is_object($contact) AND $debtor->getType() != "credit_note"): ?>
+    <?php if (!empty($contact) and is_object($contact) and $debtor->getType() != "credit_note") : ?>
         <li><a href="<?php e(url(null, array('create', 'contact_id' => $contact->get("id")))); ?>"><?php e(t('Create')); ?></a></li>
-    <?php else: ?>
-        <?php if (isset($variation) && isset($product)): ?>
+    <?php else : ?>
+        <?php if (isset($variation) && isset($product)) : ?>
             <?php $module_product = $context->getKernel()->useModule('product'); ?>
             <li><a href="<?php e(url($module_product->getPath().$product->get('id').'/variation/'.$variation->getId()));  ?>"><?php e(t('Show product')); ?></a></li>
-        <?php elseif (isset($product)): ?>
+        <?php elseif (isset($product)) : ?>
             <?php $module_product = $context->getKernel()->useModule('product'); ?>
            <li><a href="<?php e(url($module_product->getPath().$product->get('id')));  ?>"><?php e(t('Show product')); ?></a></li>
         <?php endif; ?>
@@ -61,7 +61,7 @@
 
 <?php echo $debtor->error->view(); ?>
 
-<?php if (!isset($_GET['$contact_id'])): ?>
+<?php if (!isset($_GET['$contact_id'])) : ?>
 
     <fieldset class="hide_on_print">
         <legend><?php e(t('Advanced search')); ?></legend>
@@ -72,21 +72,35 @@
         <label><?php e(t('Status')); ?>
         <select name="status">
             <option value="-1">Alle</option>
-            <option value="-2"<?php if ($debtor->getDBQuery()->getFilter("status") == -2) echo ' selected="selected"';?>><?php e(t('Open')); ?></option>
-            <?php if ($debtor->getType() == "invoice"): ?>
-            <option value="-3"<?php if ($debtor->getDBQuery()->getFilter("status") == -3) echo ' selected="selected"';?>><?php e(t('Depreciated')); ?></option>
+            <option value="-2"<?php if ($debtor->getDBQuery()->getFilter("status") == -2) {
+                echo ' selected="selected"';
+}?>><?php e(t('Open')); ?></option>
+            <?php if ($debtor->getType() == "invoice") : ?>
+            <option value="-3"<?php if ($debtor->getDBQuery()->getFilter("status") == -3) {
+                echo ' selected="selected"';
+}?>><?php e(t('Depreciated')); ?></option>
             <?php endif; ?>
-            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("status") == 0) echo ' selected="selected"';?>><?php e(t('Created')); ?></option>
-            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("status") == 1) echo ' selected="selected"';?>><?php e(t('Sent')); ?></option>
-            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("status") == 2) echo ' selected="selected"';?>><?php e(t('Executed')); ?></option>
-            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("status") == 3) echo ' selected="selected"';?>><?php e(t('Cancelled')); ?></option>
+            <option value="0"<?php if ($debtor->getDBQuery()->getFilter("status") == 0) {
+                echo ' selected="selected"';
+}?>><?php e(t('Created')); ?></option>
+            <option value="1"<?php if ($debtor->getDBQuery()->getFilter("status") == 1) {
+                echo ' selected="selected"';
+}?>><?php e(t('Sent')); ?></option>
+            <option value="2"<?php if ($debtor->getDBQuery()->getFilter("status") == 2) {
+                echo ' selected="selected"';
+}?>><?php e(t('Executed')); ?></option>
+            <option value="3"<?php if ($debtor->getDBQuery()->getFilter("status") == 3) {
+                echo ' selected="selected"';
+}?>><?php e(t('Cancelled')); ?></option>
         </select>
         </label>
         <!-- sortering b�r v�re placeret ved at man klikker p� en overskrift i stedet - og s� b�r man kunne sortere p� det hele -->
         <label><?php e(t('Sorting')); ?>
         <select name="sorting">
-            <?php foreach (array(0 => ucfirst($debtor->getType()).' number descending', 1 => ucfirst($debtor->getType()).' number ascending', 2 => 'Contact number', 3 => 'Contact name') AS $key => $description): ?>
-                <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) echo ' selected="selected"';?>><?php e(t($description)); ?></option>
+            <?php foreach (array(0 => ucfirst($debtor->getType()).' number descending', 1 => ucfirst($debtor->getType()).' number ascending', 2 => 'Contact number', 3 => 'Contact name') as $key => $description) : ?>
+                <option value="<?php e($key); ?>"<?php if ($debtor->getDBQuery()->getFilter("sorting") == $key) {
+                    echo ' selected="selected"';
+}?>><?php e(t($description)); ?></option>
             <?php endforeach; ?>
         </select>
         </label>
@@ -94,8 +108,10 @@
 
         <label><?php e(t('Date interval'))?>
             <select name="date_field">
-                <?php foreach (array('this_date' => ucfirst($debtor->getType()).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') AS $field => $description): ?>
-                    <option value="<?php e($field); ?>" <?php if ($debtor->getDBQuery()->getFilter("date_field") == $field) echo ' selected="selected"';?>><?php e(t($description)) ?></option>
+                <?php foreach (array('this_date' => ucfirst($debtor->getType()).' date', 'date_created' => 'Date created', 'date_sent' => 'Date sent', 'date_executed' => 'Date executed', 'data_cancelled' => 'Date cancelled') as $field => $description) : ?>
+                    <option value="<?php e($field); ?>" <?php if ($debtor->getDBQuery()->getFilter("date_field") == $field) {
+                        echo ' selected="selected"';
+}?>><?php e(t($description)) ?></option>
                 <?php endforeach; ?>
             </select>
         </label>
@@ -126,7 +142,7 @@
             <th colspan="2"><?php e(t('Contact')); ?></th>
             <th><?php e(t('Description')); ?></th>
             <th class="amount"><?php e(t('Amount')); ?></th>
-            <?php if ($debtor->getDBQuery()->getFilter("status") == -3): ?>
+            <?php if ($debtor->getDBQuery()->getFilter("status") == -3) : ?>
                 <th class="amount"><?php e(t('Depreciated')); ?></th>
             <?php endif; ?>
             <th><?php e(t('Sent')); ?></th>
@@ -190,13 +206,15 @@
                 <td class="number"><?php e($post['contact']['number']); ?></td>
                 <td><a href="<?php // e($contact_module->getPath()); ?><?php e(url('../../../contact/' . $post["contact_id"])); ?>"><?php e($post["name"]); ?></a></td>
                 <td><a href="<?php e(url($post["id"])); ?>"><?php ($post["description"] != "") ? e($post["description"]) : e("[Ingen beskrivelse]"); ?></a></td>
-                <td class="amount"><?php e(number_format($post["total"], 2, ",",".")); ?> &nbsp; </td>
+                <td class="amount"><?php e(number_format($post["total"], 2, ",", ".")); ?> &nbsp; </td>
 
 
                 <?php
                 if ($debtor->getDBQuery()->getFilter("status") == -3) {
                     ?>
-                    <td class="amount"><?php if ($post["deprication"]) e(number_format($post["deprication"], 2, ",",".")); ?> &nbsp; </td>
+                    <td class="amount"><?php if ($post["deprication"]) {
+                        e(number_format($post["deprication"], 2, ",", "."));
+} ?> &nbsp; </td>
                     <?php
                 }
                 ?>
@@ -233,7 +251,7 @@
                     if ($post["locked"] == false) {
                         ?>
                         <a class="edit" href="<?php e(url($post["id"], array('edit'))); ?>"><?php e(t('Edit')); ?></a>
-                        <?php if ($post["status"] == "created"): ?>
+                        <?php if ($post["status"] == "created") : ?>
                         <a class="delete" title="<?php e(t('Are you sure?')); ?>" href="<?php e(url($post["id"], array('delete'))); ?>"><?php e(t('Delete')); ?></a>
                         <?php endif; ?>
                         &nbsp;

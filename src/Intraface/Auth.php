@@ -101,7 +101,7 @@ class Intraface_Auth
      */
     private function notifyObservers($code, $msg)
     {
-        foreach ($this->getObservers() AS $observer) {
+        foreach ($this->getObservers() as $observer) {
             $observer->update($code, $msg);
         }
         return true;

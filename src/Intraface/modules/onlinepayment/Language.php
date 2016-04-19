@@ -5,8 +5,8 @@ class Intraface_modules_onlinepayment_Language extends Doctrine_Record
     {
         $this->setTableName('onlinepayment_settings');
         // $this->hasColumn('intranet_id', 'integer', 11, array('greaterthan' => 0)); // defined in intranet template
-        $this->hasColumn('email', 'string',  65555);
-        $this->hasColumn('subject', 'string',  255);
+        $this->hasColumn('email', 'string', 65555);
+        $this->hasColumn('subject', 'string', 255);
     }
 
     public function setUp()
@@ -17,11 +17,11 @@ class Intraface_modules_onlinepayment_Language extends Doctrine_Record
 
     function getConfirmationEmailSubject($language)
     {
-    	return $this->Translation[$language]->subject;
+        return $this->Translation[$language]->subject;
     }
 
     function getConfirmationEmailBody($language)
     {
-    	return $this->Translation[$language]->email;
+        return $this->Translation[$language]->email;
     }
 }

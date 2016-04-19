@@ -37,7 +37,7 @@ class Intraface_modules_shop_ShopGateway
             ->addWhere('id = ?', $id)
             ->execute();
         
-        if ($collection == NULL || $collection->count() != 1) {
+        if ($collection == null || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Error finding shop from id '.$id);
         } else {
             return $collection->getLast();

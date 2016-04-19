@@ -135,15 +135,13 @@ class TestableVatPeriod extends VatPeriod
         $this->value['saldo_rubrik_a'] = 0;
         $saldo_rubrik_a = 0;
 
-        if (is_array($buy_eu_accounts) AND count($buy_eu_accounts) > 0) {
-
-            foreach ($buy_eu_accounts AS $key=>$id) {
+        if (is_array($buy_eu_accounts) and count($buy_eu_accounts) > 0) {
+            foreach ($buy_eu_accounts as $key => $id) {
                 $account_eu_buy = new FakeVatPeriodAccount($this->year, $id);
                 $primo = $account_eu_buy->getPrimoSaldo();
                 $account_eu_buy->getSaldo('stated', $date_from, $date_to);
                 $saldo_rubrik_a += $account_eu_buy->get('saldo');
                 $saldo_rubrik_a -= $primo['saldo'];
-
             }
         }
         $this->value['saldo_rubrik_a'] = $saldo_rubrik_a;
@@ -226,7 +224,4 @@ class VatPeriodTest extends PHPUnit_Framework_TestCase
         $vat = $this->createPeriod();
         $this->assertTrue($vat->delete());
     }
-
-
-
 }

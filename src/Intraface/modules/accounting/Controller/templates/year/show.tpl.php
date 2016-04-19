@@ -16,7 +16,7 @@ $values = $context->getYear()->get();
     <?php echo $context->getYear()->error->view(); ?>
 
     <input type="hidden" name="id" value="<?php e($values['id']); ?>" />
-<?php if ($context->getAccountGateway()->anyAccounts()): ?>
+<?php if ($context->getAccountGateway()->anyAccounts()) : ?>
     <fieldset>
         <legend>Vælg og gå til regnskabet</legend>
         <div>
@@ -42,12 +42,12 @@ $values = $context->getYear()->get();
         <th>Sidste års regnskab</th>
         <td>
             <?php
-                if (!empty($values['last_year_id']) AND $values['last_year_id'] > 0) {
-                    $last_year = new Year($context->getKernel(), $values['last_year_id']);
-                    e($last_year->get('label'));
-                } else {
-                    e('Ingen');
-                }
+            if (!empty($values['last_year_id']) and $values['last_year_id'] > 0) {
+                $last_year = new Year($context->getKernel(), $values['last_year_id']);
+                e($last_year->get('label'));
+            } else {
+                e('Ingen');
+            }
             ?>
         </td>
     </tr>
@@ -55,11 +55,11 @@ $values = $context->getYear()->get();
         <th>Låst</th>
         <td>
             <?php
-                if (!empty($values['locked']) AND $values['locked'] == 1) {
-                    e('Ja');
-                } else {
-                    e('Nej');
-                }
+            if (!empty($values['locked']) and $values['locked'] == 1) {
+                e('Ja');
+            } else {
+                e('Nej');
+            }
             ?>
 
         </td>
@@ -68,18 +68,17 @@ $values = $context->getYear()->get();
         <th>Moms</th>
         <td>
             <?php
-                if (!empty($values['vat']) AND $values['vat'] == 1) {
-                    echo 'Ja';
-                }
-                else {
-                    echo 'Nej';
-                }
+            if (!empty($values['vat']) and $values['vat'] == 1) {
+                echo 'Ja';
+            } else {
+                echo 'Nej';
+            }
             ?>
         </td>
     </tr>
 </table>
 
-<?php if (!$context->getAccountGateway()->anyAccounts()): ?>
+<?php if (!$context->getAccountGateway()->anyAccounts()) : ?>
     <fieldset>
         <legend>Kontoplan</legend>
         <p>Du skal oprette en kontoplan for æret. Du kan først begynde at gemme poster i kassekladden, når du har oprettet en kontoplan.</p>
@@ -91,38 +90,42 @@ $values = $context->getYear()->get();
         <div>
             <input type="submit" name="standard_accountplan" value="Jeg vil bruge standardkontoplanen" class="confirm" />
         </div>
-        <?php if (count($context->getYearGateway()->getList()) - 1 > 0): // der skal trækkes en fra, for man kan ikke oprette kontoplaner fra sig selv ?>
+        <?php if (count($context->getYearGateway()->getList()) - 1 > 0) : // der skal trækkes en fra, for man kan ikke oprette kontoplaner fra sig selv ?>
         <div>
             <label for="accountplan_years">Jeg vil overføre kontoplanen fra</label>
             <select name="accountplan_year" id="accountplan_years">
                 <option value=""><?php e(t('Choose')); ?></option>
                 <?php
-                    foreach ($context->getYearGateway()->getList() as $y) {
-                        if ($y['id'] == $context->getYear()->get('id')) continue;
-                        echo '<option ';
-                        if (!empty($values['accountplan_years']) AND $values['accountplan_years'] == $y['id']) echo ' selected="selected"';
-                        echo 'value="'.$y['id'].'">'.$y['label'].'</option>';
+                foreach ($context->getYearGateway()->getList() as $y) {
+                    if ($y['id'] == $context->getYear()->get('id')) {
+                        continue;
                     }
+                    echo '<option ';
+                    if (!empty($values['accountplan_years']) and $values['accountplan_years'] == $y['id']) {
+                        echo ' selected="selected"';
+                    }
+                    echo 'value="'.$y['id'].'">'.$y['label'].'</option>';
+                }
                 ?>
             </select>
             <input type="submit" name="transfer_accountplan" value="Hent" class="confirm" />
         </div>
         <?php endif; ?>
     </fieldset>
-<?php else: ?>
+<?php else : ?>
     <h2>Kontoplan</h2>
     <p>Du kan finde dine konti under <a href="<?php e(url('account')); ?>">kontoplanen</a>.</p>
 
-    <?php if (!$context->getYear()->vatAccountIsSet()): ?>
+    <?php if (!$context->getYear()->vatAccountIsSet()) : ?>
 
         <p class="message-dependent">Du mangler at sætte nogle indstillinger. <a href="<?php (url('../settings')); ?>">Sæt indstillingerne</a>.</p>
 
-    <?php elseif (!$context->getVatPeriod()->periodsCreated()): ?>
+    <?php elseif (!$context->getVatPeriod()->periodsCreated()) : ?>
         <!--
         <p class="message-dependent">Du skal oprette momsperioder for æret. <a href="vat_period.php">Opret momsperioder</a>.</p>
         -->
     <?php endif; ?>
-	 <h2><?php e(t('Vat')); ?></h2>
+     <h2><?php e(t('Vat')); ?></h2>
     <p><?php e(t('You can')); ?> <a href="<?php e(url('vat')); ?>"><?php e(t('calculate your vat')); ?></a>.</p>
  <h2><?php e(t('End year')); ?></h2>
     <p><?php e(t('You can')); ?> <a href="<?php e(url('end')); ?>"><?php e(t('make your year end')); ?></a>.</p>

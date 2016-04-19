@@ -118,10 +118,10 @@ class Intraface_Setting
      *
      * @return boolean
      */
-    function set($type, $setting, $value, $sub_id = 0) {
+    function set($type, $setting, $value, $sub_id = 0)
+    {
 
         if ($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
-
             switch ($type) {
                 case 'system':
                     throw new Exception('Du kan ikke ændre på systemsetting');
@@ -134,7 +134,7 @@ class Intraface_Setting
                         $this->db->query("INSERT INTO setting SET value = ".$this->db->quote($value, 'text').", setting = ".$this->db->quote($setting, 'text').", intranet_id = ".$this->db->quote($this->intranet_id, 'integer').", user_id = 0, sub_id = ".intval($sub_id));
                     }
                     $this->settings[$this->intranet_id][0][$setting][$sub_id] = $value;
-                break;
+                    break;
                 case 'user':
                     if ($this->checkSystem($setting)) {
                         $this->db->query("SELECT id FROM setting WHERE setting = ".$this->db->quote($setting, 'text')." AND intranet_id = ".$this->db->quote($this->intranet_id, 'integer')." AND user_id = ".$this->db->quote($this->user_id, 'integer')." AND sub_id = ".intval($sub_id));
@@ -223,8 +223,6 @@ class Intraface_Setting
                         if (isset($this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)])) {
                             return $this->settings[$this->intranet_id][$this->user_id][$setting][intval($sub_id)];
                         }
-
-
                     }
                     // no break because it has to fall through if user is not set
                 case 'intranet':
@@ -266,7 +264,7 @@ class Intraface_Setting
     function isSettingSet($type, $setting, $sub_id = 0)
     {
         if ($this->checkSystem($setting) && $this->checkType($type)) {
-            switch($type) {
+            switch ($type) {
                 case 'user':
                     if ($this->checkLogin()) {
                         $this->db->query("SELECT value FROM setting WHERE setting = \"".$setting."\" AND intranet_id = ".$this->intranet_id." AND user_id = ".$this->user_id." AND sub_id = ".intval($sub_id));
@@ -302,10 +300,10 @@ class Intraface_Setting
      *
      * @return boolean
      */
-    function delete($type, $setting, $sub_id = 0) {
+    function delete($type, $setting, $sub_id = 0)
+    {
 
         if ($this->checkSystem($setting) && $this->checkType($type) && $this->checkLogin()) {
-
             if ($sub_id == 'ALL') {
                 $sql_sub = '';
             } else {

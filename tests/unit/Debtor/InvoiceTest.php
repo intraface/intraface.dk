@@ -44,7 +44,8 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         return new Invoice($this->createKernel());
     }
 
-    function createAnInvoiceWithOneItem($options = array()) {
+    function createAnInvoiceWithOneItem($options = array())
+    {
 
         $options = array_merge(
             array(
@@ -70,7 +71,8 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         return $invoice;
     }
 
-    function createAccountingYear() {
+    function createAccountingYear()
+    {
         require_once 'Intraface/modules/accounting/Year.php';
         $year = new Year($this->createKernel());
         $year->save(array('from_date' => date('Y').'-01-01', 'to_date' => date('Y').'-12-31', 'label' => 'test', 'locked' => 0));
@@ -78,7 +80,8 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         return $year;
     }
 
-    function createContact() {
+    function createContact()
+    {
 
         $contact = new Contact($this->createKernel());
         return $contact->save(array('name' => 'Test', 'email' => 'lars@legestue.net', 'phone' => '98468269'));
@@ -91,14 +94,16 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($invoice));
     }
 
-    function testSetStatus() {
+    function testSetStatus()
+    {
         $invoice = $this->createAnInvoiceWithOneItem();
         $this->assertTrue($invoice->setStatus('sent'));
         $invoice->load();
         $this->assertEquals('sent', $invoice->get('status'));
     }
 
-    function testReadyForStateWithoutCheckingProducts() {
+    function testReadyForStateWithoutCheckingProducts()
+    {
         $invoice = $this->createAnInvoiceWithOneItem();
         $year = $this->createAccountingYear();
         $this->assertFalse($invoice->readyForState($year, 'skip_check_products'));
@@ -109,14 +114,16 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($invoice->readyForState($year, 'skip_check_products'), $invoice->error->view());
     }
 
-    function testReadyForStateWithCheckingProducts() {
+    function testReadyForStateWithCheckingProducts()
+    {
 
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
         $this->assertTrue($invoice->readyForState($this->createAccountingYear()), $invoice->error->view());
     }
 
-    function testState() {
+    function testState()
+    {
         $invoice = $this->createAnInvoiceWithOneItem();
         $invoice->setStatus('sent');
         $year = $this->createAccountingYear();
@@ -238,6 +245,4 @@ class InvoiceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($invoice->isStated());
         $this->assertFalse($invoice->readyForState($year));
     }
-
 }
-?>

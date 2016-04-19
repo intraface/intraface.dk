@@ -23,13 +23,13 @@
  */
 class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
 {
-     public $error;
-     private $db;
-     private $intranet;
-     private $shop;
-     private $id;
-     private $values;
-     private $settings;
+    public $error;
+    private $db;
+    private $intranet;
+    private $shop;
+    private $id;
+    private $values;
+    private $settings;
 
     /**
      * Constructor
@@ -164,7 +164,6 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                 throw new Exception($result->getMessage() . $result->getUserInfo());
                 return false;
             }
-
         } else {
             $result = $this->db->query("INSERT INTO webshop_basket_evaluation SET ".$sql.", intranet_id = ".$this->db->quote($this->intranet->getId(), 'integer').", id = ".$this->db->quote($this->id, 'integer').", shop_id = ".$this->db->quote($this->shop->getId(), 'integer'));
 
@@ -241,7 +240,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
 
         $basket->removeEvaluationProducts();
 
-        foreach ($evaluations AS $evaluation) {
+        foreach ($evaluations as $evaluation) {
             // If have been requested to move to a higher index, we make sure we do that
             if ($go_to_index > $evaluation['running_index']) {
                 continue;
@@ -249,7 +248,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
 
             $evaluation_result = false;
 
-            switch($evaluation['evaluate_target']) {
+            switch ($evaluation['evaluate_target']) {
                 case 'price':
                     $evaluate = (double)$basket->getTotalPrice();
                     settype($evaluation['evaluate_value'], 'double');
@@ -290,8 +289,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     $countries = new Ilib_Countries('iso-8859-1');
                     if (false !== ($country = $countries->getCountryByName(trim($customer['country'])))) {
                         $evaluate = $country['region'];
-                    }
-                    else {
+                    } else {
                         $evaluate = 'unknown';
                     }
                     
@@ -319,7 +317,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                     return false;
             }
 
-            switch($evaluation['evaluate_method']) {
+            switch ($evaluation['evaluate_method']) {
                 case 'equals':
                     if ($evaluate == $evaluation['evaluate_value']) {
                         $evaluation_result = true;
@@ -348,7 +346,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
             if ($evaluation_result) {
                 $go_to_index = $evaluation['go_to_index_after'];
 
-                switch($evaluation['action_unit']) {
+                switch ($evaluation['action_unit']) {
                     case 'pieces':
                         $quantity = $evaluation['action_quantity'];
                         break;
@@ -363,7 +361,7 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
                         return false;
                 }
 
-                switch($evaluation['action_action']) {
+                switch ($evaluation['action_action']) {
                     case 'no_action':
                         // fine nothing is done
                         break;

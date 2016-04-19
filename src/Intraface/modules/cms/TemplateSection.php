@@ -42,7 +42,7 @@ class CMS_TemplateSection extends Intraface_Standard
         $cms_module = $this->template->cmssite->kernel->module('cms');
         $this->section_types = $cms_module->getSetting('section_types');
 
-        if (array_key_exists('type', $this->value) AND is_string($this->value['type']) AND in_array($this->value['type'], $this->section_types)) {
+        if (array_key_exists('type', $this->value) and is_string($this->value['type']) and in_array($this->value['type'], $this->section_types)) {
             $this->value['type_key'] = array_search($this->value['type'], $this->section_types);
         }
 

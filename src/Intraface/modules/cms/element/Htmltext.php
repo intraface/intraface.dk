@@ -50,7 +50,7 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
 
     protected function validate_element($var)
     {
-        if ($this->error->isError()){
+        if ($this->error->isError()) {
             return false;
         }
 
@@ -60,7 +60,7 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
     private static function convertArrayToTags($array)
     {
         $tags = '';
-        foreach ($array AS $tag) {
+        foreach ($array as $tag) {
             $tags .= '<'.$tag.'>';
         }
         return $tags;

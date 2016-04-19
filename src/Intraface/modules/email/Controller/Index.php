@@ -59,7 +59,7 @@ class Intraface_modules_email_Controller_Index extends k_Component
             'emails' => $emails->getAll(),
             'gateway' => $emails,
             'contact_module' => $contact_module,
-        	'email_shared' => $email_shared
+            'email_shared' => $email_shared
         );
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/index');

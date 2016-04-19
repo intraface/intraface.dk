@@ -5,7 +5,7 @@ $address_values = $context->getValues();
 <h1><?php e('User'); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url(null)); ?>"><?php e(t('Close')); ?></a></li>
+    <li><a href="<?php e(url(null)); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
 <?php echo $context->getUser()->error->view(); ?>
@@ -17,12 +17,16 @@ $address_values = $context->getValues();
     <legend>Oplysninger om bruger</legend>
     <div class="formrow">
         <label for="name">E-mail</label>
-        <input type="text" name="email" id="email" value="<?php if (isset($value['email'])) e($value["email"]); ?>" />
+        <input type="text" name="email" id="email" value="<?php if (isset($value['email'])) {
+            e($value["email"]);
+} ?>" />
         <p style="clear:both;"><?php e(t('Your email is also your username')); ?></p>
     </div>
     <div class="formrow">
         <label for="disabled">Deaktiveret</label>
-        <input type="checkbox" name="disabled" id="disabled" value="1" <?php if (isset($value['disabled']) && $value["disabled"] == 1) print 'checked="checked"'; ?> />
+        <input type="checkbox" name="disabled" id="disabled" value="1" <?php if (isset($value['disabled']) && $value["disabled"] == 1) {
+            print 'checked="checked"';
+} ?> />
     </div>
 
     <div class="formrow">
@@ -53,32 +57,48 @@ if ($context->getIntranet()->getId() != 0) {
         <legend>Adresse oplysninger</legend>
         <div class="formrow">
             <label for="address_name">Navn</label>
-            <input type="text" name="address_name" id="address_name" value="<?php if (isset($address_value["name"])) e($address_value["name"]); ?>" />
+            <input type="text" name="address_name" id="address_name" value="<?php if (isset($address_value["name"])) {
+                e($address_value["name"]);
+} ?>" />
         </div>
         <div class="formrow">
             <label for="address">Adresse</label>
-            <textarea name="address" id="address" rows="2"><?php if (isset($address_value["address"])) e($address_value["address"]); ?></textarea>
+            <textarea name="address" id="address" rows="2"><?php if (isset($address_value["address"])) {
+                e($address_value["address"]);
+} ?></textarea>
         </div>
         <div class="formrow">
             <label for="postcode">Postnr og by</label>
-            <input type="text" name="postcode" id="postcode" value="<?php if (isset($address_value["postcode"])) e($address_value["postcode"]); ?>" size="4" />
-            <input type="text" name="city" id="city" value="<?php if (isset($address_value["city"])) e($address_value["city"]); ?>" />
+            <input type="text" name="postcode" id="postcode" value="<?php if (isset($address_value["postcode"])) {
+                e($address_value["postcode"]);
+} ?>" size="4" />
+            <input type="text" name="city" id="city" value="<?php if (isset($address_value["city"])) {
+                e($address_value["city"]);
+} ?>" />
         </div>
         <div class="formrow">
             <label for="country">Land</label>
-            <input type="text" name="country" id="country" value="<?php if (isset($address_value["country"])) e($address_value["country"]); ?>" />
+            <input type="text" name="country" id="country" value="<?php if (isset($address_value["country"])) {
+                e($address_value["country"]);
+} ?>" />
         </div>
         <div class="formrow">
             <label for="address_email">E-mail</label>
-            <input type="text" name="address_email" id="address_email" value="<?php if (isset($address_value["email"])) e($address_value["email"]); ?>" disabled="disabled" />
+            <input type="text" name="address_email" id="address_email" value="<?php if (isset($address_value["email"])) {
+                e($address_value["email"]);
+} ?>" disabled="disabled" />
         </div>
         <div class="formrow">
             <label for="website">Hjemmeside</label>
-            <input type="text" name="website" id="website" value="<?php if (isset($address_value["website"])) e($address_value["website"]); ?>" />
+            <input type="text" name="website" id="website" value="<?php if (isset($address_value["website"])) {
+                e($address_value["website"]);
+} ?>" />
         </div>
         <div class="formrow">
             <label for="phone">Telefon</label>
-            <input type="text" name="phone" id="phone" value="<?php if (isset($address_value["phone"])) e($address_value["phone"]); ?>" />
+            <input type="text" name="phone" id="phone" value="<?php if (isset($address_value["phone"])) {
+                e($address_value["phone"]);
+} ?>" />
         </div>
     </fieldset>
     <input type="submit" name="submit" value="<?php e(t('Save')); ?>" id="submit-save-address" />

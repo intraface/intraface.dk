@@ -51,7 +51,7 @@ class Intraface_Controller_Login extends k_Component
     {
         $adapter = new Intraface_Auth_User($this->mdb2, $this->session()->sessionId(), $username, $password);
 
-        $this->auth->attachObserver($this->log);
+        // $this->auth->attachObserver($this->log);
         $this->auth->authenticate($adapter);
 
         if (!$this->auth->hasIdentity()) {

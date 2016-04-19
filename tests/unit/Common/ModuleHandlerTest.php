@@ -3,7 +3,7 @@ class ModuleHandlerIntranet
 {
     function hasModuleAccess()
     {
-    	return true;
+        return true;
     }
 }
 
@@ -61,6 +61,4 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($this->handler->getModules(MDB2::singleton(DB_DSN))));
         $this->assertEquals($result->numRows(), count($this->handler->getModules(MDB2::singleton(DB_DSN))));
     }
-
 }
-

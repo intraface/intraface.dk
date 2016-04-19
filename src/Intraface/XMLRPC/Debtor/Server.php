@@ -13,7 +13,9 @@ class Intraface_XMLRPC_Debtor_Server_Translation
         return $key;
     }
 
-    function setPageID() {}
+    function setPageID()
+    {
+    }
 }
 
 class Intraface_XMLRPC_Debtor_Server extends Intraface_XMLRPC_Server0100
@@ -47,13 +49,13 @@ class Intraface_XMLRPC_Debtor_Server extends Intraface_XMLRPC_Server0100
             throw new XML_RPC2_FaultException('You must supply a private key.', -2);
         }
 
-		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
-		$weblogin = $auth_adapter->auth();
+        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+        $weblogin = $auth_adapter->auth();
 
-		if (!$weblogin) {
-		    require_once 'XML/RPC2/Exception.php';
+        if (!$weblogin) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
-		}
+        }
 
         $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
@@ -139,14 +141,14 @@ class Intraface_XMLRPC_Debtor_Server extends Intraface_XMLRPC_Server0100
             $this->kernel->useModule('onlinepayment');
             $onlinepayment = OnlinePayment::factory($this->kernel);
         } else {
-            $onlinepayment = NULL;
+            $onlinepayment = null;
         }
 
         if ($this->kernel->intranet->get("pdf_header_file_id") != 0) {
             $this->kernel->useModule('filemanager');
             $filehandler = new FileHandler($this->kernel, $this->kernel->intranet->get("pdf_header_file_id"));
         } else {
-            $filehandler = NULL;
+            $filehandler = null;
         }
 
         $report = new Intraface_modules_debtor_Visitor_Pdf($this->kernel->getTranslation('debtor'), $filehandler);

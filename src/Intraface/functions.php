@@ -11,7 +11,7 @@ if (!function_exists('amountToOutput')) {
         return call_user_func_array($GLOBALS['_global_function_callback_amountToOutput'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_amountToOutput'])) {
-        $GLOBALS['_global_function_callback_amountToOutput'] = NULL;
+        $GLOBALS['_global_function_callback_amountToOutput'] = null;
     }
 }
 
@@ -38,7 +38,7 @@ if (!function_exists('amountToForm')) {
         return call_user_func_array($GLOBALS['_global_function_callback_amountToForm'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_amountToForm'])) {
-        $GLOBALS['_global_function_callback_amountToForm'] = NULL;
+        $GLOBALS['_global_function_callback_amountToForm'] = null;
     }
 }
 
@@ -59,12 +59,13 @@ if (!function_exists('autoop')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_email']
      */
-    function autoop($args) {
+    function autoop($args)
+    {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_autoop'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_autoop'])) {
-        $GLOBALS['_global_function_callback_autoop'] = NULL;
+        $GLOBALS['_global_function_callback_autoop'] = null;
     }
 }
 
@@ -86,12 +87,13 @@ if (!function_exists('autohtml')) {
      * This function is dynamically redefinable.
      * @see $GLOBALS['_global_function_callback_email']
      */
-    function autohtml($args) {
+    function autohtml($args)
+    {
         $args = func_get_args();
         return call_user_func_array($GLOBALS['_global_function_callback_autohtml'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_autohtml'])) {
-        $GLOBALS['_global_function_callback_autohtml'] = NULL;
+        $GLOBALS['_global_function_callback_autohtml'] = null;
     }
 }
 
@@ -120,7 +122,7 @@ if (!function_exists('safeToDb')) {
         return call_user_func_array($GLOBALS['_global_function_callback_safetodb'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_safetodb'])) {
-        $GLOBALS['_global_function_callback_safetodb'] = NULL;
+        $GLOBALS['_global_function_callback_safetodb'] = null;
     }
 }
 $GLOBALS['_global_function_callback_safetodb'] = 'intraface_safetodb';
@@ -136,8 +138,8 @@ function intraface_safetodb($data)
         return $data;
     }
 
-    if (is_array($data)){
-        return array_map('safeToDb',$data);
+    if (is_array($data)) {
+        return array_map('safeToDb', $data);
     }
 
     if (get_magic_quotes_gpc()) {
@@ -159,7 +161,7 @@ if (!function_exists('filesize_readable')) {
         return call_user_func_array($GLOBALS['_global_function_callback_filesize_readable'], $args);
     }
     if (!isset($GLOBALS['_global_function_callback_filesize_readable'])) {
-        $GLOBALS['_global_function_callback_filesize_readable'] = NULL;
+        $GLOBALS['_global_function_callback_filesize_readable'] = null;
     }
 }
 $GLOBALS['_global_function_callback_filesize_readable'] = 'intraface_filesize_readable';
@@ -173,21 +175,21 @@ function intraface_filesize_readable($size, $retstring = null)
     // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
     $sizes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
     if ($retstring === null) {
-        $retstring = '%01.2f %s'; 
+        $retstring = '%01.2f %s';
     }
     $lastsizestring = end($sizes);
     foreach ($sizes as $sizestring) {
-        if ($size < 1024) { 
-            break; 
+        if ($size < 1024) {
+            break;
         }
-        if ($sizestring != $lastsizestring) { 
-            $size /= 1024; 
+        if ($sizestring != $lastsizestring) {
+            $size /= 1024;
         }
     }
-    if ($sizestring == $sizes[0]) { 
+    if ($sizestring == $sizes[0]) {
         // Bytes aren't normally fractional
-        $retstring = '%01d %s'; 
-    } 
+        $retstring = '%01d %s';
+    }
     return sprintf($retstring, $size, $sizestring);
 }
 
@@ -220,7 +222,7 @@ function intrafaceFrontendErrorhandler($errno, $errstr, $errfile, $errline, $err
     $errorhandler->addObserver(new ErrorHandler_Observer_File(ERROR_LOG));
     if (defined('SERVER_STATUS') && SERVER_STATUS == 'TEST') {
         // From php.net "~ $a: Bits that are set in $a are not set, and vice versa." That means the observer is used on everything but ERROR_LEVEL_CONTINUE_SCRIPT
-        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT); 
+        $errorhandler->addObserver(new ErrorHandler_Observer_BlueScreen, ~ ERROR_LEVEL_CONTINUE_SCRIPT);
     } else {
         $errorhandler->addObserver(new ErrorHandler_Observer_User, ~ ERROR_LEVEL_CONTINUE_SCRIPT); // See description of ~ above
     }

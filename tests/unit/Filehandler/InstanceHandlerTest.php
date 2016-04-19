@@ -41,7 +41,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
     }
     ////////////////////////////////////////////////////////////////
 
-    function testCreateFile() 
+    function testCreateFile()
     {
         $file = $this->createFile('wideonball.jpg');
 
@@ -89,7 +89,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testCreateCustomInstanceCreaterThanImage() 
+    function testCreateCustomInstanceCreaterThanImage()
     {
         $im = new InstanceManager($this->createKernel());
 

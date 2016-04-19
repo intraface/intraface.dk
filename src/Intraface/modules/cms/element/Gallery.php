@@ -54,8 +54,7 @@ class Intraface_modules_cms_element_Gallery extends CMS_Element
         }
 
         $i = 0;
-        foreach ($files AS $file) {
-
+        foreach ($files as $file) {
             if (isset($file['file_handler_id'])) {
                 $id = $file['file_handler_id'];
                 $append_file_id = $file['id'];

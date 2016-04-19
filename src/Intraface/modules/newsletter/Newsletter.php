@@ -102,7 +102,6 @@ class Newsletter extends Intraface_Standard
             $this->value['status'] = $status['status'];
             $this->value['receivers'] = $status['receivers'];
             */
-
         }
         return ($this->id = $db->f('id'));
     }
@@ -211,7 +210,7 @@ class Newsletter extends Intraface_Standard
             return false;
         }
 
-        if (is_array($subscribers) AND count($subscribers) == 0) {
+        if (is_array($subscribers) and count($subscribers) == 0) {
             $this->error->set('Ingen at sende nyhedsbrevet til');
             return false;
         }
@@ -239,7 +238,7 @@ class Newsletter extends Intraface_Standard
         }
 
         // TODO make escaping properly
-        foreach ($subscribers AS $subscriber) {
+        foreach ($subscribers as $subscriber) {
             if (!$validator->isEmail($subscriber['contact_email'], "")) {
                 $skipped++;
                 continue;
@@ -286,7 +285,7 @@ class Newsletter extends Intraface_Standard
 
         // If the number of contacts can be divided evenly into 40 there will be no more params here.
         if (count($params) > 0) {
-           $result = $db->exec($sql . implode($params, ','));
+            $result = $db->exec($sql . implode($params, ','));
         }
 
         if (PEAR::isError($result)) {
@@ -325,7 +324,6 @@ class Newsletter extends Intraface_Standard
         $db->query("SELECT * FROM newsletter_archieve WHERE active = 1 AND list_id = " . $this->list->get('id') . " ORDER BY deadline DESC");
         $i = 0;
         while ($db->nextRecord()) {
-
             $list[$i]['subject'] = $db->f('subject');
             $list[$i]['id']      = $db->f('id');
 

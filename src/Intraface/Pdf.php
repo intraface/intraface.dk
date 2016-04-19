@@ -4,7 +4,7 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-class Intraface_Pdf extends Document_Cpdf
+class Intraface_Pdf extends Cpdf
 {
     protected $value;
     protected $page;
@@ -62,7 +62,7 @@ class Intraface_Pdf extends Document_Cpdf
     private function calculateDynamicValues()
     {
         // Sets values based on the predefined values.
-        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width from 0 to right margen        
+        $this->value['right_margin_position'] = $this->page_width - $this->value['margin_right']; // content_width from 0 to right margen
         $this->value['top_margin_position'] = $this->page_height - $this->value['margin_top']; // content_height
 
         $this->value['content_width'] = $this->page_width - $this->value['margin_right'] - $this->value['margin_left']; // content_width fom 0 to right margen
@@ -148,7 +148,8 @@ class Intraface_Pdf extends Document_Cpdf
         $header = parent::openObject();
         $size = getImageSize($headerImg); // array(0 => width, 1 => height)
 
-        $height = $this->get('header_height');;
+        $height = $this->get('header_height');
+        ;
         $width = $size[0] * ($height/$size[1]);
 
         if ($width > $this->get('content_width')) {
@@ -181,7 +182,7 @@ class Intraface_Pdf extends Document_Cpdf
         parent::line($x+$width, $y+$height-$round, $x+$width, $y+$round-1);
         parent::line($x+$width-$round, $y, $x+$round, $y);
 
-        parent::partEllipse($x+$round, $y+$round,180, 270, $round);
+        parent::partEllipse($x+$round, $y+$round, 180, 270, $round);
         parent::partEllipse($x+$round, $y+$height-$round, 90, 180, $round);
         parent::partEllipse($x+$width-$round, $y+$height-$round, 0, 90, $round);
         parent::partEllipse($x+$width-$round, $y+$round, 270, 360, $round);

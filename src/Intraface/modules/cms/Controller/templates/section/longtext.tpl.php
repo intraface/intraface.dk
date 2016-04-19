@@ -12,10 +12,9 @@
                             'class' => 'cms-html-editor'
                         );
 
-                        if ($_SERVER['REQUEST_METHOD'] == 'GET' AND $kernel->setting->get('user', 'htmleditor') == 'tinymce') {
+                        if ($_SERVER['REQUEST_METHOD'] == 'GET' and $kernel->setting->get('user', 'htmleditor') == 'tinymce') {
                             $text = $value['section'][$section->get('id')]['html'];
-                        }
-                        else {
+                        } else {
                             $text = $value['section'][$section->get('id')]['text'];
                         }
 

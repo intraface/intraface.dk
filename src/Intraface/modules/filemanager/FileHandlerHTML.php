@@ -93,11 +93,11 @@ class FileHandlerHTML
     * @param upload_field_name: navnet p� type="file" input-felttet.
     * @param submit_name: navnet p� submit-knappen, som f�rer til "V�lg fra filarkiv"
     * @param options: array:
-    * 		image_attr (mulighed for at s�tte attributer p� img-tag);
-    *			field_description: (det som st�r foran upload feltet, standard 'Fil')
-    *			image_size: (st�rrelsen p� billedet. Standard original
-    *			type: full/only_upload
-    *			include_submit_button_name: hvis sat bliver der indsat en "Upload" knap efter fil-felt, men strengen som navn
+    *       image_attr (mulighed for at s�tte attributer p� img-tag);
+    *           field_description: (det som st�r foran upload feltet, standard 'Fil')
+    *           image_size: (st�rrelsen p� billedet. Standard original
+    *           type: full/only_upload
+    *           include_submit_button_name: hvis sat bliver der indsat en "Upload" knap efter fil-felt, men strengen som navn
     */
 
     function printFormUploadTag($checkbox_name, $upload_field_name, $submit_name, $options = array())
@@ -135,7 +135,7 @@ class FileHandlerHTML
         if ($options['include_submit_button_name'] != '') {
             echo ' <input type="submit" name="'.$options['include_submit_button_name'].'" value="'.t('upload', 'filehandler') . '" /> <br />';
         }
-        if ($this->file_handler->kernel->user->hasModuleAccess('filemanager') AND $options['filemanager'] === true) {
+        if ($this->file_handler->kernel->user->hasModuleAccess('filemanager') and $options['filemanager'] === true) {
             echo ' &nbsp; '.t('or').' &nbsp; <input type="submit" name="'.$submit_name.'" value="'.t('choose from filemanager', 'filehandler').'" />';
         }
         echo '</div>';

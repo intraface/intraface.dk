@@ -29,8 +29,6 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             $filemanager = new Intraface_modules_filemanager_FileManager($this->kernel);
             $filemanager->getDBQuery()->setKeyword($this->value['keyword_id']);
             $files = $filemanager->getList();
-
-
         } else { // Enkeltfiler
             $shared_filehandler = $this->kernel->useModule('filemanager');
             $shared_filehandler->includeFile('AppendFile.php');
@@ -39,7 +37,7 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
         }
 
         $i = 0;
-        foreach ($files AS $file) {
+        foreach ($files as $file) {
             if (isset($file['file_handler_id'])) {
                 $id = $file['file_handler_id'];
                 $append_file_id = $file['id'];
@@ -52,7 +50,9 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
             // @todo this should be avoided
             $filehandler->createInstance();
             // HACK lille hack - til at undg� at vi f�r filer med som ikke har beskrivelser (formentlig slettede filer)
-            if (!$filehandler->get('description')) continue;
+            if (!$filehandler->get('description')) {
+                continue;
+            }
             $this->value['files'][$i] = $filehandler->get();
             $this->value['files'][$i]['append_file_id'] = $append_file_id;
             // $this->value['pictures'][$i]['show_uri'] = $file_uri;

@@ -9,8 +9,12 @@
     <div class="formrow">
         <label for="accessibility"><?php e(t('file accessibility')); ?></label>
         <select name="accessibility">
-            <option value="public" <?php if ($values['accessibility'] == 'public') e('selected="selected"'); ?> ><?php e(t('public', 'filehandler')); ?></option>
-            <option value="intranet" <?php if ($values['accessibility'] == 'intranet') e('selected="selected"'); ?> ><?php e(t('intranet', 'filehandler')); ?></option>
+            <option value="public" <?php if ($values['accessibility'] == 'public') {
+                e('selected="selected"');
+} ?> ><?php e(t('public', 'filehandler')); ?></option>
+            <option value="intranet" <?php if ($values['accessibility'] == 'intranet') {
+                e('selected="selected"');
+} ?> ><?php e(t('intranet', 'filehandler')); ?></option>
         </select>
     </div>
 

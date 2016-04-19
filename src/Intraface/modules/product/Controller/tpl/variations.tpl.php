@@ -26,41 +26,50 @@
             if (isset($groups[1]) && is_array($groups[1]) && !empty($groups[1]['id'])) {
                 $attributes2 = $group_gateway->findById($groups[1]['id'])->getAttributes();
             } else {
-                $attributes2 = array(NULL);
+                $attributes2 = array(null);
             }
 
             $count = 0;
             ?>
-            <?php foreach ($attributes1 AS $a1): ?>
-                <?php foreach ($attributes2 AS $a2): ?>
+            <?php foreach ($attributes1 as $a1) : ?>
+                <?php foreach ($attributes2 as $a2) : ?>
                     <tr>
                         <td>
                             <?php
                             $attributes['attribute1'] = $a1->getId();
-                            if ($a2 != NULL) {
+                            if ($a2 != null) {
                                 $attributes['attribute2'] = $a2->getId();
                             }
                             try {
                                 $variation = $product->getVariationFromAttributes($attributes);
-
                             } catch (Intraface_Gateway_Exception $e) {
-                                $variation = NULL;
+                                $variation = null;
                             } catch (Exception $e) {
-                                $variation = NULL;
+                                $variation = null;
                             }
                             ?>
-						<?php if ($variation !== NULL) echo '&bull;'; ?>
+                        <?php if ($variation !== null) {
+                            echo '&bull;';
+} ?>
                         </td>
-                        <td><?php if ($variation !== NULL): e($variation->getNumber()); else: e('-'); endif; ?>
+                        <td><?php if ($variation !== null) :
+                            e($variation->getNumber());
+else :
+    e('-');
+endif; ?>
                         </td>
                         <td>
                             <?php
                             e($groups[0]['name'].': '.$a1->getName());
-                            if ($a2 != NULL) e(', '.$groups[1]['name'].': '.$a2->getName());
+                            if ($a2 != null) {
+                                e(', '.$groups[1]['name'].': '.$a2->getName());
+                            }
                             ?>
                         </td>
                         <?php /* can be reimplemented: <td><input type="text" name="variation[<?php e($count); ?>][price_difference]" value="<?php if ($variation !== NULL) e($variation->getDetail()->getPriceDifference()); ?>" size="4"/></td> */ ?>
-                        <td><?php if ($variation !== NULL) e($variation->getDetail()->getWeightDifference()); ?></td>
+                        <td><?php if ($variation !== null) {
+                            e($variation->getDetail()->getWeightDifference());
+} ?></td>
                     </tr>
                     <?php
                     $count++;

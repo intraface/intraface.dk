@@ -31,7 +31,9 @@ $module_msg = $context->getModuleMsg();
         <tr>
             <td>
                 <?php e(t($module["name"])); ?>
-                <?php if (isset($module_msg[$module["name"]])) print("<br /><span class=\"red\">".$module_msg[$module["name"]]."</span>"); ?>
+                <?php if (isset($module_msg[$module["name"]])) {
+                    print("<br /><span class=\"red\">".$module_msg[$module["name"]]."</span>");
+} ?>
             </td>
             <td>
                 <?php

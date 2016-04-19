@@ -13,7 +13,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         if ($name == 'create') {
             return 'Intraface_modules_accounting_Controller_Year_Edit';
         } elseif (is_numeric($name)) {
-        	return 'Intraface_modules_accounting_Controller_Year_Show';
+            return 'Intraface_modules_accounting_Controller_Year_Show';
         }
     }
 
@@ -28,7 +28,7 @@ class Intraface_modules_accounting_Controller_Year_Index extends k_Component
         $year = new Year($this->getKernel(), $_POST['id']);
 
         if (!$year->setYear()) {
-        	throw new Exception('Could not set the year');
+            throw new Exception('Could not set the year');
         }
         return new k_SeeOther($this->url($year->getId()));
     }

@@ -236,5 +236,4 @@ class AppendFile
         $file = $table->findOneById(intval($id));
         return $file;
     }
-
 }

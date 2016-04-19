@@ -68,8 +68,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         $this->intranetmaintenance = $intranet;
 
         $data = array(
-        	'intranet' => $intranet,
-        	'user' => $user);
+            'intranet' => $intranet,
+            'user' => $user);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/show');
         return $smarty->render($this, $data);
@@ -188,7 +188,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
             return $this->user;
         }
         $this->user = new UserMaintenance($this->name());
-        if ($this->query('intranet') > 0 AND $this->user->hasIntranetAccess($this->query('intranet'))) {
+        if ($this->query('intranet') > 0 and $this->user->hasIntranetAccess($this->query('intranet'))) {
             $this->user->setIntranetId($this->query('intranet_id'));
         }
         return ($this->user);
@@ -199,7 +199,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
         if (is_object($this->intranetmaintenance)) {
             return $this->intranetmaintenance;
         }
-        if (method_exists($this->context, 'getIntranet') AND $this->context->getIntranet()->getId() > 0) {
+        if (method_exists($this->context, 'getIntranet') and $this->context->getIntranet()->getId() > 0) {
             return $this->intranetmaintenance = new IntranetMaintenance($this->context->getIntranet()->getId());
         }
 
@@ -208,7 +208,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Show extends k_Compo
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     /*

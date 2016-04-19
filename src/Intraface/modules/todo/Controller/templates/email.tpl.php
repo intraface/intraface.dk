@@ -6,7 +6,7 @@
     <fieldset>
         <legend>Send til kontakter</legend>
 
-        <?php foreach ($contacts AS $contact):  ?>
+        <?php foreach ($contacts as $contact) :  ?>
             <?php
                 $c = new Contact($kernel, $contact);
             ?>
@@ -17,7 +17,7 @@
         <label>Tilføj en kontaktperson</label>
         <select name="new_contact[]">
         <option value="">Vælg</option>
-        <?php foreach ($contact_list AS $contact_item): ?>
+        <?php foreach ($contact_list as $contact_item) : ?>
             <option value="<?php e($contact_item['id']); ?>"><?php e($contact_item['name']); ?></option>
         <?php endforeach; ?>
         </select>

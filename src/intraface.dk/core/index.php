@@ -17,83 +17,9 @@ function intraface_exceptions_error_handler($severity, $message, $filename, $lin
 
 set_error_handler('intraface_exceptions_error_handler', error_reporting());
 
+require_once dirname(__FILE__) . '/../../../vendor/autoload.php';
 require_once 'Intraface/common.php';
-require_once 'Ilib/ClassLoader.php';
-require_once 'konstrukt/konstrukt.inc.php';
-require_once 'swift_required.php';
-require_once 'Ilib/Errorhandler/Handler/File.php';
 spl_autoload_register('k_autoload');
-
-$GLOBALS['konstrukt_content_types']['application/ms-excel'] = 'xls';
-$GLOBALS['konstrukt_content_types']['text/x-vcard'] = 'vcf';
-$GLOBALS['konstrukt_content_types']['text/plain'] = 'txt';
-$GLOBALS['konstrukt_content_types']['xml/oioxml'] = 'oioxml';
-
-class k_PdfResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'application/pdf';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
-    }
-}
-
-class k_XlsResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'application/excel';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
-    }
-}
-
-class k_TxtResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'text/plain';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
-    }
-}
-
-
-class k_VcfResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'text/x-vcard';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
-    }
-}
-
-class k_OioxmlResponse extends k_ComplexResponse
-{
-    function contentType()
-    {
-        return 'xml/oioxml';
-    }
-
-    protected function marshal()
-    {
-        return $this->content;
-    }
-}
 
 class Intraface_AuthenticatedUser extends k_AuthenticatedUser
 {

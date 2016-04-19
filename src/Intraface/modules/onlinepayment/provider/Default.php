@@ -2,13 +2,14 @@
 /**
  * Onlinebetalingsklasse som er generel, hvis man ikke har nogen udbyder
  * @package Intraface_OnlinePayment
- * @author		Lars Olesen <lars@legestue.net>
- * @version	1.0
+ * @author      Lars Olesen <lars@legestue.net>
+ * @version     1.0
  */
 
 class OnlinePaymentDefault extends OnlinePayment
 {
-    function __construct($kernel, $id) {
+    function __construct($kernel, $id)
+    {
 
         parent::__construct($kernel, $id);
     }

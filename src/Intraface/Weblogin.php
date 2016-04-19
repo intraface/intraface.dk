@@ -53,7 +53,7 @@ class Intraface_Weblogin implements Intraface_Identity
 
     function hasModuleAccess($modulename)
     {
-		return $this->intranet->hasModuleAccess($modulename);
+        return $this->intranet->hasModuleAccess($modulename);
     }
 
     function hasIntranetAccess($intranet_id)

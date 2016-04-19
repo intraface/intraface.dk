@@ -222,5 +222,4 @@ class NewsletterList extends Intraface_Standard
         }
         return $lists;
     }
-
 }

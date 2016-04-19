@@ -3,7 +3,7 @@
  * Guide to calculate VAT
  *
  * Register VAT should persist values in database.
- * 
+ *
  * Should be able to calculate whether there is a difference between what has
  * been stated and what should have been stated to make it less error prone.
  *
@@ -47,13 +47,13 @@ class Intraface_modules_accounting_Controller_Vat_Index extends k_Component
 
     function postForm()
     {
-    	if (isset($_POST['vat_period_key'])) {
-    		$this->getYear()->setSetting('vat_period', $_POST['vat_period_key']);
-    	}
-    	$vat_period = new VatPeriod($this->getYear());
-    	$vat_period->createPeriods();
+        if (isset($_POST['vat_period_key'])) {
+            $this->getYear()->setSetting('vat_period', $_POST['vat_period_key']);
+        }
+        $vat_period = new VatPeriod($this->getYear());
+        $vat_period->createPeriods();
 
-    	return new k_SeeOther($this->url(null));
+        return new k_SeeOther($this->url(null));
     }
     
     function getPeriods()

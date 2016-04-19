@@ -26,7 +26,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         if ($id != 0) {
             $connection = Doctrine_Manager::connection();
             $connection->clear(); // clear repo, so that we are sure data are loaded again.
-            $gateway = new Intraface_modules_product_ProductDoctrineGateway($connection, NULL);
+            $gateway = new Intraface_modules_product_ProductDoctrineGateway($connection, null);
             return $gateway->findById($id);
         }
         return new Intraface_modules_product_ProductDoctrine;
@@ -350,8 +350,9 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         try {
             $product->save();
         } catch (Exception $e) {
-            foreach ($product->getErrorStack() AS $field => $error) {
-                echo $field; var_dump($error);
+            foreach ($product->getErrorStack() as $field => $error) {
+                echo $field;
+                var_dump($error);
             }
         }
 
@@ -372,8 +373,7 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         try {
             $product->setAttributeGroup($group);
             $this->assertTrue(false, 'An excpetion is not thrown');
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             $this->assertEquals('You can not set attribute group for a product without variations!', $e->getMessage());
         }
     }
@@ -418,14 +418,14 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
                 'intranet_id' => 1,
                 'name' => 'Test1',
                 '_old_deleted' => 0,
-                'deleted_at' => NULL
+                'deleted_at' => null
             ),
             1 => array(
                 'id' => 2,
                 'intranet_id' => 1,
                 'name' => 'Test2',
                 '_old_deleted' => 0,
-                'deleted_at' => NULL
+                'deleted_at' => null
             )
         );
         

@@ -4,7 +4,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 class ShopGatewayTest extends PHPUnit_Framework_TestCase
 {
     private $gateway;
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
     protected $db;
 
     function setUp()

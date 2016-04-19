@@ -2,9 +2,9 @@
 /**
  *
  * @package Intraface_Stock
- * @author	Sune Jensen
- * @since	1.0
- * @version	1.0
+ * @author  Sune Jensen
+ * @since   1.0
+ * @version     1.0
  *
  */
 class MainStock extends Intraface_Main

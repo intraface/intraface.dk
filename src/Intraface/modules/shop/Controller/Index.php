@@ -26,9 +26,9 @@ class Intraface_Filter_HTMLPurifier implements Zend_Filter_Interface
         $config = null;
         if (!is_null($options)) {
             $config = HTMLPurifier_Config::createDefault();
-                foreach ($options as $option) {
-                    $config->set($option[0] . '.' . $option[1], $option[2]);
-                }
+            foreach ($options as $option) {
+                $config->set($option[0] . '.' . $option[1], $option[2]);
+            }
         }
         $this->_htmlPurifier = new HTMLPurifier($config);
     }
@@ -37,7 +37,6 @@ class Intraface_Filter_HTMLPurifier implements Zend_Filter_Interface
     {
         return $this->_htmlPurifier->purify($value);
     }
-
 }
 
 class Intraface_Filter_HtmlBody extends Intraface_Filter_HTMLPurifier
@@ -65,7 +64,6 @@ class Intraface_Filter_HtmlBody extends Intraface_Filter_HTMLPurifier
 
         parent::__construct($options);
     }
-
 }
 
 class Intraface_modules_shop_Controller_Index extends k_Component
@@ -169,7 +167,7 @@ class Intraface_modules_shop_Controller_Index extends k_Component
         if (!$this->isValid()) {
             $data = $this->body();
         } else {
-            $data['receipt'] = $this->getKernel()->setting->get('intranet','webshop.webshop_receipt');
+            $data['receipt'] = $this->getKernel()->setting->get('intranet', 'webshop.webshop_receipt');
         }
 
         if ($this->getKernel()->intranet->hasModuleAccess('currency')) {
