@@ -1,0 +1,215 @@
+{
+  "name": "intraface/intraface",
+    "type": "project",
+    "description": "Application for accounting, invoicing and websites",
+    "homepage": "https://github.com/intraface/intraface.dk",
+    "license": "MIT",
+    "config": {
+        "secure-http": false
+    },
+    "authors": [
+        {
+            "name": "Lars Olesen",
+            "email": "lars@intraface.dk"
+        },
+        {
+          "name": "Sune T. Jensen",
+          "email": "sune@intraface.dk"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_ErrorHandler_Handler.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/ErrorHandler"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/lsolesen/mdb2-debug-explainqueries.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_RandomKeyGenerator.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Position.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Doctrine_Validator_Nohtml.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Doctrine_Validator_Greaterthan.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Doctrine_Template_positionable.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Category.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_DBQuery.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Error.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Redirect.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Validator.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_FileImport.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_ClassLoader.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Variable.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/DB_Sql.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/DB_Sql.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Keyword.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Date.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Countries.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Filemanager.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Filemanager_Controller.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Keyword_Controller.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/IntrafacePublic_CMS_Controller.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Debtor_PDF.git"
+        },
+        {
+            "type": "pear",
+            "url": "https://pear.php.net"
+        },
+        {
+            "type": "pear",
+            "url": "http://pear.doctrine-project.org"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/troelskn/bucket.git"
+        },
+        {
+            "type": "git",
+            "url": "https://github.com/troelskn/konstrukt.git"
+        }
+    ],
+   "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/unit/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.2",
+        "pear-pear.php.net/Config": "1.10.12",
+        "swiftmailer/swiftmailer": "4.1.*",
+        "pear-pear.php.net/HTTP": "1.4.1",
+        "pear-pear.php.net/MDB2": "2.4.1",
+        "pear-pear.php.net/MDB2_Driver_mysql": "1.4.1",
+        "pear-pear.php.net/Translation2": "2.0.4",
+        "pear-pear.php.net/Log": "1.12.6",
+        "pear-pear.php.net/Validate": "0.8.4",
+        "pear-pear.php.net/Net_IDNA": "0.8.1",
+        "pear-pear.php.net/HTTP_Upload": "0.9.1",
+        "pear-pear.php.net/Cache_Lite": "1.7.11",
+        "pear-pear.php.net/Image_Transform": "0.9.4",
+        "pear-pear.php.net/File": "1.4.0",
+        "troelskn/bucket": "*",
+        "troelskn/konstrukt": "dev-composer-autoload",
+        "pear-pear.doctrine-project.org/Doctrine": "1.2.4",
+        "pear-pear.php.net/XML_RPC2": "1.0.8",
+        "pear-pear.php.net/MIME_Type": "1.2.1",
+        "pear-pear.php.net/System_Command": "1.0.7",
+        "pear-pear.php.net/XML_Util": "1.2.0",
+        "pear-pear.php.net/XML_Serializer": "0.20.2",
+        "pear-pear.php.net/Text_Wiki": "1.2.1",
+        "pear-pear.php.net/Console_Table": "1.1.4",
+        "pear-pear.php.net/Contact_Vcard_Build": "1.1.2",
+        "pear-pear.php.net/Date": "1.4.7",
+        "pear-pear.php.net/OLE": "1.0.0RC1",
+        "pear-pear.php.net/Spreadsheet_Excel_Writer": "0.9.2",
+        "michelf/php-markdown": "1.3.*",
+        "michelf/php-smartypants": "1.6.*",
+        "ezyang/htmlpurifier": "4.5.0",
+        "intraface/error-handler": "*",
+        "intraface/ilib-error-handler": "*",
+        "intraface/mdb2-debug-explainqueries": "*",
+        "intraface/randomkey-generator": "*",
+        "intraface/position": "*",
+        "intraface/doctrine-validator-nohtml": "*",
+        "intraface/doctrine-validator-greaterthan": "*",
+        "intraface/doctrine-template-positionable": "*",
+        "intraface/category": "*",
+        "intraface/dbquery": "*",
+        "intraface/error": "*",
+        "intraface/redirect": "*",
+        "intraface/fileimport": "*",
+        "intraface/validator": "*",
+        "intraface/classloader": "*",
+        "intraface/variable": "*",
+        "intraface/dbsql": "*",
+        "intraface/keyword": "*",
+        "intraface/date": "*",
+        "intraface/countries": "*",
+        "intraface/filemanager": "*",
+        "intraface/filemanager-controller": "*",
+        "intraface/keyword-controller": "*",
+        "intraface/public-cms-controller": "*",
+        "intraface/debtor-pdf": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.4.*",
+        "squizlabs/php_codesniffer": "2.*"
+    }
+}
