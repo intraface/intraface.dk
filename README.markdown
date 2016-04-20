@@ -1,7 +1,7 @@
 [Intraface.dk](http://intraface.dk)
 ============
 
-[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk)
+[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master)
 
 Source code for [intraface.dk](http://intraface.dk). A system for small businesses made with the [konstrukt.dk](http://konstrukt) framework.
 
@@ -12,13 +12,26 @@ Requirements
 2. php-xml module.
 3. MySQL-server
 4. Allowing .htaccess configuration with auto_prepend_file
-5. PEAR setup correctly
+5. PEAR setup correctly (deprecatd - use composer)
 6. PHP module openSSL (for https requests to onlinepayment gateways)
 7. PHP with magic_quotes_pgc = Off
-8. Intraface dependencies - install by creating a PEAR package; see below
+8. Intraface dependencies - install by creating a PEAR package; see below (deprecated - use composer)
 
-Preparing dependencies
-----------------------
+Prepare dependencies using composer
+-----------------------------------
+
+You can install all depedencies using the following command.
+
+```
+composer install
+```
+
+That will install dependencies into the `vendor` directory. Then you can use `vendor/autoload.php` to include required files automatically.
+
+The web directory is not setup automatically this way, but by configuring your server manually to serve webcontent from `src/intraface.dk/core` will make the webapp run properly.
+
+DEPRECATED preparing dependencies with PEAR
+-------------------------------------------
 
 It is fairly easy to install intraface using the command line.
 
