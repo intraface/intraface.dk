@@ -54,7 +54,7 @@ class ProductTest extends PHPUnit_Framework_TestCase
     function testSavesProductsAndReturnsIdOfProductOnSuccess()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $product = new Product($this->kernel);
         $name = 'Test';

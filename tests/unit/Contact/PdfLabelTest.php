@@ -27,7 +27,7 @@ class PdfLabelTest extends PHPUnit_Framework_TestCase
     function testGenerate()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $pdf = $this->getPdfLabel();
 

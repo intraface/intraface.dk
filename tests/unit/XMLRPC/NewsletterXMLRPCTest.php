@@ -22,7 +22,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function testConstruction()
     {
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+            'This test has not been implemented yet.'
         );
         $this->assertTrue(is_object($this->server));
     }
@@ -30,7 +30,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function testEmptyCredentialsThrowsException()
     {
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+            'This test has not been implemented yet.'
         );
         $credentials = array();
         $list = 1;
@@ -50,7 +50,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function testIfANonExistingListIsUsedWithSubscribeAnExceptionIsThrown()
     {
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+            'This test has not been implemented yet.'
         );
         $client = $this->getClient();
 
@@ -72,7 +72,7 @@ class NewsletterXMLRPCTest extends PHPUnit_Framework_TestCase
     function testSubscribeHandlesStuff()
     {
         $this->markTestIncomplete(
-          'This test has not been implemented yet.'
+            'This test has not been implemented yet.'
         );
         $client = $this->getClient();
         $credentials = array('private_key' => 'privatekeyshouldbereplaced', 'session_id' => 'something');

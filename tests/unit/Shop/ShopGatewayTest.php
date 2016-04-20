@@ -49,7 +49,7 @@ class ShopGatewayTest extends PHPUnit_Framework_TestCase
     function testFindAllTakesIntranetIdIntoAccount()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         Intraface_Doctrine_Intranet::singleton(1);
         $id = $this->createShop();

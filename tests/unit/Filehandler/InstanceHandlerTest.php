@@ -92,7 +92,7 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
     function testCreateCustomInstanceCreaterThanImage()
     {
         $this->markTestSkipped(
-          'This test has not been implemented yet.'
+            'This test has not been implemented yet.'
         );
         $im = new InstanceManager($this->createKernel());
 

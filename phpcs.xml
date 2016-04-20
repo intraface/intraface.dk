@@ -48,4 +48,7 @@
   <rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword">
     <severity>0</severity>
   </rule>
+  <rule ref="PSR2.ControlStructures.SwitchDeclaration.TerminatingComment">
+    <severity>0</severity>
+  </rule>
 </ruleset>

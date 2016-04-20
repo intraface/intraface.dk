@@ -53,7 +53,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     function testVisit()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();
@@ -67,7 +67,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     function testVisitWithPayment()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();
@@ -82,7 +82,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     function testVisitWithLongProductText()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $pdf = $this->createPdf();
         $debtor = $this->createDebtorLongProductText();
@@ -96,7 +96,7 @@ class DebtorPdfTest extends PHPUnit_Framework_TestCase
     function testVisitWithOnlinePayment()
     {
         $this->markTestSkipped(
-          'This test is not passing.'
+            'This test is not passing.'
         );
         $pdf = $this->createPdf();
         $debtor = $this->createDebtor();

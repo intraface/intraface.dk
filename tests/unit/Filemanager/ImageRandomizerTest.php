@@ -79,7 +79,7 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
     function testGetRandomImageReturnsDifferentImages()
     {
         $this->markTestIncomplete(
-          'This seems like a volatile test that might break randomly.'
+            'This seems like a volatile test that might break randomly.'
         );
         $this->createImages();
         $r = $this->createImageRandomizer();
