@@ -148,7 +148,6 @@ class Intraface_shared_email_EmailGateway
         $emails = array();
         while ($db->nextRecord()) {
             $emails[] = new Email($this->kernel, $db->f('id'));
-
         }
         return $emails;
     }

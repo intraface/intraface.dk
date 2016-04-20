@@ -40,7 +40,8 @@ class MainAccounting extends Intraface_Main
 
         $this->addFrontpageFile('include_frontpage.php');
 
-        $this->addSetting('vat_periods',
+        $this->addSetting(
+            'vat_periods',
             array(
                 // halvårlig
                 0 => array(

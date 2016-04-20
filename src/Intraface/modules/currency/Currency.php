@@ -13,10 +13,14 @@ class Intraface_modules_currency_Currency extends Doctrine_Record
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
-        $this->hasMany('Intraface_modules_currency_Currency_ExchangeRate_ProductPrice as product_price_exchange_rate',
-            array('local' => 'id', 'foreign' => 'currency_id'));
-        $this->hasMany('Intraface_modules_currency_Currency_ExchangeRate_Payment as payment_exchange_rate',
-            array('local' => 'id', 'foreign' => 'currency_id'));
+        $this->hasMany(
+            'Intraface_modules_currency_Currency_ExchangeRate_ProductPrice as product_price_exchange_rate',
+            array('local' => 'id', 'foreign' => 'currency_id')
+        );
+        $this->hasMany(
+            'Intraface_modules_currency_Currency_ExchangeRate_Payment as payment_exchange_rate',
+            array('local' => 'id', 'foreign' => 'currency_id')
+        );
 
     }
 

@@ -3,9 +3,9 @@
  * Year
  *
  * @package Intraface_Accounting
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 require_once 'Intraface/modules/accounting/Account.php';
 
@@ -20,7 +20,7 @@ class Year extends Intraface_Standard
      * Constructor
      *
      * @param object  $kernel
-     * @param integer $year_id 
+     * @param integer $year_id
      * @param boolean $load_active used when a new year is created
      *
      * @return void
@@ -152,7 +152,6 @@ class Year extends Intraface_Standard
         $db->query($sql);
 
         if ($db->nextRecord()) {
-
             $this->id = $db->f('id');
             $this->value['id'] = $db->f('id');
             $this->value['year'] = $db->f('year');
@@ -278,7 +277,7 @@ class Year extends Intraface_Standard
         if ($this->get('vat') == 0) {
             return true; // pretend it is set, when no vat on the year
         }
-        if ($this->getSetting('vat_in_account_id') > 0 AND $this->getSetting('vat_out_account_id') > 0 AND $this->getSetting('vat_balance_account_id') > 0) {
+        if ($this->getSetting('vat_in_account_id') > 0 and $this->getSetting('vat_out_account_id') > 0 and $this->getSetting('vat_balance_account_id') > 0) {
             return true;
         }
         return false;
@@ -311,7 +310,7 @@ class Year extends Intraface_Standard
     public function isDateInYear($date)
     {
         if ($this->getId() == 0) {
-        	throw new Exception('Year has not been loaded yet - maybe not saved');
+            throw new Exception('Year has not been loaded yet - maybe not saved');
         }
 
         $date = safeToDb($date);
@@ -319,9 +318,9 @@ class Year extends Intraface_Standard
         $db = new Db_Sql;
         $db->query("SELECT from_date, to_date FROM accounting_year WHERE id= " . $this->id . " AND intranet_id = " . $this->kernel->intranet->get('id') . " LIMIT 1");
         if ($db->nextRecord()) {
-          if ($db->f('from_date') <= $date AND $date <= $db->f('to_date')) {
-              return true;
-          }
+            if ($db->f('from_date') <= $date and $date <= $db->f('to_date')) {
+                return true;
+            }
         }
         return false;
     }
@@ -331,9 +330,9 @@ class Year extends Intraface_Standard
      *
      * @return boolean
      */
-    public function readyForState($date = NULL)
+    public function readyForState($date = null)
     {
-        if ($date === NULL) {
+        if ($date === null) {
             $date = date('Y-m-d');
         }
 
@@ -397,13 +396,13 @@ class Year extends Intraface_Standard
         $balance_accounts = unserialize($this->getSetting('balance_accounts'));
 
         if (!is_array($balance_accounts)) {
-        	throw new Exception('Balance accounts are not an array');
+            throw new Exception('Balance accounts are not an array');
         }
 
         $sql_where = "";
 
-        if (!empty($balance_accounts) AND count($balance_accounts) > 0) {
-            foreach ($balance_accounts AS $account) {
+        if (!empty($balance_accounts) and count($balance_accounts) > 0) {
+            foreach ($balance_accounts as $account) {
                 $sql_where .= "id = " . $account . " OR ";
             }
         }
@@ -437,7 +436,7 @@ class Year extends Intraface_Standard
 
     function setSetting($setting, $value)
     {
-        return $this->kernel->getSetting()->set('intranet', 'accounting.'.$setting, $value,  $this->get('id'));
+        return $this->kernel->getSetting()->set('intranet', 'accounting.'.$setting, $value, $this->get('id'));
     }
 
     function getSetting($setting)
@@ -448,7 +447,7 @@ class Year extends Intraface_Standard
     function createAccounts($type, $last_year_id = 0)
     {
         if ($this->getId() == 0) {
-        	throw new Exception('Year has no id');
+            throw new Exception('Year has no id');
         }
 
         $last_year_id = (int)$last_year_id;
@@ -473,87 +472,86 @@ class Year extends Intraface_Standard
 
                     include('Intraface/modules/accounting/standardaccounts.php');
 
-                    if (empty($standardaccounts)) {
-                        return false;
-                    }
+                if (empty($standardaccounts)) {
+                    return false;
+                }
 
                     $balance_accounts = array();
                     $buy_abroad = array();
                     $buy_eu = array();
 
-                    foreach ($standardaccounts AS $input) {
-                        require_once 'Intraface/modules/accounting/Account.php';
-                        $account = new Account($this);
-                        $input['vat_percent'] = $this->kernel->getSetting()->get('intranet', 'vatpercent');
-                        $id = $account->save($input);
+                foreach ($standardaccounts as $input) {
+                    require_once 'Intraface/modules/accounting/Account.php';
+                    $account = new Account($this);
+                    $input['vat_percent'] = $this->kernel->getSetting()->get('intranet', 'vatpercent');
+                    $id = $account->save($input);
 
-                        // settings
-                        if (!empty($input['setting'])) {
-                            $this->setSetting($input['setting'] . '_account_id', $id);
-                        }
-                        if (!empty($input['balance_account']) AND $input['balance_account'] == 1) {
-                            $balance_accounts[] = $id;
-                        }
-                        if (!empty($input['result_account_id_start']) AND $input['result_account_id_start']) {
-                            $this->setSetting('result_account_id_start', $id);
-                        }
-
-                        if (!empty($input['result_account_id_end']) AND $input['result_account_id_end']) {
-                            $this->setSetting('result_account_id_end', $id);
-                        }
-
-                        if (!empty($input['balance_account_id_start']) AND $input['balance_account_id_start']) {
-                            $this->setSetting('balance_account_id_start', $id);
-                        }
-                        if (!empty($input['capital_account']) AND $input['capital_account']) {
-                            $this->setSetting('capital_account_id', $id);
-                        }
-                        if (!empty($input['balance_account_id_end']) AND $input['balance_account_id_end']) {
-                            $this->setSetting('balance_account_id_end', $id);
-                        }
-
-                        if (!empty($input['buy_eu']) AND $input['buy_eu'] == 1) {
-                            $buy_eu[] = $id;
-                        }
-                        if (!empty($input['buy_abroad']) AND $input['buy_abroad'] == 1) {
-                            $buy_abroad[] = $id;
-                        }
-
+                    // settings
+                    if (!empty($input['setting'])) {
+                        $this->setSetting($input['setting'] . '_account_id', $id);
                     }
+                    if (!empty($input['balance_account']) and $input['balance_account'] == 1) {
+                        $balance_accounts[] = $id;
+                    }
+                    if (!empty($input['result_account_id_start']) and $input['result_account_id_start']) {
+                        $this->setSetting('result_account_id_start', $id);
+                    }
+
+                    if (!empty($input['result_account_id_end']) and $input['result_account_id_end']) {
+                        $this->setSetting('result_account_id_end', $id);
+                    }
+
+                    if (!empty($input['balance_account_id_start']) and $input['balance_account_id_start']) {
+                        $this->setSetting('balance_account_id_start', $id);
+                    }
+                    if (!empty($input['capital_account']) and $input['capital_account']) {
+                        $this->setSetting('capital_account_id', $id);
+                    }
+                    if (!empty($input['balance_account_id_end']) and $input['balance_account_id_end']) {
+                        $this->setSetting('balance_account_id_end', $id);
+                    }
+
+                    if (!empty($input['buy_eu']) and $input['buy_eu'] == 1) {
+                        $buy_eu[] = $id;
+                    }
+                    if (!empty($input['buy_abroad']) and $input['buy_abroad'] == 1) {
+                        $buy_abroad[] = $id;
+                    }
+                }
 
                     $this->setSetting('balance_accounts', serialize($balance_accounts));
                     $this->setSetting('buy_abroad_accounts', serialize($buy_abroad));
                     $this->setSetting('buy_eu_accounts', serialize($buy_eu));
 
-                  break;
+                break;
             case 'transfer_from_last_year':
                     // oprette konti
-                    if ($last_year_id == 0) {
-                        return false;
-                    }
+                if ($last_year_id == 0) {
+                    return false;
+                }
                     $last_year = new Year($this->kernel, $last_year_id);
                     $account = new Account($last_year);
                     $accounts = $account->getList();
 
-                    foreach ($accounts as $a) {
-                        $old_account = new Account($last_year, $a['id']);
-                        $input = $old_account->get();
-                        $input['created_from_id'] = $old_account->get('id');
-                        $new_account = new Account($this);
-                        $new_account->save($input);
-                    }
+                foreach ($accounts as $a) {
+                    $old_account = new Account($last_year, $a['id']);
+                    $input = $old_account->get();
+                    $input['created_from_id'] = $old_account->get('id');
+                    $new_account = new Account($this);
+                    $new_account->save($input);
+                }
                     // transfer setttings
                     // old account id will be connected to the new account
-                    if ($this->get('vat') > 0) {
-                        $this->transferAccountSetting($last_year, 'vat_in_account_id');
-                        $this->transferAccountSetting($last_year, 'vat_abroad_account_id');
-                        $this->transferAccountSetting($last_year, 'vat_out_account_id');
-                        $this->transferAccountSetting($last_year, 'vat_balance_account_id');
-                        $this->transferAccountSetting($last_year, 'vat_free_account_id');
-                        $this->transferAccountSetting($last_year, 'eu_sale_account_id');
-                        //$this->transferAccountSetting($last_year, 'eu_buy_account_id');
-                        //$this->transferAccountSetting($last_year, 'abroad_buy_account_id');
-                    }
+                if ($this->get('vat') > 0) {
+                    $this->transferAccountSetting($last_year, 'vat_in_account_id');
+                    $this->transferAccountSetting($last_year, 'vat_abroad_account_id');
+                    $this->transferAccountSetting($last_year, 'vat_out_account_id');
+                    $this->transferAccountSetting($last_year, 'vat_balance_account_id');
+                    $this->transferAccountSetting($last_year, 'vat_free_account_id');
+                    $this->transferAccountSetting($last_year, 'eu_sale_account_id');
+                    //$this->transferAccountSetting($last_year, 'eu_buy_account_id');
+                    //$this->transferAccountSetting($last_year, 'abroad_buy_account_id');
+                }
                     $this->transferAccountSetting($last_year, 'result_account_id');
                     $this->transferAccountSetting($last_year, 'debtor_account_id');
                     $this->transferAccountSetting($last_year, 'credit_account_id');
@@ -569,14 +567,14 @@ class Year extends Intraface_Standard
                     $db = new DB_Sql;
                     $new_balance_accounts = array();
 
-                    if (is_array($balance_accounts)) {
-                        foreach ($balance_accounts as $key=>$id) {
-                            $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
-                            while ($db->nextRecord()) {
-                                $new_balance_accounts[] = $db->f('id');
-                            }
+                if (is_array($balance_accounts)) {
+                    foreach ($balance_accounts as $key => $id) {
+                        $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
+                        while ($db->nextRecord()) {
+                            $new_balance_accounts[] = $db->f('id');
                         }
                     }
+                }
                     $this->setSetting('balance_accounts', serialize($new_balance_accounts));
 
                     $buy_eu_accounts = unserialize($last_year->getSetting('buy_eu_accounts'));
@@ -584,14 +582,14 @@ class Year extends Intraface_Standard
                     $db = new DB_Sql;
                     $new_buy_eu_accounts = array();
 
-                    if (is_array($buy_eu_accounts)) {
-                        foreach ($buy_eu_accounts AS $key=>$id) {
-                            $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
-                            while ($db->nextRecord()) {
-                                $new_buy_eu_accounts[] = $db->f('id');
-                            }
+                if (is_array($buy_eu_accounts)) {
+                    foreach ($buy_eu_accounts as $key => $id) {
+                        $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
+                        while ($db->nextRecord()) {
+                            $new_buy_eu_accounts[] = $db->f('id');
                         }
                     }
+                }
                     $this->setSetting('buy_eu_accounts', serialize($new_buy_eu_accounts));
 
                     $buy_abroad_accounts = unserialize($last_year->getSetting('buy_abroad_accounts'));
@@ -599,20 +597,20 @@ class Year extends Intraface_Standard
                     $db = new DB_Sql;
                     $new_buy_abroad_accounts = array();
 
-                    if (is_array($buy_abroad_accounts)) {
-                        foreach ($buy_abroad_accounts AS $key=>$id) {
-                            $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
-                            while ($db->nextRecord()) {
-                                $new_buy_abroad_accounts[] = $db->f('id');
-                            }
+                if (is_array($buy_abroad_accounts)) {
+                    foreach ($buy_abroad_accounts as $key => $id) {
+                        $db->query("SELECT id FROM accounting_account WHERE year_id = ".$this->get('id')." AND intranet_id = ".$this->kernel->intranet->get('id')." AND created_from_id = " . (int)$id);
+                        while ($db->nextRecord()) {
+                            $new_buy_abroad_accounts[] = $db->f('id');
                         }
                     }
+                }
                     $this->setSetting('buy_abroad_accounts', serialize($new_buy_abroad_accounts));
 
 
                 break;
             default:
-                    throw new Exception('A method to create the accounts must be chosen');
+                throw new Exception('A method to create the accounts must be chosen');
                 break;
         }
         return true;
@@ -622,58 +620,92 @@ class Year extends Intraface_Standard
     function setSettings($input)
     {
         if ($this->get('vat') > 0) {
-            if (empty($input['vat_in_account_id'])) $input['vat_in_account_id'] = 0;
+            if (empty($input['vat_in_account_id'])) {
+                $input['vat_in_account_id'] = 0;
+            }
             $this->setSetting('vat_in_account_id', (int)$input['vat_in_account_id']);
 
-            if (empty($input['vat_out_account_id'])) $input['vat_out_account_id'] = 0;
+            if (empty($input['vat_out_account_id'])) {
+                $input['vat_out_account_id'] = 0;
+            }
             $this->setSetting('vat_out_account_id', (int)$input['vat_out_account_id']);
 
-            if (empty($input['vat_abroad_account_id'])) $input['vat_abroad_account_id'] = 0;
+            if (empty($input['vat_abroad_account_id'])) {
+                $input['vat_abroad_account_id'] = 0;
+            }
             $this->setSetting('vat_abroad_account_id', (int)$input['vat_abroad_account_id']);
 
-            if (empty($input['vat_balance_account_id'])) $input['vat_balance_account_id'] = 0;
+            if (empty($input['vat_balance_account_id'])) {
+                $input['vat_balance_account_id'] = 0;
+            }
             $this->setSetting('vat_balance_account_id', (int)$input['vat_balance_account_id']);
 
-            if (empty($input['vat_free_account_id'])) $input['vat_free_account_id'] = 0;
+            if (empty($input['vat_free_account_id'])) {
+                $input['vat_free_account_id'] = 0;
+            }
             $this->setSetting('vat_free_account_id', (int)$input['vat_free_account_id']);
 
-            if (empty($input['eu_sale_account_id'])) $input['eu_sale_account_id'] = 0;
+            if (empty($input['eu_sale_account_id'])) {
+                $input['eu_sale_account_id'] = 0;
+            }
             $this->setSetting('eu_sale_account_id', (int)$input['eu_sale_account_id']);
             //$this->setSetting('eu_buy_account_id', (int)$input['eu_buy_account_id']);
             //$this->setSetting('abroad_buy_account_id', (int)$input['abroad_buy_account_id']);
         }
-        if (empty($input['result_account_id'])) $input['result_account_id'] = 0;
+        if (empty($input['result_account_id'])) {
+            $input['result_account_id'] = 0;
+        }
         $this->setSetting('result_account_id', (int)$input['result_account_id']);
 
-        if (empty($input['debtor_account_id'])) $input['debtor_account_id'] = 0;
+        if (empty($input['debtor_account_id'])) {
+            $input['debtor_account_id'] = 0;
+        }
         $this->setSetting('debtor_account_id', (int)$input['debtor_account_id']);
 
-        if (empty($input['credit_account_id'])) $input['credit_account_id'] = 0;
+        if (empty($input['credit_account_id'])) {
+            $input['credit_account_id'] = 0;
+        }
         $this->setSetting('credit_account_id', (int)$input['credit_account_id']);
 
-        if (empty($input['balance_accounts'])) $input['balance_accounts'] = array();
+        if (empty($input['balance_accounts'])) {
+            $input['balance_accounts'] = array();
+        }
         $this->setSetting('balance_accounts', serialize($input['balance_accounts']));
 
-        if (empty($input['buy_abroad_accounts'])) $input['buy_abroad_accounts'] = array();
+        if (empty($input['buy_abroad_accounts'])) {
+            $input['buy_abroad_accounts'] = array();
+        }
         $this->setSetting('buy_abroad_accounts', serialize($input['buy_abroad_accounts']));
 
-        if (empty($input['buy_eu_accounts'])) $input['buy_eu_accounts'] = array();
+        if (empty($input['buy_eu_accounts'])) {
+            $input['buy_eu_accounts'] = array();
+        }
         $this->setSetting('buy_eu_accounts', serialize($input['buy_eu_accounts']));
 
 
-        if (empty($input['result_account_id_start'])) $input['result_account_id_start'] = 0;
+        if (empty($input['result_account_id_start'])) {
+            $input['result_account_id_start'] = 0;
+        }
         $this->setSetting('result_account_id_start', $input['result_account_id_start']);
 
-        if (empty($input['result_account_id_end'])) $input['result_account_id_end'] = 0;
+        if (empty($input['result_account_id_end'])) {
+            $input['result_account_id_end'] = 0;
+        }
         $this->setSetting('result_account_id_end', $input['result_account_id_end']);
 
-        if (empty($input['balance_account_id_start'])) $input['balance_account_id_start'] = 0;
+        if (empty($input['balance_account_id_start'])) {
+            $input['balance_account_id_start'] = 0;
+        }
         $this->setSetting('balance_account_id_start', $input['balance_account_id_start']);
 
-        if (empty($input['balance_account_id_end'])) $input['balance_account_id_end'] = 0;
+        if (empty($input['balance_account_id_end'])) {
+            $input['balance_account_id_end'] = 0;
+        }
         $this->setSetting('balance_account_id_end', $input['balance_account_id_end']);
 
-        if (empty($input['capital_account_id'])) $input['capital_account_id'] = 0;
+        if (empty($input['capital_account_id'])) {
+            $input['capital_account_id'] = 0;
+        }
         $this->setSetting('capital_account_id', $input['capital_account_id']);
 
         return true;
@@ -724,7 +756,7 @@ class Year extends Intraface_Standard
 
     function isSettingsSet()
     {
-        if (!$this->getSetting('result_account_id_start') OR !$this->getSetting('result_account_id_end') OR !$this->getSetting('balance_account_id_start') OR !$this->getSetting('balance_account_id_end') OR !$this->getSetting('capital_account_id')) {
+        if (!$this->getSetting('result_account_id_start') or !$this->getSetting('result_account_id_end') or !$this->getSetting('balance_account_id_start') or !$this->getSetting('balance_account_id_end') or !$this->getSetting('capital_account_id')) {
             return false;
         }
         return true;
@@ -817,7 +849,7 @@ class Year extends Intraface_Standard
         if ($db->numRows() == 0) {
             return true;
         }
-        return false;    
+        return false;
     }
     
     function isProcurementsStated($date_start, $date_end)
@@ -832,7 +864,7 @@ class Year extends Intraface_Standard
         if ($db->numRows() == 0) {
             return true;
         }
-        return false;    
+        return false;
     }
 
     function lock()
@@ -844,6 +876,6 @@ class Year extends Intraface_Standard
 
     public function getId()
     {
-    	return $this->get('id');
+        return $this->get('id');
     }
 }

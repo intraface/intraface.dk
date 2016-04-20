@@ -59,8 +59,7 @@
         ?>
         <p><a href="edit.php?id=<?php print($filemanager->get('id')); ?>"><?php e(t('add description')); ?></a></p>
         <?php
-    }
-    else {
+    } else {
         print(nl2br($filemanager->get('description')));
     }
     ?>
@@ -75,7 +74,7 @@
 
         <table class="stribe">
             <thead>
-            	<tr>
+                <tr>
                 <th><?php e(t('Identifier')); ?></th>
                 <th><?php e(t('Image width')); ?></th>
                 <th><?php e(t('Image height')); ?></th>
@@ -86,7 +85,9 @@
             <tbody>
                 <?php
                 foreach ($instances as $instance) {
-                    if ($instance['name'] == 'manual') continue;
+                    if ($instance['name'] == 'manual') {
+                        continue;
+                    }
                     ?>
                     <tr>
                         <td><a href="<?php e($instance['file_uri']); ?>"><?php e(t($instance['name'], 'filehandler')); ?></a></td>
@@ -96,8 +97,7 @@
                             <?php
                             if (is_numeric($instance['file_size'])) {
                                 e(number_format($instance['file_size']/1000, 2, ",", ".")." Kb");
-                            }
-                            else {
+                            } else {
                                 e('-');
                             }
                             ?>
@@ -109,7 +109,7 @@
                 ?>
             </tbody>
         </table>
-        <?php if ($kernel->user->hasModuleAccess('administration')): ?>
+        <?php if ($kernel->user->hasModuleAccess('administration')) : ?>
             <?php
             $shared_filehandler = $kernel->useModule('filemanager');
             ?>
@@ -146,13 +146,13 @@
         </ul>
 
     <?php
-        if (is_array($keywords) AND count($keywords) > 0) {
-            echo '<ul>';
-            foreach ($keywords as $k) {
-                echo '<li>' . e($k['keyword']) . '</li>';
-            }
-            echo '</ul>';
+    if (is_array($keywords) and count($keywords) > 0) {
+        echo '<ul>';
+        foreach ($keywords as $k) {
+            echo '<li>' . e($k['keyword']) . '</li>';
         }
+        echo '</ul>';
+    }
     ?>
   </div>
 

@@ -116,7 +116,7 @@ class Webshop
                 // If the contact is a company their might already be a contact person.
                 if ($this->contact->get('type') == 'company' && isset($this->contact->contactperson)) {
                     $contact_persons = $this->contact->contactperson->getList();
-                    foreach ($contact_persons AS $contact_person) {
+                    foreach ($contact_persons as $contact_person) {
                         // This is only a comparing on name, this might not be enough.
                         if ($contact_person['name'] == $input['contactperson']) {
                             $contact_person_id = $contact_person['id'];
@@ -183,12 +183,16 @@ class Webshop
         $value['message'] = $input['message'];
 
         if (isset($input['customer_coupon']) && $input['customer_coupon'] != '') {
-            if ($value['message'] != '') $value['message'] .= "\n\n";
+            if ($value['message'] != '') {
+                $value['message'] .= "\n\n";
+            }
             $value['message'] .= "Kundekupon:". $input['customer_coupon'];
         }
 
         if (isset($input['customer_comment']) && $input['customer_comment'] != '') {
-            if ($value['message'] != '') $value['message'] .= "\n\n";
+            if ($value['message'] != '') {
+                $value['message'] .= "\n\n";
+            }
             $value['message'] .= "Kommentar:\n". $input['customer_comment'];
         }
 
@@ -273,7 +277,7 @@ class Webshop
      */
     private function addOrderLines($products = array())
     {
-        foreach ($products AS $product) {
+        foreach ($products as $product) {
             $this->order->loadItem();
             $value['product_id'] = $product['id'];
             $value['quantity'] = $product['quantity'];
@@ -336,7 +340,7 @@ class Webshop
         }
 
         // hvad skal den her sikre?
-        if (is_object($this->kernel->user) AND $this->kernel->user->hasModuleAccess('onlinepayment')) {
+        if (is_object($this->kernel->user) and $this->kernel->user->hasModuleAccess('onlinepayment')) {
             return 0;
         }
 
@@ -366,7 +370,7 @@ class Webshop
      */
     public function getReceiptText()
     {
-        return array('receipt_text' => $this->kernel->setting->get('intranet','webshop.webshop_receipt'));
+        return array('receipt_text' => $this->kernel->setting->get('intranet', 'webshop.webshop_receipt'));
     }
 
     /**

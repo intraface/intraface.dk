@@ -2,8 +2,8 @@
 
 /**
  * Intraface_modules_debtor_DebtorDoctrine
- * 
- * 
+ *
+ *
  * @property integer $id
  * @property integer $where_from
  * @property integer $where_from_id
@@ -38,7 +38,7 @@
  * @property string $comment
  * @property string $message
  * @property string $internal_note
- * 
+ *
  * @package    Intraface
  * @subpackage Intraface_modules_debtor
  * @author     Sune Jensen sune@intraface.dk
@@ -97,16 +97,18 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         
-        $this->hasMany('Intraface_modules_debtor_Debtor_Item as item',
-            array('local' => 'id', 'foreign' => 'debtor_id'));
+        $this->hasMany(
+            'Intraface_modules_debtor_Debtor_Item as item',
+            array('local' => 'id', 'foreign' => 'debtor_id')
+        );
             
-        /* $this->hasMany('Intraface_modules_product_Variation as variation', 
+        /* $this->hasMany('Intraface_modules_product_Variation as variation',
             array('local' => 'id', 'foreign' => 'product_id'));  */
     }
     
     
     /**
-     * 
+     *
      * @return unknown_type
      */
     public function save()
@@ -145,7 +147,7 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     
     /**
      * Returns status
-     * 
+     *
      * @return string status
      */
     public function getStatus()
@@ -191,7 +193,7 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     }
     
     /**
-     * returns Doctrine_Collection of items 
+     * returns Doctrine_Collection of items
      * @return object Doctrine_Collection
      */
     private function getItems()
@@ -206,7 +208,7 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     public function getItemsWithVat()
     {
         $items = $this->getItems();
-        foreach ($items AS $item) {
+        foreach ($items as $item) {
             if ($item->getProduct()->getDetails()->getVatPercent()->getAsIso() == 0) {
                 $items->remove($item->getId());
             }
@@ -239,11 +241,10 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
     public function getTotal()
     {
         $total = 0;
-        foreach ($this->getItems() AS $item) {
+        foreach ($this->getItems() as $item) {
             $total += $item->getAmount()->getAsIso();
         }
         
         return new Ilib_Variable_Float($total, 'iso');
     }
-
 }

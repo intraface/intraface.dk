@@ -2,7 +2,7 @@
 /**
  * Still under development!
  */
-class ModulePackage_Limit 
+class ModulePackage_Limit
 {
     
     /**
@@ -10,7 +10,8 @@ class ModulePackage_Limit
      */
     private $limiters;
     
-    public function __construct($intranet) {
+    public function __construct($intranet)
+    {
         
         require_once 'Intraface/modules/modulepackage/Manager.php';
         $manager = new Intraface_modules_modulepackage_Manager($intranet);
@@ -19,7 +20,7 @@ class ModulePackage_Limit
         $packages = $manager->getList();
         $limiters = array();
         require_once 'Intraface/modules/modulepackage/ModulePackage.php';
-        foreach ($packages AS $package) {
+        foreach ($packages as $package) {
             $package_module = new ModulePackage($package['module_package_id']);
             $limiters = array_merge($limiters, $package_module->get('limiters'));
         }

@@ -21,7 +21,6 @@ class Intraface_Controller_ModuleGatekeeper extends k_Component
                 }
                 return 'Intraface_modules_'.$name.'_Controller_Index';
             }
-
         }
         return parent::map($name);
     }

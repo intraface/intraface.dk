@@ -21,19 +21,19 @@
     </target>
 
 	<target name="test" depends="phpunit,merge"></target>
-	
+
     <target name="phpunit">
         <exec dir="${tests.dir}" command="phpunit
            --log-junit ${reports.phpunit.dir}/unit.xml
            --coverage-html ${reports.coverage.dir}/
            ." passthru="true" checkreturn="false" />
     </target>
-	
+
     <target name="selenium">
         <exec dir="${tests.dir}" command="phpunit
            --log-xml ${reports.phpunit.dir}/selenium.xml
            SeleniumTests" passthru="true" checkreturn="false" />
-    </target>	
+    </target>
 
 	<target name="merge">
 		   <exec dir="${build.dir}" command="phpuc merge-phpunit
@@ -43,7 +43,7 @@
 		   <delete file="${build.dir}/logs/unit.xml" />
 		   <delete file="${build.dir}/logs/selenium.xml" />
 	</target>
-		
+
     <target name="php-codesniffer">
         <exec output="${reports.dir}/checkstyle.xml" dir="${source.dir}/Intraface/" error="${reports.dir}/phpcserror.log"
             command="phpcs --report=checkstyle . --standard=PEAR" />
@@ -63,7 +63,7 @@
 
     <target name="create-pear-package" depends="prepare,checkout,pear-create">
     </target>
-	
+
     <target name="deploy">
         <property file="./build.properties" />
     </target>

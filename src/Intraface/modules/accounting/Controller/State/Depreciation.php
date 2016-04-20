@@ -23,12 +23,12 @@ class Intraface_modules_accounting_Controller_State_Depreciation extends k_Compo
         }
 
         $data = array(
-        	'accounting_module' => $accounting_module,
-        	'voucher' => $this->getVoucher(),
-        	'year' => $this->getYear(),
-        	'depreciation' => $this->getModel(),
-        	'object' => $this->getDebtor(),
-        	'year' => $this->getYear());
+            'accounting_module' => $accounting_module,
+            'voucher' => $this->getVoucher(),
+            'year' => $this->getYear(),
+            'depreciation' => $this->getModel(),
+            'object' => $this->getDebtor(),
+            'year' => $this->getYear());
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/depreciation');
         return $smarty->render($this, $data);

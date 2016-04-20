@@ -6,7 +6,7 @@
         <link rel="alternate" type="application/rss+xml" title="Alle produkter" href="<?php e(url('/demo/shop/rss.php')); ?>" />
 
         <style type="text/css">
-        <?php foreach ($context->document()->styles() as $style): ?>
+        <?php foreach ($context->document()->styles() as $style) : ?>
             @import "<?php e($style); ?>";
         <?php endforeach;?>
         </style>
@@ -17,7 +17,9 @@
             <div id="header"><?php e($context->document()->companyName()); ?></div>
 
             <div id="menu">
-                <?php if ($context->document()->menu()) echo $context->document()->menu(); ?>
+                <?php if ($context->document()->menu()) {
+                    echo $context->document()->menu();
+} ?>
             </div>
             <div id="content">
                 <?php echo $content; ?>

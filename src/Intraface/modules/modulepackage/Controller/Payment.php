@@ -59,7 +59,7 @@ class Intraface_modules_modulepackage_Controller_Payment extends k_Component
         }
 
         $data = array(
-        	'shop' => $shop,
+            'shop' => $shop,
             'order' => $order,
             'action' => $this->action,
             'translation' => $this->getKernel()->getTranslation(),

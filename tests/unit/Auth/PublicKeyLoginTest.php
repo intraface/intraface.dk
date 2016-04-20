@@ -1,5 +1,6 @@
 <?php
-class PublicKeyLoginTest extends PHPUnit_Framework_TestCase {
+class PublicKeyLoginTest extends PHPUnit_Framework_TestCase
+{
 
     const SESSION_LOGIN = 'thissessionfirstlog';
     private $adapter;

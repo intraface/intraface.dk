@@ -30,11 +30,13 @@
             <?php endif; */ ?>
             <div class="formrow">
                 <label for="caption"><?php e(t('Headline')); ?></label>
-                <input value="<?php if (!empty($value['caption'])) e($value['caption']); ?>" name="caption" id="caption" type="text" />
+                <input value="<?php if (!empty($value['caption'])) {
+                    e($value['caption']);
+} ?>" name="caption" id="caption" type="text" />
             </div>
 
             <div class="formrow">
-                <?php if ($kernel->user->hasModuleAccess('filemanager')): ?>
+                <?php if ($kernel->user->hasModuleAccess('filemanager')) : ?>
                     <!-- hvad bruges den her egentlig til? - hvorfor kan man ikke v�lge uden administration -->
                     <input type="hidden" name="filelist_select_method" value="single_file" />
                 <?php endif; ?>
@@ -42,8 +44,8 @@
                 <!--<strong>Enkeltfiler</strong>-->
                 <?php
 
-                if (!empty($value['files']) AND is_array($value['files'])) {
-                    foreach ($value['files'] AS $file) {
+                if (!empty($value['files']) and is_array($value['files'])) {
+                    foreach ($value['files'] as $file) {
                         $filehandler = new Filehandler($kernel, $file['id']);
                         $filehandlerHTML = new FilehandlerHTML($filehandler);
                         $filehandlerHTML->showFile(url(null, array('remove_filelist_append_file_id' => $file['append_file_id'])));

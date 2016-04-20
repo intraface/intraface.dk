@@ -56,5 +56,4 @@ class FeaturedProductsTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->featured->delete(1));
         $this->assertEquals(0, count($this->featured->getAll()));
     }
-
 }

@@ -47,7 +47,7 @@ class Basket
      */
     public function __construct($webshop, $session_id)
     {
-        if (!is_object($webshop) AND strtolower(get_class($webshop)) == 'webshop') {
+        if (!is_object($webshop) and strtolower(get_class($webshop)) == 'webshop') {
             throw new Exception('Basket kr�ver objektet Webshop');
         }
 
@@ -102,7 +102,7 @@ class Basket
      *
      * @param integer $product_id       Product id
      * @param integer $quantity         The quantity
-     * @param string  $text	            To add description to product, not yet implemented
+     * @param string  $text             To add description to product, not yet implemented
      * @param integer $basketevaluation Wheter the product is from basketevaluation
      *
      * @return boolean
@@ -123,7 +123,7 @@ class Basket
             return false;
         }
 
-        if (is_object($product->getStock()) AND $product->getStock()->get('for_sale') < $quantity AND $quantity != 0) {
+        if (is_object($product->getStock()) and $product->getStock()->get('for_sale') < $quantity and $quantity != 0) {
             return false;
         }
 
@@ -170,7 +170,7 @@ class Basket
     /**
      * Save order details
      *
-     * @param (array)input	array with buyer details
+     * @param (array)input  array with buyer details
      *
      * @return boolean true or false
      */
@@ -248,7 +248,8 @@ class Basket
      *
      * @param string $sql Extra sql string to add
      */
-    public function saveToDb($sql) {
+    public function saveToDb($sql)
+    {
 
         $db = new DB_Sql;
         $db->query("SELECT id FROM basket_details WHERE " . $this->sql_extra. "
@@ -477,7 +478,6 @@ class Basket
 
         $i = 0;
         while ($db->nextRecord()) {
-
             $items[$i]['id'] = $db->f("id");
             $items[$i]['text'] = $db->f("text");
             $items[$i]['basketevaluation_product'] = $db->f("basketevaluation_product");

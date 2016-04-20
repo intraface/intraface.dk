@@ -5,13 +5,18 @@
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">
-<?php $i = 0; foreach ($products AS $p) {
-    if ($p['locked'] == 1) { continue; }
+<?php $i = 0; foreach ($products as $p) {
+    if ($p['locked'] == 1) {
+        continue;
+    }
     $this_product = new Product($context->getKernel(), $p['id']);
     $keyword_object = $this_product->getKeywordAppender();
     $p['keywords'] = $keyword_object->getConnectedKeywordsAsString();
 ?>
-<table <?php if ($i == 1) { echo ' class="even"'; $i = -1; } ?>>
+<table <?php if ($i == 1) {
+    echo ' class="even"';
+    $i = -1;
+} ?>>
     <tbody>
         <tr>
             <th><?php e(t('name')); ?></th>
@@ -32,7 +37,8 @@
     </tbody>
 </table>
 <br />
-<?php $i++; } // end foreach ?>
+<?php $i++;
+} // end foreach ?>
 <div>
     <input type="submit" class="save" value="<?php e(t('Save')); ?>" />
     <a href="<?php e(url('../', array('use_stored' => true))); ?>"><?php e(t('Cancel')); ?></a>

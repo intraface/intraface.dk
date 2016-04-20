@@ -1,8 +1,8 @@
 <?php
-class UserLoginTest extends PHPUnit_Framework_TestCase 
+class UserLoginTest extends PHPUnit_Framework_TestCase
 {
     const SESSION_LOGIN = 'thissessionfirstlog';
-	private $adapter;
+    private $adapter;
 
     function setUp()
     {
@@ -15,16 +15,16 @@ class UserLoginTest extends PHPUnit_Framework_TestCase
 
     function tearDown()
     {
-		unset($this->adapter);
+        unset($this->adapter);
     }
 
-	function testConstructionOfAdapter()
-	{
-	    $this->assertTrue(is_object($this->adapter));
-	}
-	
-    function testAuthWithCorrectCredentials() 
+    function testConstructionOfAdapter()
+    {
+        $this->assertTrue(is_object($this->adapter));
+    }
+    
+    function testAuthWithCorrectCredentials()
     {
         $this->assertTrue(is_object($this->adapter->auth()));
-    }	
+    }
 }

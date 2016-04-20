@@ -26,7 +26,7 @@ class Intraface_modules_todo_Controller_Todo extends k_Component
         $translation = $this->getKernel()->getTranslation('todo');
 
         $todo = new TodoList($this->getKernel(), $this->name());
-        if (!empty($_GET['action']) AND $_GET['action'] == "delete") {
+        if (!empty($_GET['action']) and $_GET['action'] == "delete") {
             $todo = new TodoList($this->getKernel(), $this->name());
             $todo->getItem($_GET['item_id'])->delete();
             return new k_SeeOther($this->url());
@@ -64,8 +64,7 @@ class Intraface_modules_todo_Controller_Todo extends k_Component
         // Set done
         $todo->setAllItemsUndone();
         if (!empty($_POST['done'])) {
-
-            foreach ($_POST['done'] AS $key=>$value) {
+            foreach ($_POST['done'] as $key => $value) {
                 if ($todo->getItem($_POST['done'][$key])->setDone()) {
                 }
             }

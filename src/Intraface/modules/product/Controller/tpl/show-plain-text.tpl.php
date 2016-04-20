@@ -42,7 +42,7 @@
             ?>
         </td>
     </tr>
-    <?php if ($kernel->intranet->hasModuleAccess('stock')): ?>
+    <?php if ($kernel->intranet->hasModuleAccess('stock')) : ?>
     <tr>
         <td><?php e(t('Stock product')); ?></td><td>
             <?php
@@ -53,12 +53,12 @@
     </tr>
     <?php endif; ?>
     <tr>
-	   <td><?php e(t('Description')); ?></td>
-	   <td><?php autohtml($product->get('description')); ?></td>
+       <td><?php e(t('Description')); ?></td>
+       <td><?php autohtml($product->get('description')); ?></td>
     </tr>
 </table>
 
-<?php if ($product->hasVariation()): ?>
+<?php if ($product->hasVariation()) : ?>
     <?php
     try {
         $variations = $product->getVariations();
@@ -67,7 +67,7 @@
         $variation_is_present = false;
     }
     ?>
-    <?php if ($variation_is_present): ?>
+    <?php if ($variation_is_present) : ?>
         <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
             <caption><?php e(t('Variations')); ?></caption>
             <thead>
@@ -76,19 +76,19 @@
                     <th><?php e(t('Variation')); ?></th>
                     <th><?php e(t('Price')); ?><br /><?php e(t('excl. vat')); ?></th>
                     <th><?php e(t('Weight')); ?><br />Gram</th>
-                    <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                    <?php if ($kernel->user->hasModuleAccess("stock") and $product->get('stock')) : ?>
                         <th><?php e(t('In stock')); ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
-            <?php foreach ($variations AS $variation): ?>
+            <?php foreach ($variations as $variation) : ?>
                 <tr>
                     <td><?php e($variation->getNumber()); ?></td>
                     <td><?php e($variation->getName()); ?></td>
                     <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> </td>
                     <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
-                    <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                    <?php if ($kernel->user->hasModuleAccess("stock") and $product->get('stock')) : ?>
                         <td><?php e($variation->getStock($product)->get('actual_stock')); ?></td>
                     <?php endif; ?>
 
@@ -110,8 +110,8 @@
     <?php
     $related = $product->getRelatedProducts();
     ?>
-    <?php if (!empty($related) AND count($related) > 0): ?>
-        <?php foreach ($related AS $p): ?>
+    <?php if (!empty($related) and count($related) > 0) : ?>
+        <?php foreach ($related as $p) : ?>
             <tr>
                 <td><?php e($p['id']); ?></td>
                 <td><?php e($p['number']); ?></td>
@@ -132,8 +132,8 @@
     <?php
     $pictures = $product->getNewPictures();
     ?>
-    <?php if (count($pictures) > 0): ?>
-        <?php foreach ($pictures as $appendix): ?>
+    <?php if (count($pictures) > 0) : ?>
+        <?php foreach ($pictures as $appendix) : ?>
             <tr>
                 <td><?php e($appendix['original']['name']); ?></td>
                 <td><a href="<?php e($appendix['original']['file_uri']); ?>"><img src="<?php e($appendix['original']['file_uri']); ?>" height="100" /></a></td>
@@ -143,7 +143,7 @@
 </table>
     
 
-<?php if ($kernel->user->hasModuleAccess('shop')): ?>
+<?php if ($kernel->user->hasModuleAccess('shop')) : ?>
     <?php $module_shop = $kernel->useModule('shop'); ?>
     <table class="stripe">
         <caption><?php e(t('Categories')); ?></caption>
@@ -157,7 +157,7 @@
         $gateway = new Intraface_modules_shop_Shop_Gateway();
         $shops = $gateway->findAll();
         ?>
-        <?php foreach ($shops as $shop): ?>
+        <?php foreach ($shops as $shop) : ?>
             <tr>
                 <td><strong><?php e($shop->getName()); ?></strong></td>
                 <td>
@@ -167,7 +167,7 @@
                     $appender = $category->getAppender($product->getId());
                     ?>
                     <ul>
-                        <?php foreach ($appender->getCategories() AS $category): ?>
+                        <?php foreach ($appender->getCategories() as $category) : ?>
                             <li><?php e($category['name']); ?></li>
                         <?php endforeach; ?>
                     </ul>
@@ -188,8 +188,8 @@
     $keyword = $product->getKeywordAppender();
     $keywords = $keyword->getConnectedKeywords();
     ?>
-    <?php if (is_array($keywords) AND count($keywords) > 0): ?>
-        <?php foreach ($keywords as $k): ?>
+    <?php if (is_array($keywords) and count($keywords) > 0) : ?>
+        <?php foreach ($keywords as $k) : ?>
             <tr>
                 <td><?php e($k['keyword']); ?></td>
             </tr>
@@ -197,7 +197,7 @@
     <?php endif; ?>
 </table>
 
-<?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')): ?>
+<?php if ($kernel->user->hasModuleAccess("stock") and $product->get('stock') and !$product->get('has_variation')) : ?>
     <table>
         <caption><?php e(t('Stock')); ?></caption>
         <tr>

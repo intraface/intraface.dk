@@ -76,7 +76,6 @@ class Intraface_modules_procurement_Controller_Item extends k_Component
             $returned_values = unserialize($redirect->getParameter('product_id'));
             $procurement->item->changeProduct($returned_values['product_id'], $returned_values['product_variation_id']);
             $procurement->loadItem(intval($_GET["id"]));
-
         }
 
         $data = array('procurement' => $procurement, 'values' => $values);

@@ -110,8 +110,8 @@ class Intraface_XMLRPC_Server
     {
         if ($value === null) {
             return '';
-       }
-       return $value;
+        }
+        return $value;
     }
 
     /**
@@ -135,7 +135,7 @@ class Intraface_XMLRPC_Server
         } elseif (is_null($values)) {
             return call_user_func($function, $values);
         } elseif (is_array($values)) {
-            foreach ($values AS $key => $value) {
+            foreach ($values as $key => $value) {
                 $values[$key] = $this->recursiveMap($function, $value);
             }
             return $values;

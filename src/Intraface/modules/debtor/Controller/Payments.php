@@ -24,11 +24,11 @@ class Intraface_modules_debtor_Controller_Payments extends k_Component
         $object = $this->getModel();
         $payment = $this->getPayment();
         if ($id = $payment->update($_POST)) {
-             if ($this->getKernel()->user->hasModuleAccess('accounting')) {
-                 return new k_SeeOther($this->url($id . '/state'));
-             } else {
-                 return new k_SeeOther($this->url('../'));
-             }
+            if ($this->getKernel()->user->hasModuleAccess('accounting')) {
+                return new k_SeeOther($this->url($id . '/state'));
+            } else {
+                return new k_SeeOther($this->url('../'));
+            }
         }
         return $this->render();
     }

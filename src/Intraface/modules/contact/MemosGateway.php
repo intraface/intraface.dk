@@ -44,8 +44,11 @@ class Intraface_modules_contact_MemosGateway
             "contact_reminder_single",
             "contact_reminder_single.active = 1
             	AND contact_reminder_single.intranet_id = " .
-                    $this->db->quote($this->kernel->intranet->get("id"),
-                    'integer'));
+                    $this->db->quote(
+                        $this->kernel->intranet->get("id"),
+                        'integer'
+                    )
+        );
         $this->dbquery->setJoin("INNER", "contact", "contact_reminder_single.contact_id = contact.id", "contact.active = 1 AND contact.intranet_id = ".$this->db->quote($this->kernel->intranet->get("id"), 'integer'));
         $this->dbquery->useErrorObject($this->error);
 

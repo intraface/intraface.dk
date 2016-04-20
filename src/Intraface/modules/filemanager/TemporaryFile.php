@@ -2,13 +2,14 @@
 
 /**
  * TemporaryFile class returns a possible path to a temporary file
- * 
+ *
  * @author sune jensen
  * @version 0.0.1
  * @category filehandler
  */
 
-class TemporaryFile {
+class TemporaryFile
+{
     
     /**
      * @var object $file_handler
@@ -32,11 +33,11 @@ class TemporaryFile {
     
     /**
      * Constructor
-     * 
+     *
      * @param object $file_handler
      * @param string $file_name the name of the temporary file.
      */
-    public function __construct($filehandler, $file_name = NULL)
+    public function __construct($filehandler, $file_name = null)
     {
         if (!is_object($filehandler)) {
             throw new Exception("TemporaryFile requires filehandler or filemanager");
@@ -44,18 +45,18 @@ class TemporaryFile {
 
         $this->filehandler = $filehandler;
         $this->file_name = $file_name;
-        $this->file_path = NULL;
-        $this->file_dir = NULL;
+        $this->file_path = null;
+        $this->file_dir = null;
         
-        if ($this->file_name != NULL) {
+        if ($this->file_name != null) {
             $this->load();
-        } 
+        }
     }
     
     /**
      * loads the temporary file, which means generates the path to the file.
      */
-    private function load() 
+    private function load()
     {
         if (empty($this->file_name)) {
             throw new Exception('file_name needs to be set to load temporary file');
@@ -84,8 +85,7 @@ class TemporaryFile {
                 throw new Exception('Error generating a unique name');
                 exit;
             }
-        }
-        while (is_dir($this->filehandler->tempdir_path.$unique_name));
+        } while (is_dir($this->filehandler->tempdir_path.$unique_name));
         
         if (!mkdir($this->filehandler->tempdir_path.$unique_name, 0755)) {
             throw new Exception('Unable to create temporary dir "'.$this->filehandler->tempdir_path.$unique_name.'"');
@@ -99,11 +99,12 @@ class TemporaryFile {
     
     /**
      * Parses the filename and removes unwanted characters and controls the length
-     * 
+     *
      * @param string $file_name the name to be parsed
      * @return string parsed file name
      */
-    private function parseFileName($file_name) {
+    private function parseFileName($file_name)
+    {
         
         
         $file_name = str_replace(' ', '_', $file_name);
@@ -115,10 +116,9 @@ class TemporaryFile {
             $extension = strrchr($file_name, '.');
             if ($extension !== false && (strlen($extension) == 4 || strlen($extension) == 5)) {
                 $file_name = substr($file_name, 0, 50-strlen($extension)).$extension;
-            }
-            else {
+            } else {
                 $file_name = substr($file_name, 0, 50);
-            }   
+            }
         }
         
         return $file_name;
@@ -126,7 +126,7 @@ class TemporaryFile {
     
     /**
      * Sets the filename, if it is not already done in the constructor.
-     * 
+     *
      * @param string $file_name the name of the file.
      * @return string file_path;
      */
@@ -139,32 +139,31 @@ class TemporaryFile {
     
     /**
      * Returns the file path
-     * 
+     *
      * @return string file_path
      */
-    public function getFilePath() 
+    public function getFilePath()
     {
         return $this->file_path;
     }
     
     /**
      * Returns the file name after it has been parsed.
-     * 
+     *
      * @return string parsed file name
      */
-    function getFileName() 
+    function getFileName()
     {
         return $this->file_name;
     }
     
     /**
      * Returns the file name after it has been parsed.
-     * 
+     *
      * @return string parsed file name
      */
-    function getFileDir() 
+    function getFileDir()
     {
         return $this->file_dir;
-    }   
+    }
 }
-?>

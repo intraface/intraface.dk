@@ -78,19 +78,23 @@
             <select name="credit_account_number">
                 <option value=""><?php e(t('Choose')); ?></option>
                 <?php
-                foreach ($account->getList('finance') as $a):
-                    if ($year->getSetting('debtor_account_id') == $a['id']) continue;
+                foreach ($account->getList('finance') as $a) :
+                    if ($year->getSetting('debtor_account_id') == $a['id']) {
+                        continue;
+                    }
                     ?>
                     <option value="<?php e($a['number']); ?>"
-                    <?php if (isset($value['credit_account_number']) && $a['number'] == $value['credit_account_number']) echo ' selected="selected"'; ?>
+                    <?php if (isset($value['credit_account_number']) && $a['number'] == $value['credit_account_number']) {
+                        echo ' selected="selected"';
+} ?>
                     ><?php e($a['name']); ?></option>
-                <?php endforeach; ?>
+                <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                 endforeach; ?>
             </select>
         </div>
 
     </fieldset>
 
-    <?php if (isset($value['debet_account']) && is_array($value['debet_account'])): ?>
+    <?php if (isset($value['debet_account']) && is_array($value['debet_account'])) : ?>
     <table class="stripe">
         <thead>
             <tr>
@@ -102,7 +106,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($value['debet_account'] AS $key => $line) { ?>
+            <?php foreach ($value['debet_account'] as $key => $line) { ?>
                 <tr>
                     <td><?php e($key+1); ?></td>
                     <td><?php e($procurement->get('description')); ?> - <input type="text" name="debet_account[<?php e($key); ?>][text]" value="<?php e($line["text"]); ?>" /></td>
@@ -111,21 +115,27 @@
                         <select id="state_account" name="debet_account[<?php e($key); ?>][state_account_id]">
                             <option value=""><?php e(t('Choose')); ?></option>
                                 <?php
-                                foreach ($account->getList('expenses') AS $a):
-                                    if (strtolower($a['type']) == 'sum') continue;
-                                    if (strtolower($a['type']) == 'headline') continue;
+                                foreach ($account->getList('expenses') as $a) :
+                                    if (strtolower($a['type']) == 'sum') {
+                                        continue;
+                                    }
+                                    if (strtolower($a['type']) == 'headline') {
+                                        continue;
+                                    }
                                     ?>
                                     <option value="<?php e($a['number']); ?>"
-                                    <?php if (isset($line['state_account_id']) && $line['state_account_id'] == $a['number']) echo ' selected="selected"'; ?>
+                                    <?php if (isset($line['state_account_id']) && $line['state_account_id'] == $a['number']) {
+                                        echo ' selected="selected"';
+} ?>
                                     ><?php e($a['name'].' ('.t('vat', 'accounting').': '.t($a['vat_shorthand'], 'accounting').')'); ?></option>
 
-                                <?php endforeach; ?>
+                                <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 endforeach; ?>
                             </select>
                         </td>
                         <td><input type="submit" name="remove_line[<?php e($key); ?>]" value="<?php e(t('remove')); ?>" /></td>
                     </tr>
             <?php } ?>
-            <?php if ($procurement->get('vat') > 0): ?>
+            <?php if ($procurement->get('vat') > 0) : ?>
                 <tr>
                     <td>&nbsp;</td>
                     <td><?php e($procurement->get('description'). ' - '.t('vat')); ?></td>
@@ -140,9 +150,9 @@
     <div>
         <input type="submit" name="add_line" value="<?php e(t('add line')); ?>" />
     </div>
-    <?php if (empty($value['debet_account'])): ?>
+    <?php if (empty($value['debet_account'])) : ?>
          <p class="warning"><?php e(t('Cannot state procurement with no items.')); ?> <a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></p>
-    <?php else: ?>
+    <?php else : ?>
     <div>
          <input type="submit" name="state" value="<?php e(t('State')); ?>" />
          <a href="<?php url('../'); ?>"><?php e(t('Cancel')); ?></a>

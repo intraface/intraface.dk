@@ -16,7 +16,7 @@
     </tr>
 </thead>
 <tbody>
-    <?php foreach ($accounts AS $account): ?>
+    <?php foreach ($accounts as $account) : ?>
     <tr>
         <td><?php e($account['number']); ?></td>
         <td><?php e($account['name']); ?></td>
@@ -35,9 +35,9 @@
         <td>
             <strong>Balance</strong>
             <?php
-                if ($total_debet != $total_credit) {
-                    echo '<strong class="warning">Balancen stemmer ikke</strong>';
-                }
+            if ($total_debet != $total_credit) {
+                echo '<strong class="warning">Balancen stemmer ikke</strong>';
+            }
             ?>
         </td>
         <td><strong><?php e(amountToOutput($total_debet)); ?></strong></td>
@@ -46,7 +46,7 @@
 </tbody>
 </table>
 
-<?php if ($year->get('last_year_id') > 0): ?>
+<?php if ($year->get('last_year_id') > 0) : ?>
 
 <form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($year->get('id')); ?>" />

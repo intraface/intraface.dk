@@ -56,7 +56,7 @@ class Intraface_modules_onlinepayment_OnlinePaymentGateway
 
     protected function getProvider($provider, $value = 0)
     {
-        switch(strtolower($provider)) {
+        switch (strtolower($provider)) {
             case 'default':
                 require_once 'Intraface/modules/onlinepayment/provider/Default.php';
                 return new OnlinePaymentDefault($this->kernel, $value);

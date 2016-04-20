@@ -41,7 +41,7 @@ class Intraface_modules_cms_element_Longtext extends CMS_Element
     public static function convertArrayToTags($array)
     {
         $tags = '';
-        foreach ($array AS $tag) {
+        foreach ($array as $tag) {
             $tags .= '<'.$tag.'>';
         }
         return $tags;
@@ -49,8 +49,6 @@ class Intraface_modules_cms_element_Longtext extends CMS_Element
 
     function save_element($var)
     {
-
-        require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core.Encoding', 'UTF-8');
         $config->set('HTML.Doctype', 'XHTML 1.0 Strict');

@@ -8,7 +8,7 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
         if ($name == 'subscribers') {
             return 'Intraface_modules_newsletter_Controller_Subscribers';
         } elseif ($name == 'letters') {
-        	return 'Intraface_modules_newsletter_Controller_Letters';
+            return 'Intraface_modules_newsletter_Controller_Letters';
         } elseif ($name == 'log') {
             return 'Intraface_modules_newsletter_Controller_Log';
         }
@@ -43,7 +43,7 @@ class Intraface_modules_newsletter_Controller_List extends k_Component
 
     function DELETE()
     {
-    	return $this->getList()->delete();
+        return $this->getList()->delete();
     }
 
     function renderHtmlEdit()

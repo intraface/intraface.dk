@@ -1,10 +1,10 @@
 <h1><?php e(t('Merge contacts')); ?></h1>
 
 <ul class="options">
-	<li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
+    <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if (count($context->getSimilarContacts()) == 0) {	?>
+<?php if (count($context->getSimilarContacts()) == 0) {     ?>
 
 <p><?php e(t('This contact does not look like anyone else.')); ?></p>
 
@@ -12,7 +12,7 @@
 
     <p><strong><?php e(t('Attention')); ?></strong>:
     <?php e(t('When merging contacts, you need to select the contact you want to keep. When you have chosen the correct contact, you can choose which other contacts to merge. All the information about the original contact will be lost.')); ?>
-	</p>
+    </p>
     <table style="font-size: 0.8em;">
         <caption>Denne kontakt</caption>
         <thead>
@@ -70,10 +70,10 @@
         </tbody>
     </table>
 
-	<label>
+    <label>
     <input type="checkbox" value="yes" name="delete_merged_contacts" />
-	<?php e(t('Delete merged contacts')); ?>
-	</label>
+    <?php e(t('Delete merged contacts')); ?>
+    </label>
 
     <p><input type="submit" value="<?php e(t('Merge contacts')); ?>" /></p>
     </form>

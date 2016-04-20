@@ -12,7 +12,8 @@ class Testable_CMS_Section_LongText extends Intraface_modules_cms_section_Longte
     }
 }
 
-class SectionLongTextTest extends PHPUnit_Framework_TestCase {
+class SectionLongTextTest extends PHPUnit_Framework_TestCase
+{
 
     private $kernel;
     private $page;

@@ -54,7 +54,7 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
         */
 
 
-        if (isset($_POST['label']) AND !isset($labels_standard[$_POST['label']])) {
+        if (isset($_POST['label']) and !isset($labels_standard[$_POST['label']])) {
             $this->getError()->set('error in label - not allowed');
         }
 
@@ -62,7 +62,7 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
             $this->getError()->set('error in label');
         }
 
-        if (!empty($_POST['language']) AND !array_key_exists($_POST['language'], $this->getKernel()->getTranslation()->getLangs())) {
+        if (!empty($_POST['language']) and !array_key_exists($_POST['language'], $this->getKernel()->getTranslation()->getLangs())) {
             $this->getError()->set('error in language - not allowed');
         }
 
@@ -111,7 +111,7 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     function getModules()

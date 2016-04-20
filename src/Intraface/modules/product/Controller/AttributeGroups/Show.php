@@ -63,7 +63,7 @@ class Intraface_modules_product_Controller_AttributeGroups_Show extends k_Compon
                 $group->save();
                 $group->load();
                 return new k_SeeOther($this->url());
-            } catch(Doctrine_Validator_Exception $e) {
+            } catch (Doctrine_Validator_Exception $e) {
                 $error = new Intraface_Doctrine_ErrorRender($translation);
                 $error->attachErrorStack($group->getErrorStack());
             }
@@ -135,5 +135,4 @@ class Intraface_modules_product_Controller_AttributeGroups_Show extends k_Compon
             return new k_SeeOther($this->url('../'));
         }
     }
-
 }

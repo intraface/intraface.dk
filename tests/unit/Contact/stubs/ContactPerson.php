@@ -1,5 +1,7 @@
 <?php
-class FakeContactPerson {
-    function get() {}
+class FakeContactPerson
+{
+    function get()
+    {
+    }
 }
-?>

@@ -56,12 +56,12 @@ class Intraface_modules_shop_Controller_Show extends k_Component
 
 
             $post = $this->body();
-            if (!empty($post)) {
-                $data = $post;
-            } else {
-                $shop = $this->getModel();
-                $data = $shop->toArray();
-            }
+        if (!empty($post)) {
+            $data = $post;
+        } else {
+            $shop = $this->getModel();
+            $data = $shop->toArray();
+        }
 
         if ($this->getKernel()->intranet->hasModuleAccess('currency')) {
             $this->getKernel()->useModule('currency', true); // true: ignore user access

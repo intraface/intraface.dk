@@ -81,7 +81,7 @@ class Intraface_modules_procurement_ProcurementGateway
                 $this->dbquery->setCondition("status_key < 1 OR (status_key = 1 AND paid_date = \"0000-00-00\")");
             } else {
                 if ($this->dbquery->checkFilter("to_date")) {
-                    switch($this->dbquery->getFilter("status")) {
+                    switch ($this->dbquery->getFilter("status")) {
                         case "0":
                             $to_date_field = "date_created";
                             break;
@@ -146,7 +146,8 @@ class Intraface_modules_procurement_ProcurementGateway
 
             $list[$i]["contact_id"] = $db->f("contact_id");
 
-            $list[$i]["total_price"] = round($db->f("price_items") + $db->f("price_shipment_etc") + $db->f("vat"), 2);;
+            $list[$i]["total_price"] = round($db->f("price_items") + $db->f("price_shipment_etc") + $db->f("vat"), 2);
+            ;
 
             $i++;
         }

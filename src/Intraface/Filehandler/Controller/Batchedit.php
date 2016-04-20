@@ -25,9 +25,9 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
         $this->document->setTitle('files');
 
         $data = array(
-        	'gateway' => $gateway,
-        	'files' => $files,
-        	'kernel' => $kernel,
+            'gateway' => $gateway,
+            'files' => $files,
+            'kernel' => $kernel,
             'gateway' => $gateway);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/batchedit');
@@ -48,7 +48,6 @@ class Intraface_Filehandler_Controller_Batchedit extends k_Component
                 'description' => $input['description'][$key],
                 'accessibility' => $input['accessibility'][$key]
                 ))) {
-
                 $appender = $filemanager->getKeywordAppender();
                 $string_appender = new Intraface_Keyword_StringAppender($filemanager->getKeyword(), $appender);
                 $string_appender->addKeywordsByString($input['keywords'][$key]);

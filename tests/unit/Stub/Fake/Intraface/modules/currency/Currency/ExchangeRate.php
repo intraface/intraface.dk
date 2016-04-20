@@ -9,7 +9,4 @@ class Fake_Intraface_modules_currency_Currency_ExchangeRate
     {
         return $this->rate;
     }
-    
 }
-
-?>

@@ -3,8 +3,8 @@
  * Handles different instances of the pictures
  *
  * @package Intraface
- * @author		Sune
- * @version	1.0
+ * @author      Sune
+ * @version     1.0
  */
 class InstanceHandler extends Intraface_Standard
 {
@@ -244,7 +244,6 @@ class InstanceHandler extends Intraface_Standard
             $this->file_handler->createImage();
 
             for ($i = 0, $max = count($types); $i < $max; $i++) {
-
                 $types[$i]['width'] = '';
                 $types[$i]['height'] = '';
                 $types[$i]['file_size'] = '-';
@@ -332,14 +331,15 @@ class InstanceHandler extends Intraface_Standard
      *
      * @param boolean
      */
-    function deleteAll() {
+    function deleteAll()
+    {
         if ($this->file_handler->get('id') == 0) {
             throw new Exception('An file_handler_id is needed to delete instances in InstanceHandler->deleteAll()');
         }
 
         $db = new DB_sql;
         $db->query("SELECT id FROM file_handler_instance WHERE intranet_id = ".$this->file_handler->kernel->intranet->get('id')." AND file_handler_id = ".$this->file_handler->get('id')." AND active = 1");
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $instance = new InstanceHandler($this->file_handler, $db->f('id'));
             $instance->delete();
         }

@@ -79,22 +79,21 @@
             <td><?php e(t('VAT')); ?></td>
             <td><?php e($procurement->get("dk_vat")); ?></td>
         </tr>
-        <?php if ($kernel->user->hasModuleAccess('accounting')): ?>
+        <?php if ($kernel->user->hasModuleAccess('accounting')) : ?>
             <tr>
                 <th><?php e(t('Stated')); ?></th>
                 <td>
                     <?php
-                        if ($procurement->isStated()) {
-                            $module_accounting = $kernel->useModule('accounting');
-                            e($procurement->get('dk_date_stated'));
-                            echo ' <a href="'.url('../../accounting/search', array('voucher_id' => $procurement->get('voucher_id'))).'">Se bilag</a>';
-                        } else {
-                            e(t('Not stated'));
-                            if ($procurement->get('paid_date') != '0000-00-00') { ?>
+                    if ($procurement->isStated()) {
+                        $module_accounting = $kernel->useModule('accounting');
+                        e($procurement->get('dk_date_stated'));
+                        echo ' <a href="'.url('../../accounting/search', array('voucher_id' => $procurement->get('voucher_id'))).'">Se bilag</a>';
+                    } else {
+                        e(t('Not stated'));
+                        if ($procurement->get('paid_date') != '0000-00-00') { ?>
                                 <a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a>
-                            <?php }
-
-                        }
+                            <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 }
+                    }
                     ?>
                 </td>
             </tr>
@@ -119,8 +118,7 @@
                 ?>
                 <p>Forventet levering <?php e($procurement->get("dk_delivery_date")); ?>.</p>
                 <?php
-            }
-            else {
+            } else {
                 ?>
                 <p>Forventet levering ikke angivet.</p>
                 <?php
@@ -131,8 +129,7 @@
                 <li><a href="<?php e(url(null, array('status'=>'canceled'))); ?>" class="confirm">Annullér bestillingen</a></li>
             </ul>
             <?php
-        }
-        elseif ($procurement->get("status") == "recieved") {
+        } elseif ($procurement->get("status") == "recieved") {
             ?>
             <p>Varen er modtaget <?php e($procurement->get("dk_date_recieved")); ?>.</p>
             <ol class="options">
@@ -163,7 +160,6 @@
                 <p><strong>Varen er endnu ikke betalt.</strong></p>
                 <?php
                 if ($procurement->get("dk_payment_date") != "") {
-
                     if (strtotime($procurement->get("payment_date")) < time()) {
                         $class = "highlight";
                     } else {
@@ -194,7 +190,7 @@
         $appendix_list = $append_file->getList();
 
         if (count($appendix_list) > 0) {
-            foreach ($appendix_list AS $appendix) {
+            foreach ($appendix_list as $appendix) {
                 $tmp_filehandler = new FileHandler($kernel, $appendix['file_handler_id']);
                 echo '<div class="appendix"><img src="'.$tmp_filehandler->get('icon_uri').'" style="width: 75px; height: 75px; float: left;" /> <div style="padding-left: 10px; width: 50%;"><a target="_blank" href="'.$tmp_filehandler->get('file_uri').'">'.$tmp_filehandler->get('file_name').'</a>
                 <a class="delete" href="'.url(null, array('delete_appended_file_id' => $appendix['id'])).'">Slet</a></div><div style="clear: both;"></div></div>';
@@ -215,7 +211,7 @@
 
 <div style="clear: both;">
 
-<?php if ($kernel->user->hasModuleAccess('product')): ?>
+<?php if ($kernel->user->hasModuleAccess('product')) : ?>
     <?php
     $product_module = $kernel->useModule('product');
 
@@ -231,7 +227,7 @@
     <?php
     $items = $procurement->getItems();
 
-    if (count($items) > 0):
+    if (count($items) > 0) :
     ?>
     <table class="stripe">
         <caption><?php e(t('Products')); ?></caption>
@@ -255,7 +251,9 @@
             for ($i = 0, $max = count($items); $i<$max; $i++) {
                 $total += $items[$i]["quantity"] * $items[$i]["unit_purchase_price"];
                 ?>
-                <tr id="i<?php e($items[$i]["id"]); ?>" <?php if (isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) print(' class="fade"'); ?>>
+                <tr id="i<?php e($items[$i]["id"]); ?>" <?php if (isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) {
+                    print(' class="fade"');
+} ?>>
                     <td><?php e($items[$i]["number"]); ?></td>
                     <td><?php e($items[$i]["name"]); ?></td>
                     <td class="amount"><?php e(number_format($items[$i]["quantity"], 2, ",", ".")); ?></td>
@@ -294,7 +292,7 @@
         <?php
     }
     ?>
-<?php endif; ?>
+<?php                                                                                                         endif; ?>
 
 <?php endif; ?>
 </div>

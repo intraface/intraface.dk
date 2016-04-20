@@ -12,14 +12,16 @@
 <?php echo $context->getVoucher()->error->view(); ?>
 
 <form method="post" action="<?php e(url(null, array('view' => $context->query('view')))); ?>" id="accounting-form-state">
- 	<input type="hidden" name="id" value="<?php if (isset($values['id'])) e($values['id']); ?>" />
+    <input type="hidden" name="id" value="<?php if (isset($values['id'])) {
+        e($values['id']);
+} ?>" />
 
     <fieldset>
         <legend>Indtast</legend>
         <table>
-			<?php echo $view; ?>
-	    </table>
-	</fieldset>
+            <?php echo $view; ?>
+        </table>
+    </fieldset>
 </form>
 
 <?php echo $draft; ?>

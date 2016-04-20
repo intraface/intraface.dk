@@ -10,10 +10,10 @@ $items = $context->getItems();
     <li><a href="<?php e(url('../../', array('use_stored' => true))); ?>"><?php e(t('To invoices')); ?></a></li>
 </ul>
 
-<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
+<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))) : ?>
     <?php echo $context->getYear()->error->view(); ?>
     <p>Gå til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
-<?php else: ?>
+<?php else : ?>
 
     <p class="message">Når du bogfører fakturaerne vil det skyldige beløb blive sat på debitorkontoen. Når kunden har betalt, skal betalingen bogføres for at overføre beløbet fra debitorkontoen til din indkomst konto (fx Bankkonto).</p>
 
@@ -35,7 +35,7 @@ $items = $context->getItems();
         </table>
     </fieldset>
 
-    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
+    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')) : ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
             <table>
@@ -80,7 +80,7 @@ $items = $context->getItems();
                         <td><?php e($items[$i]["name"]); ?></td>
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
-                            <?php if (!$context->getModel()->isStated()):
+                            <?php if (!$context->getModel()->isStated()) :
                                 $year = new Year($context->getKernel());
                                 $context->getYear()->loadActiveYear();
                                 $accounts =  $account->getList('sale');
@@ -90,22 +90,28 @@ $items = $context->getItems();
                                     <?php
                                     $x = 0;
                                     $optgroup = 1;
-                                    foreach ($accounts AS $a):
-                                        if (strtolower($a['type']) == 'sum') continue;
-                                        if (strtolower($a['type']) == 'headline') continue;
+                                    foreach ($accounts as $a) :
+                                        if (strtolower($a['type']) == 'sum') {
+                                            continue;
+                                        }
+                                        if (strtolower($a['type']) == 'headline') {
+                                            continue;
+                                        }
                                         ?>
                                         <option value="<?php e($a['number']); ?>"
                                         <?php
                                         // er det korrekt at det er number? og m�ske skal et produkt i virkeligheden snarere
                                         // gemmes med nummeret en med id - for s� er det noget lettere at opdatere fra �r til �r
-                                        if ($product->get('state_account_id') == $a['number']) echo ' selected="selected"';
+                                        if ($product->get('state_account_id') == $a['number']) {
+                                            echo ' selected="selected"';
+                                        }
                                         ?>
                                         ><?php e($a['name']); ?></option>
                                         <?php $optgroup = 0;
                                     endforeach;
                                     ?>
                                 </select>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <?php e($account->get('number') . ' ' . $account->get('name')); ?>
                             <?php endif; ?>
                         </td>
@@ -136,6 +142,6 @@ $items = $context->getItems();
             <input type="submit" value="<?php e(t('State')); ?>" />
             <a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a>
         </div>
-   <?php endif;  ?>
+    <?php endif;  ?>
     </form>
 <?php endif; ?>

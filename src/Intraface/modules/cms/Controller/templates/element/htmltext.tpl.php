@@ -64,7 +64,9 @@
 			//]]>
 			</script>
 			    */
-if (!isset($value['text'])) $value['text'] = '';
+    if (!isset($value['text'])) {
+        $value['text'] = '';
+    }
     require_once dirname(__FILE__) . '/../../../CKEditor.php';
     $config['language'] = 'da';
     $config['toolbar'] = array(

@@ -122,16 +122,16 @@ class Intraface_modules_cms_PageGateway
         switch ($this->getDBQuery()->getFilter('type')) {
             case 'page':
                 $this->getDBQuery()->setSorting("position ASC");
-            break;
+                break;
             case 'news':
                 $this->getDBQuery()->setSorting("date_publish DESC");
-            break;
+                break;
             case 'article':
                 $this->getDBQuery()->setSorting("position, date_publish DESC");
-            break;
+                break;
             default:
                 $this->getDBQuery()->setSorting("date_publish DESC");
-            break;
+                break;
         }
 
         // rekursiv funktion til at vise siderne
@@ -146,14 +146,13 @@ class Intraface_modules_cms_PageGateway
 
         // Benyttes til undersider.
         $dbquery_original = clone $this->getDBQuery();
-        $dbquery_original->storeResult('','', 'toplevel'); // sikre at der ikke bliver gemt ved undermenuer.
+        $dbquery_original->storeResult('', '', 'toplevel'); // sikre at der ikke bliver gemt ved undermenuer.
 
 
         $keywords = $this->getDBQuery()->getKeyword();
         if (isset($keywords) && is_array($keywords) && count($keywords) > 0 && $type == 'page') {
             // If we are looking for pages, and there is keywords, we probaly want from more than one level
             // So we add nothing about level to condition.
-
         } elseif ($this->getDBQuery()->checkFilter('level') && $type == 'page') { // $level == 'sublevel' &&
 
             // Til at finde hele menuen p� valgt level.
@@ -167,7 +166,6 @@ class Intraface_modules_cms_PageGateway
 
             $this->getDBQuery()->setCondition('child_of_id = '.$child_of_id);
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$this->id. $sql_expire . $sql_publish . " ORDER BY id");
-
         } else {
             $this->getDBQuery()->setCondition('child_of_id = 0');
             // $cmspage[0]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE ".$sql_type." site_id = " . $this->cmssite->get('id') . " AND child_of_id = 0 AND active = 1 " . $sql_expire . $sql_publish . $sql_order);
@@ -175,9 +173,8 @@ class Intraface_modules_cms_PageGateway
 
         $cmspage[0] = $this->getDBQuery()->getRecordset("cms_page.id, title, identifier, status_key, navigation_name, date_publish, child_of_id, pic_id, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false); //
 
-        while(TRUE) {
-            while($cmspage[$n]->nextRecord()) {
-
+        while (true) {
+            while ($cmspage[$n]->nextRecord()) {
                 $pages[$i]['id'] = $cmspage[$n]->f('id');
 
                 $pages[$i]['title'] = $cmspage[$n]->f('title');
@@ -222,7 +219,7 @@ class Intraface_modules_cms_PageGateway
                 $i++;
                 // $o = $n + 1;
 
-                if ($this->getDBQuery()->getFilter('type') == 'page' AND $this->getDBQuery()->getFilter('level') == 'alllevels') {
+                if ($this->getDBQuery()->getFilter('type') == 'page' and $this->getDBQuery()->getFilter('level') == 'alllevels') {
                     $dbquery[$n + 1] = clone $dbquery_original;
                     $dbquery[$n + 1]->setCondition("child_of_id = ".$cmspage[$n]->f("id"));
                     $cmspage[$n + 1] = $dbquery[$n + 1]->getRecordset("id, title, identifier, navigation_name, date_publish, child_of_id, pic_id, status_key, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false);
@@ -237,7 +234,6 @@ class Intraface_modules_cms_PageGateway
                         continue;
                     }
                 }
-
             }
 
             if ($n == 0) {
@@ -264,17 +260,16 @@ class Intraface_modules_cms_PageGateway
                 $this->value['picture']['original']['height']   = $tmp_filehandler->get('height');
                 $this->value['picture']['original']['file_uri'] = $tmp_filehandler->get('file_uri');
 
-                if ($tmp_filehandler->get('is_image')) {
-                    $tmp_filehandler->createInstance();
-                    $instances = $tmp_filehandler->instance->getList('include_hidden');
-                    foreach ($instances as $instance) {
-                        $this->value['picture'][$instance['name']]['file_uri'] = $instance['file_uri'];
-                        $this->value['picture'][$instance['name']]['name']     = $instance['name'];
-                        $this->value['picture'][$instance['name']]['width']    = $instance['width'];
-                        $this->value['picture'][$instance['name']]['height']   = $instance['height'];
-
-                    }
-                }
+        if ($tmp_filehandler->get('is_image')) {
+            $tmp_filehandler->createInstance();
+            $instances = $tmp_filehandler->instance->getList('include_hidden');
+            foreach ($instances as $instance) {
+                $this->value['picture'][$instance['name']]['file_uri'] = $instance['file_uri'];
+                $this->value['picture'][$instance['name']]['name']     = $instance['name'];
+                $this->value['picture'][$instance['name']]['width']    = $instance['width'];
+                $this->value['picture'][$instance['name']]['height']   = $instance['height'];
+            }
+        }
 
             return $this->value['picture'];
     }
@@ -284,7 +279,7 @@ class Intraface_modules_cms_PageGateway
      *
      * @return array possible page types with binary index
      */
-    static public function getTypesWithBinaryIndex()
+    public static function getTypesWithBinaryIndex()
     {
         return array(
             1 => 'page',

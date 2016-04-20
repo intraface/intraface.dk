@@ -174,7 +174,6 @@ class YearEnd extends Intraface_Standard
             default:
                 throw new Exception('YearEnd::getStatement: Ugyldig type');
                 break;
-
         }
 
         $db = new DB_Sql;
@@ -232,17 +231,17 @@ class YearEnd extends Intraface_Standard
     /**
      *
      * @param $type (kan være do og reverse) - reverse er hvis man fortryder at man har gemt
-     *				dog skal det jo stadig bogføres
+     *              dog skal det jo stadig bogføres
      */
     function resetOperatingAccounts($type = 'do')
     {
-        switch($type) {
+        switch ($type) {
             case 'do':
                 break;
             case 'reverse':
                 break;
             default:
-                    throw new Exception('YearEnd::resetOperatingAccounts ugyldig type');
+                throw new Exception('YearEnd::resetOperatingAccounts ugyldig type');
                 break;
         }
 
@@ -270,7 +269,7 @@ class YearEnd extends Intraface_Standard
 
                 $actions = $this->getStatedActions('operating_reset');
 
-                if (!is_array($actions) OR count($actions) == 0) {
+                if (!is_array($actions) or count($actions) == 0) {
                     $this->error->set('Du kan ikke lave en reverse, n�r der ikke er gemt nogen actions');
                 }
 
@@ -279,8 +278,7 @@ class YearEnd extends Intraface_Standard
                     return 0;
                 }
 
-                foreach ($actions AS $a) {
-
+                foreach ($actions as $a) {
                     $save_array = array();
                     // der er byttet om på debet og credit med vilje, fordi
                     // det skal reverses
@@ -305,9 +303,8 @@ class YearEnd extends Intraface_Standard
                         }
                     }
                 }
-            break;
+                break;
             default:
-
                 $voucher = new Voucher($this->year, $this->get('operating_reset_voucher_id'));
                 $voucher->save(array(
                     'date' => $this->year->get('to_date_dk'),
@@ -315,18 +312,17 @@ class YearEnd extends Intraface_Standard
                 ));
 
                 $accounts = $account->getList('operating', true);
-                if (!is_array($accounts) OR count($accounts) == 0){
+                if (!is_array($accounts) or count($accounts) == 0) {
                     $this->error->set('Du kan ikke nulstille nogle konti der ikke findes');
                     return false;
                 }
 
-                foreach ($accounts AS $a) {
+                foreach ($accounts as $a) {
                     $save_array = array();
                     $account = new Account($this->year, $a['id']);
                     $account->getSaldo();
 
                     if ($account->get('saldo') > 0) {
-
                         $save_array = array(
                             'date' => $this->year->get('to_date_dk'),
                             'debet_account_number' => $result_account->get('number'),
@@ -349,7 +345,6 @@ class YearEnd extends Intraface_Standard
                         );
                         $debet_account = $account;
                         $credit_account = $result_account;
-
                     }
 
                     if (!empty($save_array)) {
@@ -358,7 +353,6 @@ class YearEnd extends Intraface_Standard
                         }
                     }
                     $this->setStated('operating_reset', $voucher->get('id'));
-
                 }
                 return true;
             break;
@@ -367,7 +361,7 @@ class YearEnd extends Intraface_Standard
 
     function resetYearResult($type = 'do')
     {
-        switch($type) {
+        switch ($type) {
             case 'do':
                 // her sker ikke noget
                 break;
@@ -407,7 +401,7 @@ class YearEnd extends Intraface_Standard
                 $actions = $this->getStatedActions('result_account_reset');
 
 
-                if (!is_array($actions) OR count($actions) == 0) {
+                if (!is_array($actions) or count($actions) == 0) {
                     $this->error->set('Du kan ikke lave en reverse, når der ikke er gemt nogen actions');
                 }
 
@@ -415,8 +409,7 @@ class YearEnd extends Intraface_Standard
                     return false;
                 }
 
-                foreach ($actions AS $a) {
-
+                foreach ($actions as $a) {
                     $save_array = array();
                     // der er byttet om på debet og credit med vilje, fordi
                     // det skal reverses
@@ -458,7 +451,6 @@ class YearEnd extends Intraface_Standard
 
                 $save_array = array();
                 if ($result_account->get('saldo') < 0) {
-
                     $save_array = array(
                         'date' => $this->year->get('to_date_dk'),
                         'debet_account_number' => $result_account->get('number'),
@@ -481,7 +473,6 @@ class YearEnd extends Intraface_Standard
                     );
                     $debet_account = $capital_account;
                     $credit_account = $result_account;
-
                 }
 
                 if (!empty($save_array)) {

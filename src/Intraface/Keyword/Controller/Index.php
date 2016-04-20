@@ -18,7 +18,7 @@ class Intraface_Keyword_Controller_Index extends k_Component
 
     function getModel()
     {
-    	return $this->context->getModel();
+        return $this->context->getModel();
     }
 
     function getKernel()

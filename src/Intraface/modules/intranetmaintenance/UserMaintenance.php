@@ -18,7 +18,7 @@ class UserMaintenance extends Intraface_User
      * constructor
      *
      * @param integer $user_id id of the user to be maintained
-     * 
+     *
      * @return void
      */
     public function __construct($user_id = 0)
@@ -33,12 +33,12 @@ class UserMaintenance extends Intraface_User
      *
      * @return void
      */
-    public function getDBQuery($kernel = NULL)
+    public function getDBQuery($kernel = null)
     {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if ($kernel == NULL) {
+        if ($kernel == null) {
             throw new Exception('getDBQuery requires kernel first time called');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'user');
@@ -159,7 +159,6 @@ class UserMaintenance extends Intraface_User
         $module_name = $module_id;
 
         if (!is_numeric($module_id)) {
-
             $db->query("SELECT id FROM module WHERE name =  '".$module_id."'");
             if (!$db->nextRecord()) {
                 throw new Exception("Ugyldig module_id");
@@ -242,7 +241,7 @@ class UserMaintenance extends Intraface_User
      *
      * @return array list of users
      */
-    function getList($kernel = NULL)
+    function getList($kernel = null)
     {
         if ($this->intranet_id != 0) {
             return Intraface_User::getList();

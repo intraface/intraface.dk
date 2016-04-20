@@ -4,12 +4,17 @@ require_once 'NewsletterStubs.php';
 
 class FakeObserver
 {
-    function update() {}
+    function update()
+    {
+    }
 }
 
 class FakeSubscriberContact
 {
-    function getId() { return 1000; }
+    function getId()
+    {
+        return 1000;
+    }
 }
 
 class NewsletterSubscriberTest extends PHPUnit_Framework_TestCase

@@ -43,5 +43,4 @@ class LanguageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('english subject 2', $settings->getConfirmationEmailSubject($language));
 
     }
-
 }

@@ -18,8 +18,8 @@ class Intraface_Filehandler_Controller_Size extends k_Component
         $this->document->setTitle('Edit instance type');
 
         $data = array(
-        	'instance_manager' => $instance_manager,
-        	'value' => $value);
+            'instance_manager' => $instance_manager,
+            'value' => $value);
 
         $tpl = $this->template->create(dirname(__FILE__) . '/../templates/sizes-edit');
         return $tpl->render($this, $data);

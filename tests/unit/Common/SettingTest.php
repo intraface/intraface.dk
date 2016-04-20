@@ -3,7 +3,7 @@ require_once 'Intraface/Setting.php';
 
 class SettingTest extends PHPUnit_Framework_TestCase
 {
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function createSetting()
     {
@@ -177,4 +177,3 @@ class SettingTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($user_setting, $setting->get('user', 'rows_pr_page'));
     }
 }
-?>

@@ -189,7 +189,7 @@ class Email extends Intraface_Standard
         }
         $sql_extra = '';
         // gemme userid hvis vi er inde i systemet
-        if (is_object($this->kernel->user) AND $this->kernel->user->get('id') > 0) {
+        if (is_object($this->kernel->user) and $this->kernel->user->get('id') > 0) {
             //$db->query("UPDATE email SET user_id = ".$this->kernel->user->get('id')." WHERE id = " . $this->id);
             $sql_extra = ', user_id = ' . $db->quote($this->kernel->user->get('id'), 'integer');
         }
@@ -298,7 +298,7 @@ class Email extends Intraface_Standard
     function getTo()
     {
         $contact = $this->getContact();
-        if ($this->get('contact_id') == 0 OR !is_object($contact)) {
+        if ($this->get('contact_id') == 0 or !is_object($contact)) {
             $this->error->set('Der kunne ikke sendes e-mail til email #' . $this->get('id') . ' fordi der ikke var nogen kunde sat');
             return false;
         }
@@ -387,7 +387,6 @@ class Email extends Intraface_Standard
         $file = array();
         $i = 0;
         while ($db->nextRecord()) {
-
             $file[$i]['id'] = $db->f('file_id');
             $file[$i]['filename'] = $db->f('filename');
             $i++;
@@ -411,7 +410,7 @@ class Email extends Intraface_Standard
 
     function delete()
     {
-        if ($this->get('status') == 'sent' OR $this->id == 0) {
+        if ($this->get('status') == 'sent' or $this->id == 0) {
             return false;
         }
         $db = new DB_Sql;

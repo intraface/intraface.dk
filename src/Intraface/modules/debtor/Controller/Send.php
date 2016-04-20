@@ -16,7 +16,6 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         $debtor = $this->context->getDebtor();
 
         switch ($this->query('send')) {
-
             case 'email':
                 $contact = $debtor->getContact();
                 if (!$contact->address->get('email')) {
@@ -43,7 +42,6 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 break;
 
             case 'electronic_email':
-
                 // find ud af hvem der er scan in contact
                 // måske skal vi lige tjekke om det overhovedet er en faktura
                 $scan_in_contact_id = $this->context->getKernel()->getSetting()->get('intranet', 'debtor.scan_in_contact');
@@ -65,20 +63,19 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                 $body = 'Hermed faktura #' . $debtor->get('number') . ' til at læse ind';
 
                 break;
-
         }
 
         if (($debtor->get("type") == "order" || $debtor->get("type") == "invoice") && $this->context->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
             $this->context->getKernel()->useModule('onlinepayment');
             $onlinepayment = OnlinePayment::factory($this->context->getKernel());
         } else {
-            $onlinepayment = NULL;
+            $onlinepayment = null;
         }
 
         if ($this->context->getKernel()->intranet->get("pdf_header_file_id") != 0) {
             $file = new FileHandler($this->context->getKernel(), $this->context->getKernel()->intranet->get("pdf_header_file_id"));
         } else {
-            $file = NULL;
+            $file = null;
         }
 
         // gem debtoren som en fil i filsystemet
@@ -101,10 +98,9 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
         if (!$file_id = $filehandler->update($input)) {
             echo $filehandler->error->view();
             throw new Exception('Oplysninger om filen kunne ikke opdateres');
-
         }
 
-        switch($this->context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
+        switch ($this->context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
             case 'intranet':
                 $from_email = '';
                 $from_name = '';
@@ -155,7 +151,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                     $redirect->setIdentifier('send_email');
                     $redirect->askParameter('send_email_status');
 
-                    return new k_SeeOther($url);
+                return new k_SeeOther($url);
                 break;
             case 'electronic_email':
                 // Sender e-mailen
@@ -164,7 +160,6 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
                         $debtor->setStatus('sent');
                     }
                     return new k_SeeOther($this->url('../'));
-
                 } else {
                     echo $email->error->view();
                     throw new Exception('E-mailen kunne ikke sendes');
@@ -172,7 +167,7 @@ class Intraface_modules_debtor_Controller_Send extends k_Component
 
                 break;
             default:
-                    throw new Exception('not valid send as');
+                throw new Exception('not valid send as');
                 break;
         }
         throw new Exception('Something went wrong');

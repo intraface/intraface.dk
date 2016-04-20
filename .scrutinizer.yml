@@ -1,0 +1,19 @@
+build:
+  environment:
+    php:
+      version: 5.4 # Common versions: 5.4, 5.5, 5.6, 7.0 or hhvm
+  tests:
+    override:
+      -
+        command: 'cd tests/unit/ && phpunit --coverage-clover=clover.xml --configuration phpunit.example.xml .'
+        coverage:
+          file: 'clover.xml'
+          format: 'php-clover'
+checks:
+  php:
+    custom_coding_standard:
+      ruleset_path: 'phpcs.xml'
+
+filter:
+  excluded_paths:
+    - src/intraface.dk/core/javascript/*

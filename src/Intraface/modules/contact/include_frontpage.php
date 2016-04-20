@@ -8,7 +8,7 @@ $contact_module = $kernel->useModule('contact');
 
 $contact = new Contact($kernel);
 
-if (!$contact->isFilledIn()):
+if (!$contact->isFilledIn()) :
     $_advice[] = array(
         'msg' => 'you can create contacts in the contact module',
         'link' => $contact_module->getPath(),
@@ -17,7 +17,7 @@ if (!$contact->isFilledIn()):
 endif;
 
 $reminders = ContactReminder::upcomingReminders($kernel);
-foreach ($reminders AS $reminder) {
+foreach ($reminders as $reminder) {
     if (strtotime($reminder['reminder_date']) > time()) {
         $text = 'Upcoming';
     } else {
@@ -29,5 +29,4 @@ foreach ($reminders AS $reminder) {
         'msg' => $text.' ('.$reminder['dk_reminder_date'].'): '.$reminder['contact_name'].':  '.$reminder['subject'].'.',
         'no_translation' => true
     );
-
 }

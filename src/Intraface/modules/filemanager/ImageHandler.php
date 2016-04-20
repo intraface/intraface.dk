@@ -23,7 +23,7 @@ class ImageHandler extends Intraface_Standard
     /**
      * @var string tmp_file_name
      */
-    private $tmp_file_name = NULL;
+    private $tmp_file_name = null;
 
     /**
      * Constructor
@@ -83,10 +83,9 @@ class ImageHandler extends Intraface_Standard
             throw new Exception($image->getMessage() . $image->getUserInfo());
         }
 
-        if ($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
+        if ($this->tmp_file_name != null && file_exists($this->tmp_file_name)) {
             $error = $image->load($this->tmp_file_name);
-        }
-        else {
+        } else {
             $error = $image->load($this->file_handler->get('file_path'));
         }
 
@@ -116,11 +115,10 @@ class ImageHandler extends Intraface_Standard
             }
 
             // die($image->new_x.':'.$image->new_y.':'.$width.':'.$height.': '.$offset_x.': '.$offset_y);
-            if ($image->crop($width, $height, $offset_x, $offset_y) !== true){
+            if ($image->crop($width, $height, $offset_x, $offset_y) !== true) {
                 throw new Exception("Der opstod en fejl under formatering (crop) af billedet i ImageHandler->resize");
             }
         } else {
-
             if ($image->fit($width, $height) !== true) {
                 throw new Exception("Der opstod en fejl under formatering (fit) af billedet i ImageHandler->resize");
             }
@@ -155,7 +153,7 @@ class ImageHandler extends Intraface_Standard
             throw new Exception($image->getMessage() . $image->getUserInfo());
         }
 
-        if ($this->tmp_file_name != NULL && file_exists($this->tmp_file_name)) {
+        if ($this->tmp_file_name != null && file_exists($this->tmp_file_name)) {
             $error = $image->load($this->tmp_file_name);
         } else {
             $error = $image->load($this->file_handler->get('file_path'));
@@ -211,6 +209,4 @@ class ImageHandler extends Intraface_Standard
 
         return array('width' => round($width), 'height' => round($height));
     }
-
 }
-?>

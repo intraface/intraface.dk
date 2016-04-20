@@ -84,7 +84,7 @@ class VatPeriod extends Intraface_Standard
             return 0;
         }
         $db = new DB_Sql;
-        if ($this->id == 0 OR $type=='insert') {
+        if ($this->id == 0 or $type=='insert') {
             $sql_type = "INSERT INTO ";
             $sql_end  = ", date_created = NOW()";
         } else {
@@ -176,14 +176,13 @@ class VatPeriod extends Intraface_Standard
         $this->value['saldo_rubrik_a'] = 0;
         $saldo_rubrik_a = 0;
 
-        if (is_array($buy_eu_accounts) AND count($buy_eu_accounts) > 0) {
-            foreach ($buy_eu_accounts AS $key=>$id) {
+        if (is_array($buy_eu_accounts) and count($buy_eu_accounts) > 0) {
+            foreach ($buy_eu_accounts as $key => $id) {
                 $account_eu_buy = new Account($this->year, $id);
                 $primo = $account_eu_buy->getPrimoSaldo();
                 $account_eu_buy->getSaldo('stated', $date_from, $date_to);
                 $saldo_rubrik_a += $account_eu_buy->get('saldo');
                 $saldo_rubrik_a -= $primo['saldo'];
-
             }
         }
         $this->value['saldo_rubrik_a'] = $saldo_rubrik_a;
@@ -271,7 +270,6 @@ class VatPeriod extends Intraface_Standard
         if ($this->get('saldo_vat_in') > 0) {
             $var['debet_account_number'] = $account_vat_balance->get('number');
             $var['credit_account_number'] = $account_vat_in->get('number');
-
         } else {
             $var['debet_account_number'] = $account_vat_in->get('number');
             $var['credit_account_number'] = $account_vat_balance->get('number');
@@ -282,7 +280,7 @@ class VatPeriod extends Intraface_Standard
              $this->error->set('Systemet kunne ikke opdatere indgående moms');
         }
 
-        if ($this->error->isError()){
+        if ($this->error->isError()) {
             return false;
         }
 

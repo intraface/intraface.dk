@@ -144,8 +144,8 @@ class Intraface_Factory
     function new_Cache_Lite()
     {
         $options = array(
-    		'cacheDir' => PATH_CACHE,
-    		'lifeTime' => 3600
+            'cacheDir' => PATH_CACHE,
+            'lifeTime' => 3600
         );
 
         return new Cache_Lite($options);

@@ -39,7 +39,7 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
         $cmspage = $this->context->getModel();
         $sections = $cmspage->getSections();
 
-        if (!empty($sections) AND count($sections) == 1 AND array_key_exists(0, $sections) AND $sections[0]->get('type') == 'mixed') {
+        if (!empty($sections) and count($sections) == 1 and array_key_exists(0, $sections) and $sections[0]->get('type') == 'mixed') {
             return new k_SeeOther($this->url($sections[0]->get('id')));
         };
         if ($this->getKernel()->setting->get('user', 'htmleditor') == 'tinymce') {
@@ -47,8 +47,8 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
         }
 
         $data = array(
-        	'cmspage' => $cmspage,
-        	'sections' => $sections,
+            'cmspage' => $cmspage,
+            'sections' => $sections,
             'kernel' => $this->getKernel(),
             'error' => $this->error
         );
@@ -63,7 +63,7 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
 
         $files = '';
         if (is_array($this->body('section'))) {
-            foreach ($this->body('section') AS $key=>$value) {
+            foreach ($this->body('section') as $key => $value) {
                 $section = CMS_Section::factory($this->getKernel(), 'id', $key);
                 /*
                 if ($section->get('type') == 'picture') {
@@ -101,9 +101,8 @@ class Intraface_modules_cms_Controller_Sections extends k_Component
                 }
             }
         }
-        if (empty($this->error) AND count($this->error) == 0) {
+        if (empty($this->error) and count($this->error) == 0) {
             if ($this->body('choose_file') && $this->getKernel()->user->hasModuleAccess('filemanager')) {
-
                 // jeg skal bruge array_key, n�r der er klikket p� choose_file, for den indeholder section_id. Der b�r
                 // kun kunne v�re en post i arrayet, s� key 0 m� v�re $section_id for vores fil
                 $keys = array_keys($_POST['choose_file']);

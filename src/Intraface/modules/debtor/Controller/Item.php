@@ -30,12 +30,12 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
         $product_module = $this->getKernel()->useModule('product');
 
         if (isset($_GET['change_product'])) {
-        	$redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
-        	$url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectproduct'), NET_SCHEME . NET_HOST . $this->url());
-        	$redirect->askParameter('product_id');
-        	return new k_SeeOther($url);
+            $redirect = Intraface_Redirect::factory($this->getKernel(), 'go');
+            $url = $redirect->setDestination(NET_SCHEME . NET_HOST . $this->url('selectproduct'), NET_SCHEME . NET_HOST . $this->url());
+            $redirect->askParameter('product_id');
+            return new k_SeeOther($url);
         }
-		/*
+        /*
         elseif (isset($_GET['return_redirect_id'])) {
         	$redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
             $returned_values = unserialize($redirect->getParameter('product_id'));
@@ -65,15 +65,15 @@ class Intraface_modules_debtor_Controller_Item extends k_Component
 
     function postForm()
     {
-       	$debtor = $this->context->getDebtor();
-       	$debtor->loadItem(intval($_POST["id"]));
+        $debtor = $this->context->getDebtor();
+        $debtor->loadItem(intval($_POST["id"]));
 
-       	if ($id = $debtor->item->save($_POST)) {
-       		return new k_SeeOther($this->url('../../'));
-       	} else {
-       		$values = $_POST;
-       	}
-       	return $this->render();
+        if ($id = $debtor->item->save($_POST)) {
+            return new k_SeeOther($this->url('../../'));
+        } else {
+            $values = $_POST;
+        }
+        return $this->render();
     }
 
     function addItem($returned_values)

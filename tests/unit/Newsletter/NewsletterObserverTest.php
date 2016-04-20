@@ -2,7 +2,8 @@
 require_once 'Intraface/modules/newsletter/Observer/OptinMail.php';
 require_once 'NewsletterStubs.php';
 
-class FakeNewsletterMailer {
+class FakeNewsletterMailer
+{
 
 }
 

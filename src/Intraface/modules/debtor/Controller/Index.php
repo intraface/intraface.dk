@@ -25,7 +25,7 @@ class Intraface_modules_debtor_Controller_Index extends k_Component
         } elseif ($this->getKernel()->user->hasModuleAccess("order")) {
             return new k_SeeOther($this->url('order/list', array('type' => 'order')));
         } elseif ($this->getKernel()->user->hasModuleAccess("quotation")) {
-	        return new k_SeeOther($this->url('quotation/list', array('type' => 'quotation')));
+            return new k_SeeOther($this->url('quotation/list', array('type' => 'quotation')));
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/templates/index');

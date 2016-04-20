@@ -46,7 +46,7 @@ class Intraface_modules_currency_Currency_Type
     public function getByKey($key)
     {
         $types = $this->getAll();
-        foreach ($types AS $type) {
+        foreach ($types as $type) {
             if ($type->getKey() == $key) {
                 return $type;
             }

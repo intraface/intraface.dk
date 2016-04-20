@@ -94,7 +94,7 @@ class Intraface_Intranet extends Intraface_Standard
 
     public function getAddress()
     {
-    	return ($this->address = Intraface_Address::factory('intranet', $this->id));
+        return ($this->address = Intraface_Address::factory('intranet', $this->id));
     }
 
     /**
@@ -141,7 +141,7 @@ class Intraface_Intranet extends Intraface_Standard
         }
 
         if (!empty($this->permissions)) {
-            if (!empty($this->permissions['intranet']['module'][$module_id]) AND $this->permissions['intranet']['module'][$module_id] == true) {
+            if (!empty($this->permissions['intranet']['module'][$module_id]) and $this->permissions['intranet']['module'][$module_id] == true) {
                 return true;
             }
             return false;
@@ -153,7 +153,7 @@ class Intraface_Intranet extends Intraface_Standard
         }
         $result->free();
 
-        if (!empty($this->permissions['intranet']['module'][$module_id]) AND $this->permissions['intranet']['module'][$module_id] == true) {
+        if (!empty($this->permissions['intranet']['module'][$module_id]) and $this->permissions['intranet']['module'][$module_id] == true) {
             return true;
         }
         return false;

@@ -19,7 +19,7 @@ class FakeShopBasketWebshop
 class ShopBasketTest extends PHPUnit_Framework_TestCase
 {
     private $product;
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     function setUp()
     {
@@ -32,7 +32,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function tearDown() {
+    function tearDown()
+    {
         $this->product->delete();
     }
 
@@ -216,7 +217,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
          $this->assertEquals(count($basket->getItems()), 0);
     }
 
-    function testSaveCustomerEan() {
+    function testSaveCustomerEan()
+    {
         $basket = $this->createBasket();
 
         $ean = '1234567890123';
@@ -226,7 +228,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($basket->getCustomerEan(), array('customer_ean' => $ean));
     }
 
-    function testSaveCustomerCoupon() {
+    function testSaveCustomerCoupon()
+    {
         $basket = $this->createBasket();
 
         $coupon = '12345';
@@ -236,7 +239,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($basket->getCustomerCoupon(), array('customer_coupon' => $coupon));
     }
 
-    function testSaveCustomerComment() {
+    function testSaveCustomerComment()
+    {
         $basket = $this->createBasket();
 
         $comment = 'this is a comment';
@@ -246,7 +250,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($basket->getCustomerComment(), array('customer_comment' => $comment));
     }
 
-    function testSaveAddressOnFullAddress() {
+    function testSaveAddressOnFullAddress()
+    {
         $basket = $this->createBasket();
 
         $address = array('name' => 'my name',
@@ -264,7 +269,8 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($address, $basket->getAddress());
     }
 
-    function testSaveAddressOnIncompleteAddress() {
+    function testSaveAddressOnIncompleteAddress()
+    {
         $basket = $this->createBasket();
 
         $address = array('name' => 'my name',
@@ -308,6 +314,4 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(808, $basket->getTotalWeight());
     }
-
 }
-?>

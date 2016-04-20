@@ -45,7 +45,7 @@ class Intraface_Controller_Signup extends k_Component
         if (!Validate::string($this->body('password'), VALIDATE_ALPHA . VALIDATE_NUM)) {
             $this->error[] = 'Password ugyldigt';
         }
-        if (!empty($error) AND count($error) > 0) {
+        if (!empty($error) and count($error) > 0) {
             $this->msg = 'Vi kunne ikke oprette dig';
             return $this->render();
         } else {
@@ -61,7 +61,7 @@ class Intraface_Controller_Signup extends k_Component
                 $this->error[] = 'Du er allerede oprettet';
             }
 
-            if (!empty($error) AND count($error) > 0) {
+            if (!empty($error) and count($error) > 0) {
                 $this->msg = 'Du er allerede oprettet. <a href="'.url('/login').'">Login</a>.';
                 return $this->render();
             } else {
@@ -79,7 +79,7 @@ class Intraface_Controller_Signup extends k_Component
                     // module access
                     $modules = array('administration', 'modulepackage', 'onlinepayment', 'cms', 'filemanager', 'contact', 'debtor','quotation', 'invoice', 'order','accounting', 'product', 'stock', 'webshop');
 
-                    foreach ($modules AS $module) {
+                    foreach ($modules as $module) {
                         $res = $db->query("SELECT id FROM module WHERE name = ".$db->quote($module, 'text')." LIMIT 1");
                         if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                             $db->query("INSERT INTO permission SET
@@ -95,7 +95,7 @@ class Intraface_Controller_Signup extends k_Component
 
                     $sub_access = array('edit_templates', 'setting', 'vat_report', 'endyear');
 
-                    foreach ($sub_access AS $module) {
+                    foreach ($sub_access as $module) {
                         $res = $db->query("SELECT id, module_id FROM module_sub_access WHERE name = ".$db->quote($module, 'text')." LIMIT 1");
                         if ($row = $res->fetchRow(MDB2_FETCHMODE_ASSOC)) {
                             $res = $db->query("INSERT INTO permission SET intranet_id = ".$db->quote($intranet_id, 'integer').", module_sub_access_id = ".$db->quote($row['id'], 'integer').", module_id = ".$db->quote($row['module_id'], 'integer').", user_id = ".$db->quote($user_id, 'integer'));

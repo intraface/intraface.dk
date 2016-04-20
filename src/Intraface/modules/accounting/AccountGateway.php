@@ -26,7 +26,7 @@ class Intraface_modules_accounting_AccountGateway
 
     function __construct($year)
     {
-    	$this->year = $year;
+        $this->year = $year;
     }
 
    /**
@@ -74,8 +74,8 @@ class Intraface_modules_accounting_AccountGateway
 
     function findById($id)
     {
-        require_once dirname (__FILE__) . '/Account.php';
-    	return new Account($this->year, $id);
+        require_once dirname(__FILE__) . '/Account.php';
+        return new Account($this->year, $id);
     }
 
     function findByType($type, $saldo = false)
@@ -110,7 +110,7 @@ class Intraface_modules_accounting_AccountGateway
 
         $db = new DB_Sql;
         if (!empty($type)) {
-            switch($type) {
+            switch ($type) {
                 case 'expenses':
                         $type_sql = " AND use_key = '".array_search('expenses', $this->use)."'";
                     break;
@@ -131,7 +131,7 @@ class Intraface_modules_accounting_AccountGateway
                         $type_sql = " AND type_key = '".array_search('operating', $this->types)."'";
                     break;
                 default:
-               break;
+                    break;
             }
         }
         $accounts = array();
@@ -174,7 +174,6 @@ class Intraface_modules_accounting_AccountGateway
                 $accounts[$i]['debet'] = $account->get('debet');
                 $accounts[$i]['credit'] = $account->get('credit');
                 $accounts[$i]['saldo'] = $account->get('saldo');
-
             }
 
 

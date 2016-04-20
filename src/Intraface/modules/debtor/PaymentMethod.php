@@ -17,7 +17,7 @@ class Intraface_modules_debtor_PaymentMethod
      */
     public function getTypes()
     {
-     	$types[0] = 'None';
+        $types[0] = 'None';
         $types[1] = 'BankTransfer';
         $types[2] = 'GiroPayment01';
         $types[3] = 'GiroPayment71';
@@ -86,7 +86,7 @@ class Intraface_modules_debtor_PaymentMethod
     {
         $payment_methods = array();
 
-   	    $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($shop_id);
+        $methods = Doctrine::getTable('Intraface_modules_shop_PaymentMethods')->findByShopId($shop_id);
         foreach ($methods as $method) {
             $gateway = new Intraface_modules_debtor_PaymentMethod();
             $m = $gateway->getByKey($method->getPaymentMethodKey());

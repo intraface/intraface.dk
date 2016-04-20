@@ -36,7 +36,7 @@ class ImageRandomizer
         $keyword_ids = array();
 
         require_once 'Intraface/shared/keyword/Keyword.php';
-        foreach ($keywords AS $keyword) {
+        foreach ($keywords as $keyword) {
             $keyword_object = new Keyword($this->file_manager);
             // @todo: This is not really good, but the only way to identify keyword on name!
             $keyword_ids[] = $keyword_object->save(array('keyword' => $keyword));
@@ -47,7 +47,7 @@ class ImageRandomizer
         $filetype = new FileType();
         $types = $filetype->getList();
         $keys = array();
-        foreach ($types AS $key => $mime_type) {
+        foreach ($types as $key => $mime_type) {
             if ($mime_type['image'] == 1) {
                 $keys[] = $key;
             }

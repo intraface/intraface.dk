@@ -15,8 +15,10 @@ class Intraface_modules_product_Variation extends Doctrine_Record
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
 
-        $this->hasMany('Intraface_modules_product_Variation_Detail as detail',
-            array('local' => 'id', 'foreign' => 'product_variation_id'));
+        $this->hasMany(
+            'Intraface_modules_product_Variation_Detail as detail',
+            array('local' => 'id', 'foreign' => 'product_variation_id')
+        );
     }
 
     public function preInsert($event)
@@ -29,7 +31,7 @@ class Intraface_modules_product_Variation extends Doctrine_Record
             ->orderBy('number')
             ->execute();
 
-        if ($collection == NULL || $collection->count() == 0) {
+        if ($collection == null || $collection->count() == 0) {
             $this->number = 1;
         } else {
             $this->number = $collection->getLast()->getNumber() + 1;
@@ -39,18 +41,18 @@ class Intraface_modules_product_Variation extends Doctrine_Record
     
     /**
      * Returns detail object
-     * 
+     *
      * @param $id
      * @return object Intraface_modules_product_Variation_Detail
      */
     public function getDetail($id = 0)
     {
-        if ($this->id === NULL) {
+        if ($this->id === null) {
             throw new Exception('You can first get detail when variation is saved');
         }
         
         if ($id != 0) {
-            foreach ($this->detail AS $detail) {
+            foreach ($this->detail as $detail) {
                 if ($detail->getId() == $id) {
                     return $detail;
                 }
@@ -93,14 +95,14 @@ class Intraface_modules_product_Variation extends Doctrine_Record
         */
     }
 
-    public function getStock($product = NULL)
+    public function getStock($product = null)
     {
         if (!$this->stock) {
             if ($product->getId() != $this->product_id) {
                 throw new Exception('The given product does not match the variation');
             }
 
-            if ($product == NULL) {
+            if ($product == null) {
                 throw new Exception('You have to provide the correct Product object the first time you request stock');
             }
 

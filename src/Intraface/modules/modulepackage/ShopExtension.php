@@ -60,21 +60,24 @@ class Intraface_modules_modulepackage_ShopExtension
                 array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
                 INTRAFACE_INTRANETMAINTENANCE_SHOP_ID,
                 INTRAFACE_XMLRPC_DEBUG,
-                $xmlrpc_shop_url);
-        } catch(Exception $e) {
-            $this->shop = NULL;
+                $xmlrpc_shop_url
+            );
+        } catch (Exception $e) {
+            $this->shop = null;
             throw new Exception('Unable to connect to the intranet maintenance webshop '.$e->getMessage());
         }
 
         $this->debtor = new IntrafacePublic_Debtor_Client_XMLRPC(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
             INTRAFACE_XMLRPC_DEBUG,
-            $xmlrpc_debtor_url);
+            $xmlrpc_debtor_url
+        );
 
         $this->onlinepayment = new IntrafacePublic_OnlinePayment_Client_XMLRPC(
             array('private_key' => INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY, 'session_id' => uniqid()),
             INTRAFACE_XMLRPC_DEBUG,
-            $xmlrpc_onlinepayment_url);
+            $xmlrpc_onlinepayment_url
+        );
 
         $this->error = new Intraface_Error;
     }
@@ -105,14 +108,13 @@ class Intraface_modules_modulepackage_ShopExtension
             } else {
                 return array();
             }
-        }  elseif (is_int($product_id)) {
+        } elseif (is_int($product_id)) {
             if (intval($product_id) == 0) {
                 return array();
             }
             try {
                 $product = $this->shop->getProduct($product_id);
             } catch (Exception $e) {
-
                 throw new Exception('unable to get product from intranet webshop: '.$e->getMessage());
             }
             return $product;
@@ -136,7 +138,7 @@ class Intraface_modules_modulepackage_ShopExtension
         $debtor = $this->getExistingDebtor($debtor_id);
 
         // @todo what kind of check of the invoice/order do we need to make here!
-        foreach ($debtor['items'] AS $item) {
+        foreach ($debtor['items'] as $item) {
             if ($item['product_id'] == $product_id) {
                 return (array)$item;
             }
@@ -183,7 +185,7 @@ class Intraface_modules_modulepackage_ShopExtension
         }
 
         // then we add the products to the basket
-        foreach ((array)$products AS $product) {
+        foreach ((array)$products as $product) {
             if (!isset($product['product_detail_id'])) {
                 $product['product_detail_id'] = 0;
             }

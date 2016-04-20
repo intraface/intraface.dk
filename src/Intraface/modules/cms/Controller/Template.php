@@ -26,21 +26,21 @@ class Intraface_modules_cms_Controller_Template extends k_Component
     {
         $this->getKernel()->module('cms');
 
-        if (!empty($_GET['movedown']) AND is_numeric($_GET['movedown'])) {
+        if (!empty($_GET['movedown']) and is_numeric($_GET['movedown'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['movedown']);
             $section->getPosition($this->mdb2)->moveDown();
             $template = $section->template;
-        } elseif (!empty($_GET['moveup']) AND is_numeric($_GET['moveup'])) {
+        } elseif (!empty($_GET['moveup']) and is_numeric($_GET['moveup'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['moveup']);
             $section->getPosition($this->mdb2)->moveUp();
             $template = $section->template;
         }
 
-        if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) {
+        if (!empty($_GET['delete']) and is_numeric($_GET['delete'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['delete']);
             $section->delete();
             $template = $section->template;
-        } elseif (!empty($_GET['undelete']) AND is_numeric($_GET['undelete'])) {
+        } elseif (!empty($_GET['undelete']) and is_numeric($_GET['undelete'])) {
             $section = CMS_TemplateSection::factory($this->getKernel(), 'id', $_GET['undelete']);
             $section->undelete();
             $template = $section->template;
@@ -109,7 +109,7 @@ class Intraface_modules_cms_Controller_Template extends k_Component
     {
         $this->getKernel()->module('cms');
 
-        if (!empty($_POST['add_section']) AND !empty($_POST['new_section_type'])) {
+        if (!empty($_POST['add_section']) and !empty($_POST['new_section_type'])) {
             return new k_SeeOther($this->url('section/create', array('type' => $_POST['new_section_type'])));
             exit;
         } elseif (!empty($_POST['add_keywords'])) {

@@ -80,7 +80,9 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         if ($this->dbquery->checkFilter("uploaded_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
-            if (isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            if (isset($date_parts[1]) && $date_parts[1] != "") {
+                $time = " ".$date_parts[1];
+            }
             $date = new Intraface_Date($date_parts[0]);
             if ($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_created >= \"".$date->get().$time."\"");
@@ -92,7 +94,9 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         if ($this->dbquery->checkFilter("uploaded_to_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("uploaded_to_date"));
             // Der kontrolleres ikke for gyldig tidsformat
-            if (isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            if (isset($date_parts[1]) && $date_parts[1] != "") {
+                $time = " ".$date_parts[1];
+            }
             $date = new Intraface_Date($date_parts[0]);
             if ($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_created <= \"".$date->get().$time."\"");
@@ -104,7 +108,9 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         if ($this->dbquery->checkFilter("edited_from_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("edited_from_date"));
             // Der kontrolleres ikke for gyldig tidsformat
-            if (isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            if (isset($date_parts[1]) && $date_parts[1] != "") {
+                $time = " ".$date_parts[1];
+            }
             $date = new Intraface_Date($date_parts[0]);
             if ($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed >= \"".$date->get().$time."\"");
@@ -116,7 +122,9 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         if ($this->dbquery->checkFilter("edited_to_date")) {
             $date_parts = explode(" ", $this->dbquery->getFilter("edited_to_date"));
             // Der kontrolleres ikke for gyldig tidsformat
-            if (isset($date_parts[1]) && $date_parts[1] != "") $time = " ".$date_parts[1];
+            if (isset($date_parts[1]) && $date_parts[1] != "") {
+                $time = " ".$date_parts[1];
+            }
             $date = new Intraface_Date($date_parts[0]);
             if ($date->convert2db()) {
                 $this->dbquery->setCondition("file_handler.date_changed <= \"".$date->get().$time."\"");
@@ -138,7 +146,7 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
 
         if ($this->dbquery->checkFilter('images')) {
             $keys = array();
-            foreach ($this->file_types AS $key => $mime_type) {
+            foreach ($this->file_types as $key => $mime_type) {
                 if ($mime_type['image'] == 1) {
                     $keys[] = $key;
                 }
@@ -167,8 +175,7 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
         $db = $this->dbquery->getRecordset("file_handler.*, DATE_FORMAT(file_handler.date_created, '%d-%m-%Y') AS dk_date_created", "", $debug);
 
         //$db->query("SELECT * FROM file_handler WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1 AND tmp = 0 ORDER BY date_created DESC");
-        while($db->nextRecord()) {
-
+        while ($db->nextRecord()) {
             $file[$i]['id'] = $db->f('id');
             $file[$i]['date_created'] = $db->f('date_created');
             $file[$i]['dk_date_created'] = $db->f('dk_date_created');
@@ -180,11 +187,11 @@ class Intraface_modules_filemanager_FileManager extends FileHandler
             $file[$i]['file_type'] = $this->_getMimeType((int)$db->f('file_type_key'));
             $file[$i]['is_picture'] = $this->file_types[$db->f('file_type_key')]['image'];
             if ($file[$i]['file_size'] >= 1000000) {
-                $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000000), 2, ",",".")." Mb";
-            } else if ($file[$i]['file_size'] >= 1000) {
-                $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000), 2, ",",".")." Kb";
+                $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000000), 2, ",", ".")." Mb";
+            } elseif ($file[$i]['file_size'] >= 1000) {
+                $file[$i]['dk_file_size'] = number_format(($file[$i]['file_size']/1000), 2, ",", ".")." Kb";
             } else {
-                $file[$i]['dk_file_size'] = number_format($file[$i]['file_size'], 2, ",",".")." byte";
+                $file[$i]['dk_file_size'] = number_format($file[$i]['file_size'], 2, ",", ".")." byte";
             }
             $file[$i]['file_uri'] = FILE_VIEWER.'?/'.$this->kernel->intranet->get('public_key').'/'.$db->f('access_key').'/'.urlencode($db->f('file_name'));
 

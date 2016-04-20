@@ -2,9 +2,9 @@
 /**
  *
  * @package Intraface_IntranetMaintenance
- * @author	Sune Jensen
- * @since	1.0
- * @version	1.1
+ * @author  Sune Jensen
+ * @since   1.0
+ * @version     1.1
  *
  */
 class MainIntranetMaintenance extends Intraface_Main

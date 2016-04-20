@@ -307,7 +307,8 @@ class ProcurementItem extends Intraface_Standard
      * @param float $price
      * @return boolean true on success
      */
-    public function setPurchasePrice($price) {
+    public function setPurchasePrice($price)
+    {
 
         if ($this->id == 0) {
             throw new Exception('You can only set purchase price when item has been saved');
@@ -435,14 +436,12 @@ class ProcurementItem extends Intraface_Standard
                 $item[$i]["name"] = $product->get("name").' - '.$variation->getName();
                 $item[$i]["number"]= $product->get("number").'.'.$variation->getNumber();
                 $item[$i]["price"] = $detail->getPrice($product);
-
             } else {
                 $item[$i]["name"] = $product->get("name");
                 $item[$i]["number"] = $product->get("number");
                 $item[$i]["price"] = $product->getDetails()->getPrice();
             }
             $i++;
-
         }
         return $item;
     }

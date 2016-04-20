@@ -33,7 +33,7 @@ class Intraface_modules_cms_HTML_Editor
     function get($textarea_attributes, $initial_value = '', $editor_attributes = array())
     {
         $output = '';
-        switch($this->editor) {
+        switch ($this->editor) {
             case 'tinymce':
                 // return tinymce textarea
 
@@ -41,7 +41,7 @@ class Intraface_modules_cms_HTML_Editor
                 $button = array();
 
 
-                if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
+                if (!empty($editor_attributes['plugins']) and is_array($editor_attributes['plugins'])) {
                     if (in_array('save', $editor_attributes['plugins'])) {
                         $button[] = 'save';
                     }
@@ -50,8 +50,7 @@ class Intraface_modules_cms_HTML_Editor
                 $button[] = 'undo';
                 $button[] = 'redo';
 
-                if (!empty($this->allowed_tags) AND is_array($this->allowed_tags)) {
-
+                if (!empty($this->allowed_tags) and is_array($this->allowed_tags)) {
                     if (in_array('p', $this->allowed_tags)) {
                         $blockformat[] = 'p';
                     }
@@ -114,14 +113,13 @@ class Intraface_modules_cms_HTML_Editor
 
                 // original list of buttons1: , bold, italic, formatselect, separator, bullist,numlist,separator,undo,redo,separator,link,unlink,separator,sub,sup,separator, tablecontrols, separator,charmap,separator,cleanup,code,spellchecker,separator,help,pasteword
 
-                if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
+                if (!empty($editor_attributes['plugins']) and is_array($editor_attributes['plugins'])) {
                     if (in_array('spellchecker', $editor_attributes['plugins'])) {
                         // $button[] = 'spellchecker';
                     }
 
-                    if (in_array('table', $editor_attributes['plugins']) AND in_array('table', $this->allowed_tags)) {
+                    if (in_array('table', $editor_attributes['plugins']) and in_array('table', $this->allowed_tags)) {
                         $button[] = 'tablecontrols';
-
                     }
                 }
 
@@ -134,7 +132,7 @@ class Intraface_modules_cms_HTML_Editor
                 $output .= '    mode : "exact",'."\n";
                 $output .= '    elements : "'.$textarea_attributes['id'].'",'."\n";
                 $output .= '    theme : "advanced",'."\n";
-                if (!empty($editor_attributes['plugins']) AND is_array($editor_attributes['plugins'])) {
+                if (!empty($editor_attributes['plugins']) and is_array($editor_attributes['plugins'])) {
                     $output .= '    plugins : "'.implode($editor_attributes['plugins'], ',').'",'."\n";
                 }
                 $output .= '    theme_advanced_buttons1 : "'.implode($button, ',').'",'."\n";
@@ -170,7 +168,6 @@ class Intraface_modules_cms_HTML_Editor
                     // return ordinary textarea
                     $output = '<textarea'.$this->_parseTextareaAttributes($textarea_attributes).'>'.htmlspecialchars($initial_value).'</textarea>';
                 break;
-
         }
         return $output;
     }

@@ -7,20 +7,20 @@ class Intraface_shared_email_Signature
     private $user;
     
     /**
-     * 
+     *
      * @var object Intraface_Setting
      */
     private $setting;
     
     /**
-     * 
+     *
      * @var object Intraface_Intranet
      */
     private $intranet;
     
     /**
      * Constructor
-     * 
+     *
      * @param object $user Intraface_User
      * @param object $setting Intraface_Setting
      * @return void
@@ -45,7 +45,7 @@ class Intraface_shared_email_Signature
     }
     
     /**
-     * 
+     *
      * @return object Intraface_Setting
      */
     private function getSetting()
@@ -54,7 +54,7 @@ class Intraface_shared_email_Signature
     }
     
     /**
-     * 
+     *
      * @return object Intraface_User
      */
     private function getUser()
@@ -63,7 +63,7 @@ class Intraface_shared_email_Signature
     }
     
     /**
-     * 
+     *
      * @return object Intraface_Intranet
      */
     private function getIntranet()
@@ -77,22 +77,19 @@ class Intraface_shared_email_Signature
      */
     public function getAsText()
     {
-        switch($this->getSetting()->get('user', 'email.signature_type')) 
-        {
+        switch ($this->getSetting()->get('user', 'email.signature_type')) {
             case 0:
                 return '';
                 break;
             case 1:
-                default:
+            default:
                 return "--\n" . $this->getUser()->getAddress()->get('name') . "\n" . $this->getIntranet()->get('name');
                 break;
             case 2:
-                return $this->getSetting()->get('user', 'email.custom_signature'); 
+                return $this->getSetting()->get('user', 'email.custom_signature');
                 break;
-            
         }
         
         throw new Exception('Invalid signature type "'.$this->getSetting()->get('user', 'email.signature_type').'"');
     }
 }
-?>

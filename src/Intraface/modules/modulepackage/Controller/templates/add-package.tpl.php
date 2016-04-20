@@ -16,7 +16,12 @@
 
         ?>
         <label for="price"><?php e(t('price')); ?></label>
-        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id')); if (isset($product['product']['currency']['DKK']['price_incl_vat'])): e('DKK '.$product['product']['currency']['DKK']['price_incl_vat'].' '.t('per').' '.t($product['product']['unit']['singular'])); else: echo 'free!'; endif; ?></span>
+        <span id="price"><?php $product = $modulepackageshop->getProduct((int)$modulepackage->get('product_id'));
+        if (isset($product['product']['currency']['DKK']['price_incl_vat'])) :
+            e('DKK '.$product['product']['currency']['DKK']['price_incl_vat'].' '.t('per').' '.t($product['product']['unit']['singular']));
+        else :
+            echo 'free!';
+        endif; ?></span>
     </div>
 
     <div class="formrow">
@@ -43,17 +48,15 @@
         <span id="limiters">
             <?php
             if (is_array($limiters) && count($limiters) > 0) {
-                foreach ($limiters AS $limiter) {
+                foreach ($limiters as $limiter) {
                     e(t($limiter['description']).' ');
                     if (isset($limiter['limit_readable'])) {
                         e($limiter['limit_readable']);
-                    }
-                    else {
+                    } else {
                         e($limiter['limit']);
                     }
                 }
-            }
-            else {
+            } else {
                 e(t('no limitations at all, isn\'t that nice!'));
             }
             ?>
@@ -73,12 +76,11 @@ if ($add_type == 'extend' && count($existing_modulepackages) > 0 && isset($exist
     $end_date_integer = strtotime($existing_modulepackages[count($existing_modulepackages)-1]['end_date']);
     // the new start day is the day after the last package ends
     $start_date = date('d-m-Y', strtotime('+1 day', $end_date_integer));
-}
-else {
+} else {
     $start_date = date('d-m-Y');
 }
 
-if (is_array($existing_modulepackages) && count($existing_modulepackages) > 0):
+if (is_array($existing_modulepackages) && count($existing_modulepackages) > 0) :
     ?>
     <fieldset>
         <legend><?php e(t('your existing packages')); ?></legend>
@@ -88,26 +90,26 @@ if (is_array($existing_modulepackages) && count($existing_modulepackages) > 0):
                 <tr>
                     <th><?php e(t('package')); ?></th>
                     <th><?php e(t('end date')); ?></th>
-                    <?php if ($add_type == 'upgrade'): ?>
+                    <?php if ($add_type == 'upgrade') : ?>
                         <th><?php e(t('balance in your favour')); ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($existing_modulepackages AS $package): ?>
+                <?php foreach ($existing_modulepackages as $package) : ?>
                     <tr>
                         <td><?php e(t($package['plan']).' '.t($package['group'])); ?></td>
                         <td><?php e($package['dk_end_date']); ?></td>
-                        <?php if ($add_type == 'upgrade'): ?>
+                        <?php if ($add_type == 'upgrade') : ?>
                             <td></td>
                         <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
              </tbody>
          </table>
-         <?php if ($add_type == 'upgrade'): ?>
+            <?php if ($add_type == 'upgrade') : ?>
             <p><?php e(t('your balance will be deducted from your new upgrade price')); ?></p>
-         <?php endif; ?>
+            <?php endif; ?>
     </fieldset>
     <?php
 endif;
@@ -124,8 +126,14 @@ endif;
     <div class="formrow">
         <label for="duration_month"><?php e(t('periode')); ?></label>
         <select name="duration_month" id="duration_month">
-            <option value="12"><?php e('1 '.t('year')); if (isset($product['price_incl_vat'])): e(' (DKK '.($product['price_incl_vat']*12).')'); endif; ?></option>
-            <option value="24"><?php e('2 '.t('years')); if (isset($product['price_incl_vat'])): e(' (DKK '.($product['price_incl_vat']*24).')'); endif;  ?></option>
+            <option value="12"><?php e('1 '.t('year'));
+            if (isset($product['price_incl_vat'])) :
+                e(' (DKK '.($product['price_incl_vat']*12).')');
+            endif; ?></option>
+            <option value="24"><?php e('2 '.t('years'));
+            if (isset($product['price_incl_vat'])) :
+                e(' (DKK '.($product['price_incl_vat']*24).')');
+            endif;  ?></option>
         </select>
     </div>
 
@@ -138,34 +146,50 @@ endif;
     ?>
     <div class="formrow">
         <label for="name"><?php e(t('name', 'address')); ?></label>
-        <input type="text" name="name" id="name" value="<?php if (isset($address['name'])) e($address["name"]); ?>" />
+        <input type="text" name="name" id="name" value="<?php if (isset($address['name'])) {
+            e($address["name"]);
+} ?>" />
     </div>
     <div class="formrow">
         <label for="address"><?php e(t('address', 'address')); ?></label>
-        <textarea name="address" id="address" rows="2"><?php if (isset($address['address'])) e($address["address"]); ?></textarea>
+        <textarea name="address" id="address" rows="2"><?php if (isset($address['address'])) {
+            e($address["address"]);
+} ?></textarea>
     </div>
     <div class="formrow">
         <label for="postcode"><?php e(t('postal code and city', 'address')); ?></label>
         <div>
-            <input type="text" name="postcode" id="postcode" value="<?php if (isset($address['postcode'])) e($address["postcode"]); ?>" size="4" />
-            <input type="text" name="city" id="city" value="<?php if (isset($address['city'])) e($address["city"]); ?>" />
+            <input type="text" name="postcode" id="postcode" value="<?php if (isset($address['postcode'])) {
+                e($address["postcode"]);
+} ?>" size="4" />
+            <input type="text" name="city" id="city" value="<?php if (isset($address['city'])) {
+                e($address["city"]);
+} ?>" />
         </div>
     </div>
     <div class="formrow">
         <label for="country"><?php e(t('country', 'address')); ?></label>
-        <input type="text" name="country" id="country" value="<?php if (isset($address['country'])) e($address["country"]); ?>" />
+        <input type="text" name="country" id="country" value="<?php if (isset($address['country'])) {
+            e($address["country"]);
+} ?>" />
     </div>
     <div class="formrow">
         <label for="cvr"><?php e(t('cvr number', 'address')); ?></label>
-        <input type="text" name="cvr" id="cvr" value="<?php if (isset($address['cvr'])) e($address["cvr"]); ?>" />
+        <input type="text" name="cvr" id="cvr" value="<?php if (isset($address['cvr'])) {
+            e($address["cvr"]);
+} ?>" />
     </div>
     <div class="formrow">
         <label for="email"><?php e(t('e-mail', 'address')); ?></label>
-        <input type="text" name="email" id="email" value="<?php if (isset($address['email'])) e($address["email"]); ?>" />
+        <input type="text" name="email" id="email" value="<?php if (isset($address['email'])) {
+            e($address["email"]);
+} ?>" />
     </div>
     <div class="formrow">
         <label for="phone"><?php e(t('phone', 'address')); ?></label>
-        <input type="text" name="phone" id="phone" value="<?php if (isset($address['phone'])) e($address["phone"]); ?>" />
+        <input type="text" name="phone" id="phone" value="<?php if (isset($address['phone'])) {
+            e($address["phone"]);
+} ?>" />
     </div>
 </fieldset>
 

@@ -3,7 +3,7 @@ Intraface_Doctrine_Intranet::singleton(1);
 
 class ExchangeRateTest extends PHPUnit_Framework_TestCase
 {
-    private $object = NULL;
+    private $object = null;
 
     function setUp()
     {
@@ -38,8 +38,7 @@ class ExchangeRateTest extends PHPUnit_Framework_TestCase
 
         try {
             $object->save();
-        }
-        catch(Exception $e) {
+        } catch(Exception $e) {
             // $this->assertTrue(false, $e->getErrorMessage());
         }
     }

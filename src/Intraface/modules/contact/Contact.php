@@ -110,12 +110,12 @@
 
  *
  * @package Intraface_Contact
- * @author	Lars Olesen <lars@legestue.net>
- * @author	Sune Jensen <sj@sunet.dk>
- * @version	1.0
- * @since	1.0
+ * @author  Lars Olesen <lars@legestue.net>
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @version     1.0
+ * @since   1.0
  * @access Public
- * @copyright 	Lars Olesen
+ * @copyright   Lars Olesen
  * @license
  *
  */
@@ -198,9 +198,9 @@ class Contact extends Intraface_Standard
      * Constructor
      *
      * @param object  $kernel
-     * @param integer $id	  Contact id
+     * @param integer $id     Contact id
      *
-     * @return	void
+     * @return  void
      */
     public function __construct($kernel, $id = 0)
     {
@@ -266,7 +266,7 @@ class Contact extends Intraface_Standard
         // Husk noget validering af de forskellige values og typer
         $gateway = new Intraface_modules_contact_ContactGateway($kernel, new DB_Sql);
         try {
-            switch($type) {
+            switch ($type) {
                 case 'email':
                     $emails = $gateway->findByEmail($value);
                     return $emails[0];
@@ -400,7 +400,7 @@ class Contact extends Intraface_Standard
     {
         $var = $var;
 
-        if (array_key_exists('number', $var) AND !$this->isNumberFree($var['number'])) {
+        if (array_key_exists('number', $var) and !$this->isNumberFree($var['number'])) {
             $this->error->set('Kundenummeret er ikke frit');
         }
 
@@ -443,7 +443,7 @@ class Contact extends Intraface_Standard
             $validator->isNumeric($var['ean'], 'Fejl i ean-nummeret', 'allow_empty');
         }
 
-        if (!empty($var['ean']) AND strlen($var['ean']) != 13) {
+        if (!empty($var['ean']) and strlen($var['ean']) != 13) {
             $this->error->set('EAN-nummeret skal pr�cis v�re 13 tal');
         }
 
@@ -487,7 +487,7 @@ class Contact extends Intraface_Standard
          }
          */
 
-        if ($var['preferred_invoice'] == 2 AND empty($var['email'])) {
+        if ($var['preferred_invoice'] == 2 and empty($var['email'])) {
             $this->error->set('E-mailen skal udfyldes, hvis kontakten foretr�kker e-mail.');
         }
 
@@ -502,20 +502,20 @@ class Contact extends Intraface_Standard
     /**
      * Saves the contact
      *
-     * @param	int $var['id']	Kundeid
-     * @param	string $var['company']
-     * @param	string $var['address']
-     * @param	string $var['postalcode']
-     * @param	string $var['town']
-     * @param	string $var['country']
-     * @param	string $var['email']
-     * @param	string $var['website']
-     * @param	string $var['phone']
-     * @param	string $var['deliveryaddress']
-     * @param	string $var['deliverypostalcode']
-     * @param	string $var['deliverytown']
-     * @param	string $var['deliverycountry']
-     * @param	string $var['paymentcondition']
+     * @param   int $var['id']  Kundeid
+     * @param   string $var['company']
+     * @param   string $var['address']
+     * @param   string $var['postalcode']
+     * @param   string $var['town']
+     * @param   string $var['country']
+     * @param   string $var['email']
+     * @param   string $var['website']
+     * @param   string $var['phone']
+     * @param   string $var['deliveryaddress']
+     * @param   string $var['deliverypostalcode']
+     * @param   string $var['deliverytown']
+     * @param   string $var['deliverycountry']
+     * @param   string $var['paymentcondition']
      *
      * @return void
      */
@@ -526,7 +526,7 @@ class Contact extends Intraface_Standard
 
         $sql_items = '';
 
-        if ($this->id == 0 AND empty($var['number'])) {
+        if ($this->id == 0 and empty($var['number'])) {
             $var['number'] = $this->getMaxNumber() + 1;
         }
 
@@ -573,39 +573,39 @@ class Contact extends Intraface_Standard
 
             $db = new DB_Sql;
             $db->query($sql);
-            if ($this->id == 0) {
-                $this->id = $db->insertedId();
-            }
+        if ($this->id == 0) {
+            $this->id = $db->insertedId();
+        }
 
             // Standardadresse
             $address_object = Intraface_Address::factory('contact', $this->id);
             $address_fields = $address_object->fields;
 
-            foreach ($address_fields AS $key=>$value) {
-                if (array_key_exists($value, $var)) {
-                    $standard_address_to_save[$value] = $var[$value];
-                }
+        foreach ($address_fields as $key => $value) {
+            if (array_key_exists($value, $var)) {
+                $standard_address_to_save[$value] = $var[$value];
             }
-            if (!empty($standard_address_to_save)) {
-                if (!$address_object->save($standard_address_to_save)) {
-                    return 0;
-                }
+        }
+        if (!empty($standard_address_to_save)) {
+            if (!$address_object->save($standard_address_to_save)) {
+                return 0;
             }
+        }
 
             // Delivery Address
-            foreach ($address_fields AS $key=>$value) {
-                if (array_key_exists('delivery_'.$value, $var)) {
-                    $delivery_address_to_save[$value] = $var['delivery_' . $value];
-                }
+        foreach ($address_fields as $key => $value) {
+            if (array_key_exists('delivery_'.$value, $var)) {
+                $delivery_address_to_save[$value] = $var['delivery_' . $value];
             }
+        }
 
             $delivery_address_object = Intraface_Address::factory('contact_delivery', $this->id);
 
-            if (!empty($delivery_address_to_save)) {
-                if (!$delivery_address_object->save($delivery_address_to_save)) {
-                    return 0;
-                }
+        if (!empty($delivery_address_to_save)) {
+            if (!$delivery_address_object->save($delivery_address_to_save)) {
+                return 0;
             }
+        }
             $this->load();
 
             return $this->id;
@@ -616,7 +616,7 @@ class Contact extends Intraface_Standard
      *
      * Never delete a contact entirely. Should only be deactivated.
      *
-     * @return integer	0 = false eller 1 = true
+     * @return integer  0 = false eller 1 = true
      */
     public function delete()
     {

@@ -2,8 +2,8 @@
 
 /**
  * Intraface_modules_debtor_Debtor_Item
- * 
- * 
+ *
+ *
  * @property integer $id
  * @property integer $intranet_id
  * @property integer $debtor_id
@@ -15,7 +15,7 @@
  * @property float $quantity
  * @property integer $position
  * @property integer $active
- * 
+ *
  * @package    Intraface
  * @subpackage Intraface_modules_debtor
  * @author     Sune Jensen sune@intraface.dk
@@ -42,10 +42,12 @@ class Intraface_modules_debtor_Debtor_Item extends Doctrine_Record
     {
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         
-        $this->hasOne('Intraface_modules_product_ProductDoctrine as product',
-            array('local' => 'product_id', 'foreign' => 'id'));
+        $this->hasOne(
+            'Intraface_modules_product_ProductDoctrine as product',
+            array('local' => 'product_id', 'foreign' => 'id')
+        );
             
-        /* $this->hasMany('Intraface_modules_product_Variation as variation', 
+        /* $this->hasMany('Intraface_modules_product_Variation as variation',
             array('local' => 'id', 'foreign' => 'product_id'));  */
     }
     
@@ -96,5 +98,4 @@ class Intraface_modules_debtor_Debtor_Item extends Doctrine_Record
     {
         return new Ilib_Variable_Float($this->quantity, 'iso');
     }
-
 }

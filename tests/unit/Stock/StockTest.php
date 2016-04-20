@@ -38,6 +38,4 @@ class StockTest extends PHPUnit_Framework_TestCase
     {
         $this->assertTrue(is_object($this->stock));
     }
-
 }
-?>

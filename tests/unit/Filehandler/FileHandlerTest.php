@@ -94,9 +94,9 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(50, strlen($fh->get('access_key')));
     }
 
-    function testCreateTemporaryFile() {
+    function testCreateTemporaryFile()
+    {
         $fh = new FileHandler($this->createKernel());
         $this->assertEquals('TemporaryFile', get_class($fh->createTemporaryFile()));
     }
 }
-?>

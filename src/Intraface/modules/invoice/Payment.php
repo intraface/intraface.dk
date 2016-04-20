@@ -97,23 +97,31 @@ class Payment extends Intraface_Standard
         $input = safeToDb($input);
         $validator = new Intraface_Validator($this->error);
 
-        if (!isset($input["payment_date"])) $input["payment_date"] = '';
+        if (!isset($input["payment_date"])) {
+            $input["payment_date"] = '';
+        }
         if ($validator->isDate($input["payment_date"], "Ugyldig dato", "allow_no_year")) {
             $date = new Intraface_Date($input["payment_date"]);
             $date->convert2db();
         }
 
-        if (!isset($input["amount"])) $input["amount"] = 0;
+        if (!isset($input["amount"])) {
+            $input["amount"] = 0;
+        }
         if ($validator->isDouble($input["amount"], "Ugyldig bel�b")) {
             $amount = new Intraface_Amount($input["amount"]);
             $amount->convert2db();
             $amount = $amount->get();
         }
 
-        if (!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) {
+            $input['description'] = '';
+        }
         $validator->isString($input["description"], "Fejl i beskrivelse", "", "allow_empty");
 
-        if (!isset($input['type'])) $input['type'] = NULL;
+        if (!isset($input['type'])) {
+            $input['type'] = null;
+        }
         $validator->isNumeric($input["type"], "Type er ikke angivet korrekt");
         $types = $this->getTypes();
         if (!isset($types[$input["type"]])) {
@@ -160,7 +168,7 @@ class Payment extends Intraface_Standard
 
         $this->dbquery->setSorting("payment_date ASC");
         $db = $this->dbquery->getRecordset("id, amount, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $payment[$i]["id"] = $db->f("id");
             $types = $this->getTypes();
             $payment[$i]["type"] = $types[$db->f('type')];
@@ -323,7 +331,6 @@ class Payment extends Intraface_Standard
         if ($this->get('id') == 0) {
             $this->error->set('Betaling er ikke gemt eller loaded');
             return false;
-
         }
 
         if ($this->isStated()) {

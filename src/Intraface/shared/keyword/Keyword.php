@@ -153,7 +153,6 @@ class Keyword
 
             $sql_type = 'UPDATE ';
             $sql_end = ' WHERE ' . implode(' AND ', $c);
-
         } else {
             $c = array();
             $condition = array();
@@ -296,7 +295,6 @@ class Intraface_Keyword_Appender extends Keyword
             $sql = "INSERT INTO keyword_x_object
                     SET " . implode(', ', $c);
             $db->query($sql);
-
         }
         return true;
     }
@@ -310,8 +308,8 @@ class Intraface_Keyword_Appender extends Keyword
      */
     function addKeywords($keywords)
     {
-        if (is_array($keywords) AND count($keywords) > 0) {
-            foreach ($keywords AS $keyword) {
+        if (is_array($keywords) and count($keywords) > 0) {
+            foreach ($keywords as $keyword) {
                 $this->addKeyword($keyword);
             }
         }
@@ -438,7 +436,7 @@ class Intraface_Keyword_Appender extends Keyword
         $keywords = $this->getConnectedKeywords();
         $arr = array();
 
-        foreach ($keywords AS $keyword) {
+        foreach ($keywords as $keyword) {
             $arr[] = $keyword['keyword'];
         }
         $string = implode(', ', $arr);
@@ -475,8 +473,8 @@ class Intraface_Keyword_StringAppender
         $this->appender->deleteConnectedKeywords();
 
         $keywords = self::quotesplit(stripslashes($string), ",");
-        if (is_array($keywords) AND count($keywords) > 0) {
-            foreach ($keywords AS $key => $value) {
+        if (is_array($keywords) and count($keywords) > 0) {
+            foreach ($keywords as $key => $value) {
                 $keyword = $this->cloneKeyword();
                 if ($keyword->save(array('keyword' => $value))) {
                     $res = $this->appender->addKeyword($keyword);
@@ -494,7 +492,7 @@ class Intraface_Keyword_StringAppender
      *
      * @return array with keywords
      */
-    public static function quotesplit($s, $splitter=',')
+    public static function quotesplit($s, $splitter = ',')
     {
         //First step is to split it up into the bits that are surrounded by quotes and the bits that aren't. Adding the delimiter to the ends simplifies the logic further down
         $getstrings = explode('\"', $splitter.$s.$splitter);
@@ -513,10 +511,12 @@ class Intraface_Keyword_StringAppender
             } else {
                 //Break up the string according to the delimiter character
                 //Each string has extraneous delimiters around it (inc the ones we added above), so they need to be stripped off
-                $temparray = explode($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen ) );
+                $temparray = explode($splitter, substr($val, $delimlen, strlen($val)-$delimlen-$delimlen));
 
                 while (list($iarg, $ival) = each($temparray)) {
-                    if (!empty($ival)) $result[] = trim($ival);
+                    if (!empty($ival)) {
+                        $result[] = trim($ival);
+                    }
                 }
                 $instring = 1;
             }

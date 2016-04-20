@@ -74,9 +74,9 @@
  *
  * <code>
  * if ($go_further) {
- * 	   $new_redireict = Redirect::go($kernel);
- * 	   $url = $new_redirect->setDestination('http://example.dk/first.php', 'http://example.dk/second.php?' . $redirect->get('redirect_query_string'));
- * 	   header('Location: ' . $url);
+ *     $new_redireict = Redirect::go($kernel);
+ *     $url = $new_redirect->setDestination('http://example.dk/first.php', 'http://example.dk/second.php?' . $redirect->get('redirect_query_string'));
+ *     header('Location: ' . $url);
  *     exit;
  * }
  * </code>

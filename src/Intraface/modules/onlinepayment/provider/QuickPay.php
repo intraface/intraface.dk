@@ -3,15 +3,13 @@
  * Onlinebetalingsklasse som specifik passer til Quickpay
  *
  * @package Intraface_OnlinePayment
- * @author		Sune Jensen
- * @author		Lars Olesen <lars@legestue.net>
- * @version	1.0
+ * @author      Sune Jensen
+ * @author      Lars Olesen <lars@legestue.net>
+ * @version     1.0
  *
- * @todo		Skal statuskoderne fra den oprindelige quickpayklasse oversættes
- *				til vores statuskoder?
+ * @todo        Skal statuskoderne fra den oprindelige quickpayklasse oversættes
+ *              til vores statuskoder?
  */
-require_once 'Payment/Quickpay.php';
-
 class OnlinePaymentQuickPay extends OnlinePayment
 {
     // This should maybe instead be: $transaction_status_types = array(
@@ -102,7 +100,6 @@ class OnlinePaymentQuickPay extends OnlinePayment
         $this->quickpay->set_msgtype(array_search($action, $this->msg_types));
 
         if ($action == "capture") {
-
             // Her kan der laves en capture fra QuickPay;
 
             // henter bel�bene fra denne onlinebetaling
@@ -111,7 +108,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
             $this->eval = $this->quickpay->capture();
 
-            if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
+            if (!empty($this->eval['qpstat']) and $this->eval['qpstat'] === '000') {
                 // success
 
                 if ($this->addAsPayment()) {
@@ -121,7 +118,6 @@ class OnlinePaymentQuickPay extends OnlinePayment
                 }
 
                 return true;
-
             } else {
                 // fiasko
                 $this->error->set('Betalingen kunne ikke h�ves: '.$this->eval['qpstatmsg']);
@@ -130,16 +126,13 @@ class OnlinePaymentQuickPay extends OnlinePayment
         } elseif ($action == "reversal") {
             $this->quickpay->set_transaction($this->get('transaction_number'));
             $this->eval = $this->quickpay->reverse();
-            if (!empty($this->eval['qpstat']) AND $this->eval['qpstat'] === '000') {
+            if (!empty($this->eval['qpstat']) and $this->eval['qpstat'] === '000') {
                 $this->setStatus("reversed");
                 return true;
-
             } else {
                 $this->error->set('Betalingen kunne ikke tilbagebetales: ' . $this->eval['qpstatmsg']);
                 return false;
-
             }
-
         } else {
             throw new Exception('Ugyldig handling i Quickpay->transactionAction()');
         }
@@ -191,8 +184,8 @@ class OnlinePaymentQuickPay extends OnlinePayment
      */
     function getSettings()
     {
-        $this->value['md5_secret'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret');
-        $this->value['merchant_id'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id');
+        $this->value['md5_secret'] =    $this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret');
+        $this->value['merchant_id'] =   $this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id');
         return $this->value;
     }
 
@@ -203,7 +196,7 @@ class OnlinePaymentQuickPay extends OnlinePayment
      */
     function isSettingsSet()
     {
-        if ($this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret') AND $this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id')) {
+        if ($this->kernel->setting->get('intranet', 'onlinepayment.quickpay.md5_secret') and $this->kernel->setting->get('intranet', 'onlinepayment.quickpay.merchant_id')) {
             return true;
         }
         return false;

@@ -20,7 +20,7 @@ class Intraface_DBQuery extends Ilib_DBQuery
         parent::__construct($table, $required_conditions);
         $session_id = $kernel->getSessionId();
         $this->createStore(md5($session_id), 'intranet_id = '.$kernel->intranet->get('id'));
-        if (is_object($kernel->user) AND strtolower(get_class($kernel->user)) == 'intraface_user') {
+        if (is_object($kernel->user) and strtolower(get_class($kernel->user)) == 'intraface_user') {
             $this->setRowsPerPage($kernel->setting->get('user', 'rows_pr_page'));
         }
     }

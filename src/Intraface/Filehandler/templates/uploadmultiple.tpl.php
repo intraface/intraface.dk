@@ -1,6 +1,6 @@
 <h1><?php e(t('Upload files')); ?></h1>
 
-<?php if (!empty($msg)): ?>
+<?php if (!empty($msg)) : ?>
     <p class="message"><?php echo $msg; ?></p>
 <?php endif; ?>
 
@@ -21,7 +21,9 @@
         <legend><?php e(t('Keywords and permissions')); ?></legend>
         <div class="formrow">
             <label for=""><?php e(t('Keywords', 'keyword')); ?></label>
-            <input type="text" name="keywords" value="<?php if (isset($_POST['keywords'])) e($_POST['keywords']); ?>" />
+            <input type="text" name="keywords" value="<?php if (isset($_POST['keywords'])) {
+                e($_POST['keywords']);
+} ?>" />
         </div>
 
         <div class="formrow">

@@ -35,7 +35,6 @@ class Intraface_Filehandler_Controller_Index extends k_Component
         $gateway = $this->getGateway();
 
         if ($this->query('search')) {
-
             if ($this->query('text') != '') {
                 $gateway->getDBQuery()->setFilter('text', $this->query('text'));
             }
@@ -43,7 +42,7 @@ class Intraface_Filehandler_Controller_Index extends k_Component
             if (intval($this->query('filtration')) != 0) {
                 $gateway->getDBQuery()->setFilter('filtration', $this->query('filtration'));
 
-                switch($this->query('filtration')) {
+                switch ($this->query('filtration')) {
                     case 1:
                         $gateway->getDBQuery()->setFilter('uploaded_from_date', date('d-m-Y').' 00:00');
                         break;
@@ -76,7 +75,6 @@ class Intraface_Filehandler_Controller_Index extends k_Component
             if (is_array($this->query('keyword')) && count($this->query('keyword')) > 0) {
                 $gateway->getDBQuery()->setKeyword($this->query('keyword'));
             }
-
         } elseif ($this->query('character')) {
             $gateway->getDBQuery()->useCharacter();
         } else {

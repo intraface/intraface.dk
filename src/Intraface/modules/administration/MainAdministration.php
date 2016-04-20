@@ -2,9 +2,9 @@
 /**
  *
  * @package Intraface_Administration
- * @author	Lars Olesen <lars@legestue.net>
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   1.0
+ * @version     1.0
  *
  */
 class MainAdministration extends Intraface_Main
@@ -24,4 +24,3 @@ class MainAdministration extends Intraface_Main
         $this->addFrontpageFile('include_frontpage.php');
     }
 }
-

@@ -18,7 +18,7 @@ class Intraface_modules_todo_Controller_Email extends k_Component
         $todo = new TodoList($this->getKernel(), $this->context->name());
         $value['id'] = $todo->get('id');
         $value['subject'] = 'Todoliste';
-        $value['body'] = $this->getKernel()->setting->get('user','todo.email.standardtext') . "\n\nMed venlig hilsen\n".$this->getKernel()->user->getAddress()->get('name') . "\n" . $this->getKernel()->intranet->get('name');
+        $value['body'] = $this->getKernel()->setting->get('user', 'todo.email.standardtext') . "\n\nMed venlig hilsen\n".$this->getKernel()->user->getAddress()->get('name') . "\n" . $this->getKernel()->intranet->get('name');
 
         $contacts = $todo->getContacts();
 
@@ -46,10 +46,8 @@ class Intraface_modules_todo_Controller_Email extends k_Component
 
         $_POST['contact'] = array_merge($_POST['contact'], $_POST['new_contact']);
 
-        foreach ($_POST['contact'] AS $key=>$value) {
-
+        foreach ($_POST['contact'] as $key => $value) {
             if (!empty($_POST['contact'][$key])) {
-
                 $todo->addContact($_POST['contact'][$key]);
 
                 $contact = new Contact($this->getKernel(), $_POST['contact'][$key]);
@@ -60,7 +58,7 @@ class Intraface_modules_todo_Controller_Email extends k_Component
                     'subject' => $_POST['subject'],
                     'contact_id' => $contact->get('id'),
                     'type_id' => 6, // type_id 6 er todo
-                	'belong_to' => $todo->get('id')
+                    'belong_to' => $todo->get('id')
                 );
 
                 if ($id = $email->save($var)) {

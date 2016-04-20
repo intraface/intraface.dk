@@ -6,8 +6,12 @@ require_once 'Intraface/modules/webshop/Webshop.php';
 require_once 'Intraface/modules/webshop/Basket.php';
 require_once 'Intraface/modules/product/ProductDetail.php';
 
-class FakeWebshopWeblogin {
-    function get() { return 1; }
+class FakeWebshopWeblogin
+{
+    function get()
+    {
+        return 1;
+    }
 }
 
 class WebshopTest extends PHPUnit_Framework_TestCase

@@ -4,7 +4,7 @@
     <h1><?php e(t($context->getDebtor()->get("type"))); ?> #<?php e($context->getDebtor()->get("number")); ?></h1>
 
     <ul class="options">
-        <?php if ($context->getDebtor()->get("locked") == false): ?>
+        <?php if ($context->getDebtor()->get("locked") == false) : ?>
             <li><a href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
         <?php endif; ?>
         <li><a class="pdf" href="<?php e(url('.pdf')); ?>" target="_blank"><?php e(t('Pdf')); ?></a></li>
@@ -24,7 +24,7 @@ if (isset($context->onlinepayment)) {
     }
 }
 ?>
-<?php if ($context->getKernel()->intranet->get("pdf_header_file_id") == 0 && $context->getKernel()->user->hasModuleAccess('administration')): ?>
+<?php if ($context->getKernel()->intranet->get("pdf_header_file_id") == 0 && $context->getKernel()->user->hasModuleAccess('administration')) : ?>
     <div class="message-dependent">
         <p><a href="<?php e(url('../../../../administration/intranet')); ?>"><?php e(t('Upload a logo for your pdf\'s')); ?></a> </p>
     </div>
@@ -32,46 +32,46 @@ if (isset($context->onlinepayment)) {
 
 <?php echo $context->getMessageAboutEmail(); ?>
 
-<?php if (isset($context->email_send_with_success) && $context->email_send_with_success): ?>
+<?php if (isset($context->email_send_with_success) && $context->email_send_with_success) : ?>
     <div class="message-dependent"><p><?php e(t('Your email was sent').'.'); ?></p></div>
 <?php endif; ?>
 
 <form method="post" action="<?php e(url()); ?>">
     <input type="hidden" name="id" value="<?php e($context->getDebtor()->get('id')); ?>" />
-    <?php if ($context->getDebtor()->contact->get('preferred_invoice') == 2 AND  $context->getDebtor()->get('status') == 'created' AND $context->isValidSender()): ?>
+    <?php if ($context->getDebtor()->contact->get('preferred_invoice') == 2 and  $context->getDebtor()->get('status') == 'created' and $context->isValidSender()) : ?>
         <input type="submit" value="<?php e(t('Send on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
-    <?php elseif ($context->getDebtor()->contact->get('preferred_invoice') == 2 AND $context->getDebtor()->get('status') == 'sent' AND $context->isValidSender()): ?>
+    <?php elseif ($context->getDebtor()->contact->get('preferred_invoice') == 2 and $context->getDebtor()->get('status') == 'sent' and $context->isValidSender()) : ?>
         <input type="submit" value="<?php e(t('Resend on email')); ?>" name="send_email" title="<?php e(t('Are you sure?')); ?>" />
-    <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'created' AND $context->isValidScanInContact()): ?>
+    <?php elseif ($context->getDebtor()->get("type") == 'invoice' and $context->getDebtor()->contact->get('preferred_invoice') == 3 and $context->getDebtor()->contact->address->get('ean') and $context->getDebtor()->get('status') == 'created' and $context->isValidScanInContact()) : ?>
         <input type="submit" value="<?php e(t('Send electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure you want to send the invoice to the Læs-ind-bureau?')); ?>" />
-    <?php elseif ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->getDebtor()->get('status') == 'sent' AND $context->isValidScanInContact()): ?>
+    <?php elseif ($context->getDebtor()->get("type") == 'invoice' and $context->getDebtor()->contact->get('preferred_invoice') == 3 and $context->getDebtor()->contact->address->get('ean') and $context->getDebtor()->get('status') == 'sent' and $context->isValidScanInContact()) : ?>
         <input type="submit" value="<?php e(t('Resend electronic invoice')); ?>" name="send_electronic_invoice" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
-    <?php if ($context->getDebtor()->get("status") == "created"): // make sure we can always mark as sent	?>
+    <?php if ($context->getDebtor()->get("status") == "created") : // make sure we can always mark as sent	?>
         <input type="submit" value="<?php e(t('Mark as sent')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="sent" />
     <?php endif; ?>
-    <?php if (($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "created") || ($context->getDebtor()->get("type") != "invoice" && $context->getDebtor()->get("locked") == false)): ?>
+    <?php if (($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "created") || ($context->getDebtor()->get("type") != "invoice" && $context->getDebtor()->get("locked") == false)) : ?>
         <input type="submit" value="<?php e(t('Delete')); ?>" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="delete" />
     <?php endif; ?>
-    <?php if (($context->getDebtor()->get("type") == "quotation" || $context->getDebtor()->get("type") == "order") && ($context->getDebtor()->get('status') == "created" || $context->getDebtor()->get('status') == "sent")): ?>
+    <?php if (($context->getDebtor()->get("type") == "quotation" || $context->getDebtor()->get("type") == "order") && ($context->getDebtor()->get('status') == "created" || $context->getDebtor()->get('status') == "sent")) : ?>
         <input type="submit" value="<?php e(t('Cancel')); ?>" name="cancel" class="confirm" title="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
-    <?php if ($context->getDebtor()->get("type") == "quotation" && $context->getDebtor()->get('status') == "sent" && $context->getKernel()->user->hasModuleAccess('order')): ?>
+    <?php if ($context->getDebtor()->get("type") == "quotation" && $context->getDebtor()->get('status') == "sent" && $context->getKernel()->user->hasModuleAccess('order')) : ?>
         <input type="submit" value="<?php e(t('Order this')); ?>" name="order" class="confirm" value="<?php e(t('Are you sure?')); ?>" />
     <?php endif; ?>
-    <?php if ($context->getDebtor()->get("type") == "quotation" && $context->getDebtor()->get("status") == "sent" && $context->getKernel()->user->hasModuleAccess('invoice')): ?>
+    <?php if ($context->getDebtor()->get("type") == "quotation" && $context->getDebtor()->get("status") == "sent" && $context->getKernel()->user->hasModuleAccess('invoice')) : ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="invoice" value="<?php e(t('Invoice this')); ?>" />
     <?php endif; ?>
-    <?php if ($context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')): ?>
+    <?php if ($context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')) : ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="invoice" value="<?php e(t('Invoice this')); ?>" />
     <?php endif; ?>
-    <?php if (1 == 2 AND $context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')): ?>
+    <?php if (1 == 2 and $context->getDebtor()->get("type") == "order" && $context->getDebtor()->get("where_to_id") == 0 && $context->getKernel()->user->hasModuleAccess('invoice')) : ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="quickprocess_order" value="<?php e(t('Quick process')); ?>" />
     <?php endif; ?>
-    <?php if ($context->getDebtor()->get("type") == "invoice" && ($context->getDebtor()->get("status") == "sent" OR $context->getDebtor()->get("status") == 'executed')): // Opret kreditnota fra faktura ?>
+    <?php if ($context->getDebtor()->get("type") == "invoice" && ($context->getDebtor()->get("status") == "sent" or $context->getDebtor()->get("status") == 'executed')) : // Opret kreditnota fra faktura ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="credit_note" value="<?php e(t('Make credit note from invoice')); ?>" />
     <?php endif; ?>
-    <?php if (1 == 2 AND $context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") != 'executed'): // Opret kreditnota fra faktura ?>
+    <?php if (1 == 2 and $context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") != 'executed') : // Opret kreditnota fra faktura ?>
         <input type="submit" class="confirm" title="<?php e(t('Are you sure?')); ?>" name="quickprocess_invoice" value="<?php e(t('Quick process')); ?>" />
     <?php endif; ?>
 
@@ -124,21 +124,23 @@ if (isset($context->onlinepayment)) {
                 <th><?php e(t('Date')); ?></th>
                 <td><?php e($context->getDebtor()->get("dk_this_date")); ?></td>
             </tr>
-            <?php if ($context->getDebtor()->get("type") != "credit_note"): ?>
+            <?php if ($context->getDebtor()->get("type") != "credit_note") : ?>
             <tr>
                 <th><?php e(t($context->getDebtor()->get('type').' due date')); ?></th>
                 <td>
                     <?php e($context->getDebtor()->get("dk_due_date")); ?>
-                    <?php if ($context->getDebtor()->get('type')=='invoice' && count($context->getDebtor()->anyDue($context->getDebtor()->contact->get('id'))) > 0 && $context->getDebtor()->get("status") != 'executed') echo '<a href="'.url('../../../reminders', array('create', 'contact_id' => intval($context->getDebtor()->contact->get('id')))).'">'.t('Create reminder').'</a>'; ?>
+                    <?php if ($context->getDebtor()->get('type')=='invoice' && count($context->getDebtor()->anyDue($context->getDebtor()->contact->get('id'))) > 0 && $context->getDebtor()->get("status") != 'executed') {
+                        echo '<a href="'.url('../../../reminders', array('create', 'contact_id' => intval($context->getDebtor()->contact->get('id')))).'">'.t('Create reminder').'</a>';
+} ?>
                 </td>
             </tr>
             <?php endif; ?>
-            <?php if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'user' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'defined'): ?>
+            <?php if ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'user' || $context->getKernel()->getSetting()->get('intranet', 'debtor.sender') == 'defined') : ?>
                 <tr>
                     <th><?php e(t('Our contact')); ?></th>
                         <td>
                             <?php
-                            switch($context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
+                            switch ($context->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
                                 case 'user':
                                     e($context->getKernel()->user->getAddress()->get('name'). ' <'.$context->getKernel()->user->getAddress()->get('email').'>');
                                     break;
@@ -164,7 +166,7 @@ if (isset($context->onlinepayment)) {
                     ?>
                 </td>
             </tr>
-            <?php if ($context->getDebtor()->get("type") == "invoice" || $context->getDebtor()->get("type") == "order") {	?>
+            <?php if ($context->getDebtor()->get("type") == "invoice" || $context->getDebtor()->get("type") == "order") {   ?>
                 <tr>
                     <th><?php e(t('Payment method')); ?></th>
                     <td><?php e($context->getDebtor()->get("translated_payment_method")); ?></td>
@@ -188,34 +190,33 @@ if (isset($context->onlinepayment)) {
                 <td>
                     <?php if (($context->getDebtor()->get('where_from') == 'quotation' || $context->getDebtor()->get('where_from') == 'order' || $context->getDebtor()->get('where_from') == 'invoice') && $context->getDebtor()->get("where_from_id") > 0) { ?>
                         <a href="<?php e(url('../' . $context->getDebtor()->get("where_from_id"))); ?>"><?php e(t($context->getDebtor()->get("where_from"))); ?></a>
-               <?php } else { ?>
+                <?php } else { ?>
                         <?php e(t($context->getDebtor()->get('where_from'))); ?>
                     <?php } ?>
                 </td>
             </tr>
-            <?php if ($context->getDebtor()->get('where_to') AND $context->getDebtor()->get('where_to_id')): ?>
+            <?php if ($context->getDebtor()->get('where_to') and $context->getDebtor()->get('where_to_id')) : ?>
             <tr>
                 <th><?php e(t('Where to')); ?></th>
                 <td><a href="<?php e(url('../' . $context->getDebtor()->get('where_to_id'))); ?>"><?php e(t($context->getDebtor()->get('where_to'))); ?></a></td>
             </tr>
             <?php endif; ?>
-            <?php if (($context->getDebtor()->get("type") == 'credit_note' || $context->getDebtor()->get("type") == 'invoice') AND $context->getKernel()->user->hasModuleAccess('accounting')): ?>
+            <?php if (($context->getDebtor()->get("type") == 'credit_note' || $context->getDebtor()->get("type") == 'invoice') and $context->getKernel()->user->hasModuleAccess('accounting')) : ?>
             <tr>
                 <th><?php e(t('Stated')); ?></th>
                 <td>
                     <?php
-                        if ($context->getDebtor()->isStated()) {
-                            $module_accounting = $context->getKernel()->useModule('accounting');
-                            e($context->getDebtor()->get('dk_date_stated'));
-                            echo ' <a href="'.url('../../../../accounting/search', array('voucher_id' => $context->getDebtor()->get('voucher_id'))).'">'.t('See voucher').'</a>';
-                        } else {
-                            e(t('Not stated'));
-                            if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
+                    if ($context->getDebtor()->isStated()) {
+                        $module_accounting = $context->getKernel()->useModule('accounting');
+                        e($context->getDebtor()->get('dk_date_stated'));
+                        echo ' <a href="'.url('../../../../accounting/search', array('voucher_id' => $context->getDebtor()->get('voucher_id'))).'">'.t('See voucher').'</a>';
+                    } else {
+                        e(t('Not stated'));
+                        if ($context->getDebtor()->get('status') == 'sent' || $context->getDebtor()->get('status') == 'executed') { ?>
                                 <a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a>
                             <?php
-                            }
-
                         }
+                    }
                     ?>
                 </td>
             </tr>
@@ -223,18 +224,18 @@ if (isset($context->onlinepayment)) {
         </tbody>
     </table>
 
-    <?php if ($context->getDebtor()->get("message") != ''): ?>
+    <?php if ($context->getDebtor()->get("message") != '') : ?>
         <fieldset>
             <legend><?php e(t('Text')); ?></legend>
             <p><?php autohtml($context->getDebtor()->get("message")); ?></p>
         </fieldset>
     <?php endif; ?>
 
-    <?php if ($context->getDebtor()->get("internal_note") != ''): ?>
+    <?php if ($context->getDebtor()->get("internal_note") != '') : ?>
         <fieldset>
             <legend><?php e(t('Internal note')); ?></legend>
             <?php
-            $internal_note = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]","<a href=\"\\0\" target=\"_blank\">\\0</a>", $context->getDebtor()->get("internal_note"));
+            $internal_note = ereg_replace("[[:alpha:]]+://[^<>[:space:]]+[[:alnum:]/]", "<a href=\"\\0\" target=\"_blank\">\\0</a>", $context->getDebtor()->get("internal_note"));
             ?>
             <p><?php autohtml($internal_note); ?></p>
         </fieldset>
@@ -265,7 +266,7 @@ if (isset($context->onlinepayment)) {
                     </div>
                 </td>
             </tr>
-            <?php if ($context->getDebtor()->get("type") == 'invoice' AND $context->getDebtor()->contact->get('preferred_invoice') == 3 AND $context->getDebtor()->contact->address->get('ean') AND $context->isValidScanInContact()): ?>
+            <?php if ($context->getDebtor()->get("type") == 'invoice' and $context->getDebtor()->contact->get('preferred_invoice') == 3 and $context->getDebtor()->contact->address->get('ean') and $context->isValidScanInContact()) : ?>
             <tr>
                 <th><?php e(t('EAN-number')); ?></th>
                 <td><?php e($context->getDebtor()->contact->address->get('ean')); ?></td>
@@ -275,14 +276,14 @@ if (isset($context->onlinepayment)) {
                 <th><?php e(t('Email')); ?></th>
                 <td><?php e($context->getDebtor()->contact->address->get("email")); ?></td>
             </tr>
-            <?php if ($context->getDebtor()->contact->address->get("cvr") != '' && $context->getDebtor()->contact->address->get("cvr") != 0): ?>
+            <?php if ($context->getDebtor()->contact->address->get("cvr") != '' && $context->getDebtor()->contact->address->get("cvr") != 0) : ?>
                 <tr>
                     <th><?php e(t('CVR')); ?></th>
                     <td><?php e($context->getDebtor()->contact->address->get("cvr")); ?></td>
                 </tr>
             <?php endif; ?>
 
-            <?php if (isset($context->getDebtor()->contact_person) && strtolower(get_class($context->getDebtor()->contact_person)) == "contactperson"): ?>
+            <?php if (isset($context->getDebtor()->contact_person) && strtolower(get_class($context->getDebtor()->contact_person)) == "contactperson") : ?>
                 <tr>
                     <th><?php e(t('Att.')); ?></th>
                     <td><?php e($context->getDebtor()->contact_person->get("name")); ?></td>
@@ -292,7 +293,7 @@ if (isset($context->onlinepayment)) {
     </table>
     </div>
 
-    <?php if ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent"):  ?>
+    <?php if ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent") :  ?>
         <div class="box">
             <h2><?php e(t('Register payment')); ?></h2>
             <form method="post" action="<?php e(url('payment')); ?>">
@@ -330,7 +331,7 @@ if (isset($context->onlinepayment)) {
             </form>
             <p><a href="<?php e(url('depreciation')); ?>"><?php e(t('I am not going to recieve the full payment...')); ?></a></p>
         </div>
-    <?php elseif ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == 'executed'): ?>
+    <?php elseif ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == 'executed') : ?>
         <div class="box">
             <a href="<?php e(url('payment')); ?>"><?php e(t('Register payment or reimbursement')); ?></a>.
         </div>
@@ -359,7 +360,7 @@ if (isset($context->onlinepayment)) {
                             <th><?php e(t('Type')); ?></th>
                             <th><?php e(t('Description')); ?></th>
                             <th><?php e(t('Amount')); ?></th>
-                            <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+                            <?php if ($context->getKernel()->user->hasModuleAccess('accounting')) : ?>
                                 <th><?php e(t('Stated')); ?></th>
                             <?php endif; ?>
                         </tr>
@@ -384,15 +385,15 @@ if (isset($context->onlinepayment)) {
                                 ?>
                             </td>
                             <td class="amount"><?php e(number_format($payment["amount"], 2, ",", ".")); ?></td>
-                            <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+                            <?php if ($context->getKernel()->user->hasModuleAccess('accounting')) : ?>
                                 <td>
-                                    <?php if ($payment['is_stated']): ?>
+                                    <?php if ($payment['is_stated']) : ?>
                                         <a href="<?php e(url('../../../../accounting/search', array('voucher_id' => $payment['voucher_id']))); ?>"><?php e(t('voucher')); ?></a>
-                                    <?php elseif ($payment['type'] == 'credit_note'): ?>
+                                    <?php elseif ($payment['type'] == 'credit_note') : ?>
                                         <a href="<?php e(url('../' . $payment['id'] . '/state')); ?>"><?php e(t('state credit note')); ?></a>
-                                    <?php elseif ($payment['type'] == 'depreciation'): ?>
+                                    <?php elseif ($payment['type'] == 'depreciation') : ?>
                                         <a href="<?php e(url('../' . $context->getDebtor()->get('id') . '/depreciation/'.$payment['id'].'/state')); ?>"><?php e(t('state depreciation')); ?></a>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <a href="<?php e(url('../' . $context->getDebtor()->get('id') . '/payment/' . $payment['id'] . '/state')); ?>"><?php e(t('state payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
@@ -407,7 +408,7 @@ if (isset($context->onlinepayment)) {
                         <td>&nbsp;</td>
                         <td><strong><?php e(t('Total')); ?></strong></td>
                         <td class="amount"><?php e(number_format($payment_total, 2, ",", ".")); ?></td>
-                        <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+                        <?php if ($context->getKernel()->user->hasModuleAccess('accounting')) : ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
                     </tr>
@@ -416,7 +417,7 @@ if (isset($context->onlinepayment)) {
                         <td>&nbsp;</td>
                         <th><?php e(t('Missing payment')); ?></th>
                         <td class="amount"><?php e(number_format($context->getDebtor()->get("total") - $payment_total, 2, ",", ".")); ?></td>
-                        <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+                        <?php if ($context->getKernel()->user->hasModuleAccess('accounting')) : ?>
                             <td>&nbsp;</td>
                         <?php endif; ?>
                     </tr>
@@ -429,7 +430,6 @@ if (isset($context->onlinepayment)) {
     <?php
 
     if (($context->getDebtor()->get("type") == "order" || $context->getDebtor()->get("type") == "invoice") && $context->getKernel()->intranet->hasModuleAccess('onlinepayment')) {
-
         $onlinepayment_module = $context->getKernel()->useModule('onlinepayment', true); // true: ignore user permisssion
         $onlinepayment = OnlinePayment::factory($context->getKernel());
         $onlinepayment->getDBQuery()->setFilter('belong_to', $context->getDebtor()->get("type"));
@@ -455,7 +455,7 @@ if (isset($context->onlinepayment)) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($payment_list as $p): ?>
+                        <?php foreach ($payment_list as $p) : ?>
                             <tr>
                                 <td><?php e($p['dk_date_created']); ?></td>
                                 <td><?php e($p['transaction_number']); ?></td>
@@ -486,9 +486,9 @@ if (isset($context->onlinepayment)) {
                                 </td>
                                 <td class="options">
 
-                                    <?php if (count($actions) > 0 && $p['status'] == "authorized" && $context->getKernel()->user->hasModuleAccess('onlinepayment')): // Changed for better usability. $context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent"    ?>
+                                    <?php if (count($actions) > 0 && $p['status'] == "authorized" && $context->getKernel()->user->hasModuleAccess('onlinepayment')) : // Changed for better usability. $context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent"    ?>
                                         <?php
-                                        foreach ($actions AS $a) {
+                                        foreach ($actions as $a) {
                                             if ($a['action'] != 'capture' || ($context->getDebtor()->get("type") == "invoice" && $context->getDebtor()->get("status") == "sent")) {
                                                 ?>
                                                 <a href="<?php e(url(null, array('onlinepayment_id' => $p['id'], 'onlinepayment_action' => $a['action']))); ?>" class="confirm"><?php e($a['label']); ?></a>
@@ -497,7 +497,7 @@ if (isset($context->onlinepayment)) {
                                         }
                                         ?>
                                     <?php endif; ?>
-                                    <?php if ($p['status'] == 'authorized'): ?>
+                                    <?php if ($p['status'] == 'authorized') : ?>
                                         <a href="<?php e(url('onlinepayment/' . $p['id'])); ?>" class="edit"><?php e(t('Edit payment')); ?></a>
                                     <?php endif; ?>
                                 </td>
@@ -508,7 +508,7 @@ if (isset($context->onlinepayment)) {
             </div>
             <?php
         // paymentmethodkey 5 is onlinepayment
-        } elseif ($context->getDebtor()->getPaymentMethodKey() == 5 AND $context->getDebtor()->getWhereToId() == 0) {
+        } elseif ($context->getDebtor()->getPaymentMethodKey() == 5 and $context->getDebtor()->getWhereToId() == 0) {
             $payment_url = '<strong>Der findes ikke nogen url</strong>';
             try {
                 $shop = Doctrine::getTable('Intraface_modules_shop_Shop')->findOneById($context->getDebtor()->getWhereFromId());
@@ -517,16 +517,16 @@ if (isset($context->onlinepayment)) {
                 }
             } catch (Doctrine_Record_Exeption $e) {
             }
-            if ($shop AND $shop->getPaymentUrl()): ?>
+            if ($shop and $shop->getPaymentUrl()) : ?>
                 <div class="warning">
-                	<?php e(t('An online payment should be present. Maybe the customer cancelled the buy, or an error occurred at your online payment provider. The customer can pay on the following link')); ?>:
+                    <?php e(t('An online payment should be present. Maybe the customer cancelled the buy, or an error occurred at your online payment provider. The customer can pay on the following link')); ?>:
                     <?php e($payment_url); ?>. <a href="<?php e(url(null, array('action' => 'send_onlinepaymentlink'))); ?>"><?php e('Write email'); ?></a>.
                 </div>
-            <?php elseif ($shop === false AND $context->getKernel()->user->hasModuleAccess('shop')): ?>
+            <?php                                                                                                                                                                                                                                                                                                                                     elseif ($shop === false and $context->getKernel()->user->hasModuleAccess('shop')) : ?>
                 <div class="warning">
                     <?php e(t('An online payment should be present. However it has not been created from the shop. If you want to make it possible to pay online, you should create the order from your shop, edit it, and then return to this page and send the payment link to the customer')); ?>.
                 </div>
-            <?php else: ?>
+            <?php else : ?>
                 <div class="warning">
                     <?php e(t('An onlinepayment should be present. You can supply a payment link from the shop. Supplying a link would make it possible to automatically writing an email to the contact with the payment link')); ?>.
                 </div>
@@ -551,7 +551,7 @@ if (isset($context->onlinepayment)) {
                 <th colspan="2"><?php e(t('Quantity')); ?></th>
                 <th><?php e(t('Price')); ?></th>
                 <th><?php e(t('Amount')); ?></th>
-                <?php if ($context->getKernel()->intranet->hasModuleAccess('currency') && false !== $context->getDebtor()->getCurrency()): ?>
+                <?php if ($context->getKernel()->intranet->hasModuleAccess('currency') && false !== $context->getDebtor()->getCurrency()) : ?>
                     <th><?php e($context->getDebtor()->getCurrency()->getType()->getIsoCode()); ?></th>
                 <?php endif; ?>
                 <th>&nbsp;</th>
@@ -575,7 +575,9 @@ if (isset($context->onlinepayment)) {
                 $total += $items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2);
                 $vat = $items[$i]["vat"];
                 ?>
-                <tr id="i<?php e($items[$i]["id"]); ?>" <?php if (isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) print(' class="fade"'); ?>>
+                <tr id="i<?php e($items[$i]["id"]); ?>" <?php if (isset($_GET['item_id']) && $_GET['item_id'] == $items[$i]['id']) {
+                    print(' class="fade"');
+} ?>>
                     <td><?php e($items[$i]["number"]); ?></td>
                     <td><?php e($items[$i]["name"]); ?>
                         <?php
@@ -607,7 +609,7 @@ if (isset($context->onlinepayment)) {
                     ?>
                     <?php $price = new Ilib_Variable_Float($items[$i]["quantity"] * $items[$i]["price"]->getAsIso(2)); ?>
                     <td class="amount"><?php e($price->getAsLocal('da_dk', 2)); ?></td>
-                    <?php if ($context->getDebtor()->getCurrency()): ?>
+                    <?php if ($context->getDebtor()->getCurrency()) : ?>
                         <?php
                         $price_currency = new Ilib_Variable_Float($items[$i]["quantity"]*$items[$i]["price_currency"]->getAsIso(2));
                         $total_currency += $price_currency->getAsIso(2);
@@ -639,7 +641,7 @@ if (isset($context->onlinepayment)) {
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                         <td class="amount"><b><?php e(number_format($total * 0.25, 2, ",", ".")); ?></b></td>
-                        <?php if ($context->getDebtor()->getCurrency()): ?>
+                        <?php if ($context->getDebtor()->getCurrency()) : ?>
                             <td class="amount"><b><?php e(number_format($total_currency * 0.25, 2, ",", ".")); ?></b></td>
                             <?php $total_currency *= 1.25; ?>
                         <?php endif; ?>
@@ -658,7 +660,7 @@ if (isset($context->onlinepayment)) {
                 <td>&nbsp;</td>
                 <td colspan="3"><?php e(t('Total')); ?></td>
                 <td class="amount"><?php e(number_format($total, 2, ",", ".")); ?></td>
-                <?php if ($context->getDebtor()->getCurrency()): ?>
+                <?php if ($context->getDebtor()->getCurrency()) : ?>
                     <td class="amount"><?php e(number_format($total_currency, 2, ",", ".")); ?></td>
                 <?php endif; ?>
 
@@ -668,9 +670,11 @@ if (isset($context->onlinepayment)) {
         <tr>
             <td>&nbsp;</td>
             <td>&nbsp;</td>
-            <td colspan="3"><b>Total<?php if ($context->getDebtor()->get("round_off") == 1 && $context->getDebtor()->get("type") == "invoice" && $total != $context->getDebtor()->get("total")) e(" afrundet"); ?>:</b></td>
+            <td colspan="3"><b>Total<?php if ($context->getDebtor()->get("round_off") == 1 && $context->getDebtor()->get("type") == "invoice" && $total != $context->getDebtor()->get("total")) {
+                e(" afrundet");
+} ?>:</b></td>
             <td class="amount"><strong><?php e(number_format($context->getDebtor()->get("total"), 2, ",", ".")); ?></strong></td>
-            <?php if ($context->getDebtor()->getCurrency()): ?>
+            <?php if ($context->getDebtor()->getCurrency()) : ?>
                 <td class="amount"><strong><?php e(number_format($total_currency, 2, ",", ".")); ?></strong></td>
             <?php endif; ?>
 
@@ -681,16 +685,16 @@ if (isset($context->onlinepayment)) {
 </div>
 
 <?php
-if ($context->getKernel()->user->hasModuleAccess('invoice')):
-$context->getKernel()->useModule('invoice');
-$reminder = new Reminder($context->getKernel());
-$reminder->getDBQuery()->setFilter("invoice_id", $context->getDebtor()->get("id"));
-$reminders = $reminder->getList();
-if (count($reminders) > 0):
-?>
-<table class="stripe">
-<caption><?php e(t('Reminders on this invoice')); ?></caption>
-<thead>
+if ($context->getKernel()->user->hasModuleAccess('invoice')) :
+    $context->getKernel()->useModule('invoice');
+    $reminder = new Reminder($context->getKernel());
+    $reminder->getDBQuery()->setFilter("invoice_id", $context->getDebtor()->get("id"));
+    $reminders = $reminder->getList();
+    if (count($reminders) > 0) :
+        ?>
+        <table class="stripe">
+        <caption><?php e(t('Reminders on this invoice')); ?></caption>
+    <thead>
     <tr>
         <th><?php e(t('No.')); ?></th>
         <th><?php e(t('Contact')); ?></th>
@@ -700,12 +704,14 @@ if (count($reminders) > 0):
         <th><?php e(t('Due date')); ?></th>
         <th>&nbsp;</th>
     </tr>
-</thead>
-<tbody>
+    </thead>
+    <tbody>
     <?php
     foreach ($reminders as $reminder) {
         ?>
-        <tr id="i<?php e($reminder["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminder['id']) print(" class=\"fade\""); ?>>
+        <tr id="i<?php e($reminder["id"]); ?>"<?php if (isset($_GET['id']) && $_GET['id'] == $reminder['id']) {
+            print(" class=\"fade\"");
+} ?>>
             <td class="number"><?php e($reminder["number"]); ?></td>
             <td><a href="<?php e(url('../../../reminders', array('contact_id' => $reminder["contact_id"]))); ?>"><?php e($reminder["name"]); ?></a></td>
             <td><a href="<?php e(url('../../../reminders/' . $reminder["id"])); ?>"><?php (trim($reminder["description"] != "")) ? e($reminder["description"]) : e('['.t("No description").']'); ?></a></td>
@@ -713,8 +719,7 @@ if (count($reminders) > 0):
                 <?php
                 if ($reminder["status"] != "created") {
                     e($reminder["dk_date_sent"]);
-                }
-                else {
+                } else {
                     e(t('No'));
                 }
                 ?>
@@ -737,7 +742,7 @@ if (count($reminders) > 0):
                 if ($reminder["locked"] == 0) {
                     ?>
                     <a class="edit" href="<?php e(url('../../../reminders/' . $reminder["id"], array('edit'))); ?>"><?php e(t('Edit')); ?></a>
-                    <?php if ($reminder["status"] == "created"): ?>
+                    <?php if ($reminder["status"] == "created") : ?>
                     <a class="delete" href="<?php e(url('../../../reminders/' . $reminder["id"], array('delete'))); ?>"><?php e(t('Delete')); ?></a>
                     <?php endif; ?>
                     <?php
@@ -748,6 +753,7 @@ if (count($reminders) > 0):
         <?php
     }
     ?>
-</tbody>
-</table>
-<?php endif; endif; ?>
+    </tbody>
+    </table>
+    <?php                                                                                                         endif;
+endif; ?>

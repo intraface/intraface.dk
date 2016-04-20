@@ -16,10 +16,10 @@ class Intraface_modules_controlpanel_Controller_ChangePassword extends k_Compone
 
     function putForm()
     {
-    	if ($this->getUser()->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
-    		return new k_SeeOther($this->url('../'));
-    	}
-    	return $this->render();
+        if ($this->getUser()->updatePassword($_POST['old_password'], $_POST['new_password'], $_POST['repeat_password'])) {
+            return new k_SeeOther($this->url('../'));
+        }
+        return $this->render();
     }
 
     function getValues()

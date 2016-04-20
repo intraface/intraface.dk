@@ -35,18 +35,22 @@ class FakeNewsletterContact
         $this->address = new Stub_Address;
     }
 
-    function get() {
+    function get()
+    {
         return 1;
     }
 
-    function getLoginUrl() {
+    function getLoginUrl()
+    {
         return 'loginurl';
     }
 }
 
 class FakeNewsletterSubscriber
 {
-    function load() {}
+    function load()
+    {
+    }
 
     function get()
     {
@@ -58,4 +62,3 @@ class FakeNewsletterSubscriber
         return new FakeNewsletterContact;
     }
 }
-?>

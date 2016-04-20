@@ -35,15 +35,15 @@
  *
  * <!--Creative Commons License-->
  * <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/dk/">
- *		<img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
- *		<br/>Dette v�rk er licensieret under en <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/dk/">Creative Commons Navngivelse-Ingen bearbejdelser 2.5 Danmark Licens</a>.
- *	<!--/Creative Commons License-->
- *	<!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
- *	<Work rdf:about="">
- *		<license rdf:resource="http://creativecommons.org/licenses/by-nd/2.5/dk/" />
- *	<dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
- *	</Work>
- *	<License rdf:about="http://creativecommons.org/licenses/by-nd/2.5/dk/"><permits rdf:resource="http://web.resource.org/cc/Reproduction"/><permits rdf:resource="http://web.resource.org/cc/Distribution"/><requires rdf:resource="http://web.resource.org/cc/Notice"/><requires rdf:resource="http://web.resource.org/cc/Attribution"/></License></rdf:RDF> -->
+ *      <img alt="Creative Commons License" style="border-width: 0" src="http://creativecommons.org/images/public/somerights20.png"/></a>
+ *      <br/>Dette v�rk er licensieret under en <a rel="license" href="http://creativecommons.org/licenses/by-nd/2.5/dk/">Creative Commons Navngivelse-Ingen bearbejdelser 2.5 Danmark Licens</a>.
+ *  <!--/Creative Commons License-->
+ *  <!-- <rdf:RDF xmlns="http://web.resource.org/cc/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+ *  <Work rdf:about="">
+ *      <license rdf:resource="http://creativecommons.org/licenses/by-nd/2.5/dk/" />
+ *  <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+ *  </Work>
+ *  <License rdf:about="http://creativecommons.org/licenses/by-nd/2.5/dk/"><permits rdf:resource="http://web.resource.org/cc/Reproduction"/><permits rdf:resource="http://web.resource.org/cc/Distribution"/><requires rdf:resource="http://web.resource.org/cc/Notice"/><requires rdf:resource="http://web.resource.org/cc/Attribution"/></License></rdf:RDF> -->
  *
  * Se eksempel p� /test/update.php
  *
@@ -328,7 +328,7 @@ class CMS_Page extends Intraface_Standard
         //position
         $db->query("SELECT position FROM cms_page WHERE id = " . $this->id);
         if ($db->nextRecord()) {
-            if ($db->f('position') == 0 AND count($this->getList($this->value['type']) > 0)) {
+            if ($db->f('position') == 0 and count($this->getList($this->value['type']) > 0)) {
                 $next_pos = $this->getPosition(MDB2::singleton(DB_DSN))->getMaxPosition() + 1;
                 $db->query("UPDATE cms_page SET position = " . $next_pos . " WHERE id = " . $this->id);
             }
@@ -425,7 +425,7 @@ class CMS_Page extends Intraface_Standard
             $page_tree[$i]['id'] = $this->get('id');
 
             $child_of_id = $this->get('child_of_id');
-            while($child_of_id != 0) {
+            while ($child_of_id != 0) {
                 $i++;
 
                 $db->query("SELECT child_of_id, navigation_name, title, id, identifier FROM cms_page WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND active = 1 AND type_key = ".$this->get('type_key')." AND id = ".$child_of_id);
@@ -438,7 +438,6 @@ class CMS_Page extends Intraface_Standard
                     $page_tree[$i]['url_self'] = $db->f('identifier').'/';
                     $page_tree[$i]['id'] = $db->f('id');
                     $child_of_id = $db->f('child_of_id');
-
                 } else {
                     $child_of_id = 0;
                 }
@@ -472,7 +471,6 @@ class CMS_Page extends Intraface_Standard
                 $section = CMS_Section::factory($this, 'type', $template_section['type']);
                 $section->save(array('type_key' => $template_section['type_key'], 'template_section_id' => $template_section['id']));
             }
-
         }
 
         // man kan rende ind i det problem at en sektion er i overskud
@@ -500,8 +498,8 @@ class CMS_Page extends Intraface_Standard
         $sections = $this->getSections();
         $page_sections = array();
         $i = 0;
-        if (is_array($sections) AND count($sections) > 0) {
-            foreach ($sections AS $key => $section) {
+        if (is_array($sections) and count($sections) > 0) {
+            foreach ($sections as $key => $section) {
                 $page_sections[$i] = $section->get();
                 $i++;
             }
@@ -695,7 +693,7 @@ class CMS_Page extends Intraface_Standard
                     $cmspage[$n + 1] = $dbquery[$n + 1]->getRecordset("id, title, identifier, navigation_name, date_publish, child_of_id, pic_id, status_key, description, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk", '', false);
 
                     // if (!array_key_exists($n + 1, $cmspage) OR !is_object($cmspage[$n + 1])) {
-                    //	$cmspage[$n + 1] = new DB_Sql;
+                    //  $cmspage[$n + 1] = new DB_Sql;
                     //}
                     // $cmspage[$n + 1]->query("SELECT *, DATE_FORMAT(date_publish, '%d-%m-%Y') AS date_publish_dk FROM cms_page WHERE active=1 AND child_of_id = ".$cmspage[$n]->f("id"). $sql_expire . $sql_publish . " ORDER BY id");
 
@@ -731,17 +729,16 @@ class CMS_Page extends Intraface_Standard
                 $this->value['picture']['original']['height']   = $tmp_filehandler->get('height');
                 $this->value['picture']['original']['file_uri'] = $tmp_filehandler->get('file_uri');
 
-                if ($tmp_filehandler->get('is_image')) {
-                    $tmp_filehandler->createInstance();
-                    $instances = $tmp_filehandler->instance->getList('include_hidden');
-                    foreach ($instances as $instance) {
-                        $this->value['picture'][$instance['name']]['file_uri'] = $instance['file_uri'];
-                        $this->value['picture'][$instance['name']]['name']     = $instance['name'];
-                        $this->value['picture'][$instance['name']]['width']    = $instance['width'];
-                        $this->value['picture'][$instance['name']]['height']   = $instance['height'];
-
-                    }
-                }
+        if ($tmp_filehandler->get('is_image')) {
+            $tmp_filehandler->createInstance();
+            $instances = $tmp_filehandler->instance->getList('include_hidden');
+            foreach ($instances as $instance) {
+                $this->value['picture'][$instance['name']]['file_uri'] = $instance['file_uri'];
+                $this->value['picture'][$instance['name']]['name']     = $instance['name'];
+                $this->value['picture'][$instance['name']]['width']    = $instance['width'];
+                $this->value['picture'][$instance['name']]['height']   = $instance['height'];
+            }
+        }
 
             return $this->value['picture'];
     }
@@ -830,7 +827,7 @@ class CMS_Page extends Intraface_Standard
      *
      * @return array possible page types with binary index
      */
-    static public function getTypesWithBinaryIndex()
+    public static function getTypesWithBinaryIndex()
     {
         return Intraface_modules_cms_PageGateway::getTypesWithBinaryIndex();
     }
@@ -840,7 +837,7 @@ class CMS_Page extends Intraface_Standard
      *
      * @return array page types in plural
      */
-    static public function getTypesPlural()
+    public static function getTypesPlural()
     {
         return array(
             'page' => 'pages',
@@ -880,5 +877,4 @@ class CMS_Page extends Intraface_Standard
     {
         return ($this->value['active'] == 1);
     }
-
 }

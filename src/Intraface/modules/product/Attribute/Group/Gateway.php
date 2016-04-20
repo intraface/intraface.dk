@@ -1,9 +1,9 @@
 <?php
 /**
  * Gateway to find Attribute groups.
- * 
+ *
  * @todo Should be renamed Intraface_modules_product_AttributeGroupGateway
- * 
+ *
  * @author sune
  *
  */
@@ -17,18 +17,18 @@ class Intraface_modules_product_Attribute_Group_Gateway
     
     /**
      * Constructor
-     * 
+     *
      * @todo $doctrine should not be optional
-     * 
-     * @param object $doctrine Doctrine_Connection 
+     *
+     * @param object $doctrine Doctrine_Connection
      * @return void
      */
-    public function __construct($doctrine = NULL) 
+    public function __construct($doctrine = null)
     {
         /**
-         * @todo remove id and make $doctrine required 
+         * @todo remove id and make $doctrine required
          */
-        if ($doctrine != NULL) {
+        if ($doctrine != null) {
             $this->table = $doctrine->getTable('Intraface_modules_product_Attribute_Group');
         }
     }
@@ -48,7 +48,7 @@ class Intraface_modules_product_Attribute_Group_Gateway
     
     /**
      * Returns attribute group from attribute id
-     * 
+     *
      * @param integer $id attribute id
      * @return object Doctrine_Record
      */
@@ -99,7 +99,4 @@ class Intraface_modules_product_Attribute_Group_Gateway
         }
         return $groups->getFirst();
     }
-    
-    
-    
 }

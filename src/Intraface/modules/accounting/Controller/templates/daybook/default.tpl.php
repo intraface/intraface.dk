@@ -40,9 +40,11 @@ $values = $context->getValues();
                         <input tabindex="6" name="amount" id="amount" type="text" size="8" value="<?php e($values['amount']); ?>"  />
                     </td>
                     <td>
-                        <input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) e($values['reference']);  ?>"  />
+                        <input tabindex="7" name="reference" id="reference" type="text" size="7" value="<?php if (!empty($values['reference'])) {
+                            e($values['reference']);
+}  ?>"  />
                     </td>
-                    <?php if ($context->getYear()->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0) : ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>

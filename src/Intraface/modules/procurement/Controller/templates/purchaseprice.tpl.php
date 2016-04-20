@@ -4,7 +4,7 @@
 
 <form method="POST" action="<?php e(url()); ?>" id="form_items">
 
-	<table class="stripe">
+    <table class="stripe">
         <caption>Produkter</caption>
         <thead>
             <tr>
@@ -13,10 +13,10 @@
                 <th>Antal</th>
                 <th>Salgspris</th>
                 <th>Indkøbspris pr. stk. ex. moms</th>
-  		    </tr>
+            </tr>
         </thead>
         <tbody>
-  		    <?php for ($i = 0, $max = count($items); $i < $max; $i++): ?>
+            <?php for ($i = 0, $max = count($items); $i < $max; $i++) : ?>
                 <tr>
                     <td align="right">
                         <?php e($items[$i]['number']); ?>
@@ -27,7 +27,7 @@
                     <td align="right"><?php e($items[$i]["price"]->getAsLocal('da_dk', 2)); ?></td>
                     <td><input type="text" name="items[<?php e($i); ?>][price]" value="0,00" size="8" /></td>
                 </tr>
-  			<?php endfor; ?>
+            <?php endfor; ?>
         </tbody>
     </table>
 

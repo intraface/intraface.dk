@@ -9,8 +9,8 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
     public function setTableDefinition()
     {
         $this->setTableName('shop_dicount_campaign');
-        $this->hasColumn('name', 'string',  255, array('type' => 'string', 'length' => 255, 'notnull' => true));
-        $this->hasColumn('voucher_code_prefix', 'string',  255, array('type' => 'string', 'length' => 255, 'notnull' => true));
+        $this->hasColumn('name', 'string', 255, array('type' => 'string', 'length' => 255, 'notnull' => true));
+        $this->hasColumn('voucher_code_prefix', 'string', 255, array('type' => 'string', 'length' => 255, 'notnull' => true));
         // $this->hasColumn('start_date', 'string',  65555);
         // $this->hasColumn('end_date', 'string',  255);
         // $this->hasColumn('validity_period', 'string',  255);
@@ -23,8 +23,10 @@ class Intraface_modules_shop_DiscountCampaign extends Doctrine_Record
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
 
-        $this->hasMany('Intraface_modules_shop_DiscountCampaign_Voucher as voucher',
-            array('local' => 'id', 'foreign' => 'shop_discount_campaign_id'));
+        $this->hasMany(
+            'Intraface_modules_shop_DiscountCampaign_Voucher as voucher',
+            array('local' => 'id', 'foreign' => 'shop_discount_campaign_id')
+        );
     }
 
     function getId()

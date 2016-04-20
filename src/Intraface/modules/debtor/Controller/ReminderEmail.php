@@ -6,7 +6,9 @@ class Reminder_Text
 {
     private $output;
 
-    function __construct() {}
+    function __construct()
+    {
+    }
 
     function visit(Reminder $reminder)
     {
@@ -27,24 +29,27 @@ class Reminder_Text
         for ($i = 0, $max = count($items); $i < $max; $i++) {
             $this->output .= "\nFak# ".$items[$i]["number"];
             $spaces = -strlen($items[$i]["number"]) - 5 + 20;
-            for ($j = 0; $j < $spaces; $j++) { $this->output .= ' ';  }
+            for ($j = 0; $j < $spaces;
+            $j++) {
+                $this->output .= ' ';
+            }
                 $this->output .= ' ' . $items[$i]["dk_this_date"];
                 $this->output .= '  ' . $items[$i]["dk_due_date"];
                 $this->output .= '      ' . number_format($items[$i]["arrears"], 2, ",", ".");
                 $total += $items[$i]["arrears"];
-            }
+        }
             $items = $reminder->item->getList("reminder");
-            for ($i = 0, $max = count($items); $i < $max; $i++) {
-                $this->output .= "\nTidl. rykkkergebyr  ";
-                $this->output .= ' ' . $items[$i]["dk_this_date"];
-                $this->output .= '  ' .$items[$i]["dk_due_date"];
-                $this->output .= '      ' . number_format($items[$i]["reminder_fee"], 2, ",", ".");
-                $total += $items[$i]["reminder_fee"];
-            }
-            if ($reminder->get("reminder_fee") != 0) {
-                $this->output .= "\nRykkergebyr                                      ".number_format($reminder->get("reminder_fee"), 2, ",", ".");
-                $total += $reminder->get("reminder_fee");
-            }
+        for ($i = 0, $max = count($items); $i < $max; $i++) {
+            $this->output .= "\nTidl. rykkkergebyr  ";
+            $this->output .= ' ' . $items[$i]["dk_this_date"];
+            $this->output .= '  ' .$items[$i]["dk_due_date"];
+            $this->output .= '      ' . number_format($items[$i]["reminder_fee"], 2, ",", ".");
+            $total += $items[$i]["reminder_fee"];
+        }
+        if ($reminder->get("reminder_fee") != 0) {
+            $this->output .= "\nRykkergebyr                                      ".number_format($reminder->get("reminder_fee"), 2, ",", ".");
+            $total += $reminder->get("reminder_fee");
+        }
             $this->output .= "\n\nTotal:                                           " . number_format($total, 2, ",", ".");
 
             $parameter = array(
@@ -64,10 +69,10 @@ class Reminder_Text
                     $this->output .= "\nRegnr.:              ".$reminder->kernel->setting->get('intranet', 'bank_reg_number');
                     $this->output .= "\nKontonr.:            ".$reminder->kernel->setting->get('intranet', 'bank_account_number');
                     $this->output .= "\nBesked til modtager: " . "Kunde #" . $reminder->contact->get("number");
-                break;
+                    break;
                 case 3:
                     $this->output .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$this->context->getKernel()->setting->get('intranet', 'giro_account_number')."<";
-                break;
+                    break;
             }
 
             $this->output .= "\n\nMed venlig hilsen\n\n" . $reminder->kernel->user->getAddress()->get("name") . "\n" .$reminder->kernel->intranet->get("name");
@@ -79,7 +84,6 @@ class Reminder_Text
     {
         return $this->output;
     }
-
 }
 
 class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
@@ -104,14 +108,14 @@ class Intraface_modules_debtor_Controller_ReminderEmail extends k_Component
             throw new Exception('Kontaktpersonen har ikke nogen email');
         }
 
-        $subject  =	"Påmindelse om betaling";
+        $subject  =     "Påmindelse om betaling";
 
         $reminder_text = new Reminder_Text();
         $reminder_text->visit($reminder);
 
         $body = $reminder_text->getText();
 
-        switch($this->context->getKernel()->setting->get('intranet', 'debtor.sender')) {
+        switch ($this->context->getKernel()->setting->get('intranet', 'debtor.sender')) {
             case 'intranet':
                 $from_email = '';
                 $from_name = '';

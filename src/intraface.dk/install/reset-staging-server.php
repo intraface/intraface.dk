@@ -16,7 +16,6 @@ $auth = new Intraface_Auth(session_id());
 $auth->clearIdentity();
 
 if ($install->resetServer()) {
-
     if (!empty($_GET['modules'])) {
         $install->grantModuleAccess($_GET['modules']);
     }
@@ -45,18 +44,17 @@ if ($install->resetServer()) {
     echo '<p>Year: <span id="year">'.date('Y').'</span></p>';
     echo '<p>Date (da): <span id="date_da">'.date('d-m-Y').'</span></p>';
     echo '<p>Shortyear: <span id="short_year">'.substr(date('Y'), -2).'</span></p>';
-
 } else {
     echo 'error';
 }
 
 function delete_cache_files_from_demo($f)
 {
-        if (is_dir($f)) {
-            foreach (scandir($f) as $item) {
-                if (strpos($item, 'cache_') !== false) {
-                    unlink($f . $item);
-                }
+    if (is_dir($f)) {
+        foreach (scandir($f) as $item) {
+            if (strpos($item, 'cache_') !== false) {
+                unlink($f . $item);
             }
         }
+    }
 }

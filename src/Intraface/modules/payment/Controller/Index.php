@@ -41,7 +41,7 @@ class Intraface_modules_payment_Controller_Index extends k_Component
     
         $gateway->getDBQuery()->usePaging("paging", $this->getKernel()->setting->get('user', 'rows_pr_page'));
         $gateway->getDBQuery()->storeResult("use_stored", "payment", "toplevel");
-        $gateway->getDBQuery()->setUri($this->url(null, array('use_stored' => 'true')));        
+        $gateway->getDBQuery()->setUri($this->url(null, array('use_stored' => 'true')));
         
         $payments = $gateway->findAll();
 

@@ -1,9 +1,9 @@
 <?php
 /**
  * @package Intraface_FileManager
- * @author	<name>
- * @since	1.0
- * @version	1.0
+ * @author  <name>
+ * @since   1.0
+ * @version     1.0
  *
  */
 class MainFilemanager extends Intraface_Main
@@ -59,4 +59,3 @@ class MainFilemanager extends Intraface_Main
         $this->addRequiredShared("keyword");
     }
 }
-?>

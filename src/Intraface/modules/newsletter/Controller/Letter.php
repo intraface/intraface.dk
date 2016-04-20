@@ -58,7 +58,7 @@ class Intraface_modules_newsletter_Controller_Letter extends k_Component
     {
         $this->getKernel()->module('newsletter');
         $translation = $this->getKernel()->getTranslation('newsletter');
-;
+        ;
         return $this->getLetter()->getList();
     }
 
@@ -72,14 +72,14 @@ class Intraface_modules_newsletter_Controller_Letter extends k_Component
 
     function postForm()
     {
-    	$module = $this->getKernel()->module("newsletter");
+        $module = $this->getKernel()->module("newsletter");
         $letter = new Newsletter($this->getList(), $this->name());
 
-    	if ($id = $letter->save($_POST)) {
-    		return new k_SeeOther($this->url(null));
-    	} else {
-    		$value = $_POST;
-    	}
-    	return $this->render();
+        if ($id = $letter->save($_POST)) {
+            return new k_SeeOther($this->url(null));
+        } else {
+            $value = $_POST;
+        }
+        return $this->render();
     }
 }

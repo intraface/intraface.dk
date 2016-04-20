@@ -11,7 +11,7 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
     protected function map($name)
     {
         if (is_numeric($name)) {
-        	return 'Intraface_modules_accounting_Controller_Post_Show';
+            return 'Intraface_modules_accounting_Controller_Post_Show';
         }
     }
 
@@ -110,15 +110,15 @@ class Intraface_modules_accounting_Controller_Post_Index extends k_Component
         $worksheet->write($i, 5, 'Kredit', $format);
 
         $i = 3;
-            foreach ($posts AS $post) {
-                $worksheet->write($i, 0, $post['date_dk'], $format);
-                $worksheet->write($i, 1, $post['voucher_number'], $format);
-                $worksheet->write($i, 2, $post['account_number'], $format);
-                $worksheet->write($i, 3, $post['account_name'], $format);
-                $worksheet->write($i, 4, round($post['debet'], 2), $format);
-                $worksheet->write($i, 5, round($post['credit'], 2), $format);
-                $i++;
-            }
+        foreach ($posts as $post) {
+            $worksheet->write($i, 0, $post['date_dk'], $format);
+            $worksheet->write($i, 1, $post['voucher_number'], $format);
+            $worksheet->write($i, 2, $post['account_number'], $format);
+            $worksheet->write($i, 3, $post['account_name'], $format);
+            $worksheet->write($i, 4, round($post['debet'], 2), $format);
+            $worksheet->write($i, 5, round($post['credit'], 2), $format);
+            $i++;
+        }
 
         $worksheet->hideGridLines();
 

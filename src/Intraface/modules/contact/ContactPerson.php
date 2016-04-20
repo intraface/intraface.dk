@@ -34,7 +34,7 @@ class ContactPerson extends Intraface_Standard
      */
     public function __construct($contact, $id = 0)
     {
-        if (!is_object($contact) OR strtolower(get_class($contact)) != 'contact') {
+        if (!is_object($contact) or strtolower(get_class($contact)) != 'contact') {
             throw new Exception('ContactPerson kr�ver Contact som object');
         }
         $this->contact = $contact;

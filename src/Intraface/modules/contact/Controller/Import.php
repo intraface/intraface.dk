@@ -36,12 +36,10 @@ class Intraface_modules_contact_Controller_Import extends k_Component
         $e = 0;
         $this->success = 0;
 
-        foreach ($data AS $line => $contact) {
-
+        foreach ($data as $line => $contact) {
             $contact_object = new Contact($this->getKernel());
 
             if ($contact_object->save($contact)) {
-
                 $appender = $contact_object->getKeywordAppender();
                 $string_appender = new Intraface_Keyword_StringAppender($contact_object->getKeywords(), $appender);
 

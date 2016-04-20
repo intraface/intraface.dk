@@ -1,9 +1,9 @@
 <?php
 /**
  * @package Intraface_OnlinePayment
- * @author	Lars Olesen <lars@legestue.net>
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   1.0
+ * @version     1.0
  *
  */
 class MainOnlinepayment extends Intraface_Main
@@ -48,7 +48,7 @@ class MainOnlinepayment extends Intraface_Main
             2 => 'invoice'));
         */
 
-        $this->addSetting('implemented_providers',  array(
+        $this->addSetting('implemented_providers', array(
             0 => '_invalid_',
             1 => 'default', // reserveret for en custom (alts� en hvor det hele k�rer uden for systemet
             2 => 'quickpay',

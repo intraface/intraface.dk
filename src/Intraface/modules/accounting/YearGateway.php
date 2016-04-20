@@ -29,7 +29,7 @@ class Intraface_modules_accounting_YearGateway
     function findById($id, $load_active = true)
     {
         require_once dirname(__FILE__) . '/Year.php';
-    	return new Year($this->kernel, $id, $load_active);
+        return new Year($this->kernel, $id, $load_active);
     }
 
     /**
@@ -69,7 +69,6 @@ class Intraface_modules_accounting_YearGateway
         $db->query($sql);
 
         if ($db->numRows() == 0) {
-
             return false;
         }
 

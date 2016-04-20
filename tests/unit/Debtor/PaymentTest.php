@@ -106,7 +106,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
             'date_stated' => '0000-00-00',
             'voucher_id' => 0,
             'type_key' => 1,
-        	'this_date' => '2007-01-01'
+            'this_date' => '2007-01-01'
         );
 
         $this->assertEquals($expected, $payment->get());
@@ -144,7 +144,7 @@ class PaymentTest extends PHPUnit_Framework_TestCase
                 'id' => 1,
                 'date_dk' => date('d-m-Y'),
                 'date' => date('Y-m-d'),
-            	'text' => 'Payment  (invoice #1)',
+                'text' => 'Payment  (invoice #1)',
                 'debet' => '100.00',
                 'credit' => '0.00',
                 'voucher_number' => 1,

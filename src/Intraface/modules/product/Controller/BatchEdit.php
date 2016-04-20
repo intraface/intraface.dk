@@ -26,7 +26,7 @@ class Intraface_modules_product_Controller_BatchEdit extends k_Component
     {
         $module = $this->context->getKernel()->module("product");
         $translation = $this->context->getKernel()->getTranslation('product');
-        foreach ($_POST['name'] AS $key=>$value) {
+        foreach ($_POST['name'] as $key => $value) {
             $product = new Product($this->context->getKernel(), $key);
             if ($product->save(array(
             'number' => $product->get('number'),

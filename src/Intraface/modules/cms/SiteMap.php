@@ -10,7 +10,8 @@
  *
  * @package Intraface_CMS
  */
-class CMS_SiteMap {
+class CMS_SiteMap
+{
 
     private $cmssite;
 
@@ -37,5 +38,3 @@ class CMS_SiteMap {
     </urlset>
 
 */
-
-?>

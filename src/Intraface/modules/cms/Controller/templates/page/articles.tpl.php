@@ -10,15 +10,17 @@
                     <th colspan="2"></th>
                 </tr>
             </thead>
-            <?php foreach ($articles AS $p):?>
+            <?php foreach ($articles as $p) :?>
                 <tr>
                     <td><a href="<?php e(url($p['id'])); ?>"><?php e($p['title']); ?></a></td>
                     <td><?php e($p['identifier']); ?></td>
                     <td>
-                        <?php if ($p['status'] == 'published') echo ' &bull'; ?>
+                        <?php if ($p['status'] == 'published') {
+                            echo ' &bull';
+} ?>
                     </td>
                     <td>
-                    <?php if ($p['status'] == 'published'): // hack siden kan kun vises, hvis den er udgivet. Der b�r laves et eller andet, s� det er muligt anyways - fx en hemmelig kode p� siden ?>
+                    <?php if ($p['status'] == 'published') : // hack siden kan kun vises, hvis den er udgivet. Der b�r laves et eller andet, s� det er muligt anyways - fx en hemmelig kode p� siden ?>
                         <a href="<?php e($p['url']); ?>" target="_blank"><?php e(t('show page')); ?></a>
                     <?php endif; ?>
                     </td>

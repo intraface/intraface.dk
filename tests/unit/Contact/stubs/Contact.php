@@ -2,7 +2,8 @@
 class FakeContact
 {
     
-    function __construct() {
+    function __construct()
+    {
         $this->values = array(
             'name' => 'Contact Name',
             'id' => 1,
@@ -11,8 +12,8 @@ class FakeContact
     }
     
     
-    function get($key) {
+    function get($key)
+    {
         return $this->values[$key];
     }
 }
-?>

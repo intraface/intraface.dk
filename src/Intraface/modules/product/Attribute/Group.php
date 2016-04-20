@@ -6,7 +6,7 @@
  *
  * @package  Intraface
  * @author   Sune Jensen <sj@sunet.dk>
- * @since    
+ * @since
  * @version  @package-version@
  */
 class Intraface_modules_product_Attribute_Group extends Doctrine_Record
@@ -25,11 +25,13 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         $this->actAs('Intraface_Doctrine_Template_Intranet');
         $this->actAs('SoftDelete');
         
-        $this->hasMany('Intraface_modules_product_Attribute as attribute', 
+        $this->hasMany(
+            'Intraface_modules_product_Attribute as attribute',
             array('local' => 'id', 'foreign' => 'attribute_group_id')
         );
         
-        $this->hasMany('Intraface_modules_product_Product_X_Attribute_Group as x_product', 
+        $this->hasMany(
+            'Intraface_modules_product_Product_X_Attribute_Group as x_product',
             array('local' => 'id', 'foreign' => 'product_attribute_group_id')
         );
         
@@ -40,12 +42,12 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         return $this->id;
     }
     
-    public function getName() 
+    public function getName()
     {
         return $this->name;
     }
     
-    public function getDescription() 
+    public function getDescription()
     {
         return $this->description;
     }
@@ -88,7 +90,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     
     /**
      * Returns attribute record from id
-     * 
+     *
      * @param integer $id id
      */
     public function getAttribute($id)
@@ -103,7 +105,7 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
     
     /**
      * Returns collection of attributes used on a given product
-     * 
+     *
      * @param object $product Intraface_modules_product_Product
      */
     public function getAttributesUsedByProduct($product)

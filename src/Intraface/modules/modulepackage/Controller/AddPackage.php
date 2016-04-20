@@ -31,7 +31,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
         $modulepackageshop = new Intraface_modules_modulepackage_ShopExtension();
 
         $data = array(
-        	'modulepackagemanager' => $this->modulepackagemanager,
+            'modulepackagemanager' => $this->modulepackagemanager,
             'add_type' => $add_type,
             'modulepackageshop' => $modulepackageshop,
             'modulepackage' => $this->modulepackage,
@@ -58,7 +58,7 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                 $this->modulepackagemanager->error->set('You need to accept the conditions of sale and use');
             } else {
                 // we are now ready to create the order.
-                switch($add_type) {
+                switch ($add_type) {
                     case 'add':
                         $action = $this->modulepackagemanager->add($this->modulepackage, (int)$_POST['duration_month'].' month');
                         break;
@@ -75,7 +75,6 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                 if (!$this->modulepackagemanager->error->isError()) {
                     $action_store = new Intraface_modules_modulepackage_ActionStore($this->getKernel()->intranet->get('id'));
                     if ($action->hasAddActionWithProduct()) {
-
                         $contact = $this->getKernel()->intranet->address->get();
                         // The following we do not want to transfer as this can give problems.
                         unset($contact['id']);
@@ -99,7 +98,6 @@ class Intraface_modules_modulepackage_Controller_AddPackage extends k_Component
                         }
 
                         $total_price = $action->getTotalPrice();
-
                     } else {
                         $total_price = 0;
                     }

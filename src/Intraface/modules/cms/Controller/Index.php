@@ -14,9 +14,9 @@ class Intraface_modules_cms_Controller_Index extends k_Component
 
     function map($name)
     {
-         if (is_numeric($name)) {
-             return 'Intraface_modules_cms_Controller_Site';
-         }  elseif ($name == 'create') {
+        if (is_numeric($name)) {
+            return 'Intraface_modules_cms_Controller_Site';
+        } elseif ($name == 'create') {
             return 'Intraface_modules_cms_Controller_SiteEdit';
         }
     }

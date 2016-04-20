@@ -51,7 +51,7 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->addOrderBy('details.id')
             ->execute();
 
-        if ($collection == NULL || $collection->count() != 1) {
+        if ($collection == null || $collection->count() != 1) {
             throw new Intraface_Gateway_Exception('Error finding product from id '.$id);
         } else {
             return $collection->getLast();
@@ -86,7 +86,7 @@ class Intraface_modules_product_ProductDoctrineGateway
         return $collection;
     }
 
-    public function findByVariationAttributeId($id) 
+    public function findByVariationAttributeId($id)
     {
         $collection = $this->table
             ->createQuery()
@@ -115,7 +115,7 @@ class Intraface_modules_product_ProductDoctrineGateway
             ->orderBy('details.number')
             ->execute();
 
-        if ($collection == NULL || $collection->count() == 0) {
+        if ($collection == null || $collection->count() == 0) {
             return 0;
         } else {
             return $collection->getLast()->getDetails()->getNumber();

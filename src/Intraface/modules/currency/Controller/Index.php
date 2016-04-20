@@ -27,12 +27,12 @@ class Intraface_modules_currency_Controller_Index extends k_Component
             $gateway = new Intraface_modules_currency_Currency_Gateway($this->doctrine);
             $currencies = $gateway->findAll();
         } catch (Intraface_Gateway_Exception $e) {
-            $currencies = NULL;
+            $currencies = null;
         }
 
         $smarty = $this->template->create('Intraface/modules/currency/Controller/tpl/empty-table');
 
-        if ($currencies == NULL) {
+        if ($currencies == null) {
             $smarty = $this->template->create('Intraface/modules/currency/Controller/tpl/empty-table');
 
             return $smarty->render($this, array('message' => 'No currencies has been added yet.'));

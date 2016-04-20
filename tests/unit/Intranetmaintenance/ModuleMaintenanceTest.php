@@ -22,7 +22,8 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($return));
     }
 
-    function testModuleMaintenanceFactory() {
+    function testModuleMaintenanceFactory()
+    {
 
         $kernel = new Intraface_Kernel;
         $object = ModuleMaintenance::factory('accounting');
@@ -33,4 +34,3 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
 
     }
 }
-?>

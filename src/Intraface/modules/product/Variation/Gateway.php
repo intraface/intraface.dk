@@ -26,7 +26,7 @@ class Intraface_modules_product_Variation_Gateway
     
     /**
      * Constructor
-     * 
+     *
      * @param object Intraface_modules_product_Product
      * @return void
      */
@@ -43,7 +43,6 @@ class Intraface_modules_product_Variation_Gateway
             throw new Exception('No groups is added to the product');
         } elseif (count($this->groups) == 1) {
             $this->variation = new Intraface_modules_product_Variation_OneAttributeGroup;
-            
         } elseif (count($this->groups) == 2) {
             $this->variation =  new Intraface_modules_product_Variation_TwoAttributeGroups;
         } else {
@@ -53,9 +52,9 @@ class Intraface_modules_product_Variation_Gateway
     
     /**
      * Returns empty variation object
-     * 
+     *
      * @return object Intraface_modules_product_Variation_OneAttributeGroup or Intraface_modules_product_Variation_TwoAttributeGroups
-     *  
+     *
      */
     public function getObject()
     {
@@ -64,7 +63,7 @@ class Intraface_modules_product_Variation_Gateway
     
     /**
      * Find a variation from id
-     * 
+     *
      * @return object Intraface_modules_product_Variation_OneAttributeGroup or Intraface_modules_product_Variation_TwoAttributeGroups
      */
     public function findById($id)
@@ -72,7 +71,9 @@ class Intraface_modules_product_Variation_Gateway
         $query = $this->variation->getTable()->createQuery();
         
         $select = get_class($this->variation).'.*, detail.*, a1.*, a1_attribute.*, a1_attribute_group.*';
-        if (count($this->groups) == 2) $select .= ', a2.*, a2_attribute.*, a2_attribute_group.*';
+        if (count($this->groups) == 2) {
+            $select .= ', a2.*, a2_attribute.*, a2_attribute_group.*';
+        }
         $query = $query->select($select)
             ->leftJoin(get_class($this->variation).'.detail detail')
             ->innerJoin(get_class($this->variation).'.attribute1 a1 WITH a1.attribute_number = 1')
@@ -104,7 +105,7 @@ class Intraface_modules_product_Variation_Gateway
     
     /**
      * Find a variation from attributes
-     * 
+     *
      * @return object Intraface_modules_product_Variation_OneAttributeGroup or Intraface_modules_product_Variation_TwoAttributeGroups
      */
     public function findByAttributes($value)
@@ -131,15 +132,16 @@ class Intraface_modules_product_Variation_Gateway
             throw new Exception('More than one entry found!');
         }
         return $collection->getFirst();
-    } 
+    }
     
     
     /**
      * Finds all variations for product
-     * 
+     *
      * @return object Doctrine_Collection
      */
-    public function findAll() {
+    public function findAll()
+    {
         
         $query = $this->findAllQuery();
         
@@ -155,10 +157,11 @@ class Intraface_modules_product_Variation_Gateway
     
     /**
      * Finds all variations for product with given attribute
-     * 
+     *
      * @return object Doctrine_Collection
      */
-    public function findWithAttributeId($attribute_id) {
+    public function findWithAttributeId($attribute_id)
+    {
         
         $query = $this->findAllQuery();
         
@@ -184,7 +187,9 @@ class Intraface_modules_product_Variation_Gateway
         $query = $this->variation->getTable()->createQuery();
         
         $select = get_class($this->variation).'.*, detail.*, a1.*, a1_attribute.*, a1_attribute_group.*';
-        if (count($this->groups) == 2) $select .= ', a2.*, a2_attribute.*, a2_attribute_group.*';
+        if (count($this->groups) == 2) {
+            $select .= ', a2.*, a2_attribute.*, a2_attribute_group.*';
+        }
         
         $query = $query->select($select)
             ->leftJoin(get_class($this->variation).'.detail detail')
@@ -198,13 +203,10 @@ class Intraface_modules_product_Variation_Gateway
                 ->innerJoin('a2.attribute a2_attribute')
                 ->innerJoin('a2_attribute.group a2_attribute_group')
                 ->orderBy('a1_attribute.position, a2_attribute.position');
-            
         }
         $query = $query->where(get_class($this->variation).'.product_id = ?', $this->product->getId());
         $query = $query->addOrderBy('number, detail.date_created DESC');
         
         return $query;
     }
-
-    
 }

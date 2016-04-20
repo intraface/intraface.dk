@@ -51,7 +51,6 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
                 $cmssite = new CMS_Site($this->getKernel(), (int)$this->context->name());
                 $cmspage = new CMS_Page($cmssite);
                 $this->getKernel()->setting->set('user', 'cms.active.site_id', (int)$this->name());
-
             } else {
                 $site_id = $this->getKernel()->setting->get('user', 'cms.active.site_id');
                 if ($site_id != 0) {
@@ -61,8 +60,7 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
                     return new k_SeeOther($this->url('../'));
                 }
             }
-
-        }
+}
 
         $page_types_plural = CMS_Page::getTypesPlural();
 
@@ -85,8 +83,8 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $news = $cmsnews->getList();
 
         $data = array(
-        	'type' => $type,
-        	'page_types_plural' => $page_types_plural,
+            'type' => $type,
+            'page_types_plural' => $page_types_plural,
             'cmssite' => $cmssite,
             'cmspage' => $cmspage,
             'pages' => $pages,
@@ -139,9 +137,9 @@ class Intraface_modules_cms_Controller_Pages extends k_Component
         $this->document->addScript('cms/parseUrlIdentifier.js');
 
         $data = array('value' => $value,
-        	'type' => $type,
-        	'cmspage' => $cmspage,
-        	'template' => $template,
+            'type' => $type,
+            'cmspage' => $cmspage,
+            'template' => $template,
             'translation' => $this->getKernel()->getTranslation('cms'),
             'templates' => $templates,
             'cmssite' => $cmssite,

@@ -21,12 +21,12 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
 
         $this->doc = $this->getDocument();
 
-        if (!empty($this->file) AND $this->file->get('id') > 0) {
+        if (!empty($this->file) and $this->file->get('id') > 0) {
             $this->doc->addHeader($this->file->get('file_uri_pdf'));
         }
 
         $contact = $reminder->contact->address->get();
-        if (isset($reminder->contact_person) AND get_class($reminder->contact_person) == "contactperson") {
+        if (isset($reminder->contact_person) and get_class($reminder->contact_person) == "contactperson") {
             $contact["attention_to"] = $reminder->contact_person->get("name");
         }
         $contact['number'] = $reminder->contact->get('number');
@@ -34,7 +34,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $intranet_address = new Intraface_Address($reminder->get("intranet_address_id"));
         $intranet = $intranet_address->get();
 
-        switch($reminder->kernel->setting->get('intranet', 'debtor.sender')) {
+        switch ($reminder->kernel->setting->get('intranet', 'debtor.sender')) {
             case 'intranet':
                 // void
                 break;
@@ -52,12 +52,12 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $this->docinfo[0]["label"] = "Dato:";
         $this->docinfo[0]["value"] = $reminder->get("dk_this_date");
 
-        $this->addRecieverAndSender($contact , $intranet, "Reminder about payment", $this->docinfo);
+        $this->addRecieverAndSender($contact, $intranet, "Reminder about payment", $this->docinfo);
 
         $this->doc->setY('-20'); // space to the product list
 
         $text = explode("\r\n", $reminder->get("text"));
-        foreach ($text AS $line) {
+        foreach ($text as $line) {
             if ($line == "") {
                 $this->doc->setY('-'.$this->doc->get('font_spacing'));
 
@@ -65,8 +65,7 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
                     $this->doc->nextPage(true);
                 }
             } else {
-                while($line != "") {
-
+                while ($line != "") {
                     $this->doc->setY('-'.($this->doc->get("font_padding_top") + $this->doc->get("font_size")));
                     $line = $this->doc->addTextWrap($this->doc->get('x'), $this->doc->get('y'), $this->doc->get("right_margin_position") - $this->doc->get('x'), $this->doc->get("font_size"), $line); // $this->doc->get("right_margin_position") - $this->doc->get('x')
               
@@ -112,7 +111,6 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $color = 0;
 
         for ($i = 0, $max = count($items); $i < $max; $i++) {
-
             if ($color == 1) {
                 $this->doc->setColor(0.8, 0.8, 0.8);
                 $this->doc->filledRectangle($this->doc->get("margin_left"), $this->doc->get('y') - $this->doc->get("font_spacing"), $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $this->doc->get("font_spacing"));
@@ -139,7 +137,6 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         $items = $reminder->item->getList("reminder");
 
         for ($i = 0, $max = count($items); $i < $max; $i++) {
-
             if ($color == 1) {
                 $this->doc->setColor(0.8, 0.8, 0.8);
                 $this->doc->filledRectangle($this->doc->get("margin_left"), $this->doc->get('y') - $this->doc->get("font_spacing"), $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $this->doc->get("font_spacing"));
@@ -163,7 +160,6 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
         }
 
         if ($reminder->get("reminder_fee") > 0) {
-
             if ($color == 1) {
                 $this->doc->setColor(0.8, 0.8, 0.8);
                 $this->doc->filledRectangle($this->doc->get("margin_left"), $this->doc->get('y') - $this->doc->get("font_spacing"), $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $this->doc->get("font_spacing"));

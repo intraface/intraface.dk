@@ -102,13 +102,13 @@ class Procurement extends Intraface_Standard
         $this->value["from_region"] = $region_types[$db->f("from_region_key")];
 
         $this->value["price_items"] = $db->f("price_items");
-        $this->value["dk_price_items"] = number_format($db->f("price_items"), 2, ",",".");
+        $this->value["dk_price_items"] = number_format($db->f("price_items"), 2, ",", ".");
         $this->value["price_shipment_etc"] = $db->f("price_shipment_etc");
-        $this->value["dk_price_shipment_etc"] = number_format($this->value["price_shipment_etc"], 2, ",",".");
+        $this->value["dk_price_shipment_etc"] = number_format($this->value["price_shipment_etc"], 2, ",", ".");
         $this->value["vat"] = $db->f("vat");
-        $this->value["dk_vat"] = number_format($db->f("vat"), 2, ",",".");
+        $this->value["dk_vat"] = number_format($db->f("vat"), 2, ",", ".");
         $this->value["total_price"] = round($this->value["price_items"] + $this->value["price_shipment_etc"] + $this->value["vat"], 2);
-        $this->value["dk_total_price"] = number_format($this->value["total_price"], 2, ",",".");
+        $this->value["dk_total_price"] = number_format($this->value["total_price"], 2, ",", ".");
 
         $this->value["status_key"] = $db->f("status_key");
         $types = $this->getStatusTypes();
@@ -258,7 +258,7 @@ class Procurement extends Intraface_Standard
             throw new Exception("Ugyldigt status: ".$status);
         }
 
-        switch($status) {
+        switch ($status) {
             case "ordered":
                 $sql = "";
                 break;
@@ -347,8 +347,7 @@ class Procurement extends Intraface_Standard
             $procurement->loadItem();
             $items = $procurement->item->getList();
 
-            foreach ($items AS $item) {
-
+            foreach ($items as $item) {
                 if ($item['product_id'] == $product_id) {
                     $list[$i] = $item;
                     $list[$i]['dk_invoice_date'] = $procurement->get('dk_invoice_date');
@@ -457,7 +456,6 @@ class Procurement extends Intraface_Standard
             if (!$voucher->saveInDaybook($input_values, true)) {
                 $this->error->merge($voucher->error->getMessage());
             }
-
         }
 
         require_once 'Intraface/modules/accounting/VoucherFile.php';
@@ -571,16 +569,15 @@ class Procurement extends Intraface_Standard
 
         $total = 0;
         $vat = 0;
-        foreach ($debet_accounts AS $key => $debet_account) {
+        foreach ($debet_accounts as $key => $debet_account) {
             if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', 'greater_than_zero')) {
-
                 $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
                 $total += $amount->get();
 
                 $validator->isString($debet_account['text'], 'Ugyldig tekst i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', '', 'allow_empty');
 
-                if (empty($debet_account['state_account_id']) ) {
+                if (empty($debet_account['state_account_id'])) {
                     $this->error->set('Linje ' . ($key + 1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';
@@ -637,16 +634,15 @@ class Procurement extends Intraface_Standard
 
         $total = 0;
         $vat = 0;
-        foreach ($debet_accounts AS $key => $debet_account) {
+        foreach ($debet_accounts as $key => $debet_account) {
             if ($validator->isNumeric($debet_account['amount'], 'Ugyldig beløb i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', 'greater_than_zero')) {
-
                 $amount = new Intraface_Amount($debet_account['amount']);
                 $amount->convert2db();
                 $total += $amount->get();
 
                 $validator->isString($debet_account['text'], 'Ugyldig tekst i linje ' . ($key + 1) . ' "' . $debet_account['text'] . '"', '', 'allow_empty');
 
-                if (empty($debet_account['state_account_id']) ) {
+                if (empty($debet_account['state_account_id'])) {
                     $this->error->set('Linje ' . ($key + 1) . ' "' . $debet_account['text'] . '" ved ikke hvor den skal bogføres');
                 } else {
                     require_once 'Intraface/modules/accounting/Account.php';

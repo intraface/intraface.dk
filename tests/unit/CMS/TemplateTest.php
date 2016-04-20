@@ -39,5 +39,4 @@ class TemplateTest extends PHPUnit_Framework_TestCase
         $site = new CMS_Template($this->createSite());
         $this->assertTrue($site->delete());
     }
-
 }

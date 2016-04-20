@@ -1,3 +1,3 @@
 <p class="message-<?php e($type); ?>">
-	<?php echo $content; ?>
+    <?php echo $content; ?>
 </p>

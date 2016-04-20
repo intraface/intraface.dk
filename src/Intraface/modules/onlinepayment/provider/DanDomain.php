@@ -2,9 +2,9 @@
 /**
  * Onlinebetalingsklasse som specifik passer til DanDomain
  * @package Intraface_OnlinePayment
- *	@author		Sune Jensen
- * @author		Lars Olesen <lars@legestue.net>
- * @version	1.0
+ *  @author         Sune Jensen
+ * @author      Lars Olesen <lars@legestue.net>
+ * @version     1.0
  *
  */
 class OnlinePaymentDanDomain extends OnlinePayment
@@ -77,7 +77,6 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
 
         if ($action == "capture") {
-
             if ($this->get('amount') < $this->get('original_amount')) {
                 $add_url = '&ChangeAmount=1&amount='.number_format($this->get('amount'), 2, ",", '');
             } else {
@@ -110,7 +109,6 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 return 0;
             }
         } elseif ($action == "reverse") {
-
             $http_request->setURL($basis_url.'&Reject=1');
             $result = $http_request->sendRequest();
             if (PEAR::isError($result)) {
@@ -130,7 +128,6 @@ class OnlinePaymentDanDomain extends OnlinePayment
                 $this->error->set('Vi kunne ikke tilbagebetale betalingen, vi fik følgende fejl: '.$http_request->getResponseBody());
                 return 0;
             }
-
         } else {
             throw new Exception("Ugyldig handling i Dandomain->transactionAction()");
         }
@@ -145,14 +142,14 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
     function getSettings()
     {
-        $this->value['password'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password');
-        $this->value['merchant_id'] = 	$this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id');
+        $this->value['password'] =  $this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password');
+        $this->value['merchant_id'] =   $this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id');
         return $this->value;
     }
 
     function isSettingsSet()
     {
-        if ($this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password') AND $this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id')) {
+        if ($this->kernel->setting->get('intranet', 'onlinepayment.dandomain.password') and $this->kernel->setting->get('intranet', 'onlinepayment.dandomain.merchant_id')) {
             return 1;
         }
         return 0;

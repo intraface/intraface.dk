@@ -17,7 +17,8 @@ class FakeAppendFileFile
 {
 
     public $id;
-    function __construct($id = 1) {
+    function __construct($id = 1)
+    {
         $this->id = $id;
     }
 
@@ -76,7 +77,8 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($append->undelete(1));
     }
 
-    function testCreateDBQuery() {
+    function testCreateDBQuery()
+    {
         $append = $this->createAppendFile();
         $append->getDBQuery();
 
@@ -85,7 +87,8 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testGetList() {
+    function testGetList()
+    {
         $append = $this->createAppendFile();
         $append->addFile(new FakeAppendFileFile(1));
         $append->addFile(new FakeAppendFileFile(2));
@@ -112,6 +115,4 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $append->getList());
 
     }
-
 }
-?>

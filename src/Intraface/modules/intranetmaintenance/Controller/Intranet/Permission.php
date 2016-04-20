@@ -21,7 +21,6 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
 
         // Update permission
         if (isset($_POST["change_permission"])) {
-
             $modules = array();
             $modules = $_POST["module"];
 
@@ -62,5 +61,3 @@ class Intraface_modules_intranetmaintenance_Controller_Intranet_Permission exten
         return $this->context->getIntranet();
     }
 }
-
-

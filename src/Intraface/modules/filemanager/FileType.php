@@ -146,7 +146,9 @@ class FileType
     /**
      * constructor
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Returns all the file types.

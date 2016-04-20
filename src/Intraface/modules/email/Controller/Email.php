@@ -19,8 +19,8 @@ class Intraface_modules_email_Controller_Email extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/show');
         $data = array(
-        	'contact' => $contact,
-        	'value' => $value,
+            'contact' => $contact,
+            'value' => $value,
             'email' => $email,
             'kernel' => $this->getKernel(),
             'redirect' => $redirect
@@ -38,7 +38,7 @@ class Intraface_modules_email_Controller_Email extends k_Component
         $text = $this->getEmail()->getContact()->address->get('name') .
             "\n" . $this->getEmail()->getContact()->address->get('address') .
             "\n" . $this->getEmail()->getContact()->address->get('postcode') .
-        	"  " . $this->getEmail()->getContact()->address->get('city') . "\n\n\n";
+            "  " . $this->getEmail()->getContact()->address->get('city') . "\n\n\n";
 
         $pdf->ezText($text, $size);
 
@@ -61,7 +61,6 @@ class Intraface_modules_email_Controller_Email extends k_Component
 
         if (!empty($_POST['submit'])) {
             if ($email->queue()) {
-
                 $email->load();
                 // This status can be used to change status where the email is coming from.
                 if ($redirect->get('id') != 0) {
@@ -107,8 +106,8 @@ class Intraface_modules_email_Controller_Email extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/edit');
         $data = array(
-        	'contact' => $contact,
-        	'value' => $value,
+            'contact' => $contact,
+            'value' => $value,
             'email' => $email,
             'kernel' => $this->getKernel(),
             'redirect' => $redirect
@@ -130,14 +129,12 @@ class Intraface_modules_email_Controller_Email extends k_Component
         }
 
         if (isset($_POST['save']) || isset($_POST['send'])) {
-
             if (isset($_POST['add_contact_login_url'])) {
                 $contact = $email->getContact();
                 $_POST['body'] .= "\n\nLogin: ".$contact->getLoginUrl();
             }
 
             if ($id = $email->save($_POST)) {
-
                 if (isset($_POST['send']) && $_POST['send'] != '' && $email->isReadyToSend()) {
                     $email->queue();
                     $email->load();
@@ -148,7 +145,6 @@ class Intraface_modules_email_Controller_Email extends k_Component
                 }
 
                 return new k_SeeOther($redirect->getRedirect($standard_location));
-
             } else {
                 $value = $_POST;
             }

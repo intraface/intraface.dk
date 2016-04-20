@@ -39,13 +39,15 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
 
     ////////////////////////////////////////////////////////////////
 
-    function testConstruct() {
+    function testConstruct()
+    {
         $image = new ImageHandler($this->createFileHandler());
         $this->assertEquals('ImageHandler', get_class($image));
     }
 
 
-    function testResizeWithRelativeSize() {
+    function testResizeWithRelativeSize()
+    {
 
         $image = new ImageHandler($this->createFileHandler());
         $file = $image->resize(200, 600);
@@ -54,7 +56,8 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(50, $size[1]);
     }
 
-    function testResizeWithStrictSize() {
+    function testResizeWithStrictSize()
+    {
 
         $image = new ImageHandler($this->createFileHandler());
         $file = $image->resize(200, 300, 'strict');
@@ -63,7 +66,8 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(300, $size[1]);
     }
 
-    function testCrop() {
+    function testCrop()
+    {
         $image = new ImageHandler($this->createFileHandler());
         $file = $image->crop(100, 100, 200, 20);
         $size = getimagesize($file);
@@ -72,7 +76,8 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testQualityAfterRepeatedResize() {
+    function testQualityAfterRepeatedResize()
+    {
 
         $image = new ImageHandler($this->createFileHandler());
         $image->resize(500, 200);
@@ -86,7 +91,4 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(filesize($file2), filesize($file1), '', filesize($file2)/100*10);
 
     }
-
-
 }
-?>

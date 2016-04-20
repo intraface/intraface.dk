@@ -52,7 +52,7 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
                 // Returning from variations page and add the variations to the product_id parameter.
                 $product_variations = $return_redirect->getParameter('product_variation_id', 'with_extra_value');
                 if ($this->multiple) {
-                    foreach ($product_variations AS $product_variation) {
+                    foreach ($product_variations as $product_variation) {
                         $redirect->removeParameter('product_id', $product_variation['value']);
                         if ($this->quantity) {
                             $redirect->setParameter('product_id', $product_variation['value'], $product_variation['extra_value']);
@@ -79,9 +79,9 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         // @todo where should this get its values from
         $product_values = array();
         $this->selected_products = array();
-        if (!empty($product_values) AND is_array($product_values)) {
+        if (!empty($product_values) and is_array($product_values)) {
             if ($this->multiple) {
-                foreach ($product_values AS $selection) {
+                foreach ($product_values as $selection) {
                     $selection['value'] = unserialize($selection['value']);
                     $this->selected_products[$selection['value']['product_id']] = $selection['extra_value'];
                 }
@@ -109,7 +109,6 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
     function getProducts()
     {
         if ($this->query("search") || $this->query("keyword_id")) {
-
             if ($this->query("search")) {
                 $this->getProduct()->getDBQuery()->setFilter("search", $this->query("search"));
             }
@@ -152,19 +151,20 @@ class Intraface_modules_product_Controller_Selectproduct extends Intraface_modul
         if ($this->body('submit') || $this->body('submit_close')) {
             if ($this->multiple) {
                 if (is_array($this->body('selected'))) {
-                    foreach ($this->body('selected') AS $selected_id => $selected_value) {
+                    foreach ($this->body('selected') as $selected_id => $selected_value) {
                         if ($selected_value != '' && $selected_value != '0') {
                             $product = array(
-                            	'product_id' => $selected_id,
-                            	'product_variation_id' => 0);
-                            $this->addItem($product, $selected_value);                        }
+                                'product_id' => $selected_id,
+                                'product_variation_id' => 0);
+                            $this->addItem($product, $selected_value);
+                        }
                     }
                 }
             } else {
                 if ((int)$this->body('selected') != 0) {
                     $product = array(
-                    	'product_id' => (int)$this->body('selected'),
-                    	'product_variation_id' => 0);
+                        'product_id' => (int)$this->body('selected'),
+                        'product_variation_id' => 0);
                     $this->addItem($product, (int)$this->body('quantity'));
                 }
             }

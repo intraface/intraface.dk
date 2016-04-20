@@ -29,11 +29,10 @@ class Intraface_modules_product_Controller_Variation extends k_Component
                 $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
                 $array_files = $redirect->getParameter('file_handler_id');
                 if (is_array($array_files)) {
-                    foreach ($array_files AS $file_id) {
+                    foreach ($array_files as $file_id) {
                         $append_file->addFile(new FileHandler($this->getKernel(), $file_id));
                     }
                 }
-
             }
         }
 
@@ -44,7 +43,6 @@ class Intraface_modules_product_Controller_Variation extends k_Component
             $append_file->delete((int)$_GET['delete_appended_file_id']);
             header('Location: product.php?id='.$product->get('id'));
             exit;
-
         }
 
         $data = array(
@@ -68,7 +66,6 @@ class Intraface_modules_product_Controller_Variation extends k_Component
         $product = new Product($this->getKernel(), $_POST['id']);
 
         if ($this->body('append_file_submit')) {
-
             $filehandler = new FileHandler($this->getKernel());
             $append_file = new AppendFile($this->getKernel(), 'product', $product->get('id'));
 

@@ -90,7 +90,7 @@ class Intraface_modules_invoice_PaymentGateway
 
         $this->dbquery->setSorting("payment_date ASC");
         $db = $this->dbquery->getRecordset("id, amount, payment_for, type, description, payment_date, payment_for_id, DATE_FORMAT(payment_date, '%d-%m-%Y') AS dk_payment_date, date_stated, voucher_id", "", false);
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $payment[$i]["id"] = $db->f("id");
             $types = $this->getTypes();
             $payment[$i]["type"] = $types[$db->f('type')];

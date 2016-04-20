@@ -34,4 +34,3 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->validator->isIdentifier('this-is-a-valid-identifier', 'Not valid'));
     }
 }
-?>

@@ -4,9 +4,9 @@
     <li><a class="excel" href="<?php e(url(null) . '.xls'); ?>" class="new">Poster som excel</a></li>
 </ul>
 
-<?php if (count($context->getPosts()) == 0): ?>
+<?php if (count($context->getPosts()) == 0) : ?>
     <p>Der er ikke nogen bilag.</p>
-<?php else: ?>
+<?php else : ?>
     <table>
         <caption>Bilag</caption>
         <thead>
@@ -16,7 +16,7 @@
             <th>Tekst</th>
         </tr>
         </thead>
-    <?php foreach ($context->getPosts() AS $post): ?>
+    <?php foreach ($context->getPosts() as $post) : ?>
         <tr>
             <td><a href="<?php e(url($post['id'])); ?>"><?php e($post['number']); ?></a></td>
             <td><?php e($post['date_dk']); ?></td>

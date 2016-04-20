@@ -42,7 +42,7 @@ class Intraface_modules_todo_Controller_Edit extends k_Component
 
         $todo = new TodoList($this->getKernel(), $this->name());
         if ($todo->save($data)) {
-            foreach ($_POST['todo'] AS $key=>$value) {
+            foreach ($_POST['todo'] as $key => $value) {
                 if (isset($_POST['item_id'])) {
                     $item_id = $_POST['item_id'];
                     if ($todo->getItem($_POST['item_id'][$key])->save($_POST['todo'][$key], $_POST['responsible_user_id'][$key])) {

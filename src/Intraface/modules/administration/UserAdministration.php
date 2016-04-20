@@ -5,10 +5,10 @@
  * Please read in User.php for description of relations
  *
  * @package Intraface_Administration
- * @author	Sune Jensen <sj@sunet.dk>
- * @author	Lars Olesen <lars@legestue.net>
- * @since	0.1.0
- * @version	@package-version@
+ * @author  Sune Jensen <sj@sunet.dk>
+ * @author  Lars Olesen <lars@legestue.net>
+ * @since   0.1.0
+ * @version     @package-version@
  *
  *
  */

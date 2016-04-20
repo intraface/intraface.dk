@@ -3,13 +3,13 @@
 <?php echo $modulepackagemanager->error->view(); ?>
 
 <div class="message">
-    <?php if ($context->query('status') == 'success'): ?>
+    <?php if ($context->query('status') == 'success') : ?>
         <?php
         // TODO: This is not really a good text
         ?>
         <h3><?php e(t('success!')); ?></h3>
         <p><?php e(t('if everything went as it should, you can see your packages below, and you should be able to use them now.')); ?></p>
-    <?php else: ?>
+    <?php else : ?>
         <p><?php e(t('on this page you have an overview of your intraface account')); ?></p>
     <?php endif; ?>
 </div>
@@ -30,7 +30,7 @@ if (count($packages) > 0) {
             </tr>
         </thead>
         <tbody>
-        <?php foreach ($packages AS $package): ?>
+        <?php foreach ($packages as $package) : ?>
             <tr>
                 <td><?php e($package['plan'] . ' '. $package['group']); ?></td>
                 <td><?php e($package['dk_start_date']); ?></td>
@@ -58,7 +58,7 @@ $packages = $modulepackage->getList('matrix');
     <thead>
         <tr>
             <th><?php e(t('select your package')); ?></th>
-            <?php foreach ($plans AS $plan): ?>
+            <?php foreach ($plans as $plan) : ?>
                 <th style="width: <?php echo floor(100/(2 + count($plans))); ?>%;"><?php e(t($plan['plan'])); ?></th>
             <?php endforeach; ?>
         </tr>
@@ -69,7 +69,7 @@ $packages = $modulepackage->getList('matrix');
         settype($groups, 'array');
         settype($plans, 'array');
 
-        foreach ($groups AS $group) { ?>
+        foreach ($groups as $group) { ?>
            <tr>
             <th style="vertical-align: top;">
             <strong><?php e(t($group['group'])); ?></strong>
@@ -97,14 +97,13 @@ $packages = $modulepackage->getList('matrix');
             ?>
             </th>
             <?php
-            foreach ($plans AS $plan) { ?>
+            foreach ($plans as $plan) { ?>
                 <td style="vertical-align: bottom;">
                 <?php if (isset($packages[$group['id']][$plan['id']]) && is_array($packages[$group['id']][$plan['id']])) {
-
                     $modules = array();
                     $limiters = array();
                     if (isset($packages[$group['id']][$plan['id']]['modules']) && is_array($packages[$group['id']][$plan['id']]['modules'])) {
-                        foreach ($packages[$group['id']][$plan['id']]['modules'] AS $module) {
+                        foreach ($packages[$group['id']][$plan['id']]['modules'] as $module) {
                             $modules[] = $module['module'];
                             if (is_array($module['limiters']) && count($module['limiters']) > 0) {
                                 $limiters = array_merge($limiters, $module['limiters']);
@@ -123,20 +122,20 @@ $packages = $modulepackage->getList('matrix');
                     if (is_array($limiters) && count($limiters) > 0) { ?>
                         <p><?php e(t('gives you')); ?>:
 
-                        <?php foreach ($limiters AS $limiter) { ?>
+                        <?php foreach ($limiters as $limiter) { ?>
                             <br /><?php e(t($limiter['description']).' ');
                             if (isset($limiter['limit_readable'])) {
                                 e($limiter['limit_readable']);
                             } else {
                                 e($limiter['limit']);
                             }
-                        } ?>
+} ?>
                         </p>
-                    <?php }
+                    <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         }
 
                     if (is_array($packages[$group['id']][$plan['id']]['product']) && count($packages[$group['id']][$plan['id']]['product']) > 0) { ?>
                         <p> DKK <?php e($packages[$group['id']][$plan['id']]['product']['price_incl_vat'].' '.t('per').' '.t($packages[$group['id']][$plan['id']]['product']['unit']['singular'])); ?></p>
-                    <?php } ?>
+                    <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         } ?>
 
                     <a href="<?php e(url('package/' . $packages[$group['id']][$plan['id']]['id'])); ?>"><?php e(t('choose')); ?></a>
 

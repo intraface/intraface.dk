@@ -17,7 +17,7 @@ class VoucherFile
     );
     public $error;
 
-    function __construct($voucher, $id=0)
+    function __construct($voucher, $id = 0)
     {
         if (!is_object($voucher)) {
             throw new Exception('VoucherFile:: Voucher ikke gyldig');
@@ -63,13 +63,14 @@ class VoucherFile
         if ($this->id > 0) {
             $sql_type = "UPDATE ";
             $sql_end = " WHERE id = " . $this->id;
-
         } else {
             $sql_type = "INSERT INTO ";
             $sql_end = " , date_created = NOW()";
         }
 
-        if (empty($var['description'])) $var['description'] = '';
+        if (empty($var['description'])) {
+            $var['description'] = '';
+        }
 
         $sql = $sql_type . " accounting_voucher_file SET
             date_updated = NOW(),
@@ -104,5 +105,5 @@ class VoucherFile
     {
         $gateway = new Intraface_modules_accounting_VoucherFileGateway($this->voucher);
         return $gateway->getList();
-   }
+    }
 }

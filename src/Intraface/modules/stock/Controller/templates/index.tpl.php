@@ -5,7 +5,7 @@
 
 <?php
 echo '<div style="text-align: center; margin: 1em">- ';
-foreach ($stock->getCharacters() AS $c) {
+foreach ($stock->getCharacters() as $c) {
     echo '<a href="?c='.$c.'">'.strtolower($c).'</a> - ';
 }
 echo '</div>';
@@ -13,7 +13,9 @@ echo '</div>';
 
 ?>
 
-<?php if (count($$context->getStock()) > 100) { echo '<p>Der vises kun 100 poster ad gangen. Lav nogle søgekriterier.</p>'; } ?>
+<?php if (count($$context->getStock()) > 100) {
+    echo '<p>Der vises kun 100 poster ad gangen. Lav nogle søgekriterier.</p>';
+} ?>
 
 <form action="<?e(url()); ?>" method="post">
     <table summary="Produkter">
@@ -27,7 +29,7 @@ echo '</div>';
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($$context->getStock() AS $product) { ?>
+            <?php foreach ($$context->getStock() as $product) { ?>
             <tr>
                 <td><?php e($product['name']); ?></td>
                 <td>
@@ -46,8 +48,7 @@ echo '</div>';
   </div>
 </form>
 <?php
-}
-else {
+} else {
 ?>
     <p><?php e(t('no products has been created on stock')); ?></p>
 <?php

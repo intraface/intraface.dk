@@ -34,7 +34,7 @@ class Intraface_modules_cms_element_Wikitext extends CMS_Element
      */
     protected function validate_element($var)
     {
-        if ($this->error->isError()){
+        if ($this->error->isError()) {
             return false;
         }
 

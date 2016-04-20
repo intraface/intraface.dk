@@ -59,34 +59,33 @@ class Intraface_XMLRPC_Shop_Server
         // sublevel has to be used so other searches are not overwritten
         $product->getDBQuery()->storeResult('use_stored', 'webshop_' . $area . '_' .  md5($this->credentials['session_id']), 'sublevel');
         $debug2 = serialize($mixed);
-        if (isset($mixed['offset']) AND array_key_exists('offset', $mixed) AND is_numeric($mixed['offset'])) {
+        if (isset($mixed['offset']) and array_key_exists('offset', $mixed) and is_numeric($mixed['offset'])) {
             $product->getDBQuery()->useStored(true);
             $product->getDBQuery()->setPagingOffset((int)$mixed['offset']);
             $debug2 .= 'offset ' . $mixed['offset'];
-        } elseif (isset($mixed['use_stored']) AND array_key_exists('use_stored', $mixed) AND $mixed['use_stored'] == 'true') {
+        } elseif (isset($mixed['use_stored']) and array_key_exists('use_stored', $mixed) and $mixed['use_stored'] == 'true') {
             $product->getDBQuery()->useStored(true);
             $debug2 .= 'use_stored true';
         } else {
-            if (isset($mixed['search']) AND array_key_exists('search', $mixed) AND !empty($mixed['search'])) {
+            if (isset($mixed['search']) and array_key_exists('search', $mixed) and !empty($mixed['search'])) {
                 $product->getDBQuery()->setFilter('search', $mixed['search']);
                 $debug2 .= 'search ' . $mixed['search'];
             }
 
-            if (isset($mixed['keywords']) AND array_key_exists('keywords', $mixed) AND !empty($mixed['keywords'])) {
+            if (isset($mixed['keywords']) and array_key_exists('keywords', $mixed) and !empty($mixed['keywords'])) {
                 $product->getDBQuery()->setFilter('keywords', $mixed['keywords']);
                 $debug2 .= 'keyword ' . $mixed['keywords'];
             }
 
-            if (isset($mixed['ids']) AND array_key_exists('ids', $mixed) AND is_array($mixed['ids'])) {
+            if (isset($mixed['ids']) and array_key_exists('ids', $mixed) and is_array($mixed['ids'])) {
                 $product->getDBQuery()->setFilter('ids', $mixed['ids']);
                 $debug2 .= 'ids ' . implode(', ', $mixed['ids']);
             }
 
-            if (isset($mixed['sorting']) AND array_key_exists('sorting', $mixed) AND !empty($mixed['sorting'])) {
+            if (isset($mixed['sorting']) and array_key_exists('sorting', $mixed) and !empty($mixed['sorting'])) {
                 $product->getDBQuery()->setFilter('sorting', $mixed['sorting']);
                 $debug2 .= 'sorting ' . $mixed['sorting'];
             }
-
         }
 
         return array(
@@ -194,7 +193,6 @@ class Intraface_XMLRPC_Shop_Server
                 'title' => $row['headline'],
                 'products' => $product->getList()
             );
-
         }
 
         return $related_products;
@@ -273,7 +271,7 @@ class Intraface_XMLRPC_Shop_Server
         $product_id = intval($product_id);
         $quantity = intval($quantity);
 
-        if (!is_numeric($product_id) AND !is_numeric($quantity)) {
+        if (!is_numeric($product_id) and !is_numeric($quantity)) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('product id and quantity must be integers', -5);
         }
@@ -303,8 +301,7 @@ class Intraface_XMLRPC_Shop_Server
         // we put the possibility for BasketEvaluation not to be run.
         if (is_string($customer) && $customer == 'no_evaluation') {
             // nothing happens
-        }
-        elseif (is_array($customer)) {
+        } elseif (is_array($customer)) {
             require_once 'Intraface/modules/webshop/BasketEvaluation.php';
             $basketevaluation = new BasketEvaluation($this->webshop->kernel);
             if (!$basketevaluation->run($this->webshop->basket, $customer)) {
@@ -337,7 +334,7 @@ class Intraface_XMLRPC_Shop_Server
 
         $this->_factoryWebshop();
 
-        if (!is_array($this->webshop->basket->getItems()) OR count($this->webshop->basket->getItems()) <= 0) {
+        if (!is_array($this->webshop->basket->getItems()) or count($this->webshop->basket->getItems()) <= 0) {
             require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('order could not be sent - cart is empty', -4);
         }
@@ -380,7 +377,7 @@ class Intraface_XMLRPC_Shop_Server
         $this->kernel->useModule('onlinepayment', true); // true: ignores user access;
 
         if (isset($values['payment_id']) && intval($values['payment_id']) > 0) {
-           $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id']));
+            $onlinepayment = OnlinePayment::factory($this->kernel, 'id', intval($values['payment_id']));
         } else {
             $onlinepayment = OnlinePayment::factory($this->kernel);
         }
@@ -672,5 +669,4 @@ class Intraface_XMLRPC_Shop_Server
         }
 
     }
-
 }

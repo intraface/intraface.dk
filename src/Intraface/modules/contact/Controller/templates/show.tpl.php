@@ -6,7 +6,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 <div id="colOne">
 
 <div class="box">
-	<img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=60&d='.NET_SCHEME . NET_HOST . url('/images/icons/gravatar.png')); ?>" height="60" width="60" />
+    <img style="float: right;" src="<?php e('http://www.gravatar.com/avatar/'.md5($address['email']).'?s=60&d='.NET_SCHEME . NET_HOST . url('/images/icons/gravatar.png')); ?>" height="60" width="60" />
 
     <h1>#<?php e($value['number']); ?> <?php e($address['name']); ?></h1>
 
@@ -17,14 +17,14 @@ $delivery_address = $context->getDeliveryAddressValues();
     </ul>
 
     <ul class="options" style="clear: none;">
-	<?php foreach ($context->getDependencies() as $key => $dependency): ?>
-            <?php if ($dependency['gateway']->findCountByContactId($context->getContact()->get("id")) > 0): ?>
+    <?php foreach ($context->getDependencies() as $key => $dependency) : ?>
+            <?php if ($dependency['gateway']->findCountByContactId($context->getContact()->get("id")) > 0) : ?>
             <li><a href="<?php e($dependency['url']); ?>"><?php e(t(ucfirst($dependency['label'] . 's'))); ?></a></li>
-            <?php elseif (!empty($dependency['url_create'])): ?>
+            <?php elseif (!empty($dependency['url_create'])) : ?>
             <li class="inactive"><a href="<?php e($dependency['url_create']); ?>"><?php e(t('Create') . ' ' . t($dependency['label'])); ?></a></li>
             <?php endif; ?>
-	<?php endforeach; ?>
-	</ul>
+    <?php endforeach; ?>
+    </ul>
 
     <?php /*if ($context->getKernel()->user->hasModuleAccess("debtor")): ?>
         <ul class="options">
@@ -78,7 +78,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 
 <?php echo $context->getContact()->error->view(); ?>
 
-<?php if ($context->getContact()->hasSimilarContacts()): ?>
+<?php if ($context->getContact()->hasSimilarContacts()) : ?>
 
     <p class="message">Der er kontakter, der ligner denne kontakt. <a href="<?php e(url('merge')); ?>">Videre</a></p>
 
@@ -101,7 +101,7 @@ $delivery_address = $context->getDeliveryAddressValues();
                     </div>
                 </td>
             </tr>
-            <?php if (is_object($context->getContact()->delivery_address) AND !empty($delivery_address['address'])): ?>
+            <?php if (is_object($context->getContact()->delivery_address) and !empty($delivery_address['address'])) : ?>
             <tr class="vcard">
                 <th><?php e(t('delivery address')); ?></th>
                 <td>
@@ -127,13 +127,13 @@ $delivery_address = $context->getDeliveryAddressValues();
                 <th><?php e(t('website', 'address')); ?></th>
                 <td class="url"><?php e($address['website']); ?></td>
             </tr>
-            <?php if ($context->getKernel()->intranet->get('identifier')): ?>
+            <?php if ($context->getKernel()->intranet->get('identifier')) : ?>
             <tr>
                 <th><?php e(t('code')); ?></th>
                 <td>
                     <?php e($context->getContact()->get('code')); ?>
                     <input type="submit" value="<?php e(t('new')); ?>" class="confirm" name="new_password" />
-                    <?php if (!empty($address['email'])): ?>
+                    <?php if (!empty($address['email'])) : ?>
                         <input type="submit" name="send_email" value="<?php e(t('send e-mail with login')); ?>" class="confirm" title="Er du sikker p�, at du vil sende e-mail?" />
                     <?php endif; ?>
                 </td>
@@ -146,26 +146,26 @@ $delivery_address = $context->getDeliveryAddressValues();
 
 
 
-<?php if ($value['type'] == "corporation"): ?>
+<?php if ($value['type'] == "corporation") : ?>
 
-  <?php if (count($persons) > 0) { ?>
+    <?php if (count($persons) > 0) { ?>
 
     <table>
     <caption><?php e(t('contact persons')); ?></caption>
     <tbody>
     <?php
-    foreach ($persons AS $person) { ?>
+    foreach ($persons as $person) { ?>
         <tr class="vcard">
         <td class="fn"><a href="<?php e(url('contactperson/' . $person['id'], array('edit'))); ?>"><?php e($person['name']); ?></a></td>
         <td class="email"><?php e($person['email']); ?></td>
         <td class="tel"><?php e($person['phone']); ?></td>
         <td class="tel"><?php e($person['mobile']); ?></td>
         </tr>
-    <?php }
+    <?php                                                                                                         }
     ?>
     </tbody>
     </table>
-  <?php } ?>
+    <?php } ?>
     <ul class="options">
         <li><a href="<?php e(url('contactperson', array('create'))); ?>"><?php e(t('Add contact person')); ?></a></li>
     </ul>
@@ -174,7 +174,7 @@ $delivery_address = $context->getDeliveryAddressValues();
 <?php
 $reminder = new ContactReminder($context->getContact());
 $reminders = $reminder->getList();
-if (count($reminders) > 0):
+if (count($reminders) > 0) :
     ?>
     <h2><?php e(t('reminders')); ?></h2>
 
@@ -189,16 +189,16 @@ if (count($reminders) > 0):
         </thead>
         <tbody>
         <?php
-        foreach ($reminders AS $reminder_item) {
+        foreach ($reminders as $reminder_item) {
             ?>
             <tr>
                 <td class="date">
                     <?php
                     if (strtotime($reminder_item['reminder_date']) <= time()) { ?>
                         <span class="due"><?php e($reminder_item['dk_reminder_date']); ?></span>
-                    <?php } else {
+                    <?php                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         } else {
                         e($reminder_item['dk_reminder_date']);
-                    }
+}
                     ?>
                 </td>
                 <td><a href="<?php e(url('memo/' . $reminder_item['id'])); ?>"><?php e($reminder_item['subject']); ?></a></td>
@@ -221,21 +221,21 @@ endif;
 </div>
 
 <div id="colTwo">
-<?php if ($value['type'] == "corporation"): ?>
+<?php if ($value['type'] == "corporation") : ?>
 <?php //if ($context->getKernel()->user->hasModuleAccess('debtor') AND !empty($address['cvr'])): ?>
 <div id="paymentinformation" class="box">
 <h2><?php e(t('payment information')); ?></h2>
 <table class="stripe">
 <caption><?php e(t('payment information')); ?></caption>
-<?php if ($value['type'] != "private"): ?>
+<?php if ($value['type'] != "private") : ?>
 
-    <?php if (!empty($address['cvr'])): ?>
+    <?php if (!empty($address['cvr'])) : ?>
 <tr>
     <td><?php e(t('cvr number', 'address')); ?></td>
     <td><a href="http://www.cvr.dk/Site/Forms/PublicService/DisplayCompany.aspx?cvrnr=<?php echo rawurlencode($address['cvr']); ?>"><?php e($address['cvr']); ?></a></td>
 </tr>
     <?php endif; ?>
-    <?php if (!empty($address['ean'])): ?>
+    <?php if (!empty($address['ean'])) : ?>
 <tr>
     <td><?php e(t('ean number', 'address')); ?></td>
     <td><?php e($address['ean']); ?></td>
@@ -245,16 +245,20 @@ endif;
 <tr>
     <td><?php e(t('payment conditions')); ?></td>
      <td><?php
-    foreach ($context->getContactModule()->getSetting("paymentcondition") AS $key=>$v) {
-        if (isset($value['paymentcondition']) AND $v == $value['paymentcondition']) { e($v); }
-    }
+        foreach ($context->getContactModule()->getSetting("paymentcondition") as $key => $v) {
+            if (isset($value['paymentcondition']) and $v == $value['paymentcondition']) {
+                e($v);
+            }
+        }
 ?> <?php e(t('days')); ?></td>
     </tr>
 </table>
 </div>
 <?php endif; ?>
 
-<div id="keywords" class="box <?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
+<div id="keywords" class="box <?php if (!empty($_GET['from']) and $_GET['from'] == 'keywords') {
+    echo ' fade';
+} ?>">
  <h2><?php e(t('keywords', 'keyword')); ?></h2>
     <?php if ($context->getContact()->get('locked') == 0) { ?>
     <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(t('Add keywords', 'keyword')); ?></a></li></ul>
@@ -262,14 +266,14 @@ endif;
     <?php
         $keyword = $context->getContact()->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
-        if (is_array($keywords) AND count($keywords) > 0) { ?>
+    if (is_array($keywords) and count($keywords) > 0) { ?>
             <ul id="keyword_list">
-            <?php foreach ($keywords AS $k) { ?>
+            <?php foreach ($keywords as $k) { ?>
                 <li><?php e($k['keyword']); ?></li>
             <?php } ?>
             </ul>
             <?php
-        }
+    }
     ?>
 
 </div>
@@ -295,7 +299,7 @@ endif;
 </div>
 */ ?>
 
-<?php if ($context->getKernel()->intranet->get('identifier')): ?>
+<?php if ($context->getKernel()->intranet->get('identifier')) : ?>
 <div class="box">
     <h2><?php e(t('tools')); ?></h2>
 <ul>

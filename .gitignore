@@ -14,3 +14,5 @@ tests/unit/phpunit.xml
 tests/selenium/.tmp/
 tests/unit/htmlpurifier/
 log/
+vendor/
+composer.phar

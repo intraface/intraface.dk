@@ -1,6 +1,6 @@
 <h1><?php e(t('you are now ready to pay your order')); ?></h1>
 
-<?php if ($context->query('payment_error')): ?>
+<?php if ($context->query('payment_error')) : ?>
     <div class="message">
         <?php e(t('an error occured under your online payment. Please try again. If this keeps happening, feel free to contact us.')); ?>
     </div>

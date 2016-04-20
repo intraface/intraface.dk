@@ -16,7 +16,7 @@ class Intraface_modules_procurement_Controller_PurchasePrice extends k_Component
         $procurement = $this->context->getProcurement();
 
         $data = array(
-    		'items' => $procurement->getItems(),
+            'items' => $procurement->getItems(),
             'procurement' => $procurement
         );
 
@@ -31,7 +31,7 @@ class Intraface_modules_procurement_Controller_PurchasePrice extends k_Component
 
         $procurement = $this->context->getProcurement();
 
-        foreach ($_POST['items'] AS $item) {
+        foreach ($_POST['items'] as $item) {
             $procurement->loadItem($item['id']);
             $procurement->item->setPurchasePrice($item['price']);
             $procurement->error->merge($procurement->item->error->getMessage());

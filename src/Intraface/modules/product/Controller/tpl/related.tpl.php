@@ -16,9 +16,15 @@ $related_product_ids = $context->getRelatedProductIds();
         <label>Filter
         <select name="filter" id="filter">
             <option>Ingen</option>
-            <option value="notpublished" <?php if (!empty($_GET['filter']) AND $_GET['filter'] == 'notpublished') echo ' selected="selected"'; ?>>Ikke udgivet</option>
-            <option value="webshop"<?php if (!empty($_GET['filter']) AND $_GET['filter'] == 'webshop') echo ' selected="selected"'; ?>>Webshop</option>
-            <option value="stock"<?php if (!empty($_GET['filter']) AND $_GET['filter'] == 'stock') echo ' selected="selected"'; ?>>Lager</option>
+            <option value="notpublished" <?php if (!empty($_GET['filter']) and $_GET['filter'] == 'notpublished') {
+                echo ' selected="selected"';
+} ?>>Ikke udgivet</option>
+            <option value="webshop"<?php if (!empty($_GET['filter']) and $_GET['filter'] == 'webshop') {
+                echo ' selected="selected"';
+} ?>>Webshop</option>
+            <option value="stock"<?php if (!empty($_GET['filter']) and $_GET['filter'] == 'stock') {
+                echo ' selected="selected"';
+} ?>>Lager</option>
         </select>
         </label>
         -->
@@ -29,8 +35,10 @@ $related_product_ids = $context->getRelatedProductIds();
         <?php e(t('Show with keywords')); ?>
         <select name="keyword_id" id="keyword_id">
             <option value=""><?php e(t('none')); ?></option>
-            <?php foreach ($context->getKeywords()->getUsedKeywords() AS $k) { ?>
-            <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getProduct()->getDBQuery()->getKeyword(0)) { echo ' selected="selected"'; }; ?>><?php e($k['keyword']); ?></option>
+            <?php foreach ($context->getKeywords()->getUsedKeywords() as $k) { ?>
+            <option value="<?php e($k['id']); ?>" <?php if ($k['id'] == $context->getProduct()->getDBQuery()->getKeyword(0)) {
+                echo ' selected="selected"';
+}; ?>><?php e($k['keyword']); ?></option>
             <?php } ?>
         </select>
     </label>
@@ -61,7 +69,9 @@ echo $context->getProduct()->getDBQuery()->display('character');
             <tr>
                 <td>
                     <input type="hidden" name="product[<?php e($p['id']); ?>]" value="<?php e($p['id']); ?>" />
-                    <input class="input-relate" id="<?php e($p['id']); ?>" type="checkbox" name="relate[<?php e($p['id']); ?>]" value="relate" <?php if (array_search($p['id'], $related_product_ids) !== false) echo ' checked="checked"'; ?> />
+                    <input class="input-relate" id="<?php e($p['id']); ?>" type="checkbox" name="relate[<?php e($p['id']); ?>]" value="relate" <?php if (array_search($p['id'], $related_product_ids) !== false) {
+                        echo ' checked="checked"';
+} ?> />
                 </td>
                 <td><?php e($p['number']); ?></td>
                 <td><?php e($p['name']); ?></td>
@@ -74,5 +84,5 @@ echo $context->getProduct()->getDBQuery()->display('character');
           <input type="submit" value="<?php e(t('Save and close')); ?>" name="close" />
       </p>
 
-  <?php echo $context->getProduct()->getDBQuery()->display('paging'); ?>
+    <?php echo $context->getProduct()->getDBQuery()->display('paging'); ?>
     </form>

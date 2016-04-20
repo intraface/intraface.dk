@@ -16,13 +16,13 @@
 </div>
 
 <table>
-    <?php if (!$product->hasVariation()): ?>
+    <?php if (!$product->hasVariation()) : ?>
         <tr>
             <td><?php e(t('Price')); ?></td>
             <td><?php e(number_format($product->get('price'), 2, ",", ".")); ?> <?php e(t('excl. vat')); ?></td>
         </tr>
-        <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')): ?>
-            <?php if ($product->get('before_price') != 0.00): ?>
+        <?php if ($kernel->user->hasModuleAccess('webshop') || $kernel->user->hasModuleAccess('shop')) : ?>
+            <?php if ($product->get('before_price') != 0.00) : ?>
                 <tr>
                     <td><?php e(t('Before price')); ?></td>
                     <td><?php e(number_format($product->get('before_price'), 2, ",", ".")); ?></td>
@@ -45,7 +45,7 @@
         </td>
     </tr>
 
-    <?php if ($kernel->user->hasModuleAccess("webshop") || $kernel->user->hasModuleAccess("shop")): ?>
+    <?php if ($kernel->user->hasModuleAccess("webshop") || $kernel->user->hasModuleAccess("shop")) : ?>
 
     <tr>
         <td><?php e(t('Show in webshop')); ?></td>
@@ -70,7 +70,7 @@
             ?>
         </td>
     </tr>
-    <?php if ($kernel->intranet->hasModuleAccess('stock')): ?>
+    <?php if ($kernel->intranet->hasModuleAccess('stock')) : ?>
     <tr>
         <td><?php e(t('Stock product')); ?></td><td>
             <?php
@@ -81,27 +81,27 @@
     </tr>
     <?php endif; ?>
     <?php
-    if ($kernel->user->hasModuleAccess('accounting')):
+    if ($kernel->user->hasModuleAccess('accounting')) :
         $mainAccounting = $kernel->useModule("accounting");
         ?>
         <tr>
             <td><?php e(t('State on')); ?></td><td>
             <?php
                 $year = new Year($kernel);
-                if ($year->get('id') == 0) {
-                    echo t('year is not set in accounting');
+            if ($year->get('id') == 0) {
+                echo t('year is not set in accounting');
+            } else {
+                $account = Account::factory($year, $product->get('state_account_id'));
+                if ($account->get('name')) {
+                    e($account->get('number') . ' ' . $account->get('name'));
                 } else {
-                    $account = Account::factory($year, $product->get('state_account_id'));
-                    if ($account->get('name')) {
-                        e($account->get('number') . ' ' . $account->get('name'));
-                    } else {
-                        echo t('Not set');
-                    }
+                    echo t('Not set');
                 }
+            }
             ?>
             </td>
         </tr>
-    <?php endif; ?>
+    <?php                                                                                                         endif; ?>
 </table>
 
 <?php
@@ -119,16 +119,16 @@ if ($kernel->user->hasModuleAccess('invoice')) {
 ?>
 
 
-<?php if ($product->hasVariation()): ?>
+<?php if ($product->hasVariation()) : ?>
     <?php /* <h2><?php e(t('Variations')); ?></h2> */ ?>
     <?php
     $groups = $product->getAttributeGroups();
     ?>
-    <?php if (count($groups) == 0): ?>
+    <?php if (count($groups) == 0) : ?>
         <ul class="options">
             <li><a href="<?php e(url('variations/select_attribute_groups')); ?>"><?php e(t('Select attributes for product')); ?></a></li>
         </ul>
-    <?php else: ?>
+    <?php else : ?>
         <?php
         try {
             $variations = $product->getVariations();
@@ -137,12 +137,12 @@ if ($kernel->user->hasModuleAccess('invoice')) {
             $variation_is_present = false;
         }
         ?>
-        <?php if ($variation_is_present): ?>
-        <?php if ($variations->count() == 0): ?>
+        <?php if ($variation_is_present) : ?>
+        <?php if ($variations->count() == 0) : ?>
             <ul class="options">
                 <li><a href="<?php e(url('variations', array('edit'))); ?>"><?php e(t('Create variations for the product')); ?></a></li>
             </ul>
-        <?php else: ?>
+        <?php else : ?>
 
             <table summary="<?php e(t('Variations')); ?>" id="variations_table" class="stripe">
                 <caption><?php e(t('Variations')); ?></caption>
@@ -152,7 +152,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                         <th><?php e(t('Variation')); ?></th>
                         <th><?php e(t('Price')); ?><br /><?php e(t('excl. vat')); ?></th>
                         <th><?php e(t('Weight')); ?><br />Gram</th>
-                        <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                        <?php if ($kernel->user->hasModuleAccess("stock") and $product->get('stock')) : ?>
                             <th><?php e(t('In stock')); ?></th>
                             <?php /* At this moment there is only a reason for more details when there is stock */ ?>
                             <th></th>
@@ -160,13 +160,13 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($variations AS $variation): ?>
+                <?php foreach ($variations as $variation) : ?>
                     <tr>
                         <td><?php e($variation->getNumber()); ?></td>
                         <td><?php e($variation->getName()); ?></td>
                         <td><?php e($variation->getDetail()->getPrice($product)->getAsLocal('da_dk', 2)); ?> </td>
                         <td><?php e($product->get('weight')+$variation->getDetail()->getWeightDifference()); ?></td>
-                        <?php if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock')): ?>
+                        <?php if ($kernel->user->hasModuleAccess("stock") and $product->get('stock')) : ?>
                             <td><?php e($variation->getStock($product)->get('actual_stock')); ?></td>
                             <td><a href="<?php e(url('variation/' . $variation->getId())); ?>"><?php e(t('Details')); ?></a></td>
                         <?php endif; ?>
@@ -178,9 +178,9 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         <?php endif; ?>
             <ul class="options">
                 <li><a href="<?php e(url('variations', array('edit'))); ?>"><?php e(t('Edit variations for the product')); ?></a></li>
-				<?php if ($context->getKernel()->user->hasModuleAccess('stock')): ?>
+                <?php if ($context->getKernel()->user->hasModuleAccess('stock')) : ?>
                 <li><a href="<?php e(url('variations/stock')); ?>"><?php e(t('Edit stock for variations')); ?></a></li>
-				<?php endif; ?>
+                <?php endif; ?>
             </ul>
 
     <?php endif; ?>
@@ -195,16 +195,16 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <?php } ?>
     <?php
         $related = $product->getRelatedProducts();
-        if (!empty($related) AND count($related) > 0) {
-            foreach ($related AS $p) {
-                echo '<li>'. $p['name'];
-                if ($p['locked'] == 0) {
-                    echo ' <a class="delete" href="'.url('related', array('delete', 'del_related' => $p['related_id'])) .'">'.t('remove').'</a>';
-                }
-                echo '</li>';
+    if (!empty($related) and count($related) > 0) {
+        foreach ($related as $p) {
+            echo '<li>'. $p['name'];
+            if ($p['locked'] == 0) {
+                echo ' <a class="delete" href="'.url('related', array('delete', 'del_related' => $p['related_id'])) .'">'.t('remove').'</a>';
             }
-            echo '</ul>';
+            echo '</li>';
         }
+        echo '</ul>';
+    }
     ?>
 </div>
 
@@ -240,15 +240,17 @@ if ($kernel->user->hasModuleAccess('invoice')) {
         </form>
     </div>
 
-    <?php if ($kernel->user->hasModuleAccess('shop')): ?>
+    <?php if ($kernel->user->hasModuleAccess('shop')) : ?>
         <?php $module_shop = $kernel->useModule('shop'); ?>
-        <div id="categories" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'categories') echo ' fade'; ?>">
+        <div id="categories" class="box<?php if (!empty($_GET['from']) and $_GET['from'] == 'categories') {
+            echo ' fade';
+} ?>">
             <h2><?php e(t('Categories')); ?></h2>
             <?php
             $gateway = new Intraface_modules_shop_Shop_Gateway();
             $shops = $gateway->findAll();
             ?>
-            <?php foreach ($shops as $shop): ?>
+            <?php foreach ($shops as $shop) : ?>
                 <?php $category_type = new Intraface_Category_Type('shop', $shop->getId()); ?>
                 <h3><?php e($shop->getName()); ?></h3>
                 <ul class="options">
@@ -259,7 +261,7 @@ if ($kernel->user->hasModuleAccess('invoice')) {
                 $appender = $category->getAppender($product->getId());
                 ?>
                 <ul>
-                    <?php foreach ($appender->getCategories() AS $category): ?>
+                    <?php foreach ($appender->getCategories() as $category) : ?>
                         <li><?php e($category['name']); ?> <a href="<?php e(url(null, array('shop_id' => $shop->getId(), 'remove_appended_category' => $category['id']))); ?>" class="delete" id="remove_category_<?php e($category['id']); ?>"><?php e(t('Remove')); ?></a></li>
                     <?php endforeach; ?>
                 </ul>
@@ -269,21 +271,24 @@ if ($kernel->user->hasModuleAccess('invoice')) {
     <?php endif; ?>
 
 
-    <div id="keywords" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'keywords') echo ' fade'; ?>">
+    <div id="keywords" class="box<?php if (!empty($_GET['from']) and $_GET['from'] == 'keywords') {
+        echo ' fade';
+} ?>">
       <h2><?php e(t('Keywords')); ?></h2>
-    <?php if ($product->get('locked') == 0) { $shared_keyword = $kernel->useShared('keyword'); ?>
+    <?php if ($product->get('locked') == 0) {
+        $shared_keyword = $kernel->useShared('keyword'); ?>
     <ul class="button"><li><a href="<?php e(url('keyword/connect')); ?>"><?php e(t('Add keywords')); ?></a></li></ul>
     <?php } ?>
     <?php
         $keyword = $product->getKeywordAppender();
         $keywords = $keyword->getConnectedKeywords();
-        if (is_array($keywords) AND count($keywords) > 0) { ?>
+    if (is_array($keywords) and count($keywords) > 0) { ?>
             <ul>
             <?php foreach ($keywords as $k) { ?>
                 <li><?php e($k['keyword']); ?></li>
             <?php } ?>
             </ul>
-        <?php }
+        <?php                                                                                                             }
     ?>
   </div>
 
@@ -291,13 +296,14 @@ if ($kernel->user->hasModuleAccess('invoice')) {
 
 
     <?php
-    if ($kernel->user->hasModuleAccess("stock") AND $product->get('stock') AND !$product->get('has_variation')) {
-
+    if ($kernel->user->hasModuleAccess("stock") and $product->get('stock') and !$product->get('has_variation')) {
         if (isset($_GET['adaptation']) && $_GET['adaptation'] == 'true') {
             $product->getStock()->adaptation();
         }
         ?>
-        <div id="stock" class="box<?php if (!empty($_GET['from']) AND $_GET['from'] == 'stock') echo ' fade'; ?>">
+        <div id="stock" class="box<?php if (!empty($_GET['from']) and $_GET['from'] == 'stock') {
+            echo ' fade';
+} ?>">
             <h2><?php e(t('stock')); ?></h2>
 
             <table>

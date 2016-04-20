@@ -22,10 +22,10 @@ class CMS_Navigation extends Intraface_Standard
         $this->cmspage->getDBQuery()->setFilter('type', 'page');
         $this->cmspage->getDBQuery()->setFilter('level', $level);
         $pages = $this->cmspage->getList();
-        if (!is_array($pages) OR count($pages) == 0) {
+        if (!is_array($pages) or count($pages) == 0) {
             return array();
         }
-        foreach ($pages AS $page) {
+        foreach ($pages as $page) {
             if ($this->cmspage->get('id') == $page['id']) {
                 $output[$i]['current'] = 'yes';
             } else {

@@ -57,7 +57,6 @@ class Intraface_Fileimport_Controller_Index extends k_Component
         */
 
         if (isset($_POST['upload_file'])) {
-
             $this->filehandler = new Filehandler($this->getKernel());
             $this->filehandler->createUpload();
 
@@ -76,7 +75,6 @@ class Intraface_Fileimport_Controller_Index extends k_Component
                         $this->translation_page_id = 'contact';
                         $this->mode = 'select_fields';
                     }
-
                 }
                 $this->fileimport->error->merge($parser->error->getMessage());
             }
@@ -113,7 +111,6 @@ class Intraface_Fileimport_Controller_Index extends k_Component
                     }
                     */
                 }
-
             }
         }
         return $this->render();

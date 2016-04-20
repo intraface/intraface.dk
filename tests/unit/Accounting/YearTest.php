@@ -109,26 +109,26 @@ class YearTest extends PHPUnit_Framework_TestCase
 
     function testGetList()
     {
-    	$year = new Year($this->kernel);
+        $year = new Year($this->kernel);
         $this->assertTrue(is_array($year->getList()));
     }
 
     function testGetBalanceAccountsThrowsEceptionIfBalanceAccountsIsNotAnArray()
     {
-    	$year = new Year($this->kernel);
+        $year = new Year($this->kernel);
         $id = $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
 
-    	try {
-        	$year->getBalanceAccounts();
+        try {
+            $year->getBalanceAccounts();
             $this->assertTrue(false);
         } catch (Exception $e) {
-        	$this->assertTrue(true);
+            $this->assertTrue(true);
         }
     }
 
     function testCreateAccounts()
     {
-    	$year = new Year($this->kernel);
+        $year = new Year($this->kernel);
         $year->save(array('label' => '2000', 'locked' => 0, 'from_date' => '2000-1-1', 'to_date' => '2000-12-31', 'last_year_id' => 0));
         $res = $year->createAccounts('standard');
         $this->assertTrue($res);
@@ -136,7 +136,7 @@ class YearTest extends PHPUnit_Framework_TestCase
 
     function testIsSettingsSet()
     {
-    	$year = new Year($this->kernel);
+        $year = new Year($this->kernel);
         $this->assertFalse($year->isSettingsSet());
     }
 

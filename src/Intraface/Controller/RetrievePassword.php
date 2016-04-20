@@ -51,10 +51,10 @@ class Intraface_Controller_RetrievePassword extends k_Component
             ->setTo(array($this->body('email')))
             ->setBody($body);
 
-    	if (!$this->mailer->send($this->email)) {
-    	    $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
-    	    return $this->render();
-    	}
-    	return new k_SeeOther($this->query('continue'));
+        if (!$this->mailer->send($this->email)) {
+            $this->msg = '<p>Det gik <strong>ikke</strong> godt. E-mailen kunne ikke sendes. Du kan prøve igen senere.</p>';
+            return $this->render();
+        }
+        return new k_SeeOther($this->query('continue'));
     }
 }

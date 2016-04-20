@@ -79,8 +79,7 @@ class CreditNote extends Debtor
                 $product = new Product($this->kernel, $items[$i]['product_id']);
                 if ($product->get('state_account_id') == 0) {
                     $this->error->set('Produktet ' . $product->get('name') . ' ved ikke hvor den skal bogf�res');
-                }
-                else {
+                } else {
                     require_once 'Intraface/modules/accounting/Account.php';
                     $account = Account::factory($year, $product->get('state_account_id'));
                     if ($account->get('id') == 0 || $account->get('type') != 'operating') {
@@ -139,8 +138,7 @@ class CreditNote extends Debtor
 
 
         $total_with_vat = 0;
-        foreach ($items AS $item) {
-
+        foreach ($items as $item) {
             // produkterne
             // bem�rk at denne g�r ud fra at alt skal overf�res til debtorkontoen som standard
             $product = new Product($this->kernel, $item['product_id']);

@@ -4,15 +4,15 @@
 
 <form action="<?php e(url()); ?>" method="post" enctype="multipart/form-data">
 
-<?php if (isset($context->mode) && $context->mode = 'select_fields'): ?>
+<?php if (isset($context->mode) && $context->mode = 'select_fields') : ?>
     <fieldset>
         <legend><?php e(t('select the fields for import')); ?></legend>
-        <?php foreach ($context->values[0] AS $key => $value): ?>
+        <?php foreach ($context->values[0] as $key => $value) : ?>
             <div class="formrow">
                 <label for="fields_<?php e($key); ?>"><?php e($value); ?></label>
                 <select name="fields[<?php e($key); ?>]" id="fields_<?php e($key); ?>">
                     <option value="">[<?php e(t('ignore')); ?>]</option>
-                    <?php foreach ($context->fields AS $field): ?>
+                    <?php foreach ($context->fields as $field) : ?>
                         <option value="<?php e($field); ?>"><?php e(t($field)); ?></option>
                     <?php endforeach; ?>
                 </select>
@@ -34,7 +34,7 @@
     <input type="submit" class="save" name="save" value="<?php e(t('select').'...'); ?>" />
     <a href="<?php url(null); ?>"><?php e(t('Cancel')); ?></a>
 
-<?php else: ?>
+<?php else : ?>
     <fieldset>
         <legend><?php e(t('file')); ?></legend>
 

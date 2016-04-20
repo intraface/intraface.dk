@@ -23,7 +23,7 @@ class Intraface_modules_shop_DiscountCampaignGateway
     
     /**
      * Finds all campaigns
-     * 
+     *
      * @return Doctrine_Collection
      */
     public function findAll()
@@ -41,7 +41,7 @@ class Intraface_modules_shop_DiscountCampaignGateway
     
     /**
      * Finds record from id
-     * 
+     *
      * @return Intraface_modules_shop_DiscountCampaign
      */
     public function findById($id)
@@ -58,6 +58,4 @@ class Intraface_modules_shop_DiscountCampaignGateway
         
         return $collection->getFirst();
     }
-    
 }
-?>

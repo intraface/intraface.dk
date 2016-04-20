@@ -15,7 +15,8 @@ class Intraface_Shared
     protected $frontpage_files; // til brug på forsiden
     protected $translation;
 
-    public function __construct() {
+    public function __construct()
+    {
         // init
         $this->shared_name = '';
         $this->active = 0;

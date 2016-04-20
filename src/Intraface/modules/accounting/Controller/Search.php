@@ -32,7 +32,7 @@ class Intraface_modules_accounting_Controller_Search extends k_Component
             $year->checkYear();
 
             $search = explode(':', $this->query('search'));
-            if (empty($search[0]) OR empty($search[1])) {
+            if (empty($search[0]) or empty($search[1])) {
                 $error->set('Not a valid search');
             } else {
                 $search_term = $search[0];

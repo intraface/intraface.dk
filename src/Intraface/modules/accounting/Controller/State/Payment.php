@@ -29,10 +29,10 @@ class Intraface_modules_accounting_Controller_State_Payment extends k_Component
         }
 
         $data = array(
-        	'kernel' => $this->getKernel(),
-        	'voucher' => $voucher,
-        	'payment' => $this->getModel(),
-        	'year' => $this->getYear(),
+            'kernel' => $this->getKernel(),
+            'voucher' => $voucher,
+            'payment' => $this->getModel(),
+            'year' => $this->getYear(),
             'accounting_module' => $accounting_module);
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/payment');

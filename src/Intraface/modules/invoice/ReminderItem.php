@@ -54,8 +54,6 @@ class ReminderItem extends Intraface_Standard
         $input = safeToDb($input);
 
         if (isset($input["invoice_id"])) {
-
-
             $invoice = new Invoice($this->reminder->kernel, (int)$input["invoice_id"]);
             if ($invoice->get("id") == 0) {
                 $this->error->set("Ugyldig faktura i ReminderItem->save();");
@@ -72,7 +70,6 @@ class ReminderItem extends Intraface_Standard
             $this->db->query("INSERT INTO invoice_reminder_item SET ".$sql);
             return true;
         } elseif (isset($input["reminder_id"])) {
-
             $reminder = new Reminder($this->reminder->kernel, (int)$input["reminder_id"]);
             if ($reminder->get("id") == 0) {
                 $this->error->set("Ugyldig rykker i RemindeItem->save()");
@@ -101,7 +98,6 @@ class ReminderItem extends Intraface_Standard
 
 
         if ($type == "invoice") {
-
             $this->db->query("SELECT * FROM invoice_reminder_item WHERE invoice_reminder_id = ".$this->reminder->get("id")." ORDER BY id");
             while ($this->db->nextRecord()) {
                 $value[$i]["id"] = $this->db->f("id");

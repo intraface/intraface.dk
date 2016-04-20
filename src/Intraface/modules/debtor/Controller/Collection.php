@@ -65,7 +65,7 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $this->getGateway()->getDBQuery()->setFilter("status", "-2");
         }
 
-        if (!empty($_GET['not_stated']) AND $_GET['not_stated'] == 'true') {
+        if (!empty($_GET['not_stated']) and $_GET['not_stated'] == 'true') {
             $this->getGateway()->getDBQuery()->setFilter("not_stated", true);
         }
 
@@ -79,8 +79,8 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $this->getGateway()->getDBQuery()->setUri($this->url(null, array('use_stored' => 'true')));
 
         $data = array(
-        	'posts' => $this->getGateway()->findAll(),
-        	'debtor' => $this->getGateway());
+            'posts' => $this->getGateway()->findAll(),
+            'debtor' => $this->getGateway());
 
 
         // @todo kan følgende ikke lige så godt hente fra $this->query()
@@ -88,7 +88,6 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $data['product'] = new Product($this->getKernel(), $this->getGateway()->getDBQuery()->getFilter('product_id'));
             if (intval($this->getGateway()->getDBQuery()->getFilter('product_variation_id')) != 0) {
                 $data['variation'] = $data['product']->getVariation($this->getGateway()->getDBQuery()->getFilter('product_variation_id'));
-
             }
         }
         if (intval($this->getGateway()->getDBQuery()->getFilter('contact_id')) != 0) {
@@ -101,17 +100,17 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
 
     function postForm()
     {
-    	$debtor = $this->getDebtor();
-    	$contact = new Contact($this->getKernel(), $_POST["contact_id"]);
+        $debtor = $this->getDebtor();
+        $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
 
-    	if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
-    		$contact_person = new ContactPerson($contact);
-    		$person["name"] = $_POST['contact_person_name'];
-    		$person["email"] = $_POST['contact_person_email'];
-    		$contact_person->save($person);
-    		$contact_person->load();
-    		$_POST["contact_person_id"] = $contact_person->get("id");
-    	}
+        if (isset($_POST["contact_person_id"]) && $_POST["contact_person_id"] == "-1") {
+            $contact_person = new ContactPerson($contact);
+            $person["name"] = $_POST['contact_person_name'];
+            $person["email"] = $_POST['contact_person_email'];
+            $contact_person->save($person);
+            $contact_person->load();
+            $_POST["contact_person_id"] = $contact_person->get("id");
+        }
 
         if ($this->getKernel()->intranet->hasModuleAccess('currency') && !empty($_POST['currency_id'])) {
             $currency_module = $this->getKernel()->useModule('currency', false); // false = ignore user access
@@ -124,11 +123,11 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $_POST['currency'] = $currency;
         }
 
-    	if ($debtor->update($_POST)) {
-    	    return new k_SeeOther($this->url('../list/' . $debtor->get('id')));
-    	}
+        if ($debtor->update($_POST)) {
+            return new k_SeeOther($this->url('../list/' . $debtor->get('id')));
+        }
 
-    	return $this->render();
+        return $this->render();
     }
 
     function renderXls()
@@ -246,14 +245,13 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
             $sent_total = 0;
             $total = 0;
 
-            foreach ($posts AS $debtor) {
-
-                    if (strtotime($debtor->getDueDate()->getAsIso()) < time() && ($debtor->getStatus() == "created" OR $debtor->getStatus() == "sent")) {
-                        $due_total += $debtor->getTotal()->getAsIso(2);
-                    }
-                    if ($debtor->getStatus() == "sent") {
-                        $sent_total += $debtor->getTotal()->getAsIso(2);
-                    }
+            foreach ($posts as $debtor) {
+                if (strtotime($debtor->getDueDate()->getAsIso()) < time() && ($debtor->getStatus() == "created" or $debtor->getStatus() == "sent")) {
+                    $due_total += $debtor->getTotal()->getAsIso(2);
+                }
+                if ($debtor->getStatus() == "sent") {
+                    $sent_total += $debtor->getTotal()->getAsIso(2);
+                }
                     $total += $debtor->getTotal()->getAsIso(2);
 
                     /**
@@ -267,22 +265,22 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     $worksheet->writeNumber($i, 4, $debtor->getTotal()->getAsIso());
                     $worksheet->write($i, 5, $debtor->getDebtorDate()->getAsLocal('da_DK'));
 
-                    if ($debtor->getStatus() != "created") {
-                        $worksheet->write($i, 6, $debtor->getDateSent()->getAsLocal('da_DK'));
-                    } else {
-                        $worksheet->write($i, 6, "Nej");
-                    }
+                if ($debtor->getStatus() != "created") {
+                    $worksheet->write($i, 6, $debtor->getDateSent()->getAsLocal('da_DK'));
+                } else {
+                    $worksheet->write($i, 6, "Nej");
+                }
 
-                    if ($debtor->getStatus() == "executed" || $debtor->getStatus() == "canceled") {
-                        $worksheet->write($i, 7, $this->t($debtor->getStatus()));
-                    } else {
-                        $worksheet->write($i, 7, $debtor->getDueDate()->getAsLocal('da_DK'));
-                    }
+                if ($debtor->getStatus() == "executed" || $debtor->getStatus() == "canceled") {
+                    $worksheet->write($i, 7, $this->t($debtor->getStatus()));
+                } else {
+                    $worksheet->write($i, 7, $debtor->getDueDate()->getAsLocal('da_DK'));
+                }
                     $c = 8;
-                    if ($type == 'invoice') {
-                        $worksheet->write($i, $c, '-'); // $posts[$j]['arrears']
-                        $c++;
-                    }
+                if ($type == 'invoice') {
+                    $worksheet->write($i, $c, '-'); // $posts[$j]['arrears']
+                    $c++;
+                }
 
                     /*
                     // not implemented
@@ -315,23 +313,22 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
                     }*/
 
                     $i++;
-
-                }
+            }
 
 
             $i++;
             $i++;
 
             $worksheet->write($i, 0, 'Forfaldne', $format_italic);
-            $worksheet->write($i, 1, number_format($due_total, 2, ",","."), $format_italic);
+            $worksheet->write($i, 1, number_format($due_total, 2, ",", "."), $format_italic);
             $i++;
 
             $worksheet->write($i, 0, 'Udestående (sendt):', $format_italic);
-            $worksheet->write($i, 1, number_format($sent_total, 2, ",","."), $format_italic);
+            $worksheet->write($i, 1, number_format($sent_total, 2, ",", "."), $format_italic);
             $i++;
 
             $worksheet->write($i, 0, 'Total:', $format_italic);
-            $worksheet->write($i, 1, number_format($total, 2, ",","."), $format_italic);
+            $worksheet->write($i, 1, number_format($total, 2, ",", "."), $format_italic);
             $i++;
 
             // $worksheet->write($i, 0, number_format(memory_get_usage()));
@@ -440,85 +437,83 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         $sent_total = 0;
         $total = 0;
 
-            foreach ($posts as $post) {
-
-                if ($post["due_date"] < date("Y-m-d") && ($post["status"] == "created" OR $post["status"] == "sent")) {
-                    $due_total += $post["total"];
-                }
-                if ($post["status"] == "sent") {
-                    $sent_total += $post["total"];
-                }
-                $total += $post["total"];
-
-                $worksheet->write($i, 0, $post["number"]);
-                $worksheet->write($i, 1, $post['contact']['number']);
-                $worksheet->write($i, 2, $post["name"]);
-                $worksheet->write($i, 3, $post["description"]);
-                $worksheet->writeNumber($i, 4, $post["total"]);
-                $worksheet->write($i, 5, $post["dk_this_date"]);
-
-                if ($posts[$j]["status"] != "created") {
-                    $worksheet->write($i, 6, $post["dk_date_sent"]);
-                } else {
-                    $worksheet->write($i, 6, "Nej");
-                }
-
-                if ($posts[$j]["status"] == "executed" || $post["status"] == "canceled") {
-                    $worksheet->write($i, 7, $this->t($post["status"], 'debtor'));
-                } else {
-                    $worksheet->write($i, 7, $post["dk_due_date"]);
-                }
-                $c = 8;
-                if ($type == 'invoice') {
-                    $worksheet->write($i, $c, $post['arrears']);
-                    $c++;
-                }
-
-                /*
-                $keywords = array();
-                $contact = new Contact($this->getKernel(), $post['contact']['id']);
-                $appender = $contact->getKeywordAppender();
-                $keyword_ids = $appender->getConnectedKeywords();
-                if (count($keyword_ids) > 0) {
-                    foreach ($keyword_ids AS $keyword_id) {
-                        $keyword = new Keyword($contact, $keyword_id);
-                        $keywords[] = $keyword->getKeyword();
-                    }
-                    $worksheet->write($i, $c, implode(', ', $keywords));
-                    $c++;
-                }
-
-                if (!empty($product) && is_object($product) && get_class($product) == 'product') {
-                    $quantity_product = 0;
-                    if (count($post['items']) > 0) {
-                        foreach ($post['items'] AS $item) {
-                            if ($item['product_id'] == $product->get('id')) {
-                                $quantity_product += $item['quantity'];
-                            }
-                        }
-                    }
-                    $worksheet->write($i, $c, $quantity_product);
-                    $c++;
-                }
-				*/
-
-                $i++;
-
+        foreach ($posts as $post) {
+            if ($post["due_date"] < date("Y-m-d") && ($post["status"] == "created" or $post["status"] == "sent")) {
+                $due_total += $post["total"];
             }
+            if ($post["status"] == "sent") {
+                $sent_total += $post["total"];
+            }
+            $total += $post["total"];
+
+            $worksheet->write($i, 0, $post["number"]);
+            $worksheet->write($i, 1, $post['contact']['number']);
+            $worksheet->write($i, 2, $post["name"]);
+            $worksheet->write($i, 3, $post["description"]);
+            $worksheet->writeNumber($i, 4, $post["total"]);
+            $worksheet->write($i, 5, $post["dk_this_date"]);
+
+            if ($posts[$j]["status"] != "created") {
+                $worksheet->write($i, 6, $post["dk_date_sent"]);
+            } else {
+                $worksheet->write($i, 6, "Nej");
+            }
+
+            if ($posts[$j]["status"] == "executed" || $post["status"] == "canceled") {
+                $worksheet->write($i, 7, $this->t($post["status"], 'debtor'));
+            } else {
+                $worksheet->write($i, 7, $post["dk_due_date"]);
+            }
+            $c = 8;
+            if ($type == 'invoice') {
+                $worksheet->write($i, $c, $post['arrears']);
+                $c++;
+            }
+
+            /*
+            $keywords = array();
+            $contact = new Contact($this->getKernel(), $post['contact']['id']);
+            $appender = $contact->getKeywordAppender();
+            $keyword_ids = $appender->getConnectedKeywords();
+            if (count($keyword_ids) > 0) {
+            foreach ($keyword_ids AS $keyword_id) {
+                $keyword = new Keyword($contact, $keyword_id);
+                $keywords[] = $keyword->getKeyword();
+            }
+            $worksheet->write($i, $c, implode(', ', $keywords));
+            $c++;
+            }
+
+            if (!empty($product) && is_object($product) && get_class($product) == 'product') {
+            $quantity_product = 0;
+            if (count($post['items']) > 0) {
+                foreach ($post['items'] AS $item) {
+                    if ($item['product_id'] == $product->get('id')) {
+                        $quantity_product += $item['quantity'];
+                    }
+                }
+            }
+            $worksheet->write($i, $c, $quantity_product);
+            $c++;
+            }
+            */
+
+            $i++;
+        }
 
         $i++;
         $i++;
 
         $worksheet->write($i, 0, 'Forfaldne', $format_italic);
-        $worksheet->write($i, 1, number_format($due_total, 2, ",","."), $format_italic);
+        $worksheet->write($i, 1, number_format($due_total, 2, ",", "."), $format_italic);
         $i++;
 
         $worksheet->write($i, 0, 'Udestående (sendt):', $format_italic);
-        $worksheet->write($i, 1, number_format($sent_total, 2, ",","."), $format_italic);
+        $worksheet->write($i, 1, number_format($sent_total, 2, ",", "."), $format_italic);
         $i++;
 
         $worksheet->write($i, 0, 'Total:', $format_italic);
-        $worksheet->write($i, 1, number_format($total, 2, ",","."), $format_italic);
+        $worksheet->write($i, 1, number_format($total, 2, ",", "."), $format_italic);
         $i++;
 
         $worksheet->hideGridLines();
@@ -599,5 +594,4 @@ class Intraface_modules_debtor_Controller_Collection extends k_Component
         }
         return ($this->error = new Intraface_Error());
     }
-
 }

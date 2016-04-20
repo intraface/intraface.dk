@@ -18,7 +18,7 @@ class Intraface_modules_cms_section_Mixed extends CMS_Section
     function load_section()
     {
         //$this->value['html'] = $this->getSectionHtml();
-        foreach ($this->getElements() AS $element) {
+        foreach ($this->getElements() as $element) {
             $this->value['elements'][] = $element->get();
         }
         return true;

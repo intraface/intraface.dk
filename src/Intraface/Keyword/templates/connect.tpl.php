@@ -3,12 +3,12 @@
 <?php echo $keyword->error->view(); ?>
 
 <form action="<?php e(url()); ?>" method="post">
-    <?php if (is_array($keywords) AND count($keywords) > 0): ?>
+    <?php if (is_array($keywords) and count($keywords) > 0) : ?>
     <fieldset>
         <legend><?php e(t('Choose keywords')); ?></legend>
         <?php
             $i = 0;
-            foreach ($keywords AS $k) { ?>
+        foreach ($keywords as $k) { ?>
                 <input type="checkbox" name="keyword[]" id="k<?php e($k['id']); ?>" value="<?php e($k['id']); ?>"
                 <?php
                 if (in_array($k['id'], $checked)) {
@@ -16,9 +16,9 @@
                 } ?>
                 />
                 <label for="k<?php e($k["id"]); ?>">
-                	<a href="<?php e(url('../' . $k['id'])); ?>"><?php e($k['keyword']); ?> (#<?php e($k["id"]); ?>)</a></label>
-                	- <a href="<?php e(url('../'. $k["id"], array('delete'))); ?>" class="confirm"><?php e(t('delete')); ?></a><br />
-        <?php }
+                    <a href="<?php e(url('../' . $k['id'])); ?>"><?php e($k['keyword']); ?> (#<?php e($k["id"]); ?>)</a></label>
+                    - <a href="<?php e(url('../'. $k["id"], array('delete'))); ?>" class="confirm"><?php e(t('delete')); ?></a><br />
+        <?php                                                                                                                                                                                                                     }
         ?>
     </fieldset>
         <div style="clear: both; margin-top: 1em; width:100%;">

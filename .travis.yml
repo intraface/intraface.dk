@@ -1,58 +1,26 @@
+sudo: false
 language: php
 
 php:
-  - 5.3
+  - 5.5
+
+# Cache Composer & Drush directories.
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 install:
- 
+
   # Create database
   - mysql -e 'create database IF NOT EXISTS intraface_test;'
-  
-  # Install dependencies
-  - pear config-set preferred_state alpha
-  - pear channel-discover pear.phpunit.de
-  - pear channel-discover zend.googlecode.com/svn
-  - pear channel-discover pear.swiftmailer.org
-  - pear channel-discover pear.doctrine-project.org
-#  - pear channel-discover pear.saltybeagle.com
-  - pear channel-discover pear.pdepend.org
-  - pear channel-discover pear.phpmd.org
-  - pear channel-discover pear.phpdoc.org
-  - pear channel-discover intraface.github.io/pear.domain51.com
-  - pear channel-discover public.intraface.dk
-  - pear channel-discover htmlpurifier.org
-  - pear channel-discover pear.michelf.com
-  - pear channel-discover pearhub.org
-  - pear channel-discover pear.phing.info
-  - pear channel-discover pear.symfony-project.com
-  - pear install --force --alldeps pear_packagefilemanager
-  - pear install phing/Phing
-  - pear install --force domain51/Phing_d51PearPkg2Task
-  - pear install --force --alldeps intrafacepublic/Phing_IlibPearDeployerTask
-  - pear install --force --alldeps pear/PHP_CodeSniffer
-  - pear install intrafacepublic/Ilib_Error-1.0.1
-  - pear install pear/Translation2-2.0.4
-  - pear install pear/Validate-0.8.5
-  - pear install pear/XML_RPC2-1.1.1
-  - pear install intrafacepublic/Ilib_RandomKeyGenerator-0.3.1
-  - pear install --force intrafacepublic/Ilib_DBQuery-0.1.10
-  - pear install --force intrafacepublic/IntrafacePublic_Client_XMLRPC
-  - pear install --force intrafacepublic/Ilib_Variable-1.0.1
-  
-  # Generate package
-  - php generate_package_xml.php make 1.0.0
-  - pear package src/package.xml
 
-  # Install intraface
-  - sudo pear install --alldeps --force Intraface-1.0.0.tgz
-  - sudo rm Intraface-1.0.0.tgz
-  
+  - travis_retry composer self-update && composer --version
+  - travis_retry composer install --prefer-dist --no-interaction
+
   # Setup database for unit tests
   - php tests/unit/setup_database.php
 
   # Generating the selenium test suite file
-#  - pear install phpunit/PHPUnit_Selenium
-  - pear install --force intrafacepublic/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator-0.1.2
   - php tests/selenium/generate_test_suite.php
 
   # Setup display for selenium
@@ -61,21 +29,19 @@ install:
   - sleep 5
 
   # Get selenium
-  - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.37.0.jar
-  - java -jar selenium-server-standalone-2.37.0.jar > /dev/null 2>&1 &
-  - sleep 10 # to wait for Selenium to be up and running
+  #- wget http://selenium.googlecode.com/files/selenium-server-standalone-2.37.0.jar
+  #- java -jar selenium-server-standalone-2.37.0.jar > /dev/null 2>&1 &
+  #- nc -zvv localhost 4444; out=$?; while [[ $out -ne 0 ]]; do echo "Retry hit port 4444..."; nc -zvv localhost 4444; out=$?; sleep 5; done
 
   # Start simple HTTP-Server
   - cd src/intraface.dk
-  - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
-  
+  #- python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
+
 before_script:
-
   - cd ../../tests/unit
-  - phpunit --version  
-  - phpenv rehash
 
-script: 
-  - phpunit --verbose --configuration phpunit.example.xml .
-  - java -jar senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"
-#  - phpcs src
+script:
+  - ../../vendor/bin/phpunit --verbose --configuration phpunit.example.xml .
+  - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../src/Intraface
+  - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../tests/unit
+  #- java -jar ../../senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"

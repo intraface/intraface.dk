@@ -40,9 +40,9 @@ class Intraface_modules_contact_Controller_BatchNewsletter extends k_Component
         $this->getKernel()->useModule('newsletter');
 
         $validator = new Intraface_Validator($this->getContact()->error);
-    	$validator->isNumeric($_POST['newsletter_id'], 'error in newsletter');
+        $validator->isNumeric($_POST['newsletter_id'], 'error in newsletter');
 
-    	$contact = new Contact($this->getKernel());
+        $contact = new Contact($this->getKernel());
         $keyword = $contact->getKeywords();
         $keywords = $keyword->getAllKeywords();
         $contact->getDBQuery()->defineCharacter('character', 'address.name');
@@ -50,28 +50,28 @@ class Intraface_modules_contact_Controller_BatchNewsletter extends k_Component
         $contacts = $contact->getList("use_address");
 
         if (!$contact->error->isError()) {
-    		// valideret subject og body
-    		$j = 0;
+            // valideret subject og body
+            $j = 0;
 
-    		foreach ($contacts as $c) {
-    			$contact = $this->context->getGateway()->findById($c['id']);
+            foreach ($contacts as $c) {
+                $contact = $this->context->getGateway()->findById($c['id']);
 
-    			$newsletter = new NewsletterList($this->getKernel(), $_POST['newsletter_id']);
-    			if ($newsletter->get('id') == 0) {
-    			    throw new Exception('Invalid newsletter list');
-    			}
+                $newsletter = new NewsletterList($this->getKernel(), $_POST['newsletter_id']);
+                if ($newsletter->get('id') == 0) {
+                    throw new Exception('Invalid newsletter list');
+                }
 
-    			$subscriber = new NewsletterSubscriber($newsletter);
-    			$subscriber->addContact($contact);
+                $subscriber = new NewsletterSubscriber($newsletter);
+                $subscriber->addContact($contact);
 
-    			$j++;
-    		}
-    		$this->msg = 'I alt blev ' . $j . ' kontakter tilmeldt nyhedsbrevet. <a href="'.$this->url('../', array('use_stored' => 'true')).'">Tilbage til kontakter</a>.';
-    	} else {
-    		$value = $_POST;
-    	}
+                $j++;
+            }
+            $this->msg = 'I alt blev ' . $j . ' kontakter tilmeldt nyhedsbrevet. <a href="'.$this->url('../', array('use_stored' => 'true')).'">Tilbage til kontakter</a>.';
+        } else {
+            $value = $_POST;
+        }
 
-    	return $this->render();
+        return $this->render();
     }
 
     function getContact()

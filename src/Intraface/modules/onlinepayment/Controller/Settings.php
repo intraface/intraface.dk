@@ -32,7 +32,7 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
         $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($this->context->getKernel()->intranet->getId());
 
         if (!$settings) {
-        	$settings = new Intraface_modules_onlinepayment_Language;
+            $settings = new Intraface_modules_onlinepayment_Language;
             $settings->save();
         }
         $value = $onlinepayment->getSettings();
@@ -62,7 +62,7 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
          */
         $settings = Doctrine::getTable('Intraface_modules_onlinepayment_Language')->findOneByIntranetId($this->context->getKernel()->intranet->getId());
         if (!$settings) {
-        	$settings = new Intraface_modules_onlinepayment_Language;
+            $settings = new Intraface_modules_onlinepayment_Language;
         }
         $settings->Translation['da']->email = $_POST['email']['da'];
         $settings->Translation['da']->subject = $_POST['subject']['da'];
@@ -74,11 +74,11 @@ class Intraface_modules_onlinepayment_Controller_Settings extends k_Component
 
         $settings->save();
 
-    	if ($onlinepayment->setSettings($_POST)) {
-    		return new k_SeeOther($this->url());
-    	} else {
-    		$value = $_POST;
-    	}
+        if ($onlinepayment->setSettings($_POST)) {
+            return new k_SeeOther($this->url());
+        } else {
+            $value = $_POST;
+        }
         return $this->render();
     }
 }

@@ -59,7 +59,7 @@ class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
         $this->checkCredentials($credentials);
 
         $contact = Contact::factory($this->kernel, 'code', $contact_key);
-        if (!is_object($contact) OR !$contact->get('id') > 0) {
+        if (!is_object($contact) or !$contact->get('id') > 0) {
             return false;
         }
 
@@ -106,7 +106,7 @@ class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
         $this->checkCredentials($credentials);
 
         $contact = Contact::factory($this->kernel, 'code', $contact_key);
-        if (!is_object($contact) OR !$contact->get('id') > 0) {
+        if (!is_object($contact) or !$contact->get('id') > 0) {
             return false;
         }
 
@@ -125,7 +125,7 @@ class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
      *
      * @param  struct  $credentials Credentials provided by intraface
      * @param  string  $username    E-mail
-     * @param  string  $password 	Password
+     * @param  string  $password    Password
      *
      * @return array
      */
@@ -134,7 +134,7 @@ class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
         $this->checkCredentials($credentials);
 
         $contact = Contact::factory($this->kernel, 'username', array('username' => $username, 'password' => $password));
-        if (!is_object($contact) OR !$contact->get('id') > 0) {
+        if (!is_object($contact) or !$contact->get('id') > 0) {
             return false;
         }
 
@@ -280,13 +280,13 @@ class Intraface_XMLRPC_Contact_Server extends Intraface_XMLRPC_Server0100
             throw new XML_RPC2_FaultException('supply a session_id', -5);
         }
 
-		$auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
-		$weblogin = $auth_adapter->auth();
+        $auth_adapter = new Intraface_Auth_PrivateKeyLogin(MDB2::singleton(DB_DSN), $credentials['session_id'], $credentials['private_key']);
+        $weblogin = $auth_adapter->auth();
 
-		if (!$weblogin) {
-		    require_once 'XML/RPC2/Exception.php';
+        if (!$weblogin) {
+            require_once 'XML/RPC2/Exception.php';
             throw new XML_RPC2_FaultException('Access to the intranet denied. The private key is probably wrong.', -5);
-		}
+        }
 
         $this->kernel = new Intraface_Kernel();
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());

@@ -64,10 +64,9 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
     function GET()
     {
         if ($this->query("action") == "send_onlinepaymentlink") {
-
             $shared_email = $this->getKernel()->useShared('email');
             $shared_filehandler = $this->getKernel()->useModule('filemanager');
-            if ($this->getDebtor()->getPaymentMethodKey() == 5 AND $this->getDebtor()->getWhereToId() == 0) {
+            if ($this->getDebtor()->getPaymentMethodKey() == 5 and $this->getDebtor()->getWhereToId() == 0) {
                 try {
                     // echo $this->getDebtor()->getWhereFromId();
                     // @todo We should use a shop gateway here instead
@@ -83,7 +82,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             if ($this->getKernel()->intranet->get("pdf_header_file_id") != 0) {
                 $file = new FileHandler($this->getKernel(), $this->getKernel()->intranet->get("pdf_header_file_id"));
             } else {
-                $file = NULL;
+                $file = null;
             }
 
             $body = 'Tak for din bestilling i vores onlineshop. Vi har ikke registreret nogen onlinebetaling sammen med bestillingen, hvilket kan skyldes flere ting.
@@ -102,7 +101,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getKernel()->useModule('onlinepayment', true); // true: ignore_user_access
                 $onlinepayment = OnlinePayment::factory($this->getKernel());
             } else {
-                $onlinepayment = NULL;
+                $onlinepayment = null;
             }
 
             // @todo the language on an invoice should be decided by the contacts preference
@@ -129,7 +128,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 throw new Exception('Oplysninger om filen kunne ikke opdateres');
             }
 
-            switch($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
+            switch ($this->getKernel()->getSetting()->get('intranet', 'debtor.sender')) {
                 case 'intranet':
                     $from_email = '';
                     $from_name = '';
@@ -213,7 +212,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getDebtor()->load();
 
                 // @todo vi skulle faktisk kun videre, hvis det ikke er en tilbagebetaling eller hvad?
-                if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" AND !$this->onlinepayment->error->isError()) {
+                if ($this->getDebtor()->get("type") == "invoice" && $this->getDebtor()->get("status") == "sent" and !$this->onlinepayment->error->isError()) {
                     if ($this->getKernel()->user->hasModuleAccess('accounting')) {
                         return new k_SeeOther($this->url('payment/' . $this->onlinepayment->get('create_payment_id') . '/state'));
                     }
@@ -246,7 +245,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
         // Returns from add product and send mail
         if ($this->query('return_redirect_id')) {
-
             $return_redirect = Intraface_Redirect::factory($this->getKernel(), 'return');
 
             if ($return_redirect->get('identifier') == 'add_item') {
@@ -259,7 +257,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $return_redirect->delete();
                 $this->getDebtor()->load();
             } elseif ($return_redirect->get('identifier') == 'send_email') {
-                if ($return_redirect->getParameter('send_email_status') == 'sent' OR $return_redirect->getParameter('send_email_status') == 'outbox') {
+                if ($return_redirect->getParameter('send_email_status') == 'sent' or $return_redirect->getParameter('send_email_status') == 'outbox') {
                     $this->email_send_with_success = true;
                     // if invoice has been resent the status should not be set again
                     if ($this->getDebtor()->get('status') != 'sent' && $this->getDebtor()->get('status') != 'executed') {
@@ -267,11 +265,10 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     }
                     $return_redirect->delete();
 
-                    if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') AND !$this->getDebtor()->isStated() AND $this->getKernel()->user->hasModuleAccess('accounting')) {
+                    if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') and !$this->getDebtor()->isStated() and $this->getKernel()->user->hasModuleAccess('accounting')) {
                         return new k_SeeOther($this->url('state'));
                     }
                 }
-
             }
         }
 
@@ -309,24 +306,18 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             return new k_SeeOther($this->url('send', array('send' => 'electronic_email')));
         } elseif ($this->body('send_email')) {
             return new k_SeeOther($this->url('send', array('send' => 'email')));
-        }
-
-        // cancel debtor
-        elseif ($this->body('cancel') AND ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order") && ($this->getDebtor()->get('status') == "created" || $this->getDebtor()->get('status') == "sent")) {
+        } // cancel debtor
+        elseif ($this->body('cancel') and ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order") && ($this->getDebtor()->get('status') == "created" || $this->getDebtor()->get('status') == "sent")) {
             $this->getDebtor()->setStatus('cancelled');
-        }
-
-        // sets status to sent
+        } // sets status to sent
         elseif ($this->body('sent')) {
             $this->getDebtor()->setStatus('sent');
 
-            if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') AND $this->getKernel()->user->hasModuleAccess('accounting')) {
+            if (($this->getDebtor()->get("type") == 'credit_note' || $this->getDebtor()->get("type") == 'invoice') and $this->getKernel()->user->hasModuleAccess('accounting')) {
                 return new k_SeeOther($this->url('state'));
             }
             return new k_SeeOther($this->url());
-        }
-
-        // transfer quotation to order
+        } // transfer quotation to order
         elseif ($this->body('order')) {
             if ($this->getKernel()->user->hasModuleAccess('order') && $this->getDebtor()->get("type") == "quotation") {
                 $this->getKernel()->useModule("order");
@@ -335,9 +326,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     return new k_SeeOther($this->url('../'.$id));
                 }
             }
-        }
-
-        // transfer forder to invoice
+        } // transfer forder to invoice
         elseif ($this->body('invoice')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
                 $this->getKernel()->useModule("invoice");
@@ -346,15 +335,12 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     return new k_SeeOther($this->url('../' . $id));
                 }
             }
-        }
-
-        // Quick process order
+        } // Quick process order
         elseif ($this->body('quickprocess_order')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && ($this->getDebtor()->get("type") == "quotation" || $this->getDebtor()->get("type") == "order")) {
                 $this->getKernel()->useModule("invoice");
                 $invoice = new Invoice($this->getKernel());
                 if ($id = $invoice->create($this->getDebtor())) {
-
                 }
             }
 
@@ -392,9 +378,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
 
                 return new k_SeeOther($this->url('../' . $invoice->get('id')));
             }
-        }
-
-        // Execute invoice
+        } // Execute invoice
         elseif ($this->body('quickprocess_invoice')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice')) {
                 $this->getKernel()->useModule("invoice");
@@ -414,7 +398,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                             if (!$onlinepayment->transactionAction('capture')) {
                             }
                         } catch (Exception $e) {
-
                         }
                     }
                 }
@@ -422,9 +405,7 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                 $this->getDebtor()->setStatus('executed');
                 return new k_SeeOther($this->url(null . '.pdf'));
             }
-        }
-
-        // create credit note
+        } // create credit note
         elseif ($this->body('credit_note')) {
             if ($this->getKernel()->user->hasModuleAccess('invoice') && $this->getDebtor()->get("type") == "invoice") {
                 $credit_note = new CreditNote($this->getKernel());
@@ -433,18 +414,14 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     return new k_SeeOther($this->url('../'.$id));
                 }
             }
-        }
-
-        // cancel onlinepayment
+        } // cancel onlinepayment
         elseif ($this->body('onlinepayment_cancel') && $this->getKernel()->user->hasModuleAccess('onlinepayment')) {
             $onlinepayment_module = $this->getKernel()->useModule('onlinepayment');
             $this->onlinepayment = OnlinePayment::factory($this->getKernel(), 'id', intval($_POST['onlinepayment_id']));
 
             $this->onlinepayment->setStatus('cancelled');
             $this->getDebtor()->load();
-        }
-
-        else {
+        } else {
             $debtor = $this->getDebtor();
             $contact = new Contact($this->getKernel(), $_POST["contact_id"]);
 
@@ -555,7 +532,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                                 $msg = '<div class="message-dependent"><p>'.$this->t('You need to fill in an e-mail address to send e-mail').'. <a href="'.url('../../../../administration/intranet', array('edit')) . '">'.t('do it now').'</a>.</p></div>';
                             } else {
                                 $msg = '<div class="message-dependent"><p>'.$this->t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
-
                             }
                         }
                         break;
@@ -571,17 +547,14 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                             } else {
                                 $msg = '<div class="message-dependent"><p>'.$this->t('You need to ask your administrator to fill in an e-mail address, so that you can send emails').'</p></div>';
                             }
-
                         }
                         break;
                     default:
                         throw new Exception("Invalid sender!");
-
                 }
 
                 if ($this->getDebtor()->contact->address->get('email') == '') {
                     $msg = '<div class="message-dependent"><p>'.$this->t('You need to register an e-mail to the contact, so you can send e-mails').'</p></div>';
-
                 }
 
                 break;
@@ -603,7 +576,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                         $msg .= '<a href="'.$debtor_module->getPath().'settings">'.$this->t('Add it now').'</a>.';
                     }
                     $msg .= '</p></div>';
-
                 } elseif (!$scan_in_contact->address->get('email')) {
                     $valid_scan_in_contact = false;
                     $msg = '<div class="message-dependent"><p>';
@@ -645,14 +617,14 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
             $this->getKernel()->useModule('onlinepayment', true); // true: ignore_user_access
             $onlinepayment = OnlinePayment::factory($this->getKernel());
         } else {
-            $onlinepayment = NULL;
+            $onlinepayment = null;
         }
 
         if ($this->getKernel()->intranet->get("pdf_header_file_id") != 0) {
             $this->getKernel()->useModule('filemanager');
             $filehandler = new FileHandler($this->getKernel(), $this->getKernel()->intranet->get("pdf_header_file_id"));
         } else {
-            $filehandler = NULL;
+            $filehandler = null;
         }
 
         $report = new Intraface_modules_debtor_Visitor_Pdf($this->translator(), $filehandler);

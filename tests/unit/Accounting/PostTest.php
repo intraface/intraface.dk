@@ -3,14 +3,14 @@ require_once 'Intraface/modules/accounting/Post.php';
 
 class FakePostVoucher
 {
-	public $year;
+    public $year;
     function __construct()
     {
-    	$this->year = new FakePostYear;
+        $this->year = new FakePostYear;
     }
     function get()
     {
-    	return 1;
+        return 1;
     }
 }
 
@@ -22,8 +22,14 @@ class FakePostYear
         $this->kernel = new Stub_Kernel;
         $this->kernel->setting->set('intranet', 'vatpercent', 25);
     }
-    function get() { return 1; }
-    function vatAccountIsSet() { return true; }
+    function get()
+    {
+        return 1;
+    }
+    function vatAccountIsSet()
+    {
+        return true;
+    }
     function getSetting()
     {
         return 1;
@@ -42,7 +48,7 @@ class PostTest extends PHPUnit_Framework_TestCase
     function tearDown()
     {
         $db = MDB2::singleton(DB_DSN);
-    	$db->query('TRUNCATE accounting_post');
+        $db->query('TRUNCATE accounting_post');
     }
 
     function testPostCreate()

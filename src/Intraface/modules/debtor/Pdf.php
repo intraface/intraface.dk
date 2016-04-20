@@ -53,16 +53,16 @@ class Intraface_modules_debtor_Pdf
     function output($type = 'string', $filename = 'debtor.pdf')
     {
         switch ($type) {
-        case 'string':
-            return $this->doc->output();
+            case 'string':
+                return $this->doc->output();
             break;
-        case 'file':
-            $data = $this->doc->output();
-            return $this->doc->writeDocument($data, $filename);
+            case 'file':
+                $data = $this->doc->output();
+                return $this->doc->writeDocument($data, $filename);
             break;
-        case 'stream':
-        default:
-            return $this->doc->stream();
+            case 'stream':
+            default:
+                return $this->doc->stream();
             break;
         }
     }
@@ -107,7 +107,9 @@ class Intraface_modules_debtor_Pdf
             $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $line[$i]);
             $this->doc->setY('-'.$this->doc->get("font_spacing"));
 
-            if ($i == 2) $i = count($line);
+            if ($i == 2) {
+                $i = count($line);
+            }
         }
         $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $contact["postcode"]." ".$contact["city"]);
         $this->doc->setY('-'.$this->doc->get("font_spacing"));
@@ -148,7 +150,9 @@ class Intraface_modules_debtor_Pdf
             for ($i = 0; $i < count($line); $i++) {
                 $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $line[$i]);
                 $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $this->doc->get("font_spacing");
-                if ($i == 2) $i = count($line);
+                if ($i == 2) {
+                    $i = count($line);
+                }
             }
             $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $intranet["postcode"]." ".$intranet["city"]);
             $this->doc->setY('-'.($this->doc->get("font_spacing") * 2)); // $pointY -= $this->doc->get("font_spacing") * 2;
@@ -157,7 +161,7 @@ class Intraface_modules_debtor_Pdf
             $this->doc->addText($this->doc->get('x') + 10 + 60, $this->doc->get('y'), $this->doc->get("font_size"), $intranet["cvr"]);
             $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $this->doc->get("font_spacing");
 
-            if (!empty($intranet["contact_person"]) AND $intranet['contact_person'] != $intranet["name"]) {
+            if (!empty($intranet["contact_person"]) and $intranet['contact_person'] != $intranet["name"]) {
                 $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), "Kontakt:");
                 $this->doc->addText($this->doc->get('x') + 10 + 60, $this->doc->get('y'), $this->doc->get("font_size"), $intranet["contact_person"]);
                 $this->doc->setY('-'.$this->doc->get("font_spacing")); // $pointY -= $this->doc->get("font_spacing");
@@ -233,10 +237,10 @@ class Intraface_modules_debtor_Pdf
         }
 
         // adding payments
-        if (isset($parameter['payment']) AND $parameter['payment'] != 0 OR isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
+        if (isset($parameter['payment']) and $parameter['payment'] != 0 or isset($parameter['payment_online']) and $parameter['payment_online'] != 0) {
             $this->doc->setY('-20');
 
-            if (isset($parameter['payment']) AND $parameter['payment'] != 0) {
+            if (isset($parameter['payment']) and $parameter['payment'] != 0) {
                 $this->doc->setLineStyle(1.5);
                 $this->doc->setColor(0, 0, 0);
                 $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get("right_margin_position"), $this->doc->get('y'));
@@ -247,7 +251,7 @@ class Intraface_modules_debtor_Pdf
                 $this->doc->setY('-'.$this->doc->get("font_padding_bottom"));
             }
 
-            if (isset($parameter['payment_online']) AND $parameter['payment_online'] != 0) {
+            if (isset($parameter['payment_online']) and $parameter['payment_online'] != 0) {
                 $this->doc->setLineStyle(1.5);
                 $this->doc->setColor(0, 0, 0);
                 $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get("right_margin_position"), $this->doc->get('y'));
@@ -260,7 +264,6 @@ class Intraface_modules_debtor_Pdf
             }
 
             $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y'), $this->doc->get("right_margin_position"), $this->doc->get('y'));
-
         }
 
         if (!isset($parameter['payment_online'])) {
@@ -297,7 +300,6 @@ class Intraface_modules_debtor_Pdf
             $payment_start = $this->doc->get('y');
 
             if ($payment_method == 1) {
-
                 $this->doc->rectangle($this->doc->get('x'), $this->doc->get('y') - $payment_line * 2, $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $payment_line * 2);
                 $this->doc->line($this->doc->get('x') + $payment_left, $this->doc->get('y') - $payment_line * 2, $this->doc->get('x') + $payment_left, $this->doc->get('y'));
                 $this->doc->line($this->doc->get('x'), $this->doc->get('y') - $payment_line, $this->doc->get("right_margin_position"), $this->doc->get('y') - $payment_line);
@@ -336,9 +338,7 @@ class Intraface_modules_debtor_Pdf
                 $this->doc->addText($this->doc->get('x') + $payment_left + 4, $this->doc->get('y'), $this->doc->get("font_size") - 4, "Regnr.:            Kontonr.:");
                 $this->doc->setY('-'.($payment_line - 12));
                 $this->doc->addText($this->doc->get('x') + $payment_left + 10, $this->doc->get('y'), $this->doc->get("font_size"), $payment_info["bank_reg_number"]."       ".$payment_info["bank_account_number"]);
-
             } elseif ($payment_method == 2) {
-
                 $this->doc->rectangle($this->doc->get('x'), $this->doc->get('y') - $payment_line * 3, $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $payment_line * 3);
                 $this->doc->line($this->doc->get('x') + $payment_left, $this->doc->get('y') - $payment_line * 3, $this->doc->get('x') + $payment_left, $this->doc->get('y'));
                 $this->doc->line($this->doc->get('x') + $payment_left, $this->doc->get('y') - $payment_line, $this->doc->get("right_margin_position"), $this->doc->get('y') - $payment_line);
@@ -355,7 +355,9 @@ class Intraface_modules_debtor_Pdf
                 for ($i = 0; $i < count($line); $i++) {
                     $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $line[$i]);
                     $this->doc->setY('-'.$this->doc->get('font_spacing'));
-                    if ($i == 2) $i = count($line);
+                    if ($i == 2) {
+                        $i = count($line);
+                    }
                 }
                 $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), $parameter["contact"]->address->get("postcode")." ".$parameter["contact"]->address->get("city"));
 
@@ -391,7 +393,6 @@ class Intraface_modules_debtor_Pdf
                 $this_text = '+01-'.str_repeat(' ', 20).'+'.$payment_info['giro_account_number'].'-';
                 $this->doc->addText($this->doc->get('x') + $payment_left + 10, $this->doc->get('y'), $this->doc->get('font_size'), $this_text);
             } elseif ($payment_method == 3) {
-
                 $this->doc->rectangle($this->doc->get('x'), $this->doc->get('y') - $payment_line * 2, $this->doc->get("right_margin_position") - $this->doc->get("margin_left"), $payment_line * 2);
                 $this->doc->line($this->doc->get("margin_left"), $this->doc->get('y') - $payment_line, $this->doc->get("right_margin_position"), $this->doc->get('y') - $payment_line);
                 $this->doc->line($this->doc->get('x') + $payment_left, $this->doc->get('y'), $this->doc->get('x') + $payment_left, $this->doc->get('y') - $payment_line);
@@ -417,7 +418,6 @@ class Intraface_modules_debtor_Pdf
                 // TODO change the - back to <> but it does not work
 
                 $this->doc->addText($this->doc->get('x') + 10, $this->doc->get('y'), $this->doc->get("font_size"), "+71- ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$payment_info["giro_account_number"]."-");
-
             }
         }
         return $this->doc->get('y');

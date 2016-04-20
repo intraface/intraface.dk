@@ -13,20 +13,30 @@ $values = $context->getValues();
             <div class="formrow">
                 <label for="debtor_sender"><?php e(t('Contactperson / Sender')); ?></label>
                 <select name="debtor_sender">
-                    <option value="intranet" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') echo 'selected="selected"'; ?> >Intranetoplysninger (<?php e($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
-                    <option value="user" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') echo 'selected="selected"'; ?> >Aktuel brugers oplysninger (<?php e($kernel->user->getAddress()->get('name').' / '.$kernel->user->getAddress()->get('email')); ?>)</option>
-                    <option value="defined" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'defined') echo 'selected="selected"'; ?> >Brugerdefineret... (Udfyld herunder)</option>
+                    <option value="intranet" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'intranet') {
+                        echo 'selected="selected"';
+} ?> >Intranetoplysninger (<?php e($kernel->intranet->address->get('name').' / '.$kernel->intranet->address->get('email')); ?>)</option>
+                    <option value="user" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'user') {
+                        echo 'selected="selected"';
+} ?> >Aktuel brugers oplysninger (<?php e($kernel->user->getAddress()->get('name').' / '.$kernel->user->getAddress()->get('email')); ?>)</option>
+                    <option value="defined" <?php if (isset($values['debtor_sender']) && $values['debtor_sender'] == 'defined') {
+                        echo 'selected="selected"';
+} ?> >Brugerdefineret... (Udfyld herunder)</option>
                 </select>
             </div>
 
 
             <div class="formrow">
                 <label for="debtor_sender_name"><?php e(t('Sender name')); ?></label>
-                <input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) e($values['debtor_sender_name']); ?>" />
+                <input type="text" name="debtor_sender_name" id="debtor_sender_name" value="<?php if (!empty($values['debtor_sender_name'])) {
+                    e($values['debtor_sender_name']);
+} ?>" />
             </div>
             <div class="formrow">
                 <label for="debtor_sender_email"><?php e(t('Sender email')); ?></label>
-                <input type="text" name="debtor_sender_email" id="debtor_sender_email" value="<?php if (!empty($values['debtor_sender_email'])) e($values['debtor_sender_email']); ?>" />
+                <input type="text" name="debtor_sender_email" id="debtor_sender_email" value="<?php if (!empty($values['debtor_sender_email'])) {
+                    e($values['debtor_sender_email']);
+} ?>" />
             </div>
     </fieldset>
 
@@ -60,14 +70,14 @@ $values = $context->getValues();
         <legend><?php e(t('E-mail to data scanning agency')); ?></legend>
         <p><?php e($string); ?></p>
 
-        <?php if (!empty($scan_in_contact) AND is_object($scan_in_contact) AND !$scan_in_contact->address->get('email')): ?>
+        <?php if (!empty($scan_in_contact) and is_object($scan_in_contact) and !$scan_in_contact->address->get('email')) : ?>
         <p class="warning"><?php e(t('You have not supplied an email for the data scanning agency.')); ?></p>
         <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name')); ?>
         <input type="submit" name="edit_scan_in_contact" value="<?php e(t('Edit')); ?>" />
         <input type="hidden" name="scan_in_contact" value="<?php e($scan_in_contact->get('id')); ?>" />
-        <?php elseif (empty($scan_in_contact) OR !is_object($scan_in_contact)): ?>
+        <?php elseif (empty($scan_in_contact) or !is_object($scan_in_contact)) : ?>
         <input type="submit" name="add_scan_in_contact" value="<?php e(t('Choose contact')); ?>" />
-        <?php else: ?>
+        <?php else : ?>
         <strong>Kontakt</strong>: <?php e($scan_in_contact->get('name') . ' <'.$scan_in_contact->address->get('email').'>'); ?> <input type="submit" name="delete_scan_in_contact" value="Slet kontakt" />
         <?php endif; ?>
     </fieldset>
@@ -84,7 +94,9 @@ $values = $context->getValues();
 
     <fieldset>
         <legend><?php e(t('Default text on invoice emails')); ?></legend>
-        <textarea name="invoice_email_text" cols="80" rows="8"><?php if (!empty($values['invoice_email_text'])) e($values['invoice_email_text']); ?></textarea>
+        <textarea name="invoice_email_text" cols="80" rows="8"><?php if (!empty($values['invoice_email_text'])) {
+            e($values['invoice_email_text']);
+} ?></textarea>
     </fieldset>
 
     <fieldset>
@@ -92,18 +104,18 @@ $values = $context->getValues();
         <textarea name="reminder_text" cols="80" rows="8"><?php e($values['reminder_text']); ?></textarea>
     </fieldset>
 
-	<!--
+    <!--
     <fieldset>
         <legend><?php e(t('Notifications')); ?></legend>
         <label>
         <input name="notify_order" value="1" type="checkbox" />
-        	<?php e(t('Notify me via email on new orders')); ?>
+            <?php e(t('Notify me via email on new orders')); ?>
         </label>
     </fieldset>
- 	-->
+    -->
 
     <div>
         <input type="submit" name="submit" value="<?php e(t('Save')); ?>" />
-	    <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
+        <a href="<?php e(url('../')); ?>"><?php e(t('Cancel')); ?></a>
     </div>
 </form>

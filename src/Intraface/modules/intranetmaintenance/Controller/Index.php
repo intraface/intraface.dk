@@ -28,6 +28,6 @@ class Intraface_modules_intranetmaintenance_Controller_Index extends k_Component
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 }

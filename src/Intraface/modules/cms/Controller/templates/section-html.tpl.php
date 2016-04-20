@@ -1,9 +1,9 @@
 <h1><?php e(t('edit section')); ?> <?php e($section->get('section_name')); ?> <?php echo e(t('on page')); ?> <?php e($section->cmspage->get('title')); ?></h1>
 
 <ul class="options">
-    <?php if (count($section->cmspage->getSections()) > 1): ?>
+    <?php if (count($section->cmspage->getSections()) > 1) : ?>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('close')); ?></a></li>
-    <?php else: ?>
+    <?php else : ?>
     <li><a class="edit" href="<?php e(url('../../', array('edit'))); ?>"><?php e(t('edit page settings')); ?></a></li>
     <li><a href="<?php e(url('../../../', array('type' =>$section->cmspage->get('type')))); ?>"><?php e(t('close')); ?></a></li>
     <?php endif; ?>
@@ -11,10 +11,10 @@
 
 <form method="post" action="<?php e(url()); ?>" id="publish-form">
     <fieldset class="<?php e($section->cmspage->getStatus()); ?>">
-    <?php if (!$section->cmspage->isPublished()): ?>
+    <?php if (!$section->cmspage->isPublished()) : ?>
     <?php e('this page is not published'); ?>
     <input type="submit" value="<?php e(t('publish now')); ?>" name="publish" />
-    <?php else: ?>
+    <?php else : ?>
     <?php e('this page is published'); ?>
     <input type="submit" value="<?php e(t('set as draft')); ?>" name="unpublish" />
     <?php endif; ?>
@@ -27,7 +27,7 @@
 </div>
 
 <div id="cmspage" style="padding: 1em; border: 4px solid #ccc;">
-    <?php if (!empty($_GET['delete']) AND is_numeric($_GET['delete'])) { ?>
+    <?php if (!empty($_GET['delete']) and is_numeric($_GET['delete'])) { ?>
        <p class="message">Elementet er blevet slettet.
        <a href="<?php e(url(null, array('undelete' => $_GET['delete']))); ?>">Fortryd</a>.</p>
     <?php     }
@@ -46,10 +46,12 @@
         <select name="new_element_type_id" id="new_element_type_id">
             <option value=""><?php e(t('choose')); ?></option>
             <?php
-                foreach ($element_types AS $key=>$type):
-                    if (!in_array($key, $section->template_section->get('allowed_element'))) continue; ?>
+            foreach ($element_types as $key => $type) :
+                if (!in_array($key, $section->template_section->get('allowed_element'))) {
+                    continue;
+                } ?>
                      <option value="<?php e($type); ?>"><?php e(t($type)); ?></option>
-                <?php endforeach;
+                <?php                                                                                                                                                                                                                                                                                                                                         endforeach;
             ?>
         </select>
         <input type="submit" value="<?php e(t('add element')); ?>" name="add_element" />

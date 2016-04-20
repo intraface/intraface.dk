@@ -40,11 +40,11 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
      *
      * @return void
      */
-    function visit($debtor, $onlinepayment = NULL)
+    function visit($debtor, $onlinepayment = null)
     {
         $this->doc = $this->getDocument();
 
-        if (!empty($this->file) AND $this->file->get('id') > 0) {
+        if (!empty($this->file) and $this->file->get('id') > 0) {
             $this->doc->addHeader($this->file->get('file_uri_pdf'));
         }
 
@@ -80,7 +80,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         if ($debtor->get('message')) {
             $text = explode("\r\n", $debtor->get('message'));
-            foreach ($text AS $line) {
+            foreach ($text as $line) {
                 if ($line == "") {
                     $this->doc->setY('-'.$this->doc->get("font_spacing"));
                     if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
@@ -173,7 +173,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             $first = true;
 
             while ($tekst != "") {
-
                 if (!$first) {
                     // first line has already got coloured
                     if ($bg_color == 1) {
@@ -203,7 +202,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 }
 
                 $desc_line = explode("\r\n", $items[$i]["description"]);
-                foreach ($desc_line AS $line) {
+                foreach ($desc_line as $line) {
                     if ($line == "") {
                         if ($bg_color == 1) {
                             $this->doc->setColor(0.8, 0.8, 0.8);
@@ -216,7 +215,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                         }
                     } else {
                         while ($line != "") {
-
                             if ($bg_color == 1) {
                                 $this->doc->setColor(0.8, 0.8, 0.8);
                                 $this->doc->filledRectangle($this->doc->get("margin_left"), $this->doc->get('y') - $this->doc->get("font_spacing"), $this->doc->get('right_margin_position') - $this->doc->get("margin_left"), $this->doc->get("font_spacing"));
@@ -233,7 +231,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                         }
                     }
                 }
-
             }
 
             if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {
@@ -305,7 +302,6 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
 
         // payment condition
         if ($debtor->get("type") == "invoice" || $debtor->get("type") == "order") {
-
             $parameter = array(
                 "contact" => $debtor->contact,
                 "payment_text" => ucfirst($this->translation->get($debtor->get('type')))." ".$debtor->get("number"),
@@ -320,7 +316,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
                 $onlinepayment->getDBQuery()->setFilter('belong_to_id', $debtor->get('id'));
                 $onlinepayment->getDBQuery()->setFilter('status', 2);
 
-                foreach ($onlinepayment->getlist() AS $p) {
+                foreach ($onlinepayment->getlist() as $p) {
                     $parameter['payment_online'] += $p["amount"];
                 }
             }
@@ -335,7 +331,7 @@ class Intraface_modules_debtor_Visitor_Pdf extends Intraface_modules_debtor_Pdf
             }
 
             $text = explode("\r\n", $debtor->getInvoiceText());
-            foreach ($text AS $line) {
+            foreach ($text as $line) {
                 if ($line == "") {
                     $this->doc->setY('-'.$this->doc->get("font_spacing"));
                     if ($this->doc->get('y') < $this->doc->get("margin_bottom") + $this->doc->get("font_spacing") * 2) {

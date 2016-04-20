@@ -3,11 +3,15 @@
 
             <div class="formrow">
                 <label><?php e(t('Search')); ?></label>
-                <input type="text" value="<?php if (!empty($value['search'])) e($value['search']); ?>" name="search" />
+                <input type="text" value="<?php if (!empty($value['search'])) {
+                    e($value['search']);
+} ?>" name="search" />
             </div>
             <div class="formrow">
                 <label><?php e(t('Number')); ?></label>
-                <input type="text" value="<?php if (!empty($value['number'])) e($value['number']); ?>" name="number" />
+                <input type="text" value="<?php if (!empty($value['number'])) {
+                    e($value['number']);
+} ?>" name="number" />
             </div>
 
         </fieldset>

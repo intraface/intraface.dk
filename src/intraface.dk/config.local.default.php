@@ -24,7 +24,7 @@ define('NET_DIRECTORY', '/src/intraface.dk/'); // subdirectory. if non keep empt
 // define paths - remember trailing slahs
 define('PATH_ROOT', dirname(__FILE__) . '/../');
 
-// optional upload path - remember trailing slash 
+// optional upload path - remember trailing slash
 define('PATH_UPLOAD', '/var/cache/intraface/upload/');
 
 // optional path to cache - remember trailing slash
@@ -48,12 +48,12 @@ define('SMTP_HOST', '');
 define('TIMEZONE', 'Europe/Copenhagen');
 define('COUNTRY_LOCAL', 'da_DK');
 
-// for intranet maintenance 
+// for intranet maintenance
 // the private key of the intranet that has intranetmaintenance
 define('INTRAFACE_INTRANETMAINTENANCE_INTRANET_PRIVATE_KEY', 'privatekeyshouldbereplaced'); 
 
 // the id of the shop used to modulepackage
-define('INTRAFACE_INTRANETMAINTENANCE_SHOP_ID', 0); 
+define('INTRAFACE_INTRANETMAINTENANCE_SHOP_ID', 0);
 
 // the url for intraface xml-rpc server. Empty for the default url.
 define('INTRAFACE_XMLRPC_SERVER_URL', '');
@@ -66,4 +66,4 @@ define('INTRAFACE_ONLINEPAYMENT_MD5SECRET', 'fake');
 define('CONNECTION_INTERNET', true);
 
 // if the system is in PRODUCTION or TEST mode
-define('SERVER_STATUS', 'TEST'); 
+define('SERVER_STATUS', 'TEST');

@@ -7,7 +7,8 @@
  * @author sune
  * @version 0.0.1
  */
-class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
+class Intraface_modules_modulepackage_Manager extends Intraface_Standard
+{
 
     /**
      * @var object intranet
@@ -60,7 +61,8 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
      *
      * @return integer id
      */
-    private function load() {
+    private function load()
+    {
 
         if ($this->id == 0) {
             return false;
@@ -103,12 +105,12 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
      *
      * @return void
      */
-    public function getDBQuery($kernel = NULL)
+    public function getDBQuery($kernel = null)
     {
         if ($this->dbquery) {
             return $this->dbquery;
         }
-        if ($kernel == NULL) {
+        if ($kernel == null) {
             throw new Exception('You need to provide kernel the first time you are calling getDBQuery');
         }
         $this->dbquery = new Intraface_DBQuery($kernel, 'intranet_module_package', 'intranet_module_package.active = 1 AND intranet_module_package.intranet_id = '.$this->intranet->get('id'));
@@ -351,7 +353,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
         }
 
         if (ereg('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', $duration)) {
-
             // firsts we translate the duration into an integer
             $end_date_integer = strtotime($duration);
             $start_date_integer = strtotime($start_date);
@@ -361,16 +362,14 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
             // first we add a month to see if there is a full month left.
             // If we want to give them this month for free this should be removed.
             $running_start_date_integer = strtotime('+1 month', $start_date_integer);
-            while($running_start_date_integer <= $end_date_integer) {
+            while ($running_start_date_integer <= $end_date_integer) {
                 $running_start_date_integer = strtotime('+1 month', $running_start_date_integer);
                 $month++;
             }
 
             return array('end_date' => $duration,
                 'month' => $month);
-
         } elseif (ereg('^([0-9]{1,2}) month$', $duration, $params)) {
-
             if (intval($params[1]) == 0) {
                 $this->error->set('The duration in month should be higher than zero.');
             }
@@ -511,8 +510,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
             exit;
         }
 
-        while($row = $result->fetchRow()) {
-
+        while ($row = $result->fetchRow()) {
             $add_action = array();
 
             if ($row['status_key'] == 1) { // 'created'
@@ -537,14 +535,12 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
                 $product = $shop->getProductDetailFromExistingOrder($row['order_debtor_id'], $row['product_id']);
                 $add_action['product_detail_id'] = $product['product_detail_id'];
                 $add_action['product_id'] = $row['product_id'];
-
             } else {
                 $add_action['product_detail_id'] = 0;
                 $add_action['product_id'] = 0;
             }
 
             $action->addAction($add_action);
-
         }
 
 
@@ -557,7 +553,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
             'month' => $parsed_duration['month']));
 
         return $action;
-     }
+    }
 
     /**
      * Returns an array of the packages that an intranet has.
@@ -577,7 +573,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
             } elseif ($this->dbquery->getFilter('status') == 'active') {
                 $this->dbquery->setCondition('status_key = 2');
             }
-
         }
 
         if ($this->dbquery->checkFilter('group_id')) {
@@ -607,7 +602,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
         $i = 0;
 
         $status_types = $this->getStatusTypes();
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $modulepackages[$i]['id'] = $db->f('id');
             $modulepackages[$i]['module_package_id'] = $db->f('module_package_id');
             $modulepackages[$i]['start_date'] = $db->f('start_date');
@@ -630,7 +625,7 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
      *
      * @return array status types
      */
-    static public function getStatusTypes()
+    public static function getStatusTypes()
     {
         return array(0 => '_invalid_',
             1 => 'created',
@@ -639,5 +634,3 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard {
             4 => 'used');
     }
 }
-
-?>

@@ -2,7 +2,7 @@
 
 <ul class="options">
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
-    <?php if ($context->getKernel()->user->hasModuleAccess('accounting')): ?>
+    <?php if ($context->getKernel()->user->hasModuleAccess('accounting')) : ?>
     <li><a href="<?php e(url('state')); ?>"><?php e(t('State')); ?></a></li>
     <?php endif; ?>
 </ul>
@@ -22,9 +22,11 @@
         <select name="type" id="type">
             <?php
             $types = $context->getPayment()->getTypes();
-            foreach ($types AS $key => $value) {
+            foreach ($types as $key => $value) {
                 ?>
-                <option value="<?php e($key); ?>" <?php if ($key == 0) print("selected='selected'"); ?> ><?php e(t($value)); ?></option>
+                <option value="<?php e($key); ?>" <?php if ($key == 0) {
+                    print("selected='selected'");
+} ?> ><?php e(t($value)); ?></option>
                 <?php
             }
             ?>

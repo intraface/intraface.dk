@@ -74,13 +74,13 @@ class Intraface_modules_modulepackage_AccessUpdate
             exit;
         }
 
-        while($row = $result->fetchRow()) {
+        while ($row = $result->fetchRow()) {
             $modulepackage = new Intraface_modules_modulepackage_ModulePackage($row['module_package_id']);
             $intranet = new IntranetMaintenance($row['intranet_id']);
 
             $modules = $modulepackage->get('modules');
             if (is_array($modules) && count($modules) > 0) {
-                foreach ($modules AS $module) {
+                foreach ($modules as $module) {
                     if (!$intranet->removeModuleAccess($module['module'])) {
                         throw new Exception('Error in removing access to module '.$module['module'].' for intranet '.$row['intranet_id']);
                     }
@@ -101,7 +101,7 @@ class Intraface_modules_modulepackage_AccessUpdate
             exit;
         }
 
-        while($row = $result->fetchRow()) {
+        while ($row = $result->fetchRow()) {
             $modulepackage = new Intraface_modules_modulepackage_ModulePackage($row['module_package_id']);
 
             // we prepare to give the intranet access
@@ -109,38 +109,36 @@ class Intraface_modules_modulepackage_AccessUpdate
             // we prepage to give the users access
             $user = new UserMaintenance();
             $users = $user->getList($kernel);
-            foreach ($users AS $key => $user) {
+            foreach ($users as $key => $user) {
                 $users[$key] = new UserMaintenance($user['id']);
             }
 
             $modules = $modulepackage->get('modules');
             if (is_array($modules) && count($modules) > 0) {
                 // First we give access to the intranet
-                foreach ($modules AS $module) {
+                foreach ($modules as $module) {
                     $module_object = ModuleMaintenance::factory($module['module']);
                     if (!$intranet->setModuleAccess($module['module'])) {
                         throw new Exception("Error in giving access to module ".$module['module'].' for intranet '.$row['intranet_id']);
                         $this->error->set('we could not give your intrnaet access to your modules');
                     } else {
                         // then we give access to alle the users in the intranet
-                        foreach ($users AS $user) {
+                        foreach ($users as $user) {
                             if (!$user->setModuleAccess($module['module'], $row['intranet_id'])) {
                                 throw new Exception('Error in giving access to module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id']);
                                 $this->error->set('we could not give all users access to your modules');
                             } else {
                                 // And lastly we give all subaccess
                                 $sub_access_array = $module_object->get('sub_access');
-                                foreach ($sub_access_array AS $sub_access) {
+                                foreach ($sub_access_array as $sub_access) {
                                     if (!$user->setSubAccess($module['module'], $sub_access['id'], $row['intranet_id'])) {
                                         throw new Exception('Error in giving subaccess to '.$sub_access['name'].' in module '.$module['module'].' for user '.$user->get('username').' in intranet '.$row['intranet_id']);
                                         $this->error->set('we could not give all users access to your modules');
                                     }
                                 }
-
                             }
                         }
                     }
-
                 }
             }
             $update = $db->exec('UPDATE intranet_module_package SET status_key = 2 WHERE id = '.$db->quote($row['id'], 'integer'));
@@ -149,7 +147,6 @@ class Intraface_modules_modulepackage_AccessUpdate
                 exit;
             }
             $package_added += $update;
-
         }
 
         // @todo this should not be in the errorlog

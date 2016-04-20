@@ -6,16 +6,16 @@
 </ul>
 
 <form action="<?php e(url()); ?>" method="post">
-<?php if (!empty($deleted)): ?>
+<?php if (!empty($deleted)) : ?>
         <p class="message"><?php e(t('An attribute group has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel')); ?>" /></p>
 <?php endif; ?>
 </form>
 
 <?php echo $context->getError()->view(); ?>
 
-<?php if ($groups->count() == 0): ?>
+<?php if ($groups->count() == 0) : ?>
     <p><?php e(t('No attribute groups has been created.')); ?> <a href="<?php e(url(null, array('create'))); ?>"><?php e(t('Create attribute group')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
 
     <?php echo $content; ?>
 

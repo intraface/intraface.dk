@@ -156,7 +156,6 @@ class Intraface_XMLRPC_OnlinePayment_Server0002 extends Intraface_XMLRPC_Server
 
             $subject = $settings->getConfirmationEmailSubject($shop->getLanguage()) . ' (#' . $payment_id . ')';
             $body = $settings->getConfirmationEmailBody($shop->getLanguage()) . "\n\n" . $this->kernel->intranet->address->get('name');
-
         } catch (Exception $e) {
         }
 

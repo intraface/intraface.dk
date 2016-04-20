@@ -9,10 +9,10 @@ $items = $context->getItems();
     <li><a href="<?php e(url('../../', array('use_stored' => true))); ?>"><?php e('Back to credit notes'); ?></a></li>
 </ul>
 
-<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))): ?>
+<?php if (!$context->getYear()->readyForState($context->getModel()->get('this_date'))) : ?>
     <?php echo $context->getYear()->error->view(); ?>
     <p>Gå til <a href="<?php e($this->url('../../../../../accounting/')); ?>">regnskabet</a></p>
-<?php else: ?>
+<?php else : ?>
 
     <p class="message">Når du bogfører en kreditnota vil beløbet bliver trukket fra debitorkontoen.</p>
 
@@ -34,28 +34,28 @@ $items = $context->getItems();
         </table>
     </fieldset>
 
-    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')): ?>
+    <?php if ($context->getModel()->readyForState($context->getYear(), 'skip_check_products')) : ?>
         <fieldset>
             <legend>Oplysninger der bogføres</legend>
             <table>
                 <tr>
                     <th>Bilagsnummer</th>
                     <td>
-                        <?php if (!$context->getModel()->isStated()): ?>
+                        <?php if (!$context->getModel()->isStated()) : ?>
                         <input type="text" name="voucher_number" value="<?php e($context->getVoucher()->getMaxNumber() + 1); ?>" />
-                        <?php else: ?>
+                        <?php else : ?>
                         <a href="<?php e($accounting_module->getPath()); ?>voucher.php?id=<?php e($context->getModel()->get("voucher_id")); ?>">Se bilag</a>
                         <?php endif; ?>
                     </td>
                 </tr>
-                <?php if ($context->getModel()->isStated()): ?>
+                <?php if ($context->getModel()->isStated()) : ?>
                     <tr>
                         <th>Bogført</th>
                         <td>
                                 <?php e($context->getModel()->get("dk_date_stated")); ?>
                         </td>
                     </tr>
-                <?php else: ?>
+                <?php else : ?>
                     <tr>
                         <th>Bogfør på dato</th>
                         <td>
@@ -96,7 +96,7 @@ $items = $context->getItems();
                         <td><?php e($items[$i]["name"]); ?></td>
                         <td><?php e(amountToOutput($items[$i]["quantity"]*$items[$i]["price"]->getAsIso(2))); ?></td>
                         <td>
-                            <?php if (!$context->getModel()->isStated()):
+                            <?php if (!$context->getModel()->isStated()) :
                                 $year = new Year($context->getKernel());
                                 $year->loadActiveYear();
                                 $accounts =  $account->getList('sale');
@@ -106,22 +106,28 @@ $items = $context->getItems();
                                     <?php
                                     $x = 0;
                                     $optgroup = 1;
-                                    foreach ($accounts AS $a):
-                                        if (strtolower($a['type']) == 'sum') continue;
-                                        if (strtolower($a['type']) == 'headline') continue;
+                                    foreach ($accounts as $a) :
+                                        if (strtolower($a['type']) == 'sum') {
+                                            continue;
+                                        }
+                                        if (strtolower($a['type']) == 'headline') {
+                                            continue;
+                                        }
                                         ?>
                                         <option value="<?php e($a['number']); ?>"
                                         <?php
                                         // er det korrekt at det er number? og m�ske skal et produkt i virkeligheden snarere
                                         // gemmes med nummeret en med id - for s� er det noget lettere at opdatere fra �r til �r
                                         ?>
-                                        <?php if ($product->get('state_account_id') == $a['number']) echo ' selected="selected"'; ?>
+                                        <?php if ($product->get('state_account_id') == $a['number']) {
+                                            echo ' selected="selected"';
+} ?>
                                         ><?php e($a['name']); ?></option>
                                         <?php $optgroup = 0;
                                     endforeach;
                                     ?>
                                 </select>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <?php e($account->get('number') . ' ' . $account->get('name')); ?>
                             <?php endif; ?>
                         </td>

@@ -36,7 +36,7 @@ class Reminder extends Intraface_Standard
         return $this->dbquery;
     }
 
-    function getItems($type = NULL)
+    function getItems($type = null)
     {
         $this->loadItem();
         return $this->item->getList($type);
@@ -101,7 +101,7 @@ class Reminder extends Intraface_Standard
         }
 
         $this->value['payment_total'] = 0;
-        foreach ($this->getDebtorAccount()->getList() AS $payment) {
+        foreach ($this->getDebtorAccount()->getList() as $payment) {
             $this->value['payment_total'] += $payment["amount"];
         }
         $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
@@ -153,15 +153,21 @@ class Reminder extends Intraface_Standard
 
         $validator = new Intraface_Validator($this->error);
 
-        if (!isset($input['number'])) $input['number'] = 0;
+        if (!isset($input['number'])) {
+            $input['number'] = 0;
+        }
         if ($validator->isNumeric($input["number"], "Rykkernummer skal v�re et tal st�rre end nul", "greater_than_zero")) {
             if (!$this->isNumberFree($input["number"])) {
                 $this->error->set("Rykkernummer er allerede brugt");
             }
         }
 
-        if (!isset($input['contact_id'])) $input['contact_id'] = 0;
-        if (!isset($input["contact_person_id"])) $input["contact_person_id"] = 0;
+        if (!isset($input['contact_id'])) {
+            $input['contact_id'] = 0;
+        }
+        if (!isset($input["contact_person_id"])) {
+            $input["contact_person_id"] = 0;
+        }
         if ($validator->isNumeric($input["contact_id"], "Du skal angive en kunde", "greater_than_zero")) {
             $contact = new Contact($this->kernel, (int)$input["contact_id"]);
             if (is_object($contact->address)) {
@@ -177,38 +183,56 @@ class Reminder extends Intraface_Standard
         }
 
         // $validator->isString($input["attention_to"], "Fejl i att.", "", "allow_empty");
-        if (!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) {
+            $input['description'] = '';
+        }
         $validator->isString($input["description"], "Fejl i beskrivelsen", "", "allow_empty");
 
-        if (!isset($input['this_date'])) $input['this_date'] = '';
+        if (!isset($input['this_date'])) {
+            $input['this_date'] = '';
+        }
         if ($validator->isDate($input["this_date"], "Ugyldig dato", "allow_no_year")) {
             $this_date = new Intraface_Date($input["this_date"]);
             $this_date->convert2db();
         }
 
-        if (!isset($input['due_date'])) $input['due_date'] = '';
+        if (!isset($input['due_date'])) {
+            $input['due_date'] = '';
+        }
         if ($validator->isDate($input["due_date"], "Ugyldig forfaldsdato", "allow_no_year")) {
             $due_date = new Intraface_Date($input["due_date"]);
             $due_date->convert2db();
         }
 
-        if (!isset($input['reminder_fee'])) $input['reminder_fee'] = 0;
+        if (!isset($input['reminder_fee'])) {
+            $input['reminder_fee'] = 0;
+        }
         $validator->isNumeric($input["reminder_fee"], "Rykkerbebyr skal v�re et tal");
-        if (!isset($input['text'])) $input['text'] = '';
+        if (!isset($input['text'])) {
+            $input['text'] = '';
+        }
         $validator->isString($input["text"], "Fejl i teksten", "<b><i>", "allow_empty");
-        if (!isset($input['send_as'])) $input['send_as'] = '';
+        if (!isset($input['send_as'])) {
+            $input['send_as'] = '';
+        }
         $validator->isString($input["send_as"], "Ugyldig m�de at sende rykkeren p�");
 
-        if (!isset($input['payment_method_key'])) $input['payment_method_key'] = 0;
+        if (!isset($input['payment_method_key'])) {
+            $input['payment_method_key'] = 0;
+        }
         $validator->isNumeric($input["payment_method_key"], "Du skal angive en betalingsmetode");
-        if (!isset($input['girocode'])) $input['girocode'] = '';
+        if (!isset($input['girocode'])) {
+            $input['girocode'] = '';
+        }
         if ($input["payment_method_key"] == 3) {
             $validator->isString($input["girocode"], "Du skal udfylde girokode");
         } else {
             $validator->isString($input["girocode"], "Ugyldig girokode", "", "allow_empty");
         }
 
-        if (!isset($input['checked_invoice'])) $input['checked_invoice'] = array();
+        if (!isset($input['checked_invoice'])) {
+            $input['checked_invoice'] = array();
+        }
         if (!is_array($input["checked_invoice"]) || count($input["checked_invoice"]) == 0) {
             $this->error->set("Der er ikke valgt nogle fakturaer til rykkeren");
         }
@@ -246,14 +270,14 @@ class Reminder extends Intraface_Standard
         $this->item->clear();
 
         if (isset($input["checked_invoice"]) && is_array($input["checked_invoice"])) {
-            foreach ($input["checked_invoice"] AS $invoice_id) {
+            foreach ($input["checked_invoice"] as $invoice_id) {
                 $this->loadItem();
                 $this->item->save(array("invoice_id" => $invoice_id));
             }
         }
 
         if (isset($input["checked_reminder"]) && is_array($input["checked_reminder"])) {
-            foreach ($input["checked_reminder"] AS $reminder_id) {
+            foreach ($input["checked_reminder"] as $reminder_id) {
                 $this->loadItem();
                 $this->item->save(array("reminder_id" => $reminder_id));
             }
@@ -275,7 +299,8 @@ class Reminder extends Intraface_Standard
      *
      * @return true / false
      */
-    function setStatus($status) {
+    function setStatus($status)
+    {
 
         if (is_string($status)) {
             $status_id = array_search($status, $this->getStatusTypes());
@@ -296,7 +321,7 @@ class Reminder extends Intraface_Standard
             throw new Exception("Tried to set status the same or lower than it was before. Can be because of reload. In Reminder->setStatus");
         }
 
-        switch($status) {
+        switch ($status) {
             case "sent":
                 $sql = "date_sent = NOW()";
                 break;
@@ -391,9 +416,8 @@ class Reminder extends Intraface_Standard
                     // Hvis der ikke er nogen dato så tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $this->dbquery->setCondition("status < 2");
                 }
-
             } else {
-                switch($this->dbquery->getFilter("status")) {
+                switch ($this->dbquery->getFilter("status")) {
                     case "0":
                         $to_date_field = "date_created";
                         break;
@@ -427,7 +451,7 @@ class Reminder extends Intraface_Standard
         $db = $this->dbquery->getRecordset("id", "", false);
 
         $list = array();
-        while($db->nextRecord()) {
+        while ($db->nextRecord()) {
             $reminder = new Reminder($this->kernel, $db->f("id"));
             $list[$i] = $reminder->get();
             if (is_object($reminder->contact->address)) {
@@ -641,7 +665,7 @@ class Reminder extends Intraface_Standard
 
     }
 
-    function pdf($type = 'stream', $filename='')
+    function pdf($type = 'stream', $filename = '')
     {
         if ($this->get('id') == 0) {
             throw new Exception('Cannot create pdf from debtor without valid id');

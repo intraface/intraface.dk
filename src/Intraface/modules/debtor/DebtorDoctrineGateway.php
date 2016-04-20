@@ -81,7 +81,7 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
      *
      * @return object collection containing products
      */
-    public function findByDbQuerySearch($dbquery = NULL)
+    public function findByDbQuerySearch($dbquery = null)
     {
         $query = $this->table
             ->createQuery()
@@ -103,13 +103,12 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             ->addWhere('intranet_id = ?', $this->user->getActiveIntranetId());
 
         if ($dbquery->checkFilter("contact_id")) {
-            $query = $query->addWhere("contact_id = ?",intval($dbquery->getFilter("contact_id")));
+            $query = $query->addWhere("contact_id = ?", intval($dbquery->getFilter("contact_id")));
         }
 
         if ($dbquery->checkFilter("text")) {
             $query = $query->addWhere('description LIKE ? OR girocode = ? OR number = ?', array('%'.$dbquery->getFilter("text").'%', $dbquery->getFilter("text"), $dbquery->getFilter("text")));
             //  OR contact_address.name LIKE \"%".$dbquery->getFilter("text")."%\")
-
         }
 
         /* To be implemented
@@ -159,7 +158,6 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             if ($dbquery->getFilter("status") == "-1") {
                 // Beh�ves ikke, den tager alle.
                 // $query = $query->addWhere("status >= 0");
-
             } elseif ($dbquery->getFilter("status") == "-2") {
                 // Not executed = �bne
                 if ($dbquery->checkFilter("to_date")) {
@@ -172,7 +170,6 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                     // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $query = $query->addWhere("status < 2");
                 }
-
             } elseif ($dbquery->getFilter("status") == "-3") {
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
@@ -196,9 +193,7 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
                     $query = $query->addWhere("status = 1 OR status = 2");
                 }
             } else {
-
                 $query = $query->addWhere("status = ?", intval($dbquery->getFilter("status")));
-
             }
         }
 
@@ -242,6 +237,4 @@ class Intraface_modules_debtor_DebtorDoctrineGateway
             return $collection->getLast()->getDetails()->getNumber();
         }
     }*/
-
-
 }

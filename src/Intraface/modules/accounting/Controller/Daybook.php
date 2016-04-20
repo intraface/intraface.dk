@@ -55,13 +55,13 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         if (!$this->getAccount()->anyAccounts()) {
             $tpl = $this->template->create('Intraface/Controller/templates/message');
             return $tpl->render($this, array(
-            	'type' => 'dependent',
-            	'content' => 'Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="' .  $this->url('../year/' . $this->getYear()->get('id')) . '">regnskabsåret</a>.'));
-        } elseif ($this->getYear()->get('vat') == 1 AND !$this->getYear()->vatAccountIsSet()) {
+                'type' => 'dependent',
+                'content' => 'Du skal først oprette nogle konti, inden du kan taste poster ind i regnskabet. Du kan oprette en standardkontoplan under <a href="' .  $this->url('../year/' . $this->getYear()->get('id')) . '">regnskabsåret</a>.'));
+        } elseif ($this->getYear()->get('vat') == 1 and !$this->getYear()->vatAccountIsSet()) {
             $tpl = $this->template->create('Intraface/Controller/templates/message');
             return $tpl->render($this, array(
-            	'type' => 'dependent',
-            	'content' => 'Du har ikke sat momskonti. <a href="' . $this->url('../settings') . '">Gå til indstillingerne</a>.'));
+                'type' => 'dependent',
+                'content' => 'Du har ikke sat momskonti. <a href="' . $this->url('../settings') . '">Gå til indstillingerne</a>.'));
         }
 
         // the view to use
@@ -102,10 +102,10 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         // outputting the entire page
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/daybook');
         return $tpl->render($this, array(
-        	'cheatsheet' => $cheatsheet,
-        	'message' => $message,
-        	'draft' => $draft,
-        	'view' => $view_tpl->render($this)));
+            'cheatsheet' => $cheatsheet,
+            'message' => $message,
+            'draft' => $draft,
+            'view' => $view_tpl->render($this)));
     }
 
     function postForm()
@@ -145,8 +145,8 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
     {
         $this->getKernel()->useModule('accounting');
         if (is_object($this->voucher)) {
-    	    return $this->voucher;
-    	}
+            return $this->voucher;
+        }
         return ($this->voucher = Voucher::factory($this->getYear(), $voucher_number));
     }
 
@@ -164,20 +164,20 @@ class Intraface_modules_accounting_Controller_Daybook extends k_Component
         $values['reference'] = '';
         $values['id'] = '';
 
-    	return $values;
+        return $values;
     }
 
     function getAccount()
     {
         require_once 'Intraface/modules/accounting/Account.php';
-    	return new Account($this->getYear());
+        return new Account($this->getYear());
     }
 
     function getPost()
     {
-    	if (is_object($this->post)) {
-    	    return $this->post;
-    	}
+        if (is_object($this->post)) {
+            return $this->post;
+        }
         return ($this->post = new Post($this->getVoucher()));
     }
 

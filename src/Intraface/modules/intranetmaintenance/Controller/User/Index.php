@@ -25,8 +25,8 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
         $user = new UserMaintenance();
 
         if ($this->query('add_user_id') != 0) {
-        	$this->getRedirect()->setParameter('user_id', intval($this->query('add_user_id')));
-        	return new k_SeeOther($this->getRedirect()->getRedirect($this->url(null)));
+            $this->getRedirect()->setParameter('user_id', intval($this->query('add_user_id')));
+            return new k_SeeOther($this->getRedirect()->getRedirect($this->url(null)));
         }
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/user/index');
@@ -71,7 +71,6 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
                 } else {
                     return new k_SeeOther($this->url($user->getId()));
                 }
-
             }
         }
         return $this->render();
@@ -88,9 +87,9 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     function isAddUserTrue()
     {
         if ($this->getRedirect()->get('identifier') == 'add_user') {
-        	return true;
+            return true;
         } else {
-        	return false;
+            return false;
         }
     }
 
@@ -105,12 +104,11 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
     function getUsers()
     {
         if (isset($_GET["search"])) {
-
-        	if (isset($_GET["text"]) && $_GET["text"] != "") {
-        		$this->getUser()->getDBQuery($this->getKernel())->setFilter("text", $_GET["text"]);
-        	}
+            if (isset($_GET["text"]) && $_GET["text"] != "") {
+                $this->getUser()->getDBQuery($this->getKernel())->setFilter("text", $_GET["text"]);
+            }
         } elseif (isset($_GET['character'])) {
-        	$this->getUser()->getDBQuery($this->getKernel())->useCharacter();
+            $this->getUser()->getDBQuery($this->getKernel())->useCharacter();
         }
 
         $this->getUser()->getDBQuery($this->getKernel())->defineCharacter('character', 'name');
@@ -131,7 +129,7 @@ class Intraface_modules_intranetmaintenance_Controller_User_Index extends k_Comp
 
     function getKernel()
     {
-    	return $this->context->getKernel();
+        return $this->context->getKernel();
     }
 
     function getIntranet()

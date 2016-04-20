@@ -3,9 +3,9 @@
  * Kontakt
  *
  * @package Intraface_Contact
- * @author	Lars Olesen
- * @since	1.0
- * @version	1.0
+ * @author  Lars Olesen
+ * @since   1.0
+ * @version     1.0
  */
 class MainContact extends Intraface_Main
 {
@@ -43,7 +43,8 @@ class MainContact extends Intraface_Main
          $this->includeSettingFile('settings.php');
 
         $this->addSetting('paymentcondition', array(0, 8, 14, 30));
-        $this->addSetting('type',
+        $this->addSetting(
+            'type',
             array(
                 0 => 'private',
                 1 => 'corporation'
@@ -53,24 +54,26 @@ class MainContact extends Intraface_Main
          $this->addSetting('contact_login_url', array(
             0 => 'kundelogin.dk',
             1 => 'medlemslogin.dk'
-        ));
+         ));
 
-        $this->addSetting('preferred_invoice',
-            array(
+         $this->addSetting(
+             'preferred_invoice',
+             array(
                 1 => 'pdf',
                 2 => 'email',
                 3 => 'electronic'
-            )
-        );
+             )
+         );
 
-        $this->addSetting('reminder_status',
-            array(
+         $this->addSetting(
+             'reminder_status',
+             array(
                 0 => '_Invalid type_',
                 1 => 'created',
                 2 => 'seen',
                 3 => 'cancelled'
-            )
-        );
+             )
+         );
 
     }
 }

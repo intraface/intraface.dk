@@ -70,8 +70,8 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         }
 
         $data = array(
-        	'cmspage' => $cmspage,
-        	'sections' => $sections,
+            'cmspage' => $cmspage,
+            'sections' => $sections,
             'kernel' => $this->getKernel(),
             'error' => $this->error
         );
@@ -109,9 +109,9 @@ class Intraface_modules_cms_Controller_Page extends k_Component
         $this->document->addScript('cms/parseUrlIdentifier.js');
 
         $data = array('value' => $value,
-        	'type' => $type,
-        	'cmspage' => $cmspage,
-        	'translation' => $this->getKernel()->getTranslation('cms'),
+            'type' => $type,
+            'cmspage' => $cmspage,
+            'translation' => $this->getKernel()->getTranslation('cms'),
             'templates' => $templates,
             'cmssite' => $cmssite,
             'kernel' => $this->getKernel(),

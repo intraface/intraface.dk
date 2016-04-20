@@ -7,10 +7,10 @@ $value = $context->getValues();
 <ul class="options">
     <li><a class="edit" href="<?php e(url(null, array('edit'))); ?>"><?php e(t('Edit')); ?></a></li>
     <li><a href="<?php e(url('letters')); ?>"><?php e(t('Letters')); ?></a></li>
-    <?php if ($context->getKernel()->user->hasModuleAccess('contact')): ?>
+    <?php if ($context->getKernel()->user->hasModuleAccess('contact')) : ?>
         <li><a href="<?php e(url('subscribers')); ?>"><?php e(t('Subscribers')); ?></a></li>
     <?php endif; ?>
-	<li><a href="<?php e(url('log')); ?>"><?php e(t('Log')); ?></a></li>
+    <li><a href="<?php e(url('log')); ?>"><?php e(t('Log')); ?></a></li>
     <li><a href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 

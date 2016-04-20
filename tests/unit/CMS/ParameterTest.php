@@ -69,7 +69,4 @@ class ParameterTest extends PHPUnit_Framework_TestCase
         $p = $this->createParameter();
         $this->assertEquals($value, $p->get($parameter));
     }
-
-
 }
-?>

@@ -55,7 +55,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Component
         if ($this->body('append_product')) {
             // Append category to product
             $appender = $category->getAppender($this->body('product_id'));
-            foreach ($this->body('category') AS $category) {
+            foreach ($this->body('category') as $category) {
                 $category = new Intraface_Category($this->getKernel(), $this->mdb2, new Intraface_Category_Type('shop', $shop->getId()), $category);
                 $appender->add($category);
             }
@@ -64,7 +64,7 @@ class Intraface_modules_shop_Controller_Categories extends k_Component
         } elseif ($this->body('action') == 'delete') {
             // delete category
             if (is_array($this->body('category'))) {
-                foreach ($this->body('category') AS $category) {
+                foreach ($this->body('category') as $category) {
                     $category = new Intraface_Category($this->getKernel(), $this->mdb2, new Intraface_Category_Type('shop', $shop->getId()), $category);
                     $category->delete();
                 }

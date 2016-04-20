@@ -46,7 +46,7 @@ class Demo_Shop_Show extends k_Component
 
     private function intranetHasOnlinePaymentAccess()
     {
-        if ($this->intranet_has_online_payment_access === NULL) {
+        if ($this->intranet_has_online_payment_access === null) {
             $this->intranet_has_online_payment_access = $this->client->hasModuleAccess($this->getCredentials(), 'onlinepayment');
         }
         return $this->intranet_has_online_payment_access;
@@ -61,7 +61,8 @@ class Demo_Shop_Show extends k_Component
             $shop_id,
             $debug,
             INTRAFACE_XMLPRC_SERVER_PATH . "shop/server0100.php",
-            'utf-8'); // 'iso-8859-1', 'xmlrpcext'
+            'utf-8'
+        ); // 'iso-8859-1', 'xmlrpcext'
         return new IntrafacePublic_Shop($client, $this->cache);
     }
 

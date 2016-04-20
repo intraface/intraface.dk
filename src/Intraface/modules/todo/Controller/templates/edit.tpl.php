@@ -5,9 +5,11 @@
     <input type="hidden" name="id" value="<?php e($todo->get('id')); ?>" />
     <fieldset id="todolist">
       <h2><?php e(t('Edit todo')); ?></h2>
-      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if (!empty($value['list_name'])) e($value['list_name']); ?>" /></label>
+      <label><input style="font-size: 2em;" type="text" name="list_name" value="<?php if (!empty($value['list_name'])) {
+            e($value['list_name']);
+} ?>" /></label>
       <h2><?php e(t('Items')); ?></h2>
-        <?php foreach ($value['todo'] AS $i): ?>
+        <?php foreach ($value['todo'] as $i) : ?>
         <div>
         <input type="hidden" name="item_id[]" value="<?php e($i['id']); ?>">
         <label>
@@ -18,13 +20,13 @@
             <option value="0"><?php e(t('Who is responsible?')); ?></option>
             <?php
                 $users = $kernel->user->getList();
-                foreach ($users AS $user) {
-                    echo '<option value="'.$user['id'].'"';
-                    if ($i['responsible_user_id'] == $user['id']) {
-                        echo ' selected="selected"';
-                    }
-                    echo '>'.$user['name'].'</option>';
+            foreach ($users as $user) {
+                echo '<option value="'.$user['id'].'"';
+                if ($i['responsible_user_id'] == $user['id']) {
+                    echo ' selected="selected"';
                 }
+                echo '>'.$user['name'].'</option>';
+            }
             ?>
         </select>
         </label>
@@ -38,12 +40,12 @@
     <label>
         <select name="responsible_user_id[]">
           <option value="0"><?php e(t('Who is responsible?')); ?></option>
-          <?php
+            <?php
             $users = $kernel->user->getList();
-          foreach ($users AS $user) {
-              echo '<option value="'.$user['id'].'"';
-            echo '>'.$user['name'].'</option>';
-          }
+            foreach ($users as $user) {
+                echo '<option value="'.$user['id'].'"';
+                echo '>'.$user['name'].'</option>';
+            }
         ?>
         </select>
     </label>
@@ -78,7 +80,9 @@ function moreFields() {
     <p><a href="" onclick="moreFields(); return false;"><?php e(t('More fields')); ?></a></p>
 
    <h2><?php e(t('Description (optional)')); ?></h2>
-   <label><textarea cols="80" rows="4" name="list_description"><?php if (!empty($value['list_description'])) e($value['list_description']); ?></textarea></label>
+   <label><textarea cols="80" rows="4" name="list_description"><?php if (!empty($value['list_description'])) {
+        e($value['list_description']);
+} ?></textarea></label>
 
    </fieldset>
 

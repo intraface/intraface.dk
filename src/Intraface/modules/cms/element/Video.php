@@ -23,7 +23,7 @@ class Intraface_modules_cms_element_Video extends CMS_Element
         switch ($this->get('service')) {
             case 'revver':
                 $this->value['player'] = '<embed type="application/x-shockwave-flash" src="http://flash.revver.com/player/1.0/player.swf" pluginspage="http://www.macromedia.com/go/getflashplayer" scale="noScale" salign="TL" bgcolor="#ffffff" flashvars="width=480&height=392&mediaId='.$this->value['doc_id'].'&affiliateId=35722&javascriptContext=true&skinURL=http://flash.revver.com/player/1.0/skins/Default_Raster.swf&skinImgURL=http://flash.revver.com/player/1.0/skins/night_skin.png&actionBarSkinURL=http://flash.revver.com/player/1.0/skins/DefaultNavBarSkin.swf&resizeVideo=True" wmode="transparent" height="392" width="480"></embed>';
-            break;
+                break;
             case 'google':
                 $this->value['player']  = '<object type="application/x-shockwave-flash" data="http://video.google.com/googleplayer.swf?docId='.$this->value['doc_id'].'" width="400" height="326" id="VideoPlayback">';
                 $this->value['player'] .= '<param name="movie" value="http://video.google.com/googleplayer.swf?docId='.$this->value['doc_id'].'" />';
@@ -34,14 +34,13 @@ class Intraface_modules_cms_element_Video extends CMS_Element
                 $this->value['player'] .= '<param name="salign" value="TL" />';
                 $this->value['player'] .= '<param name="FlashVars" value="playerMode=embedded" />';
                 $this->value['player'] .= '</object>';
-            break;
+                break;
             case 'youtube':
                 $this->value['player'] = '<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/'.$this->value['doc_id'].'"></param><param name="wmode" value="transparent"></param><embed src="http://www.youtube.com/v/'.$this->value['doc_id'].'" type="application/x-shockwave-flash" wmode="transparent" width="425" height="350"></embed></object>';
-            break;
+                break;
             default:
                 $this->value['player'] = 'Ingen player understøtter denne type';
-            break;
-
+                break;
         }
     }
 
@@ -72,5 +71,4 @@ class Intraface_modules_cms_element_Video extends CMS_Element
 
         return 1;
     }
-
 }

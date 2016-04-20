@@ -12,7 +12,7 @@ $values = $context->getValues();
                     <th><label for="amount">Beløb</label></th>
                     <th><label for="reference">Reference</label></th>
                     <!--
-                    <?php if ($context->getYear()->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0) : ?>
                     <th><label for="vat_on">U. moms</label></th>
                     <?php endif; ?>
                     -->
@@ -33,16 +33,25 @@ $values = $context->getValues();
                     <td>
                         <select name="debet_account_number" id="debitor_account_number_select" tabindex="4">
                             <option value=""><?php e(t('Choose')); ?></option>
-                            <?php foreach ($context->getAccount()->getList('finance') AS $a): ?>
-                                    <?php if ($context->getYear()->getSetting('debtor_account_id') == $a['id']) continue; ?>
+                            <?php foreach ($context->getAccount()->getList('finance') as $a) : ?>
+                                    <?php if ($context->getYear()->getSetting('debtor_account_id') == $a['id']) {
+                                        continue;
+} ?>
                                     <option value="<?php e($a['number']); ?>"
-                                    <?php if ($values['debet_account_number'] == $a['number']) echo ' selected="selected"'; ?>
+                                    <?php if ($values['debet_account_number'] == $a['number']) {
+                                        echo ' selected="selected"';
+} ?>
                                     ><?php e($a['name']); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </td>
                     <td>
-                        <input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) { $account = new Account($context->getYear(), $context->getYear()->getSetting('debtor_account_id')); e($context->getAccount()->get('number')); } else { e($values['credit_account_number']); }?>" size="8" />
+                        <input tabindex="5" type="text" name="credit_account_number" id="credit_account_number" value="<?php if (empty($values['credit_account_number'])) {
+                            $account = new Account($context->getYear(), $context->getYear()->getSetting('debtor_account_id'));
+                            e($context->getAccount()->get('number'));
+} else {
+    e($values['credit_account_number']);
+}?>" size="8" />
                         <a href="daybook_list_accounts.php" id="credit_account_open">+</a>
                         <div id="credit_account_name">&nbsp;</div>
                     </td>
@@ -50,10 +59,12 @@ $values = $context->getValues();
                         <input tabindex="6" name="amount" id="amount" type="text" value="<?php e($values['amount']); ?>" size="8" />
                     </td>
                     <td>
-                        <input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) e($values['reference']); ?>" />
+                        <input tabindex="7" name="reference" id="reference" type="text" size="7"  value="<?php if (!empty($values['reference'])) {
+                            e($values['reference']);
+} ?>" />
                     </td>
                     <!--
-                    <?php if ($context->getYear()->get('vat') > 0): ?>
+                    <?php if ($context->getYear()->get('vat') > 0) : ?>
                     <td>
                         <input tabindex="8" name="vat_off" id="vat_off" type="checkbox" value="1" />
                     </td>

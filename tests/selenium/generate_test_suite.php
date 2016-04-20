@@ -1,5 +1,5 @@
 <?php
-require_once 'Ilib/Testing/Selenium/Selenese/TestSuiteGenerator.php';
+require_once dirname(__FILE__) . '/../../vendor/autoload.php';
 
 $writer = new Ilib_Testing_Selenium_Selenese_TestSuiteGenerator;
 $writer->addReplacement('##path_test_root##', dirname(__FILE__));

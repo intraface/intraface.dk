@@ -54,5 +54,4 @@ class NewsletterListTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($list->delete());
         $this->assertEquals(0, count($list->getList()));
     }
-
 }

@@ -28,11 +28,11 @@ class Intraface_modules_language_Controller_Index extends k_Component
         $languages = new Intraface_modules_language_Languages;
         $languages->flush();
         if ($this->body('language')) {
-        	foreach ($this->body('language') as $key) {
+            foreach ($this->body('language') as $key) {
                 $languages = new Intraface_modules_language_Languages;
                 $languages->type_key = $key;
                 $languages->save();
-        	}
+            }
         }
         return new k_SeeOther($this->url());
     }

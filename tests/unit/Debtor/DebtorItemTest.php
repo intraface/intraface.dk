@@ -40,20 +40,23 @@ class DebtorItemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($item));
     }
 
-    function testSaveWithEmptyArray() {
+    function testSaveWithEmptyArray()
+    {
         $item = new DebtorItem($this->createDebtor());
         $this->assertFalse($item->save(array()));
         $this->assertTrue($item->error->isError());
     }
 
-    function testSaveWithValidArray() {
+    function testSaveWithValidArray()
+    {
         $item = new DebtorItem($this->createDebtor());
         $product = $this->createProduct();
         $product->save(array('name' => 'test', 'vat' => 1, 'price' => '100'));
         $this->assertEquals(1, $item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test')));
     }
 
-    function testLoad() {
+    function testLoad()
+    {
 
         $item = new DebtorItem($this->createDebtor());
         $product = $this->createProduct();
@@ -61,7 +64,7 @@ class DebtorItemTest extends PHPUnit_Framework_TestCase
         $item->save(array('product_id' => 1, 'quantity' => 2, 'description' => 'This is a test'));
         $item = new DebtorItem($this->createDebtor(), 1);
 
-        $values = Array(
+        $values = array(
             'id' => 1,
             'product_id' => 1,
             'product_detail_id' => 1,
@@ -72,8 +75,4 @@ class DebtorItemTest extends PHPUnit_Framework_TestCase
         );
         $this->assertEquals($values, $item->get());
     }
-
-
 }
-
-?>

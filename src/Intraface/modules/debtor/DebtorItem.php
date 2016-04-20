@@ -166,8 +166,7 @@ class DebtorItem extends Intraface_Standard
     {
         if ($this->getProduct()->get('has_variation')) {
             return $this->getProductVariationDetail()->getPrice($this->getProduct());
-        }
-        else {
+        } else {
             return $this->getProduct()->getDetails()->getPrice();
         }
     }
@@ -181,8 +180,7 @@ class DebtorItem extends Intraface_Standard
     {
         if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("weight") + $this->getProductVariationDetail()->getWeightDifference();
-        }
-        else {
+        } else {
             return $this->getProduct()->get("weight");
         }
     }
@@ -196,8 +194,7 @@ class DebtorItem extends Intraface_Standard
     {
         if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("number").'.'.$this->getProductVariation()->getNumber();
-        }
-        else {
+        } else {
             return $this->getProduct()->get("number");
         }
     }
@@ -211,8 +208,7 @@ class DebtorItem extends Intraface_Standard
     {
         if ($this->getProduct()->get('has_variation')) {
             return $this->getProduct()->get("name").' - '.$this->getProductVariation()->getName();
-        }
-        else {
+        } else {
             return $this->getProduct()->get("name");
         }
     }
@@ -291,14 +287,18 @@ class DebtorItem extends Intraface_Standard
                 $product_detail_id = $product->get("detail_id");
             }
 
-            if (!isset($input['product_variation_id'])) $input['product_variation_id'] = 0;
+            if (!isset($input['product_variation_id'])) {
+                $input['product_variation_id'] = 0;
+            }
             if (intval($input['product_variation_id']) != 0) {
                 $variation = $product->getVariation(intval($input['product_variation_id']));
                 if (!$variation->getId()) {
                     $this->error->set("Invalid product variation");
                 }
 
-                if (!isset($input['product_variation_detail_id'])) $input['product_variation_detail_id'] = 0;
+                if (!isset($input['product_variation_detail_id'])) {
+                    $input['product_variation_detail_id'] = 0;
+                }
                 $detail = $variation->getDetail(intval($input['product_variation_detail_id']));
                 if (!$detail->getId()) {
                     $this->error->set("Invalid product variation detail");
@@ -306,15 +306,15 @@ class DebtorItem extends Intraface_Standard
 
                 $variation_id = $variation->getId();
                 $variation_detail_id = $detail->getId();
-            }
-            else {
+            } else {
                 $variation_id = 0;
                 $variation_detail_id = 0;
             }
-
         }
 
-        if (!isset($input["quantity"])) $input["quantity"] = 0;
+        if (!isset($input["quantity"])) {
+            $input["quantity"] = 0;
+        }
         $validator->isDouble($input["quantity"], "Du skal angive et antal", "");
         $quantity = new Intraface_Amount($input["quantity"]);
         if ($quantity->convert2db()) {
@@ -322,7 +322,9 @@ class DebtorItem extends Intraface_Standard
         } else {
             $this->error->set("Ugyligt antal");
         }
-        if (!isset($input['description'])) $input['description'] = '';
+        if (!isset($input['description'])) {
+            $input['description'] = '';
+        }
         $validator->isString($input["description"], "Fejl i beskrivelse", "<b><i>", "allow_empty");
 
         if ($this->error->isError()) {
@@ -450,7 +452,6 @@ class DebtorItem extends Intraface_Standard
             $product = new Product($this->debtor->kernel, $db->f('product_id'), $db->f('product_detail_id'));
 
             if ($product->getId() != 0 && $product->get('detail_id') != 0) {
-
                 $item = array();
                 $item["description"] = $db->f("description");
                 $item["quantity"] = $db->f("quantity");

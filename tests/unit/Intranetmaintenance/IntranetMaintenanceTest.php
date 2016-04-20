@@ -14,26 +14,30 @@ class IntranetMaintenanceTest extends PHPUnit_Framework_TestCase
 
     /////////////////////////////////////////77
 
-    function testConstruct() {
+    function testConstruct()
+    {
 
         $i = new IntranetMaintenance();
         $this->assertEquals('IntranetMaintenance', get_class($i));
 
     }
 
-    public function testSaveReturnsFalseOnInvalidInput() {
+    public function testSaveReturnsFalseOnInvalidInput()
+    {
         $i = new IntranetMaintenance();
         $this->assertFalse($i->save(array()));
     }
 
-    public function testSaveReturnsTrueOnValidInput() {
+    public function testSaveReturnsTrueOnValidInput()
+    {
         $i = new IntranetMaintenance();
         $this->assertTrue($i->save(array('name' => 'Intraface.dk', 'identifier' => 'intraface')));
         $this->assertEquals('Intraface.dk', $i->get('name'));
         $this->assertEquals('intraface', $i->get('identifier'));
     }
 
-    public function testSetMaintainedByUserId() {
+    public function testSetMaintainedByUserId()
+    {
 
         // first we need to set up af maintainer
         $i = new IntranetMaintenance();

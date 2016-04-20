@@ -49,7 +49,7 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
             return $display;
         }
 
-        foreach ($elements AS $element) {
+        foreach ($elements as $element) {
             $element['extra_class'] .= ' element';
             if (!empty($element['extra_class'])) {
                 $element['extra_class'] = ' class="'.$element['extra_class'].'"';
@@ -65,7 +65,7 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
             $display .= '	<ul class="adminbar" id="admin'.$element['id'].'">';
             $display .= '		<li><a href="'.url('element/'.$element['id']).'" title="'.$this->t('edit element').'">'.$this->t('edit').'</a></li>';
 
-            if (!empty($_GET['action']) AND $_GET['action'] == 'move') {
+            if (!empty($_GET['action']) and $_GET['action'] == 'move') {
                 if ($element['id'] != $_GET['element_id']) {
                     $display .= '		<li><a href="'.url(null).'?moveto='.$element['position'].'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->t('insert before').'</a></li>';
                     $position_after = $element['position'] + 1;
@@ -77,8 +77,8 @@ class CMS_HTML_Parser extends Intraface_modules_cms_HTML_Parser
                 $display .= '		<li><a href="'.url(null).'?action=move&amp;element_id='.$element['id'].'&amp;id='.$element['section_id'].'">'.$this->t('move').'</a></li>';
             }
             $display .= '		<li><a class="confirm" href="' . url(null) . '?delete='.$element['id'].'">'.$this->t('delete').'</a></li>';
-            $display .=	'	</ul>';
-            $display .= '<div>' . 			$output . '</div>';
+            $display .=     '	</ul>';
+            $display .= '<div>' .           $output . '</div>';
             $display .= '</div>';
         }
         return $display;

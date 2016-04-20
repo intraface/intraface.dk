@@ -2,8 +2,6 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'IntrafacePublic/CMS/HTML/Parser.php';
-
 class Intraface_modules_cms_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
 {
     private $translation;
@@ -30,7 +28,7 @@ class Intraface_modules_cms_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
             return $display;
         }
 
-        foreach ($elements AS $element) {
+        foreach ($elements as $element) {
             $element['extra_class'] .= ' element';
             if (!empty($element['extra_class'])) {
                 $element['extra_class'] = ' class="'.$element['extra_class'].'"';
@@ -46,7 +44,7 @@ class Intraface_modules_cms_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
             $display .= '   <ul class="adminbar" id="admin'.$element['id'].'">';
             $display .= '       <li><a href="section_html_edit.php?id='.$element['id'].'" title="'.$this->translation->get('edit element').'">'.$this->translation->get('edit').'</a></li>';
 
-            if (!empty($_GET['action']) AND $_GET['action'] == 'move') {
+            if (!empty($_GET['action']) and $_GET['action'] == 'move') {
                 if ($element['id'] != $_GET['element_id']) {
                     $display .= '       <li><a href="'.$_SERVER['PHP_SELF'].'?moveto='.$element['position'].'&amp;element_id='.(int)$_GET['element_id'].'&amp;id='.$element['section_id'].'">'.$this->translation->get('insert before').'</a></li>';
                     $position_after = $element['position'] + 1;

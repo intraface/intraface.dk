@@ -47,7 +47,6 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
                 $address['phone'] = $_POST['eniro_phone'];
             }
         } else {
-
             // for a new contact we want to check if similar contacts alreade exists
             if (empty($_POST['id'])) {
                 $contact = $this->getContact();
@@ -60,9 +59,8 @@ class Intraface_modules_contact_Controller_Choosecontact extends k_Component
             }
 
             // checking if similiar contacts exists
-            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+            if (!empty($similar_contacts) and count($similar_contacts) > 0 and empty($_POST['force_save'])) {
             } elseif ($id = $contact->save($_POST)) {
-
                 // $redirect->addQueryString('contact_id='.$id);
                 if ($redirect->get('id') != 0) {
                     $redirect->setParameter('contact_id', $id);

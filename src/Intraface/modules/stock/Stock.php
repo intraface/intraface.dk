@@ -9,7 +9,7 @@ class Stock extends Intraface_Standard
     public $value;
     private $kernel;
 
-    function __construct($product, $variation = NULL)
+    function __construct($product, $variation = null)
     {
         $this->product = $product;
 

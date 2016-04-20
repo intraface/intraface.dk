@@ -9,16 +9,16 @@
     <li><a class="close" href="<?php e(url('../')); ?>"><?php e(t('Close')); ?></a></li>
 </ul>
 
-<?php if (!empty($deleted)): ?>
+<?php if (!empty($deleted)) : ?>
     <form action="<?php e(url()); ?>" method="post">
     <input type="hidden" name="id" value="<?php e($group->getId()); ?>" />
         <p class="message"><?php e(t('An attribute has been deleted')); ?>. <input type="hidden" name="deleted" value="<?php echo base64_encode(serialize($deleted)); ?>" /> <input name="undelete" type="submit" value="<?php e(t('Cancel')); ?>" /></p>
     </form>
 <?php endif; ?>
 
-<?php if (count($attributes) == 0): ?>
+<?php if (count($attributes) == 0) : ?>
     <p><?php e(t('No attributes has been created.')); ?> <a href="attribute_edit.php?group_id=<?php e($group->getId()); ?>"><?php e(t('Create attribute')); ?></a>.</p>
-<?php else: ?>
+<?php else : ?>
 
 <form action="<?php e(url()); ?>" method="post">
 <input type="hidden" name="id" value="<?php e($group->getId()); ?>" />
@@ -32,7 +32,7 @@
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($attributes as $attribute): ?>
+            <?php foreach ($attributes as $attribute) : ?>
                 <tr>
                     <!-- <td><input type="checkbox" value="<?php e($attribute->get('id')); ?>" name="selected[]" /></td>  -->
                     <td><?php e($attribute->getName()); ?></td>
@@ -41,7 +41,7 @@
                         <a class="delete" href="<?php e(url($attribute->getId(), array('delete'))); ?>"><?php e(t('Delete')); ?></a>
                     </td>
                 </tr>
-             <?php endforeach; ?>
+                <?php endforeach; ?>
         </tbody>
     </table>
     <!-- <select name="action">

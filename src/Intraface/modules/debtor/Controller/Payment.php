@@ -29,7 +29,6 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
             } else {
                 return new k_SeeOther($this->url('../'));
             }
-
         }
         return $this->render();
     }
@@ -63,5 +62,4 @@ class Intraface_modules_debtor_Controller_Payment extends k_Component
     {
         return $this->context->getKernel();
     }
-
 }

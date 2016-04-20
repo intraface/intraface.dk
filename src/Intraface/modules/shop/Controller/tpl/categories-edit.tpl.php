@@ -23,17 +23,20 @@ $level = 0;
             <label for="parent_id"><?php e(t('Parent category')); ?></label>
             <select name="parent_id" id="parent_id">
             <option value="0"><?php e(t('Choose')); ?></option>
-    <?php while ($level >= 0): ?>
-        <?php foreach ($level_categories[$level] as $category): ?>
+    <?php while ($level >= 0) : ?>
+        <?php foreach ($level_categories[$level] as $category) : ?>
             <?php array_shift($level_categories[$level]); ?>
-            <?php if ($category['id'] == $category_object->getId()) continue; ?>
-                <option <?php if ($category_object->getParentId() == $category['id']) echo 'selected="selected"'; ?> value="<?php e($category['id']); ?>">
+            <?php if ($category['id'] == $category_object->getId()) {
+                continue;
+} ?>
+                <option <?php if ($category_object->getParentId() == $category['id']) {
+                    echo 'selected="selected"';
+} ?> value="<?php e($category['id']); ?>">
                     <?php e(str_repeat('- ', $level)); ?> <?php e($category['name']); ?>
                 </option>
             <?php
             # If there is subcategories to the category
             if (is_array($category['categories']) && count($category['categories']) > 0) {
-
                 # We make the items for the next level the sub categories of this category
                 $level_categories[$level+1] = $category['categories'];
 

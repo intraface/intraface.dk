@@ -29,7 +29,7 @@ class Intraface_modules_stock_Controller_Product extends k_Component
         if ($product_object->hasVariation()) {
             $variation = $product_object->getVariation($this->context->name());
         } else {
-            $variation = NULL;
+            $variation = null;
         }
 
         return $variation;

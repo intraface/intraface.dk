@@ -38,7 +38,7 @@ class Intraface_modules_debtor_DebtorGateway
 
     function getTypeKey()
     {
-        return array_search( $this->type, $this->getDebtorTypes());
+        return array_search($this->type, $this->getDebtorTypes());
     }
 
     function getDBQuery()
@@ -272,7 +272,6 @@ class Intraface_modules_debtor_DebtorGateway
             if ($this->dbquery->getFilter("status") == "-1") {
                 // Beh�ves ikke, den tager alle.
                 // $this->dbquery->setCondition("status >= 0");
-
             } elseif ($this->dbquery->getFilter("status") == "-2") {
                 // Not executed = �bne
                 if ($this->dbquery->checkFilter("to_date")) {
@@ -285,7 +284,6 @@ class Intraface_modules_debtor_DebtorGateway
                     // Hvis der ikke er nogen dato s� tager vi alle dem som p� nuv�rende tidspunkt har status under
                     $this->dbquery->setCondition("debtor.status < 2");
                 }
-
             } elseif ($this->dbquery->getFilter("status") == "-3") {
                 //  Afskrevne. Vi tager f�rst alle sendte og executed.
 
@@ -308,7 +306,6 @@ class Intraface_modules_debtor_DebtorGateway
                     $this->dbquery->setCondition("status = 1 OR status = 2");
                 }
             } else {
-
                 $this->dbquery->setCondition("debtor.status = ".intval($this->dbquery->getFilter("status")));
 
                 /*
@@ -369,7 +366,6 @@ class Intraface_modules_debtor_DebtorGateway
         $list = array();
 
         while ($db->nextRecord()) {
-
             $debtor = $this->findById((int)$db->f("id"));
             $list[$i] = $debtor->get();
 
@@ -384,12 +380,10 @@ class Intraface_modules_debtor_DebtorGateway
                 $list[$i]['address'] = $debtor->contact->address->get('address');
                 $list[$i]['postalcode'] = $debtor->contact->address->get('postcode');
                 $list[$i]['city'] = $debtor->contact->address->get('city');
-
             }
             $debtor->destruct();
             unset($debtor);
             $i++;
-
         }
         unset($db);
         return $list;

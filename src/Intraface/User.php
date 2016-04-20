@@ -200,7 +200,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         if (!empty($this->modules[$module])) {
             return $module_id = $this->modules[$module];
         } else {
-           throw new Exception('user says unknown module ' . $module);
+            throw new Exception('user says unknown module ' . $module);
         }
     }
 
@@ -290,10 +290,10 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
             $module_id = intval($module);
         }
 
-        if (!empty($this->permissions) AND is_array($this->permissions)) {
-            if (empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
+        if (!empty($this->permissions) and is_array($this->permissions)) {
+            if (empty($this->permissions['intranet']['module'][$module_id]) or $this->permissions['intranet']['module'][$module_id] !== true) {
                 return false;
-            } else if (empty($this->permissions['user']['module'][$module_id]) OR $this->permissions['user']['module'][$module_id] !== true) {
+            } elseif (empty($this->permissions['user']['module'][$module_id]) or $this->permissions['user']['module'][$module_id] !== true) {
                 return false;
             } else {
                 return true;
@@ -358,12 +358,12 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         }
 
         // first we check whether the use has access to the module.
-        if (empty($this->permissions['intranet']['module'][$module_id]) OR $this->permissions['intranet']['module'][$module_id] !== true) {
+        if (empty($this->permissions['intranet']['module'][$module_id]) or $this->permissions['intranet']['module'][$module_id] !== true) {
             return false;
         }
 
         // then we check whether there is access to the sub access
-        if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
+        if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) and $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
             return true;
         }
 
@@ -388,7 +388,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
             $this->permissions['user']['module']['subaccess'][$row['id']] = true;
         }
 
-        if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) AND $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
+        if (!empty($this->permissions['user']['module']['subaccess'][$sub_access_id]) and $this->permissions['user']['module']['subaccess'][$sub_access_id] === true) {
             return true;
         }
 
@@ -409,7 +409,7 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
 
         if ($result->numRows() == 1) {
             $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-            if ($this->hasIntranetAccess($row['active_intranet_id']) AND $row['active_intranet_id'] != 0) {
+            if ($this->hasIntranetAccess($row['active_intranet_id']) and $row['active_intranet_id'] != 0) {
                 return $row['active_intranet_id'];
             }
         }

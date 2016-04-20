@@ -50,7 +50,6 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         $contact = $this->getContact();
 
         if ($this->body('eniro_phone')) {
-
             $eniro = new Services_Eniro();
             $value = $_POST;
 
@@ -64,9 +63,8 @@ class Intraface_modules_contact_Controller_Show extends k_Component
         }
 
         // checking if similiar contacts exists
-        if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+        if (!empty($similar_contacts) and count($similar_contacts) > 0 and empty($_POST['force_save'])) {
         } elseif ($id = $contact->save($_POST)) {
-
             // $redirect->addQueryString('contact_id='.$id);
             if ($redirect->get('id') != 0) {
                 $redirect->setParameter('contact_id', $id);
@@ -221,17 +219,15 @@ class Intraface_modules_contact_Controller_Show extends k_Component
                     'from_name' => $this->getKernel()->intranet->get('name'),
                     'type_id' => 9,
                     'belong_to' => $this->getContact()->get('id')
-            )
+                )
             )) {
                 return new k_SeeOther($this->url(null, array('flare' => 'Kunne ikke gemme e-mailen')));
             }
 
             if ($email->queue()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'Login e-mail has been queued')));
-
             }
             return new k_SeeOther($this->url(null, array('flare' => 'Could not queue the email')));
-
         } elseif (!empty($_POST['new_password'])) {
             if ($this->getContact()->generatePassword()) {
                 return new k_SeeOther($this->url(null, array('flare' => 'New code has been generated')));
@@ -289,82 +285,72 @@ class Intraface_modules_contact_Controller_Show extends k_Component
     {
         $dependencies = array();
 
-        if ($this->getKernel()->user->hasModuleAccess("quotation")):
-
-        $dependencies['quotation'] = array(
+        if ($this->getKernel()->user->hasModuleAccess("quotation")) :
+            $dependencies['quotation'] = array(
             'gateway' => new Intraface_modules_quotation_QuotationGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/quotation', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  $this->url('../../debtor/quotation/create', array('contact_id' => $this->getContact()->get("id"))),
-        	'label' => 'quotation'
-        );
-
+            'label' => 'quotation'
+            );
         endif;
 
-        if ($this->getKernel()->user->hasModuleAccess("order")):
-
-        $dependencies['order'] = array(
+        if ($this->getKernel()->user->hasModuleAccess("order")) :
+            $dependencies['order'] = array(
             'gateway' => new Intraface_modules_order_OrderGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/order', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  $this->url('../../debtor/order/create', array('contact_id' => $this->getContact()->get("id"))),
-        	'label' => 'order'
-        );
-
+            'label' => 'order'
+            );
         endif;
 
-        if ($this->getKernel()->user->hasModuleAccess("invoice")):
-
-        $dependencies['invoice'] = array(
+        if ($this->getKernel()->user->hasModuleAccess("invoice")) :
+            $dependencies['invoice'] = array(
             'gateway' => new Intraface_modules_invoice_InvoiceGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/invoice', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  $this->url('../../debtor/invoice/create', array('contact_id' => $this->getContact()->get("id"))),
-        	'label' => 'invoice'
-        );
+            'label' => 'invoice'
+            );
 
 
-        $dependencies['creditnote'] = array(
+            $dependencies['creditnote'] = array(
             'gateway' => new Intraface_modules_invoice_CreditnoteGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/credit_note', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'creditnote'
-        );
+            'label' => 'creditnote'
+            );
 
-        $dependencies['reminder'] = array(
+            $dependencies['reminder'] = array(
             'gateway' => new Intraface_modules_invoice_ReminderGateway($this->getKernel()),
             'url' =>  $this->url('../../debtor/reminder', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'reminder'
-        );
-
+            'label' => 'reminder'
+            );
         endif;
 
-        if ($this->getKernel()->user->hasModuleAccess("newsletter")):
-
-        $dependencies['newsletter'] = array(
+        if ($this->getKernel()->user->hasModuleAccess("newsletter")) :
+            $dependencies['newsletter'] = array(
             'gateway' => new Intraface_modules_newsletter_SubscribersGateway($this->getKernel()),
             'url' =>  $this->url('../../newsletter', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'newsletter'
-        );
-
+            'label' => 'newsletter'
+            );
         endif;
 
 
-        if ($this->getKernel()->user->hasModuleAccess("procurement")):
-
-        $dependencies['procurement'] = array(
+        if ($this->getKernel()->user->hasModuleAccess("procurement")) :
+            $dependencies['procurement'] = array(
             'gateway' => new Intraface_modules_procurement_ProcurementGateway($this->getKernel()),
             'url' =>  $this->url('../../procurement', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'procurement'
-        );
-
+            'label' => 'procurement'
+            );
         endif;
 
         $dependencies['email'] = array(
             'gateway' => new Intraface_shared_email_EmailGateway($this->getKernel()),
             'url' =>  $this->url('../../email', array('contact_id' => $this->getContact()->get("id"))),
             'url_create' =>  '',
-        	'label' => 'email'
+            'label' => 'email'
         );
 
         return $dependencies;

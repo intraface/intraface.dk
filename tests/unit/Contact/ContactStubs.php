@@ -13,7 +13,6 @@ class FakeContactContact
     {
         return $this->id;
     }
-
 }
 
 class FakeContactIntranet

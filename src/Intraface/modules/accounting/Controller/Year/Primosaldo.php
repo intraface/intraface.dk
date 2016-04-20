@@ -37,7 +37,7 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
         // hente konti hvor de nye har created_from_id
         $account = new Account($year);
         $accounts = $account->getList('balance');
-        foreach ($accounts AS $a) {
+        foreach ($accounts as $a) {
             //  @todo Should test whether all posts in the past year has been stated
             $old_account = new Account($last_year, $a['created_from_id']);
             $saldo = $old_account->getSaldo('stated');
@@ -69,7 +69,7 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
     {
         $this->getKernel()->module('accounting');
 
-      	$year = new Year($this->getKernel(), $this->context->name());
+        $year = new Year($this->getKernel(), $this->context->name());
 
         $account = new Account($year);
         $accounts = $account->getList('balance');
@@ -93,13 +93,13 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
     function putForm()
     {
         $year = $this->getYear();
-        foreach ($_POST['id'] AS $key=>$values) {
-        	$account = new Account($year, $_POST['id'][$key]);
-        	$account->savePrimosaldo($_POST['debet'][$key], $_POST['credit'][$key]);
+        foreach ($_POST['id'] as $key => $values) {
+            $account = new Account($year, $_POST['id'][$key]);
+            $account->savePrimosaldo($_POST['debet'][$key], $_POST['credit'][$key]);
         }
         if (!$account->error->isError()) {
-        	return new k_SeeOther($this->url());
-       	}
+            return new k_SeeOther($this->url());
+        }
         return $this->render();
     }
 

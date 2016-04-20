@@ -16,15 +16,27 @@
         <label><?php e(t('Filter')); ?>
         <select name="filtration">
             <option value="0"><?php e(t('All')); ?></option>
-            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) echo ' selected="selected"';?>><?php e(t('uploaded today')); ?></option>
-            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) echo ' selected="selected"';?>><?php e(t('uploaded yesterday')); ?></option>
-            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) echo ' selected="selected"';?>><?php e(t('uploaded this week')); ?></option>
-            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) echo ' selected="selected"';?>><?php e(t('edited today')); ?></option>
-            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) echo ' selected="selected"';?>><?php e(t('edited yesterday')); ?></option>
+            <option value="1"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 1) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded today')); ?></option>
+            <option value="2"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 2) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded yesterday')); ?></option>
+            <option value="3"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 3) {
+                echo ' selected="selected"';
+}?>><?php e(t('uploaded this week')); ?></option>
+            <option value="4"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 4) {
+                echo ' selected="selected"';
+}?>><?php e(t('edited today')); ?></option>
+            <option value="5"<?php if ($filemanager->getDBQuery()->getFilter("filtration") == 5) {
+                echo ' selected="selected"';
+}?>><?php e(t('edited yesterday')); ?></option>
         </select>
         </label>
         <label><?php e(t('Only pictures')); ?>:
-            <input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) echo 'checked="checked"'; ?> />
+            <input type="checkbox" name="images" value="1" <?php if ($filemanager->getDBQuery()->getFilter("images") == 1) {
+                echo 'checked="checked"';
+} ?> />
         </label>
         <span>
         <input type="submit" name="search" value="<?php e(t('find')); ?>" />
@@ -37,7 +49,7 @@
 
         if (count($keywords) > 0) {
             echo '<div>Nøgleord: <ul style="display: inline;">';
-            foreach ($keywords AS $value) {
+            foreach ($keywords as $value) {
                 if (in_array($value['id'], $selected_keywords) === true) {
                     $checked = 'checked="checked"';
                 } else {
@@ -45,7 +57,7 @@
                 }
                 echo '<li style="display: inline; margin-left: 20px;"><label for="keyword_'.$value['id'].'"><input type="checkbox" name="keyword[]" value="'.$value['id'].'" id="keyword_'.$value['id'].'" '.$checked.' />&nbsp;'.$value['keyword'].'</label></li>';
             }
-        echo '</ul></div>';
+            echo '</ul></div>';
         }
         ?>
     </fieldset>
@@ -72,7 +84,13 @@
         <?php foreach ($files as $file) { ?>
             <tr>
                 <td>
-                    <input type="<?php if ($context->multiple_choice): e('checkbox'); else: print('radio'); endif; ?>" value="<?php echo $file["id"]; ?>" id="<?php echo $file["id"]; ?>" class="input-select_file" name="selected[]" <?php if (in_array($file['id'], $selected_files)) print("checked=\"checked\""); ?> />
+                    <input type="<?php if ($context->multiple_choice) :
+                        e('checkbox');
+else :
+    print('radio');
+endif; ?>" value="<?php echo $file["id"]; ?>" id="<?php echo $file["id"]; ?>" class="input-select_file" name="selected[]" <?php if (in_array($file['id'], $selected_files)) {
+    print("checked=\"checked\"");
+} ?> />
                 </td>
                 <td style="height: 67px;"><img src="<?php e($file["icon_uri"]); ?>" style="height: <?php e($file["icon_height"]); ?>px; width: <?php e($file["icon_width"]); ?>px;" /></td>
 
@@ -89,7 +107,7 @@
 
 <div>
 
-    <?php if ($context->multiple_choice): ?>
+    <?php if ($context->multiple_choice) : ?>
         <input type="submit" name="submit" id="submit-select_file" value="<?php e(t('Transfer selection')); ?>" />
     <?php endif; ?>
 

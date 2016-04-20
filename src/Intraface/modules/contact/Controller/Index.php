@@ -31,7 +31,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function renderHtml()
     {
         if (in_array($this->query('search'), array('hide', 'view'))) {
-        	$this->getKernel()->setting->set('user', 'contact.search', $this->query('search'));
+            $this->getKernel()->setting->set('user', 'contact.search', $this->query('search'));
         }
         /*
         elseif (!empty($_GET['import'])) {
@@ -61,30 +61,29 @@ class Intraface_modules_contact_Controller_Index extends k_Component
     function putForm()
     {
         if ($this->body('action') == 'delete') {
-        	$deleted = array();
-        	if (is_array($this->body('selected'))) {
-        		foreach ($this->body('selected') AS $key=>$id) {
-        			$contact = $this->getGateway()->findById(intval($id));
-        			if ($contact->delete()) {
-        				$deleted[] = $id;
-        			}
-        		}
-        	}
+            $deleted = array();
+            if (is_array($this->body('selected'))) {
+                foreach ($this->body('selected') as $key => $id) {
+                    $contact = $this->getGateway()->findById(intval($id));
+                    if ($contact->delete()) {
+                        $deleted[] = $id;
+                    }
+                }
+            }
         } elseif ($this->body('undelete')) {
-
-        	if (is_string($this->body('deleted'))) {
-        		$undelete = unserialize(base64_decode($this->body('deleted')));
-        	} else {
-        		throw new Exception('Could not undelete');
-        	}
-        	if (!empty($undelete) AND is_array($undelete)) {
-        		foreach ($undelete AS $key=>$id) {
-        			$contact = $this->getGateway()->findById(intval($id));
-        			if (!$contact->undelete()) {
-        			// void
-        			}
-        		}
-        	}
+            if (is_string($this->body('deleted'))) {
+                $undelete = unserialize(base64_decode($this->body('deleted')));
+            } else {
+                throw new Exception('Could not undelete');
+            }
+            if (!empty($undelete) and is_array($undelete)) {
+                foreach ($undelete as $key => $id) {
+                    $contact = $this->getGateway()->findById(intval($id));
+                    if (!$contact->undelete()) {
+                    // void
+                    }
+                }
+            }
         }
 
         return new k_SeeOther($this->url());
@@ -103,8 +102,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
 
         $doc = new Intraface_modules_contact_PdfLabel($this->getKernel()->setting->get("user", "label"));
         $used_keyword = array();
-        foreach ($contact->getDBQuery()->getKeyword() AS $kid) {
-            foreach ($keywords AS $k){
+        foreach ($contact->getDBQuery()->getKeyword() as $kid) {
+            foreach ($keywords as $k) {
                 if ($k['id'] == $kid) {
                     $used_keyword[] = $k['keyword'];
                 }
@@ -131,15 +130,13 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $used_keyword = array();
 
         if (is_array($keyword_ids) && count($keyword_ids) > 0) {
-
-            foreach ($keyword_ids AS $kid) {
-                foreach ($keywords AS $k){
+            foreach ($keyword_ids as $kid) {
+                foreach ($keywords as $k) {
                     if ($k['id'] == $kid) {
                         $used_keyword[] = $k['keyword'];
                     }
                 }
             }
-
         }
 
         $keywords = 'Nøgleord' . implode(' ', $used_keyword);
@@ -188,7 +185,7 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $i++;
 
         if (count($contacts) > 0) {
-            foreach ($contacts AS $contact) {
+            foreach ($contacts as $contact) {
                 $worksheet->write($i, 0, $contact['name']);
                 $worksheet->write($i, 1, $contact['address']['address']);
                 $worksheet->write($i, 2, $contact['address']['postcode']);
@@ -197,7 +194,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
                 $worksheet->write($i, 5, $contact['address']['email']);
                 $i++;
             }
-
         }
         $worksheet->hideGridLines();
 
@@ -228,7 +224,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             $value = $_POST;
 
             if ($oplysninger = $eniro->query('telefon', $_POST['eniro_phone'])) {
-
                 // skal kun bruges s� l�nge vi ikke er utf8
                 // $oplysninger = array_map('utf8_decode', $oplysninger);
                 $address['name'] = $oplysninger['navn'];
@@ -240,7 +235,6 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             $this->eniro = $address;
             $this->render();
         } else {
-
             // for a new contact we want to check if similar contacts alreade exists
             if (!empty($_POST['phone'])) {
                 $this->getContact()->getDBQuery()->setCondition("address.phone = '".$_POST['phone']."' AND address.phone <> ''");
@@ -248,9 +242,8 @@ class Intraface_modules_contact_Controller_Index extends k_Component
             }
 
             // checking if similiar contacts exists
-            if (!empty($similar_contacts) AND count($similar_contacts) > 0 AND empty($_POST['force_save'])) {
+            if (!empty($similar_contacts) and count($similar_contacts) > 0 and empty($_POST['force_save'])) {
             } elseif ($id = $this->getContact()->save($_POST)) {
-
                 // $redirect->addQueryString('contact_id='.$id);
                 if ($redirect->get('id') != 0) {
                     $redirect->setParameter('contact_id', $id);
@@ -339,16 +332,15 @@ class Intraface_modules_contact_Controller_Index extends k_Component
         $used_keywords = $keywords->getUsedKeywords();
 
         if (isset($_GET['query']) || isset($_GET['keyword_id'])) {
+            if (isset($_GET['query'])) {
+                $this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
+            }
 
-        	if (isset($_GET['query'])) {
-        		$this->getContact()->getDBQuery()->setFilter('search', $_GET['query']);
-        	}
-
-        	if (isset($_GET['keyword_id'])) {
-        		$this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
-        	}
+            if (isset($_GET['keyword_id'])) {
+                $this->getContact()->getDBQuery()->setKeyword($_GET['keyword_id']);
+            }
         } else {
-        	$this->getContact()->getDBQuery()->useCharacter();
+            $this->getContact()->getDBQuery()->useCharacter();
         }
 
         $this->getContact()->getDBQuery()->defineCharacter('character', 'address.name');

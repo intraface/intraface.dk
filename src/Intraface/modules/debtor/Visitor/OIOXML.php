@@ -152,7 +152,7 @@ class Debtor_Report_OIOXML
 
         // invoice lines
         $i = 1;
-        foreach ($debtor->getItems() AS $item) {
+        foreach ($debtor->getItems() as $item) {
             $this->output .= '<com:InvoiceLine>';
             $this->output .= '	<com:ID>'.$i.'</com:ID>';
             $this->output .= '	<com:InvoicedQuantity unitCode="'.$item['unit'].'" unitCodeListAgencyID="n/a">'.$item['quantity'].'</com:InvoicedQuantity>';

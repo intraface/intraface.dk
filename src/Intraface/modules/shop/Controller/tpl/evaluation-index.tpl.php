@@ -10,19 +10,19 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($evaluations AS $evaluation): ?>
+                <?php foreach ($evaluations as $evaluation) : ?>
                     <tr>
                         <td><?php e($evaluation['running_index']); ?></td>
                         <td><?php
                             e(t('if').' '.t($evaluation['evaluate_target']).' ');
-                            if ($evaluation['evaluate_method'] != 'equals') {
-                                e(t('is').' ');
-                            }
+                        if ($evaluation['evaluate_method'] != 'equals') {
+                            e(t('is').' ');
+                        }
                             e(t($evaluation['evaluate_method']).' '.$evaluation['evaluate_value']);
-                            if ($evaluation['evaluate_value_case_sensitive']) { ?>
+                        if ($evaluation['evaluate_value_case_sensitive']) { ?>
                                 [<acronym title="<?php e(t('case sensitive')); ?>">CS</acronym>]
                                 <?php
-                            }
+                        }
 
                             ?>
                         </td>

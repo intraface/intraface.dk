@@ -220,7 +220,7 @@ class Intraface_Address extends Intraface_Standard
      *
      * @param array $array_var et array med felter med adressen. Se felterne i init funktionen: $this->fields
      *
-     * @return bolean	true or false
+     * @return bolean   true or false
      */
     function save($array_var)
     {
@@ -234,8 +234,8 @@ class Intraface_Address extends Intraface_Standard
         if (count($array_var) > 0) {
             if ($this->id != 0) {
                 $do_update = 0;
-                foreach ($this->fields AS $i => $field) {
-                    if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
+                foreach ($this->fields as $i => $field) {
+                    if (array_key_exists($field, $array_var) and isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
                         if ($this->get($field) != $array_var[$field]) {
                             $do_update = 1;
@@ -245,8 +245,8 @@ class Intraface_Address extends Intraface_Standard
             } else {
                 // Kun hvis der rent faktisk gemmes nogle v�rdier opdaterer vi. hvis count($arra_var) > 0 s� m� der ogs� v�re noget at opdatere?
                 $do_update = 0;
-                foreach ($this->fields AS $i => $field) {
-                    if (array_key_exists($field, $array_var) AND isset($array_var[$field])) {
+                foreach ($this->fields as $i => $field) {
+                    if (array_key_exists($field, $array_var) and isset($array_var[$field])) {
                         $sql .= $field.' = "'.safeToDb($array_var[$field]).'", ';
                         $do_update = 1;
                     }

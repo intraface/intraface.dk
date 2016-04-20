@@ -116,7 +116,7 @@ class Intraface_modules_accounting_VatPeriodGateway
         //$periods = $module->getSetting('vat_periods');
         $periods = self::getPeriodsArray();
         $periods = $periods[$this->year->getSetting('vat_period')];
-        foreach ($periods['periods'] as $key=>$value) {
+        foreach ($periods['periods'] as $key => $value) {
             $input = array(
                 'label'      => $value['name'],
                 'date_start' => $this->year->get('year') . '-' . $value['date_from'],
@@ -131,7 +131,7 @@ class Intraface_modules_accounting_VatPeriodGateway
 
     function findFromId($id = 0)
     {
-    	require_once dirname(__FILE__) . '/VatPeriod.php';
+        require_once dirname(__FILE__) . '/VatPeriod.php';
         return new VatPeriod($this->year);
     }
 }

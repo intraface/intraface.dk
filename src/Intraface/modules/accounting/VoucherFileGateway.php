@@ -43,28 +43,28 @@ class Intraface_modules_accounting_VoucherFileGateway
                     }
                     $files[$i]['name'] = 'Faktura';
                     $files[$i]['file_uri'] = $this->url('/module/debtor/invoice/list/'.$db->f('belong_to_id').'.pdf');
-                break;
+                    break;
                 case 'vat':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Momsperiode';
                     }
                     $files[$i]['name'] = 'Momsperiode';
                     $files[$i]['file_uri'] = $this->url('/module/accounting/year/'.$this->voucher->year->getId().'/vat/' . $db->f('belong_to_id'));
-                break;
+                    break;
                 case 'file':
                     $this->voucher->year->kernel->useModule('filemanager');
                     $filehandler = new FileHandler($this->voucher->year->kernel, $db->f('belong_to_id'));
                     $files[$i]['name'] = $filehandler->get('file_name');
                     $files[$i]['description'] = $filehandler->get('file_name');
                     $files[$i]['file_uri'] = $filehandler->get('file_uri');
-                break;
+                    break;
                 case 'credit_note':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Kreditnota';
                     }
                     $files[$i]['name'] = 'Kreditnota';
                     $files[$i]['file_uri'] = $this->url('/module/debtor/credit_note/' . $db->f('belong_to_id') . '.pdf');
-                break;
+                    break;
                 case 'reminder':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Rykker';
@@ -72,18 +72,17 @@ class Intraface_modules_accounting_VoucherFileGateway
                     $files[$i]['name'] = 'Rykker';
                     // @todo fix this
                     $files[$i]['file_uri'] = $this->url('/module/debtor/reminder_pdf.php', array('id' => $db->f('belong_to_id')));
-                break;
+                    break;
                 case 'procurement':
                     if (empty($files[$i]['description'])) {
                         $files[$i]['description'] = 'Indkøb';
                     }
                     $files[$i]['name'] = 'Indkøb';
                     $files[$i]['file_uri'] = $this->url('/module/procurement/'.$db->f('belong_to_id'));
-                break;
+                    break;
                 default:
                     throw new Exception('VoucherFile::getList: ugyldig belong to');
                 break;
-
             }
             $i++;
         }

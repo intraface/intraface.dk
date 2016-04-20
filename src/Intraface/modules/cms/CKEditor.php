@@ -93,7 +93,8 @@ class CKEditor
      *
      *  @param $basePath (string) URL to the %CKEditor installation directory (optional).
      */
-    function __construct($basePath = null) {
+    function __construct($basePath = null)
+    {
         if (!empty($basePath)) {
             $this->basePath = $basePath;
         }
@@ -142,10 +143,11 @@ class CKEditor
         $_config = $this->configSettings($config, $events);
 
         $js = $this->returnGlobalEvents();
-        if (!empty($_config))
+        if (!empty($_config)) {
             $js .= "CKEDITOR.replace('".$name."', ".$this->jsEncode($_config).");";
-        else
+        } else {
             $js .= "CKEDITOR.replace('".$name."');";
+        }
 
         $out .= $this->script($js);
 
@@ -182,8 +184,7 @@ class CKEditor
         $js = $this->returnGlobalEvents();
         if (!empty($_config)) {
             $js .= "CKEDITOR.replace('".$id."', ".$this->jsEncode($_config).");";
-        }
-        else {
+        } else {
             $js .= "CKEDITOR.replace('".$id."');";
         }
         $out .= $this->script($js);
@@ -226,12 +227,10 @@ class CKEditor
         if (empty($_config)) {
             if (empty($className)) {
                 $js .= "CKEDITOR.replaceAll();";
-            }
-            else {
+            } else {
                 $js .= "CKEDITOR.replaceAll('".$className."');";
             }
-        }
-        else {
+        } else {
             $classDetection = "";
             $js .= "CKEDITOR.replaceAll( function(textarea, config) {\n";
             if (!empty($className)) {
@@ -241,7 +240,6 @@ class CKEditor
             }
             $js .= "    CKEDITOR.tools.extend(config, ". $this->jsEncode($_config) .", true);";
             $js .= "} );";
-
         }
 
         $out .= $this->script($js);
@@ -289,8 +287,7 @@ class CKEditor
     {
         if (!empty($event)) {
             $this->events[$event] = array();
-        }
-        else {
+        } else {
             $this->events = array();
         }
     }
@@ -329,8 +326,7 @@ class CKEditor
     {
         if (!empty($event)) {
             $this->globalEvents[$event] = array();
-        }
-        else {
+        } else {
             $this->globalEvents = array();
         }
     }
@@ -381,11 +377,9 @@ class CKEditor
             foreach ($_events as $eventName => $handlers) {
                 if (empty($handlers)) {
                     continue;
-                }
-                else if (count($handlers) == 1) {
+                } elseif (count($handlers) == 1) {
                     $_config['on'][$eventName] = '@@'.$handlers[0];
-                }
-                else {
+                } else {
                     $_config['on'][$eventName] = '@@function (ev){';
                     foreach ($handlers as $handler => $code) {
                         $_config['on'][$eventName] .= '('.$code.')(ev);';
@@ -488,12 +482,11 @@ class CKEditor
          */
         if (isset($_SERVER['SCRIPT_FILENAME'])) {
             $realPath = dirname($_SERVER['SCRIPT_FILENAME']);
-        }
-        else {
+        } else {
             /**
              * realpath — Returns canonicalized absolute pathname
              */
-            $realPath = realpath( './' ) ;
+            $realPath = realpath('./') ;
         }
 
         /**
@@ -533,10 +526,8 @@ class CKEditor
         if ($val === true) {
             return 'true';
         }
-        if (is_scalar($val))
-        {
-            if (is_float($val))
-            {
+        if (is_scalar($val)) {
+            if (is_float($val)) {
                 // Always use "." for floats.
                 $val = str_replace(",", ".", strval($val));
             }
@@ -544,8 +535,7 @@ class CKEditor
             // Use @@ to not use quotes when outputting string value
             if (strpos($val, '@@') === 0) {
                 return substr($val, 2);
-            }
-            else {
+            } else {
                 // All scalars are converted to strings to avoid indeterminism.
                 // PHP's "1" and 1 are equal for all PHP operators, but
                 // JS's "1" and 1 are not. So if we pass "1" or 1 from the PHP backend,
@@ -560,23 +550,22 @@ class CKEditor
             }
         }
         $isList = true;
-        for ($i = 0, reset($val); $i < count($val); $i++, next($val))
-        {
-            if (key($val) !== $i)
-            {
+        for ($i = 0, reset($val); $i < count($val); $i++, next($val)) {
+            if (key($val) !== $i) {
                 $isList = false;
                 break;
             }
         }
         $result = array();
-        if ($isList)
-        {
-            foreach ($val as $v) $result[] = $this->jsEncode($v);
+        if ($isList) {
+            foreach ($val as $v) {
+                $result[] = $this->jsEncode($v);
+            }
             return '[ ' . join(', ', $result) . ' ]';
-        }
-        else
-        {
-            foreach ($val as $k => $v) $result[] = $this->jsEncode($k).': '.$this->jsEncode($v);
+        } else {
+            foreach ($val as $k => $v) {
+                $result[] = $this->jsEncode($k).': '.$this->jsEncode($v);
+            }
             return '{ ' . join(', ', $result) . ' }';
         }
     }

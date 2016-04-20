@@ -51,30 +51,30 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
         $voucher = new Voucher($year);
 
             $debtor = $this->getModel();
-            if ($debtor->get('type') != 'credit_note') {
-                throw new Exception('You can only state credit notes from this page');
-                exit;
-            }
-            if (!empty($_POST['state_account_id'])) {
-                foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
-                    if (empty($state_account_id)) {
-                        $debtor->error->set('Mindst et produkt ved ikke hvor det skal bogf�res.');
-                        continue;
-                    }
-
-                    $product = new Product($this->getKernel(), $product_id);
-                    $product->getDetails()->setStateAccountId($state_account_id);
+        if ($debtor->get('type') != 'credit_note') {
+            throw new Exception('You can only state credit notes from this page');
+            exit;
+        }
+        if (!empty($_POST['state_account_id'])) {
+            foreach ($_POST['state_account_id'] as $product_id => $state_account_id) {
+                if (empty($state_account_id)) {
+                    $debtor->error->set('Mindst et produkt ved ikke hvor det skal bogf�res.');
+                    continue;
                 }
-            }
 
-            if ($debtor->error->isError()) {
-                $debtor->loadItem();
-            } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $this->getKernel()->getTranslation('accounting'))) {
-                $debtor->error->set('Kunne ikke bogføre posten');
-                $debtor->loadItem();
-            } else {
-                return new k_SeeOther($this->url('../'));
+                $product = new Product($this->getKernel(), $product_id);
+                $product->getDetails()->setStateAccountId($state_account_id);
             }
+        }
+
+        if ($debtor->error->isError()) {
+            $debtor->loadItem();
+        } elseif (!$debtor->state($year, $_POST['voucher_number'], $_POST['date_state'], $this->getKernel()->getTranslation('accounting'))) {
+            $debtor->error->set('Kunne ikke bogføre posten');
+            $debtor->loadItem();
+        } else {
+            return new k_SeeOther($this->url('../'));
+        }
 
         return $this->render();
     }

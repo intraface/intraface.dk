@@ -2,13 +2,13 @@
 
 <form id="form-login" method="post" action="<?php e(url(null)); ?>">
 
-    <?php if (!empty($context->error)): ?>
+    <?php if (!empty($context->error)) : ?>
     <ul>
-	<?php foreach ($context->error as $error): ?>
-		<li><?php e($error); ?></li>
-	<?php endforeach; ?>
-	</ul>
-	<?php endif; ?>
+    <?php foreach ($context->error as $error) : ?>
+        <li><?php e($error); ?></li>
+    <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
 
     <fieldset>
         <legend><?php e(t('Please create a user for me')); ?></legend>

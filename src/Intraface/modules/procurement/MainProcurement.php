@@ -1,9 +1,9 @@
 <?php
 /**
  * @package Intraface_Procurement
- * @author	<name>
- * @since	1.0
- * @version	1.0
+ * @author  <name>
+ * @since   1.0
+ * @version     1.0
  *
  */
 class MainProcurement extends Intraface_Main
@@ -32,15 +32,13 @@ class MainProcurement extends Intraface_Main
         $this->addSetting('status', array(
                                             0=>'ordered',
                                             1=>'recieved',
-                                            2=>'canceled')
-        );
+                                            2=>'canceled'));
 
         $this->addSetting('from_region', array(
                                             0=>'denmark',
                                             1=>'eu',
                                             2=>'eu_vat_registered',
-                                            3=>'outside_eu')
-        );
+                                            3=>'outside_eu'));
 
 
 

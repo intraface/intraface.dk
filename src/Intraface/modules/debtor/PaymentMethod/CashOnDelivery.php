@@ -8,6 +8,6 @@ class Intraface_modules_debtor_PaymentMethod_CashOnDelivery
 
     function getIdentifier()
     {
-    	return 'CashOnDelivery';
+        return 'CashOnDelivery';
     }
 }

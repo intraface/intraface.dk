@@ -26,7 +26,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
     {
         $module = $this->context->getKernel()->module("product");
 
-        foreach ($this->body('product_id') AS $key => $product_id) {
+        foreach ($this->body('product_id') as $key => $product_id) {
             $product = new Product($this->context->getKernel(), $product_id);
             if ($this->body('change_type') == 'percent') {
                 $new_price = $product->get('price') + intval($product->get('price') * ($_POST['price_change'] / 100));
@@ -34,7 +34,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
                     $new_price = round($new_price, 0);
                 }
                 if ($product->save(array(
-            		'price' => $new_price,
+                    'price' => $new_price,
                     'before_price' => (float)$product->get('price')
                 ))) {
                 }
@@ -44,7 +44,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
                     $new_price = round($new_price, 0);
                 }
                 if ($product->save(array(
-            		'price' => $new_price,
+                    'price' => $new_price,
                     'before_price' => (float)$product->get('price')
                 ))) {
                 }
@@ -54,7 +54,7 @@ class Intraface_modules_product_Controller_BatchPriceChanger extends k_Component
                     $new_price = round($new_price, 0);
                 }
                 if ($product->save(array(
-            		'price' => $new_price,
+                    'price' => $new_price,
                     'before_price' => (float)$product->get('price')
                 ))) {
                 }

@@ -38,9 +38,9 @@ class Intraface_modules_cms_element_Map extends CMS_Element
                 $this->value['map']  = '<script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?'.htmlentities('v=2.0&appid=' . $api) .'"></script>';
                 /* flash version
                 $this->value['map'] .= '<script type="text/javascript">';
-                $this->value['map'] .= '	var latlon = new LatLon(' .$a['ResultSet']['Result']['Latitude'] . ', '. $a['ResultSet']['Result']['Longitude'].');';
-                $this->value['map'] .= '	var map = new Map("mapContainer", "rlerdorf", latlon, 3);';
-                $this->value['map'] .= '	map.addTool( new PanTool(), true );';
+                $this->value['map'] .= '    var latlon = new LatLon(' .$a['ResultSet']['Result']['Latitude'] . ', '. $a['ResultSet']['Result']['Longitude'].');';
+                $this->value['map'] .= '    var map = new Map("mapContainer", "rlerdorf", latlon, 3);';
+                $this->value['map'] .= '    map.addTool( new PanTool(), true );';
                 $this->value['map'] .= '</script>';
                 */
                 $this->value['map'] .= '<div id="mapContainer" style="width: '.$this->get('width').'px; height: '.$this->get('height').'px;"></div>';
@@ -121,13 +121,27 @@ class Intraface_modules_cms_element_Map extends CMS_Element
 
     function save_element($var)
     {
-        if (!empty($var['service'])) $this->parameter->save('service', $var['service']);
-        if (!empty($var['text'])) $this->parameter->save('text', $var['text']);
-        if (!empty($var['latitude'])) $this->parameter->save('latitude', $var['latitude']);
-        if (!empty($var['longitude'])) $this->parameter->save('longitude', $var['longitude']);
-        if (!empty($var['height'])) $this->parameter->save('height', $var['height']);
-        if (!empty($var['width'])) $this->parameter->save('width', $var['width']);
-        if (!empty($var['api_key'])) $this->parameter->save('api_key', $var['api_key']);
+        if (!empty($var['service'])) {
+            $this->parameter->save('service', $var['service']);
+        }
+        if (!empty($var['text'])) {
+            $this->parameter->save('text', $var['text']);
+        }
+        if (!empty($var['latitude'])) {
+            $this->parameter->save('latitude', $var['latitude']);
+        }
+        if (!empty($var['longitude'])) {
+            $this->parameter->save('longitude', $var['longitude']);
+        }
+        if (!empty($var['height'])) {
+            $this->parameter->save('height', $var['height']);
+        }
+        if (!empty($var['width'])) {
+            $this->parameter->save('width', $var['width']);
+        }
+        if (!empty($var['api_key'])) {
+            $this->parameter->save('api_key', $var['api_key']);
+        }
         return true;
     }
 }

@@ -80,5 +80,4 @@ class Intraface_Log implements Observer
         $log->log($msg);
         return true;
     }
-
 }

@@ -22,7 +22,7 @@ class Intraface_Auth_User
      *
      * @return void
      */
-    function __construct(MDB2_Driver_Common $db, $session_id, $email = NULL, $password = NULL)
+    function __construct(MDB2_Driver_Common $db, $session_id, $email = null, $password = null)
     {
         $this->db         = $db;
         $this->email      = $email;
@@ -54,9 +54,9 @@ class Intraface_Auth_User
         }
 
         $user = new Intraface_User($row['id']);
-		if (!is_object($user) || $user->get('id') != $row['id']) {
-		    throw new Exception('Unable to return a valid user object on login');
-		}
+        if (!is_object($user) || $user->get('id') != $row['id']) {
+            throw new Exception('Unable to return a valid user object on login');
+        }
 
         $_SESSION['intraface_logged_in_user_id'] = $user->getId();
 
@@ -102,5 +102,4 @@ class Intraface_Auth_User
     {
         return $this->email;
     }
-
 }
