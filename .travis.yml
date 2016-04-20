@@ -29,23 +29,19 @@ install:
   - sleep 5
 
   # Get selenium
-  - wget http://selenium.googlecode.com/files/selenium-server-standalone-2.37.0.jar
-  - java -jar selenium-server-standalone-2.37.0.jar > /dev/null 2>&1 &
-  - nc -zvv localhost 4444; out=$?; while [[ $out -ne 0 ]]; do echo "Retry hit port 4444..."; nc -zvv localhost 4444; out=$?; sleep 5; done
+  #- wget http://selenium.googlecode.com/files/selenium-server-standalone-2.37.0.jar
+  #- java -jar selenium-server-standalone-2.37.0.jar > /dev/null 2>&1 &
+  #- nc -zvv localhost 4444; out=$?; while [[ $out -ne 0 ]]; do echo "Retry hit port 4444..."; nc -zvv localhost 4444; out=$?; sleep 5; done
 
   # Start simple HTTP-Server
-  # - cd src/intraface.dk
-  # - python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
+  - cd src/intraface.dk
+  #- python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
 
 before_script:
-  #- cd ../../tests/unit
-  #- phpunit --version
-  #- phpenv rehash
+  - cd ../../tests/unit
 
 script:
-  - cd tests/unit/
   - ../../vendor/bin/phpunit --verbose --configuration phpunit.example.xml .
-  - cd ../../
-  # - java -jar senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"
-  - ./vendor/bin/phpcs --standard=phpcs.xml src/Intraface
-  - ./vendor/bin/phpcs --standard=phpcs.xml tests/unit
+  - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../src/Intraface
+  - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../tests/unit
+  #- java -jar ../../senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"
