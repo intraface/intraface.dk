@@ -48,7 +48,6 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         }
     }
 
-
     ////////////////////////////////////////////////////////////////
 
     function testImageRandomizerConstructor()
@@ -79,6 +78,9 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
 
     function testGetRandomImageReturnsDifferentImages()
     {
+        $this->markTestIncomplete(
+          'This seems like a volatile test that might break randomly.'
+        );
         $this->createImages();
         $r = $this->createImageRandomizer();
         $file1 = $r->getRandomImage();
@@ -98,6 +100,5 @@ class ImageRandomizerTest extends PHPUnit_Framework_TestCase
         $r = $this->createImageRandomizer(array('test', 'test_A'));
         $file = $r->getRandomImage();
         $this->assertEquals('FileHandler', get_class($file));
-
     }
 }

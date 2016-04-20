@@ -2,8 +2,6 @@
 /**
  * @package Intraface_CMS
  */
-require_once 'IntrafacePublic/CMS/HTML/Parser.php';
-
 class Intraface_modules_cms_HTML_Parser extends IntrafacePublic_CMS_HTML_Parser
 {
     private $translation;

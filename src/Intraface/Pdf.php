@@ -4,7 +4,7 @@
  *
  * @author Sune Jensen <sj@sunet.dk>
  */
-class Intraface_Pdf extends Cpdf
+class Intraface_Pdf extends Intraface_LegacyCpdf
 {
     protected $value;
     protected $page;
@@ -40,7 +40,7 @@ class Intraface_Pdf extends Cpdf
         // Table for the characters placements can be found here: http://www.fingertipsoft.com/3dkbd/ansitable.html
         // Table for their names is found here: http://www.gust.org.pl/fonty/qx-table2.htm
         // Notice that the placement of the characters are different in the two tables. Placement is correct in the first.
-        
+
         $diff = array(230 => 'ae',
                       198 => 'AE',
                       248 => 'oslash',

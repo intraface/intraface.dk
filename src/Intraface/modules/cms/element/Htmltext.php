@@ -69,7 +69,6 @@ class Intraface_modules_cms_element_Htmltext extends CMS_Element
     protected function save_element($var)
     {
         // should probably purify
-        require_once 'HTMLPurifier/Bootstrap.php';
         $config = HTMLPurifier_Config::createDefault();
         $config->set('Core.Encoding', 'UTF-8');
         $config->set('HTML.Doctype', 'XHTML 1.0 Strict');
