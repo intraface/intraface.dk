@@ -13,3 +13,7 @@ checks:
   php:
     custom_coding_standard:
       ruleset_path: 'phpcs.xml'
+
+filter:
+  excluded_paths:
+    - src/intraface.dk/core/javascript/*
