@@ -38,10 +38,14 @@ install:
   #- python -m SimpleHTTPServer 8080 > /dev/null 2>&1 &
 
 before_script:
+  - mkdir -p ../../build/logs
   - cd ../../tests/unit
 
 script:
-  - ../../vendor/bin/phpunit --verbose --configuration phpunit.example.xml .
+  - ../../vendor/bin/phpunit --coverage-clover ../../build/logs/clover.xml --verbose --configuration phpunit.example.xml .
   - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../src/Intraface
   - ../../vendor/bin/phpcs --standard=../../phpcs.xml ../../tests/unit
   #- java -jar ../../senium-server-standalone-2.37.0.jar -htmlSuite "*firefox" "http://127.0.0.1:8080" "../selenium/testSuite.html" "testResults.html"
+
+after_script:
+  - php vendor/bin/coveralls -v
