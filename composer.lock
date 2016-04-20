@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e241c27a8e89bef940ca2792042dacbd",
-    "content-hash": "5145f8f8abaf12cf2bf8cce5f4e819b5",
+    "hash": "685631c79ebdbc98a987be8788454a87",
+    "content-hash": "1ccefeb38740e881f8b789c80438ffe3",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -370,7 +370,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/intraface/Doctrine_Template_positionable.git",
-                "reference": "63ca08185ac1feaf306f74e8804e3cdbd3126d7c"
+                "reference": "87d5758c1b7b88dc6db29d753ed55a4c345e49cd"
             },
             "require": {
                 "php": ">=5.3.2"
@@ -404,7 +404,7 @@
                 }
             ],
             "homepage": "https://github.com/intraface/Doctrine_Template_Positionable",
-            "time": "2016-04-20 07:10:13"
+            "time": "2016-04-20 08:21:06"
         },
         {
             "name": "intraface/doctrine-validator-greaterthan",
@@ -2547,6 +2547,48 @@
                 "instantiate"
             ],
             "time": "2016-03-31 10:24:22"
+        },
+        {
+            "name": "ilib/selenium-selenese-testsuite-generator",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/intraface/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator.git",
+                "reference": "ca511d8a84907b91022fb6461ef56b2120f523e6"
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.4.*",
+                "squizlabs/php_codesniffer": "2.*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "autoload-dev": {
+                "classmap": [
+                    "tests/"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lars Olesen",
+                    "email": "lars@intraface.dk"
+                },
+                {
+                    "name": "Sune T. Jensen",
+                    "email": "sune@intraface.dk"
+                }
+            ],
+            "homepage": "https://github.com/intraface/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator",
+            "time": "2016-04-20 08:26:45"
         },
         {
             "name": "phpunit/php-code-coverage",

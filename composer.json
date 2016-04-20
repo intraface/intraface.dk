@@ -127,6 +127,10 @@
             "url": "https://github.com/intraface/IntrafacePublic_CMS.git"
         },
         {
+            "type": "git",
+            "url": "https://github.com/intraface/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator.git"
+        },
+        {
             "type": "pear",
             "url": "https://pear.php.net"
         },
@@ -217,6 +221,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.4.*",
-        "squizlabs/php_codesniffer": "2.*"
+        "phpunit/phpunit-selenium": "1.4.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "ilib/selenium-selenese-testsuite-generator": "*"
     }
 }

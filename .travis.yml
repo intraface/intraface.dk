@@ -21,9 +21,7 @@ install:
   - php tests/unit/setup_database.php
 
   # Generating the selenium test suite file
-  # - pear install phpunit/PHPUnit_Selenium
-  # - pear install --force intrafacepublic/Ilib_Testing_Selenium_Selenese_TestSuiteGenerator-0.1.2
-  # - php tests/selenium/generate_test_suite.php
+  - php tests/selenium/generate_test_suite.php
 
   # Setup display for selenium
   - export DISPLAY=:99.0
