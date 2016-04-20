@@ -156,7 +156,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.2",
-        "ext-gd": "*"
+        "ext-gd": "*",
         "pear-pear.php.net/Config": "1.10.12",
         "pear-pear.php.net/HTTP": "1.4.1",
         "pear-pear.php.net/MDB2": "2.4.1",
