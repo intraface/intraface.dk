@@ -5,7 +5,7 @@ build:
   tests:
     override:
       -
-        command: 'cd tests/unit/ && phpunit --coverage-clover=clover.xml --configuration phpunit.example.xml .'
+        command: 'mysql -e "create database IF NOT EXISTS intraface_test;" && php tests/unit/setup_database.php && cd tests/unit/ && phpunit --coverage-clover=clover.xml --configuration phpunit.example.xml .'
         coverage:
           file: 'clover.xml'
           format: 'php-clover'
