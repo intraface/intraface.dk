@@ -1,7 +1,7 @@
 [Intraface.dk](http://intraface.dk)
 ============
 
-[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master)
+[![Build Status](https://secure.travis-ci.org/intraface/intraface.dk.png?branch=master)](http://travis-ci.org/intraface/intraface.dk) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/intraface/intraface.dk/badges/build.png?b=master)](https://scrutinizer-ci.com/g/intraface/intraface.dk/build-status/master)
 
 Source code for [intraface.dk](http://intraface.dk). A system for small businesses made with the [konstrukt.dk](http://konstrukt) framework.
 
