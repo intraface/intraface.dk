@@ -87,7 +87,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->load() :".$result->getUserInfo());
-            exit;
         }
 
         if ($row = $result->fetchRow()) {
@@ -169,13 +168,11 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
         $result = $this->db->exec("INSERT INTO intranet_module_package SET ".$sql.", status_key = 1, active = 1, intranet_id = ".$this->intranet->get('id'));
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->save from result: ".$result->getUserInfo());
-            exit;
         }
 
         $id = $this->db->lastInsertID();
         if (PEAR::isError($id)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->save from id: ".$id->getUserInfo());
-            exit;
         }
         $this->id = $id;
         return $this->id;
@@ -206,7 +203,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (PEAR::isError($result)) {
             throw new Exception('Error in query:'.$result->getUserInfo());
-            return false;
         }
 
         return $result;
@@ -226,7 +222,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
         $result = $this->db->exec("UPDATE intranet_module_package SET status_key = 3 WHERE intranet_id = ".$this->intranet->get('id')." AND id = ".intval($this->id));
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->terminate :". $result->getUserInfo());
-            exit;
         }
 
         return $result;
@@ -245,7 +240,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
         $result = $this->db->exec("UPDATE intranet_module_package SET active = 0 WHERE intranet_id = ".$this->intranet->get('id')." AND id = ".intval($this->id));
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->delete :". $result->getUserInfo());
-            exit;
         }
 
         return $result;
@@ -262,12 +256,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
     {
         if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
             throw new Exception("Intraface_modules_modulepackage_Manager->getAddType needs object Intraface_modules_modulepackage_ModulePackage as first parameter");
-            exit;
         }
 
         if ($modulepackage->get('id') == 0) {
             throw new Exception('module package id is not valid in Intraface_modules_modulepackage_Manager->getAddType');
-            exit;
         }
 
         // TODO: If DBQuery had not needed kernel we could have used it here!
@@ -279,7 +271,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->getAddType: ".$result->getUserInfo());
-            exit;
         }
 
         if ($row = $result->fetchRow()) {
@@ -303,12 +294,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
             throw new Exception("Intraface_modules_modulepackage_Manager->getLastEndDateInGroup needs object Intraface_modules_modulepackage as Parameter");
-            exit;
         }
 
         if ($modulepackage->get('id') == 0) {
             throw new Exception('module package id is not valid in Intraface_modules_modulepackage_Manager->getLastEndDateInGroup');
-            exit;
         }
 
         // TODO: If DBQuery had not needed kernel we could have used it here!
@@ -320,7 +309,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->getLastEndDateInGroup: ".$result->getUserInfo());
-            exit;
         }
 
         if ($row = $result->fetchRow()) {
@@ -406,12 +394,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
     {
         if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
             throw new Exception('Intraface_modules_modulepackage_Manager->add needs object Intraface_modules_modulepackage_ModulePackage as Parameter');
-            exit;
         }
 
         if ($modulepackage->get('id') == 0) {
             throw new Exception('module package id is not valid in Intraface_modules_modulepackage_Manager->add');
-            exit;
         }
 
         // extends makes the same process
@@ -430,12 +416,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
     {
         if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
             throw new Exception('Intraface_modules_modulepackage_Manager->extend needs object Intraface_modules_modulepackage_ModulePackage as Parameter');
-            exit;
         }
 
         if ($modulepackage->get('id') == 0) {
             throw new Exception('module package id is not valid in Intraface_modules_modulepackage_Manager->extend');
-            exit;
         }
 
 
@@ -476,12 +460,10 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
     {
         if (!is_object($modulepackage) || strtolower(get_class($modulepackage)) != 'intraface_modules_modulepackage_modulepackage') {
             throw new Exception('Intraface_modules_modulepackage_Manager->upgrade needs object Intraface_modules_modulepackage as Parameter');
-            exit;
         }
 
         if ($modulepackage->get('id') == 0) {
             throw new Exception('module package id is not valid in Intraface_modules_modulepackage_Manager->upgrade');
-            exit;
         }
 
         $start_date = date('Y-m-d');
@@ -507,7 +489,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
         if (PEAR::isError($result)) {
             throw new Exception("Error in query in Intraface_modules_modulepackage_Manager->upgrade: ".$result->getUserInfo());
-            exit;
         }
 
         while ($row = $result->fetchRow()) {
@@ -529,7 +510,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
             $add_action['month'] = $remaining['month'];
             $add_action['order_debtor_id'] = $row['order_debtor_id'];
             $add_action['intranet_module_package_id'] = $row['id'];
-
 
             if ($row['order_debtor_id'] != 0 && $modulepackage->get('product_id') != 0) {
                 $product = $shop->getProductDetailFromExistingOrder($row['order_debtor_id'], $row['product_id']);

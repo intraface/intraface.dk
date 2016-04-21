@@ -143,7 +143,6 @@ class Intraface_modules_debtor_Controller_Show extends k_Component
                     break;
                 default:
                     throw new Exception("Invalid sender!");
-                    exit;
             }
             $contact = new Contact($this->getKernel(), $this->getDebtor()->get('contact_id'));
             $signature = new Intraface_shared_email_Signature($this->context->getKernel()->user, $this->context->getKernel()->intranet, $this->context->getKernel()->getSetting());

@@ -8,37 +8,37 @@
  */
 class InstanceManager
 {
-    
+
     /**
      * @var object error error objekt
      */
     public $error;
-    
+
     /**
      * @var object db db connection
      */
     private $db;
-    
+
     /**
      * @var integer id
      */
     private $type_key;
-    
+
     /**
      * @var integer intranet_id
      */
     private $intranet_id;
-    
+
     /**
      * @var array values
      */
     private $value;
-    
+
     /**
      * @var constant which id the custom types will start with
      */
     const MIN_CUSTOM_TYPE_KEY_VALUE = 1000;
-    
+
     /**
      * init function
      *
@@ -51,12 +51,12 @@ class InstanceManager
         $this->db = MDB2::singleton(DB_DSN);
         $this->type_key = (int)$type_key;
         $this->intranet_id = $kernel->intranet->get('id');
-        
+
         if ($this->type_key > 0) {
             $this->load();
         }
     }
-    
+
     /**
      * load data about intance type
      *
@@ -71,7 +71,7 @@ class InstanceManager
                 break;
             }
         }
-        
+
         $result = $this->db->query('SELECT name, type_key, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception('Error in query: '.$result->getUserInfo());
@@ -102,7 +102,7 @@ class InstanceManager
             return false;
         }
     }
-    
+
     /**
      * saves a new custom instance
      *
@@ -111,9 +111,9 @@ class InstanceManager
      */
     function save($input)
     {
-        
+
         $validator = new Ilib_Validator($this->error);
-        
+
         if ($this->type_key != 0) {
             $standard_types = $this->getStandardTypes();
             foreach ($standard_types as $standard_type) {
@@ -127,15 +127,15 @@ class InstanceManager
                 }
             }
         }
-        
+
         // @todo: make a test whether the name starts with system- and give a prober error description
-                
+
         settype($input['name'], 'string');
         $validator->isIdentifier($input['name'], 'invalid name', '');
         if (!$this->isNameFree($input['name'], $this->type_key)) {
             $this->error->set('an instance with the same name already exists');
         }
-                
+
         settype($input['max_width'], 'string');
         $validator->isNumeric($input['max_width'], 'invalid max width', 'integer,greater_than_zero');
         settype($input['max_height'], 'string');
@@ -148,23 +148,23 @@ class InstanceManager
                 $this->error->set('invalid resize type');
             }
         }
-        
+
         if ($this->error->isError()) {
             return false;
         }
-        
+
         $sql = 'name = '.$this->db->quote($input['name'], 'text').', ' .
                 'max_width = '.$this->db->quote($input['max_width'], 'integer').', ' .
                 'max_height = '.$this->db->quote($input['max_height'], 'integer').', ' .
                 'resize_type_key = '.$this->db->quote($resize_type_key);
-        
+
         if ($this->type_key == 0 || $this->get('origin') == 'standard') {
             if ($this->type_key == 0) {
                 $type_key = $this->getNextFreeTypeKey();
             } else {
                 $type_key = $this->type_key;
             }
-            
+
             $result = $this->db->exec('INSERT INTO file_handler_instance_type SET ' .
                     'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').', ' .
                     'type_key = '.$this->db->quote($type_key, 'integer').', ' .
@@ -188,11 +188,10 @@ class InstanceManager
                 return false;
             }
         }
-        
+
         return $this->type_key;
-        
     }
-    
+
     /**
      * returns the standard types
      *
@@ -215,7 +214,7 @@ class InstanceManager
             11 => array('type_key' => 11, 'name' => 'system-large', 'fixed' => true, 'hidden' => true, 'max_width' => 1024, 'max_height' => 683, 'resize_type' => 'relative')
         );
     }
-    
+
     /**
      * Checks whether a name is free to use
      *
@@ -225,14 +224,13 @@ class InstanceManager
      */
     private function isNameFree($name, $type_key = 0)
     {
-        
         $standard_types = $this->getStandardTypes();
         foreach ($standard_types as $standard_type) {
             if ($standard_type['name'] == $name && $standard_type['type_key'] != $type_key) {
                 return false;
             }
         }
-        
+
         $result = $this->db->query('SELECT type_key FROM file_handler_instance_type WHERE ' .
                 'intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND ' .
                 'name = '.$this->db->quote($name, 'text').' AND ' .
@@ -242,15 +240,15 @@ class InstanceManager
             throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
-        
+
         if ($result->numRows() > 0) {
             return false;
         }
-        
+
         return true;
-        
+
     }
-    
+
     /**
      * returns the next free type key
      *
@@ -265,16 +263,16 @@ class InstanceManager
             throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
-        
+
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
-        
+
         if ($row['max_key'] >= InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE) {
             return $row['max_key'] + 1;
         } else {
             return InstanceManager::MIN_CUSTOM_TYPE_KEY_VALUE;
         }
     }
-    
+
     /**
      * returns a list of custom instances
      *
@@ -285,9 +283,8 @@ class InstanceManager
     {
         if (!in_array($show, array('visible', 'include_hidden'))) {
             throw new Exception('First parameter to InstanceManager->getList should either be visibe or include_hidden');
-            exit;
         }
-        
+
         $result = $this->db->query('SELECT type_key, name, max_width, max_height, resize_type_key FROM file_handler_instance_type WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND active = 1 ORDER BY type_key');
         if (PEAR::isError($result)) {
             throw new Exception('Error in query: '.$result->getUserInfo());
@@ -296,20 +293,19 @@ class InstanceManager
         $custom_types = $result->fetchAll(MDB2_FETCHMODE_ASSOC);
         $standard_types = $this->getStandardTypes();
         $resize_types = $this->getResizeTypes();
-        
-        
+
         $type = array();
         $i = 0;
         $s = 0; // index for standard_types
         $c = 0; // index for custom_types;
-        
+
         while (isset($standard_types[$s]) || isset($custom_types[$c])) {
             if (isset($standard_types[$s])) {
                 if ($standard_types[$s]['hidden'] && $show == 'visible') {
                     $s++;
                     continue;
                 }
-                
+
                 if (isset($custom_types[$c]['type_key']) && $standard_types[$s]['type_key'] == $custom_types[$c]['type_key']) {
                     $type[$i] = array_merge($standard_types[$s], $custom_types[$c]);
                     $type[$i]['resize_type'] = $resize_types[$type[$i]['resize_type_key']];
@@ -325,14 +321,14 @@ class InstanceManager
                 $type[$i]['origin'] = 'custom';
                 $c++;
             }
-            
+
             $i++;
             $s++;
         }
-        
+
         return $type;
     }
-    
+
     /**
      * delete an instance type
      *
@@ -344,16 +340,16 @@ class InstanceManager
             throw new Exception('You can not delete an instancetype without setting a type_key!');
             return false;
         }
-        
+
         $result = $this->db->exec('UPDATE file_handler_instance_type SET active = 0 WHERE intranet_id = '.$this->db->quote($this->intranet_id, 'integer').' AND type_key = '.$this->db->quote($this->type_key, 'integer'));
         if (PEAR::isError($result)) {
             throw new Exception('Error in query: '.$result->getUserInfo());
             return false;
         }
-        
+
         return $result > 0;
     }
-    
+
     /**
      * returns the resize types
      *
@@ -363,8 +359,7 @@ class InstanceManager
     {
         return array(0 => 'relative', 1 => 'strict');
     }
-    
-    
+
     /**
      * returns values
      *
@@ -373,7 +368,7 @@ class InstanceManager
      */
     function get($key = '')
     {
-        
+
         if (!empty($key)) {
             if (isset($this->value[$key])) {
                 return($this->value[$key]);

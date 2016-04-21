@@ -54,17 +54,6 @@ class Newsletter extends Intraface_Standard
      */
     public static function factory($kernel, $id)
     {
-        /*
-        $db = new DB_Sql;
-        $db->query("SELECT list_id FROM newsletter_archieve WHERE intranet_id = ".$kernel->intranet->get('id')." AND active = 1 AND id = ".intval($id));
-        if ($db->nextRecord()) {
-            $list   = new NewsletterList($kernel, $db->f('list_id'));
-            $letter = new Newsletter($list, $id);
-            return $letter;
-        }
-        throw new Exception('Ugyldigt id');
-        return false;
-        */
         $gateway = new Intraface_modules_newsletter_NewsletterGateway($kernel);
         return $gateway->findById($id);
     }
@@ -234,7 +223,7 @@ class Newsletter extends Intraface_Standard
         $subject = $db->quote($this->get('subject'), 'text');
 
         if (PEAR::isError($subject)) {
-            die($subject->getUserInfo());
+            throw new Exception($subject->getUserInfo());
         }
 
         // TODO make escaping properly
@@ -249,7 +238,7 @@ class Newsletter extends Intraface_Standard
             $body = $db->quote($this->get('text')."\n\nLogin: ".$contact->getLoginUrl(), 'text');
 
             if (PEAR::isError($body)) {
-                die($body->getUserInfo());
+                throw new Exception($body->getUserInfo());
             }
 
 
@@ -293,7 +282,7 @@ class Newsletter extends Intraface_Standard
         }
 
         if (!empty($error)) {
-            die(implode(' ', $error));
+            throw new Exception(implode(' ', $error));
         }
 
         $this->updateSent($j);

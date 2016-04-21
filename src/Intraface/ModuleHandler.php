@@ -234,7 +234,6 @@ class Intraface_ModuleHandler
     {
         if (is_numeric($module_id)) {
             throw new Exception("Not yet implemented!");
-            exit;
         } else {
             $result = $db->query('SELECT id FROM module WHERE name = '.$db->quote($module_id, 'text'));
             if (PEAR::isError($result)) {

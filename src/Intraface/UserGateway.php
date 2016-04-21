@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors', true);
 class Intraface_UserGateway
 {
     protected $db;
