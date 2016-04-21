@@ -2,11 +2,11 @@
 /**
  * FileHandler
  *
- * Har grundl�ggende kontrol over filer der uploades til systemet.
- * FileHandler i include/3party omd�bes til fileModifier
+ * Har grundlæggende kontrol over filer der uploades til systemet.
+ * FileHandler i include/3party omdøbes til fileModifier
  * Filehandler benytter FileUpload og FileModifier.
  *
- * FileManager er modullet hvor man ogs� kan se browse og �ndre filerne.
+ * FileManager er modullet hvor man også kan se browse og ændre filerne.
  * Dette vil benytte FileHandler.
  *
  * @package Intraface
@@ -83,9 +83,9 @@ class FileHandler extends Intraface_Standard
     public $image;
 
     /**
-     * @todo der er muligt, at der kun skal v�re en getList i filemanager,
-     *       men s� skal vi have cms til at have filemanager som dependent. Forel�big
-     *       har jeg lavet keywords�gning i denne LO
+     * @todo der er muligt, at der kun skal være en getList i filemanager,
+     *       men så skal vi have cms til at have filemanager som dependent. Foreløbig
+     *       har jeg lavet keywordsøgning i denne LO
      * @var object
      */
     public $dbquery;
@@ -370,10 +370,10 @@ class FileHandler extends Intraface_Standard
     /**
      * Delete
      *
-     * Sletter fil: S�tter active = 0 og s�tter _deleted_ foran filen.
+     * Sletter fil: Sætter active = 0 og sætter _deleted_ foran filen.
      *
-     * Her b�r sikkert v�re et tjek p� om filen bruges nogen steder i systemet.
-     * Hvis den bruges skal man m�ske have at vide hvor?
+     * Her bør sikkert være et tjek på om filen bruges nogen steder i systemet.
+     * Hvis den bruges skal man måske have at vide hvor?
      *
      * @return boolean
      */
@@ -419,12 +419,12 @@ class FileHandler extends Intraface_Standard
     }
 
     /**
-     * Benyttes til at s�tte en uploadet fil ind i systemet
+     * Benyttes til at sætte en uploadet fil ind i systemet
      *
      * @todo should be called something else
      *
      * @param string $file      stien til filen @todo what exactly is this?
-     * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuv�rende navn
+     * @param string $file_name det originale filnavn, hvis ikke sat, tages der efter det nuværende navn
      * @param string $status    @todo hvad er det
      * @param string $mime_type @todo hvad er det
      *
@@ -556,7 +556,7 @@ class FileHandler extends Intraface_Standard
         $db = new DB_Sql;
 
         if (!is_array($input)) {
-            throw new Exception("Input skal v�re et array i FileHandler->updateInstance");
+            throw new Exception("Input skal være et array i FileHandler->updateInstance");
         }
 
         $input = safeToDb($input);
