@@ -111,7 +111,6 @@ class Intraface_modules_cms_Controller_Template extends k_Component
 
         if (!empty($_POST['add_section']) and !empty($_POST['new_section_type'])) {
             return new k_SeeOther($this->url('section/create', array('type' => $_POST['new_section_type'])));
-            exit;
         } elseif (!empty($_POST['add_keywords'])) {
             return new k_SeeOther($this->url('keyword/connect'));
         }

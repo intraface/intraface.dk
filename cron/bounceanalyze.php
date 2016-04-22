@@ -1,16 +1,14 @@
 <?php
 require 'common.php';
 
-$mail = new Zend_Mail_Storage_Imap(array('host'     => 'mail.vih.dk',
-                                         'user'     => 'lsolesen',
-                                         'password' => 'klani'));
+$mail = new Zend_Mail_Storage_Imap(array('host'     => 'xxx',
+                                         'user'     => 'xxx',
+                                         'password' => 'xxx'));
 
 $analyzer = new Intraface_modules_newsletter_BounceAnalyzer;
 
 foreach ($mail as $number => $message) {
-    var_dump($message);
 
-    /*
     if ($analyzer->isSoftBounce()) {
         continue;
     }
@@ -19,10 +17,6 @@ foreach ($mail as $number => $message) {
         // remove from newsletter
         $mail->removeMessage($number);
     }
-
-
-
-	*/
 }
 
 exit(1);

@@ -9,10 +9,10 @@
  * @version 1.0
  *
  * @todo VIGTIGT: Tilpasse til Kernel. Lige nu er $kernel bare smidt ind, fordi
- *       der var brug for den. Klasserne med IntranetAdmin er IKKE tilpasset ændringerne
+ *       der var brug for den. Klasserne med IntranetAdmin er IKKE tilpasset ï¿½ndringerne
  *       i $kernel.
  *
- * @todo Hvorfor ligger disse funktioner ikke bare i intranet. Det er jo ikke sådan,
+ * @todo Hvorfor ligger disse funktioner ikke bare i intranet. Det er jo ikke sï¿½dan,
  *       at man bare lige kan komme til dem?
  *
  */
@@ -39,8 +39,8 @@ class IntranetAdministration extends Intraface_Intranet
         settype($input['pdf_header_file_id'], 'integer');
 
         $validator = new Intraface_Validator($this->error);
-        $validator->isString($input['name'], 'Navn skal være en streng', '', '');
-        $validator->isString($input['identifier'], 'Identifier skal være en streng', '', '');
+        $validator->isString($input['name'], 'Navn skal vÃ¦re en streng', '', '');
+        $validator->isString($input['identifier'], 'Identifier skal vÃ¦re en streng', '', '');
         $validator->isNumeric($input['pdf_header_file_id'], 'Header billede er ikke gyldigt', 'zero_or_greater');
 
         if (!$this->isIdentifierUnique($input['identifier'])) {

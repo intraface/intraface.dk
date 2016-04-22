@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5f004e3dccf6af8d2fe786a7f94389fc",
-    "content-hash": "18fedaaee6a7faeedd09dc1ed396d58c",
+    "hash": "9e0aea488c0a56a907d603d3ef328ae3",
+    "content-hash": "387a3e0b6569fe49a80b4653fcf79a74",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -370,7 +370,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/intraface/Doctrine_Template_positionable.git",
-                "reference": "c6fa243cc2684756b09cd66068c6608257524815"
+                "reference": "f32d283f11c4529657705786c0bb255ad4cda86e"
             },
             "require": {
                 "pear-pear.doctrine-project.org/doctrine": "1.2.4",
@@ -405,7 +405,7 @@
                 }
             ],
             "homepage": "https://github.com/intraface/Doctrine_Template_Positionable",
-            "time": "2016-04-20 10:36:55"
+            "time": "2016-04-20 14:20:31"
         },
         {
             "name": "intraface/doctrine-validator-greaterthan",
@@ -2359,16 +2359,16 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v4.1.8",
+            "version": "v4.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "28ac862c8d5ccbe5c7ee8cecc07e1ca9d5195b56"
+                "reference": "ae540bed1079c07aa12e9e62d9d8d4fc49bbdff2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/28ac862c8d5ccbe5c7ee8cecc07e1ca9d5195b56",
-                "reference": "28ac862c8d5ccbe5c7ee8cecc07e1ca9d5195b56",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/ae540bed1079c07aa12e9e62d9d8d4fc49bbdff2",
+                "reference": "ae540bed1079c07aa12e9e62d9d8d4fc49bbdff2",
                 "shasum": ""
             },
             "require": {
@@ -2377,7 +2377,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1-dev"
+                    "dev-master": "4.3-dev"
                 }
             },
             "autoload": {
@@ -2406,7 +2406,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2012-06-17 20:55:34"
+            "time": "2013-04-11 10:22:09"
         },
         {
             "name": "troelskn/bucket",
@@ -3798,12 +3798,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "2d23e8b661e2d9658932902f5a40445cc5e5b359"
+                "reference": "1c01ac3d32124d922e1676aa09b550d0fa4b6f7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/2d23e8b661e2d9658932902f5a40445cc5e5b359",
-                "reference": "2d23e8b661e2d9658932902f5a40445cc5e5b359",
+                "url": "https://api.github.com/repos/symfony/config/zipball/1c01ac3d32124d922e1676aa09b550d0fa4b6f7a",
+                "reference": "1c01ac3d32124d922e1676aa09b550d0fa4b6f7a",
                 "shasum": ""
             },
             "require": {
@@ -3843,7 +3843,7 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2016-03-04 07:56:56"
+            "time": "2016-04-20 18:54:21"
         },
         {
             "name": "symfony/console",
@@ -3851,12 +3851,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "1ada3cf4c670719930e57b8e4a74926f8a62d41c"
+                "reference": "f16423c7da1036e09f15fd144eeaa25a7d0e3011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/1ada3cf4c670719930e57b8e4a74926f8a62d41c",
-                "reference": "1ada3cf4c670719930e57b8e4a74926f8a62d41c",
+                "url": "https://api.github.com/repos/symfony/console/zipball/f16423c7da1036e09f15fd144eeaa25a7d0e3011",
+                "reference": "f16423c7da1036e09f15fd144eeaa25a7d0e3011",
                 "shasum": ""
             },
             "require": {
@@ -3903,7 +3903,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2016-04-20 11:42:08"
+            "time": "2016-04-20 18:54:21"
         },
         {
             "name": "symfony/filesystem",

@@ -46,9 +46,9 @@ class DB_Sql
 
     function nextRecord()
     {
-        // Gennemsøger recordset.
-        // Går videre til næste post hver gang den kaldes.
-        // Returnere true så længe der er en post
+        // GennemsÃ¸ger recordset.
+        // GÃ¥r videre til nÃ¦ste post hver gang den kaldes.
+        // Returnere true sÃ¥ lÃ¦nge der er en post
         // while($db->next_record()) {
         $this->row = $this->result->fetchRow(MDB2_FETCHMODE_ASSOC);
         if (PEAR::isError($this->row)) {
@@ -60,7 +60,7 @@ class DB_Sql
 
     function affectedRows()
     {
-        // returnere antallet af berørte rækker ved INSERT, UPDATE, DELETE
+        // returnere antallet af berÃ¸rte rÃ¦kker ved INSERT, UPDATE, DELETE
         // print($db->affected_rows());
 
         return($this->db->_affectedRows(NULL));
@@ -68,14 +68,14 @@ class DB_Sql
 
     function f($name)
     {
-        // Returnere værdien fra feltet med navet som er angivet.
+        // Returnere vÃ¦rdien fra feltet med navet som er angivet.
         // Print($db->f("felt"));
         return($this->row[$name]);
     }
 
     function free()
     {
-        // Frigør hukommelse til resultatet
+        // FrigÃ¸r hukommelse til resultatet
         // $db->free();
         $this->result->free();
     }
@@ -90,7 +90,7 @@ class DB_Sql
 
     function numRows()
     {
-        // Returnere antallet af rækker
+        // Returnere antallet af rÃ¦kker
         // print($db->num_rows());
 
         return($this->result->numRows());

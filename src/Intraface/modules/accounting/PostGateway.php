@@ -1,10 +1,10 @@
 <?php
 /**
- * Håndterer poster i kladden
+ * HÃ¥ndterer poster i kladden
  *
- * Det er lovmæssigt bestemt, at man ikke må lave om i selve
- * de bogførte poster, så der skal ikke være metoder til at ændre eller
- * slette i bogføringen.
+ * Det er lovmÃ¦ssigt bestemt, at man ikke mÃ¥ lave om i selve
+ * de bogfÃ¸rte poster, sÃ¥ der skal ikke vÃ¦re metoder til at Ã¦ndre eller
+ * slette i bogfÃ¸ringen.
  *
  * @package Intraface_Accounting
  * @author Lars Olesen
