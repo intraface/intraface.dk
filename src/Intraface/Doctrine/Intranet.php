@@ -2,12 +2,12 @@
 class Intraface_Doctrine_Intranet
 {
     private $id;
-    
+
     public function __construct($id)
     {
         $this->id = $id;
     }
-    
+
     public static function singleton($id = null)
     {
         if ($id != null) {
@@ -18,7 +18,7 @@ class Intraface_Doctrine_Intranet
         }
         return new Intraface_Doctrine_Intranet($GLOBALS['intraface_doctrine_intranet_id']);
     }
-    
+
     public function getId()
     {
         return $this->id;

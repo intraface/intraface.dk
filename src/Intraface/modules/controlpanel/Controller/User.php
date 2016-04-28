@@ -3,15 +3,6 @@
  * @todo If user changes e-mail we need to do something special
  *       if we will continue using this - so I have disabled
  *       e-mail change
- *
- *
- * @category
- * @package
- * @author     lsolesen
- * @copyright
- * @license   http://www.opensource.org/licenses/lgpl-license.php LGPL
- * @version
- *
  */
 class Intraface_modules_controlpanel_Controller_User extends k_Component
 {
@@ -52,14 +43,13 @@ class Intraface_modules_controlpanel_Controller_User extends k_Component
         $address_value = $_POST;
         $address_value['name'] = $_POST['address_name'];
         $address_value['email'] = $_POST['address_email'];
-        
+
         $old_email = $this->getUser()->get('email');
 
         // @todo hvis man ændrer e-mail skal man have en e-mail som en sikkerhedsforanstaltning
         // på den gamle e-mail
 
         //$this->getUser()->setActiveIntranetId($this->getUser()->getActiveIntranet());
-        
 
         if ($this->getUser()->update($value)) {
             if ($this->getUser()->get('email') != $old_email) {
