@@ -112,12 +112,7 @@
  * @package Intraface_Contact
  * @author  Lars Olesen <lars@legestue.net>
  * @author  Sune Jensen <sj@sunet.dk>
- * @version     1.0
- * @since   1.0
- * @access Public
  * @copyright   Lars Olesen
- * @license
- *
  */
 require_once dirname(__FILE__) . '/ContactPerson.php';
 require_once 'Intraface/functions.php';
