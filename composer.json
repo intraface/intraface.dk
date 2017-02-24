@@ -163,7 +163,7 @@
         "ext-gd": "*",
         "pear-pear.php.net/Config": "1.10.12",
         "pear-pear.php.net/HTTP": "1.4.1",
-        "pear-pear.php.net/MDB2": "2.4.1",
+        "pear-pear.php.net/MDB2": "2.5.0-beta5 as 2.5.0",
         "pear-pear.php.net/MDB2_Driver_mysql": "1.4.1",
         "pear-pear.php.net/Translation2": "2.0.4",
         "pear-pear.php.net/Log": "1.12.6",
