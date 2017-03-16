@@ -1,5 +1,7 @@
 sudo: false
 language: php
+services:
+  - mysql
 
 php:
   - 5.5
