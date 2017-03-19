@@ -422,7 +422,6 @@ class Voucher extends Intraface_Standard
         }
 
         return true;
-
     }
 
     /**

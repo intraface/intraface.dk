@@ -188,7 +188,6 @@ class Post extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("DELETE FROM accounting_post WHERE id = " . $this->id);
         return true;
-
     }
 
     function getId()

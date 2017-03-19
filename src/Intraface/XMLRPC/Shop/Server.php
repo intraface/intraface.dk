@@ -196,7 +196,6 @@ class Intraface_XMLRPC_Shop_Server
         }
 
         return $related_products;
-
     }
 
    /**
@@ -218,7 +217,6 @@ class Intraface_XMLRPC_Shop_Server
         $product = new Product($this->kernel);
         $keywords = $product->getKeywordAppender();
         return $keywords->getUsedKeywords();
-
     }
 
     /**
@@ -667,6 +665,5 @@ class Intraface_XMLRPC_Shop_Server
         } else {
             return $values;
         }
-
     }
 }

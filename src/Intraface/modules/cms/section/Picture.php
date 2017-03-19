@@ -14,7 +14,6 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
         $this->value['type'] = 'picture';
         parent::__construct($cmspage, $id);
         $this->cmspage->kernel->useModule('filemanager');
-
     }
 
     function load_section()
@@ -100,6 +99,5 @@ class Intraface_modules_cms_section_Picture extends CMS_Section
             $this->addParameter('pic_id', $var['pic_id']);
         }
         return 1;
-
     }
 }

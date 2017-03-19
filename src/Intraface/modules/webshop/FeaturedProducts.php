@@ -76,6 +76,5 @@ class Intraface_Webshop_FeaturedProducts
         }
 
         return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
-
     }
 }

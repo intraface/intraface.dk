@@ -15,7 +15,6 @@ class CMS_Stylesheet extends Intraface_Standard
         $this->cmssite = $cmssite;
         $this->error = new Intraface_Error;
         $this->load();
-
     }
 
     function validate($input)

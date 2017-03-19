@@ -249,7 +249,6 @@ class DebtorItem extends Intraface_Standard
         } else {
             return 0;
         }
-
     }
 
     /**

@@ -81,7 +81,6 @@ class BasketEvaluation extends Intraface_Standard
         if ($this->id != 0) {
             $this->load();
         }
-
     }
 
     /**
@@ -131,7 +130,6 @@ class BasketEvaluation extends Intraface_Standard
         }
 
         return true;
-
     }
 
     /**

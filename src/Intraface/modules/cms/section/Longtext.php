@@ -27,7 +27,6 @@ class Intraface_modules_cms_section_Longtext extends CMS_Section
         } else {
             $this->value['html'] = autoop($this->parameter->get('text'));
         }
-
     }
 
     function validate_section($var)

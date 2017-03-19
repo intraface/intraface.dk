@@ -274,7 +274,6 @@ class Invoice extends Debtor
         $this->setStated($voucher->get('id'), $this_date->get());
         $this->load();
         return true;
-
     }
 
     /**

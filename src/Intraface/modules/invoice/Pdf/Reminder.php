@@ -198,6 +198,5 @@ class Intraface_modules_invoice_Pdf_Reminder extends Intraface_modules_debtor_Pd
 
 
         $this->addPaymentCondition($reminder->get("payment_method_key"), $parameter, $reminder->getPaymentInformation());
-
     }
 }

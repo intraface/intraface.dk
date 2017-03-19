@@ -20,7 +20,6 @@ class Intraface_modules_language_Gateway
         ksort($currencies);
 
         return $currencies;
-
     }
 
     public function getByIsoCode($iso_code)

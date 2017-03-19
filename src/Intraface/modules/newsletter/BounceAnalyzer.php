@@ -3,7 +3,6 @@ class Intraface_modules_newsletter_BounceAnalyzer
 {
     function __construct()
     {
-
     }
 
     function isSoftBounce($body)
@@ -21,6 +20,5 @@ class Intraface_modules_newsletter_BounceAnalyzer
         if (stripos($body, 'unknown user') !== false) {
             return true;
         }
-
     }
 }

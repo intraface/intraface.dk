@@ -3,7 +3,6 @@ class Intraface_modules_currency_Currency_Type
 {
     public function __construct()
     {
-
     }
 
     public function getAll()
@@ -25,7 +24,6 @@ class Intraface_modules_currency_Currency_Type
         ksort($currencies);
 
         return $currencies;
-
     }
 
     public function getByIsoCode($iso_code)

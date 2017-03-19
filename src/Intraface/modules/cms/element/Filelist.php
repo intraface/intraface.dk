@@ -61,7 +61,6 @@ class Intraface_modules_cms_element_Filelist extends CMS_Element
         }
 
         return 1;
-
     }
 
     function validate_element($var)

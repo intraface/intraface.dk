@@ -244,7 +244,6 @@ class Intraface_modules_cms_PageGateway
         }
 
         return $pages;
-
     }
 
     function getPicture($pic_id)

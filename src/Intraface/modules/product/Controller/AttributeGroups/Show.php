@@ -85,7 +85,6 @@ class Intraface_modules_product_Controller_AttributeGroups_Show extends k_Compon
         }
 
         return $this->render();
-
     }
 
     function renderHtmlEdit()

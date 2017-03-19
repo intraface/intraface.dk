@@ -90,7 +90,6 @@ class Intraface_modules_controlpanel_Controller_UserPreferences extends k_Compon
         $value = $_POST;
 
         return $this->render();
-
     }
 
     function getLabelStandards()

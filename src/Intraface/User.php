@@ -521,7 +521,6 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         } else {
             $input["disabled"] = 0;
         }
-
     }
 
     /**
@@ -599,7 +598,6 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
         $this->db->query("UPDATE user SET password = '".safeToDb(md5($new_password))."' WHERE id = " . $this->get('id'));
 
         return true;
-
     }
 
     /**
@@ -637,6 +635,5 @@ class Intraface_User extends Intraface_Standard implements Intraface_Identity
     function getLanguage()
     {
         return $this->getSetting()->get('user', 'language');
-
     }
 }

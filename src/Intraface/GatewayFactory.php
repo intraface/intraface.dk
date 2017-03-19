@@ -14,6 +14,5 @@ class Intraface_GatewayFactory
 
     function new_Intraface_modules_newsletter_SubscribersGateway($user)
     {
-
     }
 }

@@ -74,6 +74,5 @@ class MainContact extends Intraface_Main
                 3 => 'cancelled'
              )
          );
-
     }
 }

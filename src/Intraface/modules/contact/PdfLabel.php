@@ -41,8 +41,6 @@ class Intraface_modules_contact_PdfLabel extends Intraface_Pdf
                 $this->label_padding_top = 14;
                 break;
         }
-        
-        
     }
     
     public function generate($contacts, $search, $keywords)

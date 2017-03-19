@@ -216,7 +216,6 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
      */
     public function getProductsInWithVariationAttribute($credentials, $shop_id, $variation_id, $attribute_id, $results_per_page = 0, $pagging_offset = 0)
     {
-
     }
 
     /**
@@ -474,7 +473,6 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         }
 
         return $this->prepareResponseData($related_products);
-
     }
 
    /**
@@ -494,7 +492,6 @@ class Intraface_XMLRPC_Shop_Server0004 extends Intraface_XMLRPC_Server
         $product = new Product($this->kernel);
         $keywords = $product->getKeywordAppender();
         return $this->prepareResponseData($keywords->getUsedKeywords());
-
     }
 
     /**

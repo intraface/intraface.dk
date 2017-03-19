@@ -434,7 +434,6 @@ class Account extends Intraface_Standard
         $primo['saldo'] = $primo['debet'] - $primo['credit'];
 
         return $primo;
-
     }
     /**
      * Public: Metoden returnerer en saldo for en konto

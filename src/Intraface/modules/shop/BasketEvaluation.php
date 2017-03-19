@@ -75,7 +75,6 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
         if ($this->id != 0) {
             $this->load();
         }
-
     }
 
     /**
@@ -125,7 +124,6 @@ class Intraface_modules_shop_BasketEvaluation extends Intraface_Standard
         }
 
         return true;
-
     }
 
     /**

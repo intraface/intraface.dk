@@ -38,7 +38,6 @@ class Intraface_modules_accounting_Controller_State_Creditnote extends k_Compone
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/state/creditnote');
         return $smarty->render($this);
-
     }
 
     function postForm()

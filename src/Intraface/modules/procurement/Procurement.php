@@ -118,7 +118,6 @@ class Procurement extends Intraface_Standard
         $this->value["state_account_id"] = $db->f("state_account_id");
         $this->value["voucher_id"] = $db->f("voucher_id");
         return true;
-
     }
 
     function loadItem($id = 0)

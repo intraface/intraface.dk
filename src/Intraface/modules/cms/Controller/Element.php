@@ -103,7 +103,6 @@ class Intraface_modules_cms_Controller_Element extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/section-html-edit');
         return $tpl->render($this, $data);
-
     }
 
     function postMultipart()

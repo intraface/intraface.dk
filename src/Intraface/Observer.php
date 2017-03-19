@@ -40,6 +40,5 @@ class Intraface_Dispatcher
             }
             call_user_func($this->events[$e]);
         }
-
     }
 }

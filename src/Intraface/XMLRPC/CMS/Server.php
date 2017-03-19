@@ -124,7 +124,6 @@ class Intraface_XMLRPC_CMS_Server
 
         $sitemap = new CMS_SiteMap($this->cmssite);
         return $sitemap->build();
-
     }
 
     /**
@@ -159,6 +158,5 @@ class Intraface_XMLRPC_CMS_Server
         $this->kernel->weblogin = $weblogin;
         $this->kernel->intranet = new Intraface_Intranet($weblogin->getActiveIntranetId());
         $this->kernel->setting = new Intraface_Setting($this->kernel->intranet->get('id'));
-
     }
 }

@@ -45,7 +45,6 @@ class Intraface_modules_accounting_PostGateway
         }
         $post =  new Post(new Voucher($year, $db->f('voucher_id')), (int)$post_id);
         return $post;
-
     }
 
     public function getList($type = 'stated')

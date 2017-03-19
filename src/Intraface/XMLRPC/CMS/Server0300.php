@@ -129,7 +129,6 @@ class Intraface_XMLRPC_CMS_Server0300 extends Intraface_XMLRPC_Server
 
         $sitemap = new CMS_SiteMap($this->cmssite);
         return $this->prepareResponseData($sitemap->build());
-
     }
 
 

@@ -1762,7 +1762,7 @@ class Intraface_LegacyCpdf
         $pos=strlen($content);
         foreach ($this->objects as $k => $v) {
             $tmp='o_'.$v['t'];
-            $cont=$this->$tmp($k,'out');
+            $cont=$this->$tmp($k, 'out');
             $content.=$cont;
             $xref[]=$pos;
             $pos+=strlen($cont);

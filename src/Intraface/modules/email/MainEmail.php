@@ -18,6 +18,5 @@ class MainEmail extends Intraface_Main
         $this->addRequiredShared('email');
 
         $this->addControlpanelFile('E-mail settings', 'core/restricted/module/email/settings');
-
     }
 }

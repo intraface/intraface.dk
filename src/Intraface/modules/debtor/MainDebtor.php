@@ -91,6 +91,5 @@ class MainDebtor extends Intraface_Main
 
         $this->addDependentModule('contact');
         $this->addDependentModule('product');
-
     }
 }

@@ -65,7 +65,6 @@ class CMS_Parameter
         if ($this->object->get('id') > 0) {
             $this->load();
         }
-
     }
 
     /**

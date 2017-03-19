@@ -56,7 +56,6 @@ class Intraface_modules_product_ProductDoctrineGateway
         } else {
             return $collection->getLast();
         }
-
     }
 
     /**

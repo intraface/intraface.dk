@@ -337,6 +337,5 @@ class IntranetMaintenance extends Intraface_Intranet
             return false;
         }
         return true;
-
     }
 }

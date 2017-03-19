@@ -53,7 +53,6 @@ class Intraface_XMLRPC_Newsletter_Server
         }
 
         return true;
-
     }
 
     /**
@@ -101,7 +100,6 @@ class Intraface_XMLRPC_Newsletter_Server
         }
 
         return true;
-
     }
 
     /**

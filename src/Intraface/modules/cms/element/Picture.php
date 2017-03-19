@@ -39,7 +39,6 @@ class Intraface_modules_cms_element_Picture extends CMS_Element
                 }
             }
         }
-
     }
 
     function validate_element($var)

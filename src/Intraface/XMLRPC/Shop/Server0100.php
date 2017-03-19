@@ -638,7 +638,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         }
 
         return $this->prepareResponseData($related_products);
-
     }
 
    /**
@@ -658,7 +657,6 @@ class Intraface_XMLRPC_Shop_Server0100 extends Intraface_XMLRPC_Server0100
         $product = new Product($this->kernel);
         $keywords = $product->getKeywordAppender();
         return $this->prepareResponseData($keywords->getUsedKeywords());
-
     }
 
     /**

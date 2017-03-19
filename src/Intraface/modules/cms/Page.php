@@ -489,7 +489,6 @@ class CMS_Page extends Intraface_Standard
         }
 
         return $section;
-
     }
 
     // @todo dette navn giver ikke nogen mening
@@ -804,7 +803,6 @@ class CMS_Page extends Intraface_Standard
         $this->value['active'] = 0;
         $this->load();
         return true;
-
     }
 
     function getId()

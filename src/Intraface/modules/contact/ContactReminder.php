@@ -183,7 +183,6 @@ class ContactReminder extends Intraface_Standard
         $validator->isDate($input['reminder_date'], 'Error in date', 'allow_no_year');
         $validator->isString($input['subject'], 'Error in subject', '');
         $validator->isString($input['description'], 'Error in description', '', 'allow_empty');
-
     }
 
     /**
@@ -279,7 +278,6 @@ class ContactReminder extends Intraface_Standard
             return array();
         }
          return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
-
     }
 
     /**
@@ -299,7 +297,6 @@ class ContactReminder extends Intraface_Standard
         }
          $this->load();
          return true;
-
     }
 
     public function getDBQuery()

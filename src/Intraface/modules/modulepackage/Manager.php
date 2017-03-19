@@ -176,7 +176,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
         }
         $this->id = $id;
         return $this->id;
-
     }
 
     /**
@@ -445,7 +444,6 @@ class Intraface_modules_modulepackage_Manager extends Intraface_Standard
 
 
         return $action;
-
     }
 
     /**

@@ -19,7 +19,6 @@ class Intraface_modules_shop_Shop extends Doctrine_Record
         $this->hasColumn('terms_of_trade_url', 'string', 255);
         $this->hasColumn('default_currency_id', 'integer');
         $this->hasColumn('language_key', 'integer');
-
     }
 
     public function setUp()

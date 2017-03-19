@@ -273,7 +273,6 @@ class Intraface_modules_shop_Basket
         $sql = "customer_comment = \"".$customer_comment."\"";
 
         return $this->saveToDb($sql);
-
     }
 
     /**
@@ -291,7 +290,6 @@ class Intraface_modules_shop_Basket
         $sql = "payment_method_key = \"".$payment_method_key."\"";
 
         return $this->saveToDb($sql);
-
     }
 
     /**
@@ -470,7 +468,6 @@ class Intraface_modules_shop_Basket
             return 0;
         }
         return $db->f("quantity");
-
     }
 
     /**
@@ -673,7 +670,6 @@ class Intraface_modules_shop_Basket
         $this->resetItemCache();
 
         return true;
-
     }
 
     /**

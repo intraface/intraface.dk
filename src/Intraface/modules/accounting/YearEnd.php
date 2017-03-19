@@ -93,7 +93,6 @@ class YearEnd extends Intraface_Standard
                 throw new Exception('YearEnd::setStated: Ugyldig type');
                 break;
         }
-
     }
 
     /**

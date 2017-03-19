@@ -16,7 +16,6 @@ class Intraface_modules_currency_Controller_Index extends k_Component
             return 'Intraface_modules_currency_Controller_Add';
         }
         return 'Intraface_modules_currency_Controller_Show';
-
     }
 
     function renderHtml()

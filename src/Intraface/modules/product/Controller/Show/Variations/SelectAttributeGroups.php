@@ -69,7 +69,6 @@ class Intraface_modules_product_Controller_Show_Variations_SelectAttributeGroups
 
         $smarty = $this->template->create('Intraface/modules/product/Controller/tpl/select-attribute-groups');
         return $smarty->render($this, $data);
-
     }
 
     function putForm()

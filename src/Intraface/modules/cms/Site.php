@@ -106,7 +106,6 @@ class CMS_Site extends Intraface_Standard
         $this->value['name'] = $db->f('name');
         $this->value['url'] = $db->f('url');
         $this->value['cc_license'] = $this->kernel->setting->get('intranet', 'cc_license', 'site_id_' . $this->get('id'));
-
     }
 
     function delete()

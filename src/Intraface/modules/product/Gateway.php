@@ -237,7 +237,6 @@ class Intraface_modules_product_Gateway
         }
 
         return $products;
-
     }
 
     function getMaxNumber()

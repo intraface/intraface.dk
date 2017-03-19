@@ -653,7 +653,6 @@ class FileHandler extends Intraface_Standard
     protected function _getMimeTypeFromKey($key)
     {
         return $this->_getMimeType($key, 'key');
-
     }
 
     function getKernel()

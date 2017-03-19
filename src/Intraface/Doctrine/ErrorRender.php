@@ -42,7 +42,6 @@ class Intraface_Doctrine_ErrorRender
         }
 
         return $display;
-
     }
 
     private function getErrorDescription($code)

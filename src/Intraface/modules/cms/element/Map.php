@@ -97,7 +97,6 @@ class Intraface_modules_cms_element_Map extends CMS_Element
                 //$this->value['map'] .= ']]>';
                 $this->value['map'] .= '</script>';
         }
-
     }
 
     function validate_element($var)

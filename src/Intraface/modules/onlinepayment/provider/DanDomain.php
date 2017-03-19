@@ -52,7 +52,6 @@ class OnlinePaymentDanDomain extends OnlinePayment
 
         // hente settings om DanDomain fra settingssystemet
         $this->settings = $this->getSettings();
-
     }
 
     function getTransactionActions()

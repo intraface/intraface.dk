@@ -246,7 +246,6 @@ class InstanceManager
         }
 
         return true;
-
     }
 
     /**

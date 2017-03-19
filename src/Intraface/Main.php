@@ -51,7 +51,6 @@ abstract class Intraface_Main
         foreach ($this->preload_file as $file) {
             $this->includeFile($file);
         }
-
     }
 
     /**

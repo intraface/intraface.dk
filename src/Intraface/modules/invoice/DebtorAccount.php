@@ -33,7 +33,6 @@ class DebtorAccount extends Intraface_Standard
         
         $this->object = $object;
         $this->error = $object->error;
-        
     }
     
     /**

@@ -163,6 +163,5 @@ class Intraface_modules_modulepackage_AccessUpdate
         $logger->update($details);
 
         return true;
-
     }
 }

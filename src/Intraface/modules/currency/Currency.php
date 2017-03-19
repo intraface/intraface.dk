@@ -21,7 +21,6 @@ class Intraface_modules_currency_Currency extends Doctrine_Record
             'Intraface_modules_currency_Currency_ExchangeRate_Payment as payment_exchange_rate',
             array('local' => 'id', 'foreign' => 'currency_id')
         );
-
     }
 
     public function setType($type)

@@ -26,7 +26,6 @@ class Intraface_modules_contact_Controller_Memos extends k_Component
         } else {
             return $tpl->render($this, array('memos' => $gateway->getAll()));
         }
-
     }
 
     function renderHtmlCreate()

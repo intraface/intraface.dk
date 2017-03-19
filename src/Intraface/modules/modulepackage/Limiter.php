@@ -23,11 +23,9 @@ class ModulePackage_Limit
             $limiters = array_merge($limiters, $package_module->get('limiters'));
         }
         $this->limiters = $limiters;
-
     }
 
     public function check($limiter, $assert_value)
     {
-
     }
 }

@@ -87,7 +87,6 @@ class Intraface_modules_accounting_Controller_Year_Primosaldo extends k_Componen
 
         $smarty = $this->template->create(dirname(__FILE__) . '/../templates/year/primosaldo-edit');
         return $smarty->render($this, $data);
-
     }
 
     function putForm()

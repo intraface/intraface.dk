@@ -88,6 +88,5 @@ class Intraface_modules_shop_FeaturedProducts
         }
 
         return $result->fetchAll(MDB2_FETCHMODE_ASSOC);
-
     }
 }
