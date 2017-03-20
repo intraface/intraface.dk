@@ -8,7 +8,7 @@
  * @author Sune Jensen <sj@sunet.dk>
  */
 
-error_reporting(E_ALL & ~E_DEPRECATED);
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
 
 // database
 define('DB_HOST', 'localhost');

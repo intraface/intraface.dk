@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5b40d7bda763b7492bcc74be1aa6e78d",
-    "content-hash": "3da1731624f7859f492eb094eb5ecafe",
+    "content-hash": "3de8c145ac8392b5d4324fd7b5162a2d",
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
@@ -49,7 +48,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2013-02-18 00:04:08"
+            "time": "2013-02-18T00:04:08+00:00"
         },
         {
             "name": "intraface/category",
@@ -221,17 +220,17 @@
         },
         {
             "name": "intraface/dbquery",
-            "version": "dev-master",
+            "version": "dev-mdb2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/intraface/Ilib_DBQuery.git",
-                "reference": "5901cf05e4b3c44c3ff833b2d22a9513e93deeb1"
+                "reference": "c0999c059d1fe52791bf029783a17c95f0aaa2eb"
             },
             "require": {
-                "intraface/dbsql": "*",
-                "intraface/error": "*",
-                "pear-pear.php.net/mdb2": "2.4.*",
-                "pear-pear.php.net/mdb2_driver_mysql": "1.4.*",
+                "intraface/dbsql": "dev-master",
+                "intraface/error": "dev-master",
+                "pear-pear.php.net/mdb2": "2.5.0-beta5@beta",
+                "pear-pear.php.net/mdb2_driver_mysqli": "1.5.0-beta4@beta",
                 "php": ">=5.3.2"
             },
             "require-dev": {
@@ -262,8 +261,9 @@
                     "email": "sune@intraface.dk"
                 }
             ],
+            "description": "Class to help doing complex searches",
             "homepage": "https://github.com/intraface/Ilib_DBQuery",
-            "time": "2016-04-19 10:37:01"
+            "time": "2017-03-20 15:08:26"
         },
         {
             "name": "intraface/dbsql",
@@ -1207,7 +1207,7 @@
             "keywords": [
                 "markdown"
             ],
-            "time": "2013-04-11 18:53:11"
+            "time": "2013-04-11T18:53:11+00:00"
         },
         {
             "name": "michelf/php-smartypants",
@@ -1710,30 +1710,32 @@
         },
         {
             "name": "pear-pear.php.net/MDB2",
-            "version": "2.4.1",
+            "version": "2.5.0b5",
             "dist": {
                 "type": "file",
-                "url": "https://pear.php.net/get/MDB2-2.4.1.tgz",
+                "url": "https://pear.php.net/get/MDB2-2.5.0b5.tgz",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "pear-pear.php.net/pear": ">=1.3.6.0",
-                "php": ">=4.3.2.0"
+                "php": ">=5.2.0.0"
             },
             "replace": {
-                "pear-pear/mdb2": "== 2.4.1.0"
+                "pear-pear/mdb2": "== 2.5.0.0-beta5"
             },
             "suggest": {
                 "fbsql-pear-pear.php.net/MDB2_Driver_fbsql": ">=0.3.0.0",
-                "ibase-pear-pear.php.net/MDB2_Driver_ibase": ">=1.4.1.0",
-                "mssql-pear-pear.php.net/MDB2_Driver_mssql": ">=1.2.1.0",
-                "mysql-pear-pear.php.net/MDB2_Driver_mysql": ">=1.4.1.0",
-                "mysqli-pear-pear.php.net/MDB2_Driver_mysqli": ">=1.4.1.0",
-                "oci8-pear-pear.php.net/MDB2_Driver_oci8": ">=1.4.1.0",
-                "pgsql-pear-pear.php.net/MDB2_Driver_pgsql": ">=1.4.1.0",
-                "querysim-pear-pear.php.net/MDB2_Driver_querysim": ">=0.6.0.0",
-                "sqlite-pear-pear.php.net/MDB2_Driver_sqlite": ">=1.4.1.0"
+                "ibase-pear-pear.php.net/MDB2_Driver_ibase": ">=1.5.0.0",
+                "mssql-pear-pear.php.net/MDB2_Driver_mssql": ">=1.5.0.0",
+                "mysql-pear-pear.php.net/MDB2_Driver_mysql": ">=1.5.0.0",
+                "mysqli-pear-pear.php.net/MDB2_Driver_mysqli": ">=1.5.0.0",
+                "oci8-pear-pear.php.net/MDB2_Driver_oci8": ">=1.5.0.0",
+                "odbc-pear-pear.php.net/MDB2_Driver_odbc": ">=0.2.0.0",
+                "pgsql-pear-pear.php.net/MDB2_Driver_pgsql": ">=1.5.0.0",
+                "querysim-pear-pear.php.net/MDB2_Driver_querysim": ">=0.7.0.0",
+                "sqlite-pear-pear.php.net/MDB2_Driver_sqlite": ">=1.5.0.0",
+                "sqlsrv-pear-pear.php.net/MDB2_Driver_sqlsrv": ">=1.5.0.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -1751,20 +1753,20 @@
         },
         {
             "name": "pear-pear.php.net/MDB2_Driver_mysql",
-            "version": "1.4.1",
+            "version": "1.5.0b4",
             "dist": {
                 "type": "file",
-                "url": "https://pear.php.net/get/MDB2_Driver_mysql-1.4.1.tgz",
+                "url": "https://pear.php.net/get/MDB2_Driver_mysql-1.5.0b4.tgz",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "ext-mysql": "*",
-                "pear-pear.php.net/mdb2": ">=2.4.1.0",
-                "php": ">=4.3.0.0"
+                "pear-pear.php.net/mdb2": ">=2.5.0.0",
+                "php": ">=5.2.0.0"
             },
             "replace": {
-                "pear-pear/mdb2_driver_mysql": "== 1.4.1.0"
+                "pear-pear/mdb2_driver_mysql": "== 1.5.0.0-beta4"
             },
             "type": "pear-library",
             "autoload": {
@@ -1779,6 +1781,37 @@
                 "BSD License"
             ],
             "description": "This is the MySQL MDB2 driver."
+        },
+        {
+            "name": "pear-pear.php.net/MDB2_Driver_mysqli",
+            "version": "1.5.0b4",
+            "dist": {
+                "type": "file",
+                "url": "https://pear.php.net/get/MDB2_Driver_mysqli-1.5.0b4.tgz",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "ext-mysqli": "*",
+                "pear-pear.php.net/mdb2": ">=2.5.0.0",
+                "php": ">=5.2.0.0"
+            },
+            "replace": {
+                "pear-pear/mdb2_driver_mysqli": "== 1.5.0.0-beta4"
+            },
+            "type": "pear-library",
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "include-path": [
+                "/"
+            ],
+            "license": [
+                "BSD License"
+            ],
+            "description": "This is the MySQLi MDB2 driver."
         },
         {
             "name": "pear-pear.php.net/MIME_Type",
@@ -2113,10 +2146,10 @@
         },
         {
             "name": "pear-pear.php.net/XML_Parser",
-            "version": "1.3.6",
+            "version": "1.3.7",
             "dist": {
                 "type": "file",
-                "url": "https://pear.php.net/get/XML_Parser-1.3.6.tgz",
+                "url": "https://pear.php.net/get/XML_Parser-1.3.7.tgz",
                 "reference": null,
                 "shasum": null
             },
@@ -2125,7 +2158,7 @@
                 "php": ">=4.2.0.0"
             },
             "replace": {
-                "pear-pear/xml_parser": "== 1.3.6.0"
+                "pear-pear/xml_parser": "== 1.3.7.0"
             },
             "type": "pear-library",
             "autoload": {
@@ -2307,7 +2340,7 @@
                 "testing",
                 "unit-test"
             ],
-            "time": "2015-09-21 18:19:52"
+            "time": "2015-09-21T18:19:52+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2358,7 +2391,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2013-04-11 10:22:09"
+            "time": "2013-04-11T10:22:09+00:00"
         },
         {
             "name": "troelskn/bucket",
@@ -2744,7 +2777,7 @@
                 "filesystem",
                 "iterator"
             ],
-            "time": "2013-10-10 15:34:57"
+            "time": "2013-10-10T15:34:57+00:00"
         },
         {
             "name": "phpunit/php-text-template",
@@ -2785,7 +2818,7 @@
             "keywords": [
                 "template"
             ],
-            "time": "2015-06-21 13:50:34"
+            "time": "2015-06-21T13:50:34+00:00"
         },
         {
             "name": "phpunit/php-timer",
@@ -3066,7 +3099,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-11-02 09:23:27"
+            "time": "2014-11-02T09:23:27+00:00"
         },
         {
             "name": "psr/log",
@@ -3171,7 +3204,7 @@
                 "github",
                 "test"
             ],
-            "time": "2016-01-20 17:35:46"
+            "time": "2016-01-20T17:35:46+00:00"
         },
         {
             "name": "sebastian/comparator",
@@ -3543,7 +3576,7 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
-            "time": "2015-06-21 13:59:46"
+            "time": "2015-06-21T13:59:46+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -3689,12 +3722,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "2e8369faed1e0bf0fb7d2831832544d204a9a133"
+                "reference": "d4d7544f5a267aca6b79f0068ccc2bd07abc65a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/2e8369faed1e0bf0fb7d2831832544d204a9a133",
-                "reference": "2e8369faed1e0bf0fb7d2831832544d204a9a133",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d4d7544f5a267aca6b79f0068ccc2bd07abc65a2",
+                "reference": "d4d7544f5a267aca6b79f0068ccc2bd07abc65a2",
                 "shasum": ""
             },
             "require": {
@@ -3749,7 +3782,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-17 13:55:48"
+            "time": "2017-03-20T10:06:58+00:00"
         },
         {
             "name": "symfony/debug",
@@ -4030,12 +4063,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "841f67594b6f6a0b1024569aab10623bf903f393"
+                "reference": "286d84891690b0e2515874717e49360d1c98a703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/841f67594b6f6a0b1024569aab10623bf903f393",
-                "reference": "841f67594b6f6a0b1024569aab10623bf903f393",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/286d84891690b0e2515874717e49360d1c98a703",
+                "reference": "286d84891690b0e2515874717e49360d1c98a703",
                 "shasum": ""
             },
             "require": {
@@ -4071,13 +4104,43 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-03-07 16:19:54"
+            "time": "2017-03-20T09:41:44+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "troelskn/konstrukt": 20
+        "pear-pear.php.net/mdb2": 10,
+        "pear-pear.php.net/mdb2_driver_mysql": 10,
+        "troelskn/bucket": 20,
+        "troelskn/konstrukt": 20,
+        "intraface/error-handler": 20,
+        "intraface/ilib-error-handler": 20,
+        "intraface/mdb2-debug-explainqueries": 20,
+        "intraface/randomkey-generator": 20,
+        "intraface/position": 20,
+        "intraface/doctrine-validator-nohtml": 20,
+        "intraface/doctrine-validator-greaterthan": 20,
+        "intraface/doctrine-template-positionable": 20,
+        "intraface/category": 20,
+        "intraface/dbquery": 20,
+        "intraface/error": 20,
+        "intraface/redirect": 20,
+        "intraface/fileimport": 20,
+        "intraface/validator": 20,
+        "intraface/classloader": 20,
+        "intraface/variable": 20,
+        "intraface/dbsql": 20,
+        "intraface/keyword": 20,
+        "intraface/date": 20,
+        "intraface/countries": 20,
+        "intraface/filemanager": 20,
+        "intraface/filemanager-controller": 20,
+        "intraface/keyword-controller": 20,
+        "intraface/public-cms-controller": 20,
+        "intraface/debtor-pdf": 20,
+        "intrafacepublic/cms": 20,
+        "ilib/selenium-selenese-testsuite-generator": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
