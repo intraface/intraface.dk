@@ -12,11 +12,9 @@ class Intraface_modules_shop_Message_OrderConfirmation
 
     function getSubject()
     {
-
     }
 
     function getBody()
     {
-
     }
 }

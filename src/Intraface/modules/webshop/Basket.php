@@ -239,7 +239,6 @@ class Basket
         $sql = "customer_comment = \"".$customer_comment."\"";
 
         return $this->saveToDb($sql);
-
     }
 
     /**
@@ -388,7 +387,6 @@ class Basket
             return 0;
         }
         return $db->f("quantity");
-
     }
 
     /**
@@ -446,7 +444,6 @@ class Basket
         }
 
         return $weight;
-
     }
 
     /**
@@ -516,7 +513,6 @@ class Basket
                     "AND " . $this->sql_extra . " " .
                     "AND intranet_id = " . $this->webshop->kernel->intranet->get("id"));
         return true;
-
     }
 
     /**

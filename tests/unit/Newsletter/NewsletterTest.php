@@ -82,6 +82,5 @@ class NewsletterTest extends PHPUnit_Framework_TestCase
         $newsletter->save($data);
         $this->assertTrue($newsletter->delete());
         $this->assertEquals(0, count($newsletter->getList()));
-
     }
 }

@@ -45,12 +45,10 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
         $webshop = new FakeEvaluationWebshop();
         $webshop->kernel = $kernel;
         return new Basket($webshop, 'somesessionid');
-
     }
 
     function saveEvaluation()
     {
-
     }
 
     function testCreateBasketEvaluation()
@@ -158,6 +156,5 @@ class BasketEvaluationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($evaluation->run($basket));
 
         $basket->getItems(); // should have the filterproduct
-
     }
 }

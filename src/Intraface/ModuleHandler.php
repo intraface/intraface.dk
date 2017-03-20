@@ -223,7 +223,6 @@ class Intraface_ModuleHandler
             $i++;
         }
         return $modules;
-
     }
 
     /**

@@ -59,7 +59,6 @@ class Intraface_modules_accounting_AccountGateway
         }
 
         return new Account($this->year, $db->f('id'));
-
     }
 
     /**

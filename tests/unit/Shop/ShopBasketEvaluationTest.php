@@ -70,7 +70,6 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
 
     function saveEvaluation()
     {
-
     }
 
     function testCreateBasketEvaluation()
@@ -178,6 +177,5 @@ class ShopBasketEvaluationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($evaluation->run($basket));
 
         $basket->getItems(); // should have the filterproduct
-
     }
 }

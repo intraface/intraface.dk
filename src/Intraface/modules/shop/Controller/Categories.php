@@ -74,7 +74,6 @@ class Intraface_modules_shop_Controller_Categories extends k_Component
         }
 
         throw new Exception('Invalid action');
-
     }
 
     function getKernel()

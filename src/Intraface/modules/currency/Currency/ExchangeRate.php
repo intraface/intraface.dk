@@ -19,7 +19,6 @@ class Intraface_modules_currency_Currency_ExchangeRate extends Doctrine_Record
             'Intraface_modules_currency_Currency_ExchangeRate_ProductPrice'  => array('used_for_key' => 1),
             'Intraface_modules_currency_Currency_ExchangeRate_Payment' => array('used_for_key' => 2)
         ));
-
     }
 
     public function setUp()

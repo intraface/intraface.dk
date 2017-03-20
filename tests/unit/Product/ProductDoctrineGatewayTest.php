@@ -59,7 +59,6 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
         $group->save();
 
         return $group;
-
     }
 
     function createGateway()
@@ -87,7 +86,6 @@ class ProductDoctrineGatewayTest extends PHPUnit_Framework_TestCase
         $products = $gateway->findByVariationAttributeId(3); // blue;
 
         $this->assertEquals(1, $products->count());
-
     }
 
     /*

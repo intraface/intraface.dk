@@ -115,7 +115,6 @@ class Debtor extends Intraface_Standard
         unset($this->contact); // consider descruct
         unset($this->contact_person); // consider descruct
         unset($this->item); // consider desctruct
-
     }
 
     function getDBQuery()
@@ -132,7 +131,6 @@ class Debtor extends Intraface_Standard
         $this->dbquery->useErrorObject($this->error);
 
         return $this->dbquery;
-
     }
 
     /**
@@ -198,7 +196,6 @@ class Debtor extends Intraface_Standard
         }
 
         return $object;
-
     }
 
     /**
@@ -347,7 +344,6 @@ class Debtor extends Intraface_Standard
             $this->error->set('This is locked and cannot be updated');
             return 0;
         }
-
     }
 
     /**
@@ -1042,7 +1038,6 @@ class Debtor extends Intraface_Standard
     {
         $this->error->set('Denne type kan ikke bogf�res');
         return false;
-
     }
 
     /**
@@ -1215,7 +1210,6 @@ class Debtor extends Intraface_Standard
         }
 
         return $this->getArrears();
-
     }
 
     /**

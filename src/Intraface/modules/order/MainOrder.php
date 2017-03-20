@@ -31,6 +31,5 @@ class MainOrder extends Intraface_Main
 
         // hvilke units kan man vælge imellem?
         //$this->addSetting("unit", array(1=>"kr.", 2=>"stk."));
-
     }
 }

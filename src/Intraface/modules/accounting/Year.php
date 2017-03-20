@@ -614,7 +614,6 @@ class Year extends Intraface_Standard
                 break;
         }
         return true;
-
     }
 
     function setSettings($input)

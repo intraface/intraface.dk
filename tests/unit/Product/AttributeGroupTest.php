@@ -88,6 +88,5 @@ class AttributeGroupTest extends PHPUnit_Framework_TestCase
 
         $attributes = $group->getAttributesUsedByProduct(new FakeAttributeGroupProduct);
         $this->assertEquals(2, $attributes->count());
-
     }
 }

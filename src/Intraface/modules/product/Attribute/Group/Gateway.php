@@ -66,7 +66,6 @@ class Intraface_modules_product_Attribute_Group_Gateway
             throw new Intraface_Gateway_Exception('Unable to find group from attribute id "'.$id.'"');
         }
         return $groups->getFirst();
-            
     }
     
     /**

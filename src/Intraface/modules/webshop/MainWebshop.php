@@ -24,6 +24,5 @@ class MainWebshop extends Intraface_Main
             0 => 'only_stock',
             1 => 'all_published'
         ));
-
     }
 }

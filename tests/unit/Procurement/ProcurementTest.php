@@ -16,7 +16,6 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         $db->exec('TRUNCATE accounting_post');
         $db->exec('TRUNCATE accounting_year');
         $db->exec('TRUNCATE accounting_voucher');
-
     }
 
     function createKernel()
@@ -51,7 +50,6 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($procurement->update(array()));
         $this->assertEquals(3, $procurement->error->count(), $procurement->error->view());
-
     }
 
     function testUpdateWithValidInput()
@@ -105,7 +103,6 @@ class ProcurementTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $procurement->get());
-
     }
 
     function testReadyForStateBeforeSaved()

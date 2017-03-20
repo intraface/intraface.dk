@@ -46,7 +46,6 @@ class Intraface_modules_invoice_PaymentGateway
 
     function findByType()
     {
-
     }
 
     function getDBQuery()

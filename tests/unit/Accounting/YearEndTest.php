@@ -10,7 +10,6 @@ class FakeYearEndYear
     {
         $this->kernel = new Stub_Kernel;
         $this->kernel->setting->set('intranet', 'vatpercent', 25);
-
     }
     function get()
     {
@@ -120,6 +119,5 @@ class YearEndTest extends PHPUnit_Framework_TestCase
     function testResetYearResultReturnsTrue()
     {
         $this->assertTrue($this->end->resetYearResult());
-
     }
 }

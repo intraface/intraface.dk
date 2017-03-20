@@ -32,7 +32,6 @@ class Intraface_modules_cms_SectionGateway
         }
         $class = $this->class_prefix . ucfirst($section_types[$this->db->f('type_key')]);
         return new $class(CMS_Page::factory($this->kernel, 'id', $this->db->f('page_id')), $this->db->f('id'));
-
     }
 
     function findByPageAndId($page, $id)

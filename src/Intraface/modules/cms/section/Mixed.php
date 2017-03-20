@@ -22,7 +22,6 @@ class Intraface_modules_cms_section_Mixed extends CMS_Section
             $this->value['elements'][] = $element->get();
         }
         return true;
-
     }
 
     function validate_section($var)

@@ -10,8 +10,6 @@ class Intraface_modules_product_Variation_X_Attribute extends Doctrine_Record
         $this->hasColumn('product_variation_id', 'integer', 11, array('greaterthan' => 0));
         $this->hasColumn('product_attribute_id', 'integer', 11, array('greaterthan' => 0));
         $this->hasColumn('attribute_number', 'integer', 11, array('greaterthan' => 0));
-        
-    
     }
     
     public function setUp()
@@ -23,6 +21,5 @@ class Intraface_modules_product_Variation_X_Attribute extends Doctrine_Record
         // Notice that Variation/OneAttributeGroup and TwoAttributeGroup extends Variation, which means we do not get
         // all functionality in the relation specified below here.
         $this->hasOne('Intraface_modules_product_Variation as variation', array('local' => 'product_variation_id','foreign' => 'id'));
-        
     }
 }

@@ -31,7 +31,6 @@ class NewAddress extends Intraface_Standard
     function address(&$kernel, $id = 0)
     {
         this::__construct($kernel, $id);
-
     }
 
 
@@ -42,8 +41,6 @@ class NewAddress extends Intraface_Standard
         $this->id = $id;
 
         $this->fields = array('name', 'address', 'postcode', 'city', 'country', 'cvr', 'email', 'website', 'phone', 'ean');
-
-
     }
 
     function factory($object, $sub)
@@ -53,9 +50,6 @@ class NewAddress extends Intraface_Standard
     /*
         $object_name =
     */
-
-
-
     }
 
 

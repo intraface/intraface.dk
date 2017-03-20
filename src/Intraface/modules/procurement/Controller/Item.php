@@ -82,7 +82,6 @@ class Intraface_modules_procurement_Controller_Item extends k_Component
 
         $tpl = $this->template->create(dirname(__FILE__) . '/templates/item-edit');
         return $tpl->render($this, $data);
-
     }
 
     function getKernel()

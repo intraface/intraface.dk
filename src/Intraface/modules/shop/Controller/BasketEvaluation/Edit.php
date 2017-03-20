@@ -55,7 +55,6 @@ class Intraface_modules_shop_Controller_BasketEvaluation_Edit extends k_Componen
         );
         $tpl = $this->template->create('Intraface/modules/shop/Controller/tpl/evaluation');
         return $tpl->render($this, $data);
-
     }
 
     function postForm()

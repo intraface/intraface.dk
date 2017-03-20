@@ -107,7 +107,6 @@ class Reminder extends Intraface_Standard
         $this->value["arrears"] = $this->value['total'] - $this->value['payment_total'];
 
         return true;
-
     }
 
     function loadItem($id = 0)
@@ -662,7 +661,6 @@ class Reminder extends Intraface_Standard
         $this->setStated($voucher->get('id'), $this_date->get());
         $this->load();
         return true;
-
     }
 
     function pdf($type = 'stream', $filename = '')

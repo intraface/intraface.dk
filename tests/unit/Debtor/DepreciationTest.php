@@ -78,7 +78,6 @@ class DepreciationTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse($depreciation->update(array()));
         $this->assertEquals(1, $depreciation->error->count(), $depreciation->error->view());
-
     }
 
     function testUpdateWithValidInputReturnsId()

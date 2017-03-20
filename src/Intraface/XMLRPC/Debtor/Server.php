@@ -156,6 +156,5 @@ class Intraface_XMLRPC_Debtor_Server extends Intraface_XMLRPC_Server0100
 
         $encoded = XML_RPC2_Value::createFromNative($report->output('string'), 'base64');
         return $encoded;
-
     }
 }

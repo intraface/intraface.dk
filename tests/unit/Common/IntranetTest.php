@@ -23,7 +23,6 @@ class IntranetTest extends PHPUnit_Framework_TestCase
         $m->register();
 
         $this->intranet = new Intraface_Intranet(1);
-
     }
 
     function tearDown()

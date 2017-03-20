@@ -183,7 +183,6 @@ class Intraface_Page
 
             // $cache->end();
         //}
-
     }
 
     function end()

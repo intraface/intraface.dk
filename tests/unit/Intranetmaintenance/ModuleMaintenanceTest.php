@@ -30,7 +30,5 @@ class ModuleMaintenanceTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_object($object));
         $this->assertEquals('modulemaintenance', strtolower(get_class($object)));
-
-
     }
 }

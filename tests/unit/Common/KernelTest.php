@@ -152,7 +152,6 @@ class KernelTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($kernel->useModule('intranetmaintenance')));
         $this->assertTrue(is_object($module = $kernel->getModule('intranetmaintenance')));
         $this->assertEquals('intranetmaintenance', $module->getName());
-
     }
 
     function testGetModules()

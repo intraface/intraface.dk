@@ -58,7 +58,6 @@ class Intraface_modules_debtor_Controller_Depreciation extends k_Component
         }
         
         return $this->depreciation;
-            
     }
 
     function getType()

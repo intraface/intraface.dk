@@ -318,7 +318,6 @@ class OnlinePayment extends Intraface_Standard
         $db = new DB_Sql;
         $db->query("UPDATE onlinepayment SET belong_to_key = ".$belong_to_key.", belong_to_id = ".$belong_to_id." WHERE intranet_id = ".$this->kernel->intranet->get('id')." AND id = ".$this->id);
         return $this->id;
-
     }
 
     function setStatus($status)
@@ -528,7 +527,6 @@ class OnlinePayment extends Intraface_Standard
             $i++;
         }
         return $list;
-
     }
 
     /**

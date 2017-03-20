@@ -183,7 +183,6 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $product->getDetails()->getNumber());
         $this->assertEquals($name, $product->getDetails()->getTranslation('da')->name);
         $this->assertEquals($price, $product->getDetails()->getPrice()->getAsIso());
-
     }
 
 
@@ -358,7 +357,6 @@ class ProductDoctrineTest extends PHPUnit_Framework_TestCase
 
         $product = $this->createProductObject(1);
         $this->assertEquals(1, $product->showInShop());
-
     }
     
     function testSetAttributeGroupThrowsExceptionOnWhenNotSavedWithVariations()

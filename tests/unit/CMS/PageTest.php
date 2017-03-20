@@ -100,7 +100,6 @@ class PageTest extends PHPUnit_Framework_TestCase
             'template_id' => $template_id);
 
         $this->assertTrue($this->page->save($input) > 0);
-
     }
 
     function testDeleteReturnsTrue()

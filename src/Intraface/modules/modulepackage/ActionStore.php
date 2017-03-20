@@ -120,7 +120,6 @@ class Intraface_modules_modulepackage_ActionStore
             return unserialize($row['action']);
         }
         return false;
-        
     }
     
     /**
@@ -153,7 +152,6 @@ class Intraface_modules_modulepackage_ActionStore
             return unserialize($row['action']);
         }
         return false;
-        
     }
     
     /**

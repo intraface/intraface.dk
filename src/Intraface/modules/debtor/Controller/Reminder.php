@@ -314,19 +314,19 @@ class Reminder_Text
             $this->output .= "\n\nDet skyldige beløb betales senest: " . $parameter['due_date'];
 
             // TODO: change to payment_method
-            switch ($reminder->get('payment_method_key')) {
-                case 1: // fall through - ingen valgt
-                case 2: // kontooverførsel
-                    $this->output .= "\n\nBetales på konto:";
-                    $this->output .= "\nBank:                ".$reminder->kernel->setting->get('intranet', 'bank_name');
-                    $this->output .= "\nRegnr.:              ".$reminder->kernel->setting->get('intranet', 'bank_reg_number');
-                    $this->output .= "\nKontonr.:            ".$reminder->kernel->setting->get('intranet', 'bank_account_number');
-                    $this->output .= "\nBesked til modtager: " . "Kunde #" . $reminder->contact->get("number");
-                    break;
-                case 3:
-                    $this->output .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$kernel->setting->get('intranet', 'giro_account_number')."<";
-                    break;
-            }
+        switch ($reminder->get('payment_method_key')) {
+            case 1: // fall through - ingen valgt
+            case 2: // kontooverførsel
+                $this->output .= "\n\nBetales på konto:";
+                $this->output .= "\nBank:                ".$reminder->kernel->setting->get('intranet', 'bank_name');
+                $this->output .= "\nRegnr.:              ".$reminder->kernel->setting->get('intranet', 'bank_reg_number');
+                $this->output .= "\nKontonr.:            ".$reminder->kernel->setting->get('intranet', 'bank_account_number');
+                $this->output .= "\nBesked til modtager: " . "Kunde #" . $reminder->contact->get("number");
+                break;
+            case 3:
+                $this->output .= "\n\nBetaling via homebanking\n+71< ".str_repeat("0", 15 - strlen($parameter["girocode"])).$parameter["girocode"]." +".$kernel->setting->get('intranet', 'giro_account_number')."<";
+                break;
+        }
 
             $this->output .= "\n\nMed venlig hilsen\n\n" . $reminder->kernel->user->getAddress()->get("name") . "\n" .$reminder->kernel->intranet->get("name");
             $this->output .= "\n" . $reminder->kernel->intranet->address->get("address");

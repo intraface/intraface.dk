@@ -19,7 +19,6 @@ class IntranetMaintenanceTest extends PHPUnit_Framework_TestCase
 
         $i = new IntranetMaintenance();
         $this->assertEquals('IntranetMaintenance', get_class($i));
-
     }
 
     public function testSaveReturnsFalseOnInvalidInput()

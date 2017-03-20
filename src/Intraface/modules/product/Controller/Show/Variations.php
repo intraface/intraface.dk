@@ -115,7 +115,6 @@ class Intraface_modules_product_Controller_Show_Variations extends k_Component
         }
         
         return new k_SeeOther($this->url(null, array($this->subview(), 'flare' => 'An error occurred. Probably too much data in the POST request. Solve it by having fewer variations.')));
-
     }
 
     function getProductId()

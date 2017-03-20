@@ -28,8 +28,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->kernel = $kernel;
         $this->product = new Product($kernel);
         $this->product->save(array('name' => 'test', 'price' => 200, 'weight' => 200));
-
-
     }
 
     function tearDown()
@@ -59,7 +57,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $result = $db->query('TRUNCATE product_variation_detail');
         $result = $db->query('TRUNCATE product_variation_x_attribute');
         $result = $db->query('TRUNCATE product_x_attribute_group');
-
     }
 
     function createKernel()
@@ -99,7 +96,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(count($items), 1);
         $this->assertEquals($items[0]['quantity'], $quantity);
         $this->assertEquals($items[0]['product_id'], $product_id);
-
     }
 
     function testAddToBasketWithVariation()
@@ -177,7 +173,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $items = $basket->getItems();
 
         $this->assertEquals($items[0]['quantity'], -1);
-
     }
 
     function testResetBasket()
@@ -197,7 +192,6 @@ class ShopBasketTest extends PHPUnit_Framework_TestCase
         $items = $basket->getItems();
 
         $this->assertEquals(count($items), 0);
-
     }
 
     function testRemoveEvaluationProducts()

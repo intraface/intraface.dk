@@ -190,7 +190,6 @@ class Product extends Intraface_Standard
 
         $this->db->free();
         return $this->value['id'];
-
     }
 
     /**
@@ -583,7 +582,6 @@ class Product extends Intraface_Standard
         }
 
         return false;
-
     }
 
     /**
@@ -790,7 +788,6 @@ class Product extends Intraface_Standard
         }
 
         return ($result > 0);
-
     }
 
     /**

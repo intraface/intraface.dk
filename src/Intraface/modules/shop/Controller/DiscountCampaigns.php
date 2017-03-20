@@ -13,6 +13,5 @@ class Intraface_modules_shop_Controller_DiscountCampaigns extends k_Component
 
     function renderHtml()
     {
-
     }
 }

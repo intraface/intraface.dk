@@ -93,6 +93,5 @@ class Intraface_modules_newsletter_SubscribersGateway
         }
 
         return new NewsletterSubscriber($list, $db->f('id'));
-
     }
 }

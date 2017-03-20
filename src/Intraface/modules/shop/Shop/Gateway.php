@@ -3,7 +3,6 @@ class Intraface_modules_shop_Shop_Gateway
 {
     public function __construct()
     {
-
     }
 
     /**

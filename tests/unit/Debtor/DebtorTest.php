@@ -142,7 +142,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $excr->save();
 
         return $currency;
-
     }
 
     function createPayment($debtor)
@@ -177,8 +176,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('Order', get_class($debtor));
         $this->assertEquals($description, $debtor->get('description'));
-
-
     }
 
 
@@ -223,7 +220,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
                 'due_date' => date('d-m-Y'),
                 'currency' => $currency)
         ) > 0);
-
     }
 
     function testGetCurrency()
@@ -241,7 +237,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $debtor->load();
 
         $this->assertEquals('Intraface_modules_currency_Currency', get_class($debtor->getCurrency()));
-
     }
 
     function testSetStatus()
@@ -399,7 +394,6 @@ class DebtorTest extends PHPUnit_Framework_TestCase
         $debtor->load();
 
         $this->assertEquals(10.05, $debtor->getTotalInCurrency()->getAsIso());
-
     }
 
     function testGetArrears()

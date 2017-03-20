@@ -34,7 +34,6 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
             'Intraface_modules_product_Product_X_Attribute_Group as x_product',
             array('local' => 'id', 'foreign' => 'product_attribute_group_id')
         );
-        
     }
 
     public function getId()
@@ -68,7 +67,6 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
         if (!$result) {
             throw new Exception('Error deleting group '.$this->getId());
         }
-        
     }
     
     /**
@@ -100,7 +98,6 @@ class Intraface_modules_product_Attribute_Group extends Doctrine_Record
             throw new Intraface_Gateway_Exception('Invalid attribute id '.intval($id));
         }
         return $attribute;
-        
     }
     
     /**

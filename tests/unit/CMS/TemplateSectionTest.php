@@ -9,7 +9,6 @@ class TemplateSectionTest extends PHPUnit_Framework_TestCase
     function setUp()
     {
         $this->kernel = $this->createKernel();
-
     }
 
     function createKernel()

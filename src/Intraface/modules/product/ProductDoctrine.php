@@ -78,7 +78,6 @@ class Intraface_modules_product_ProductDoctrine extends Doctrine_Record
             throw new Doctrine_Validator_Exception(array());
             */
         }
-
     }
 
     public function getCollectedErrorStack()

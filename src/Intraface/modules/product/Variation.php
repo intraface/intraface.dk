@@ -36,7 +36,6 @@ class Intraface_modules_product_Variation extends Doctrine_Record
         } else {
             $this->number = $collection->getLast()->getNumber() + 1;
         }
-
     }
     
     /**

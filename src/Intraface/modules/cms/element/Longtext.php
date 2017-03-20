@@ -21,7 +21,6 @@ class Intraface_modules_cms_element_Longtext extends CMS_Element
         } else {
             $this->value['html'] = autoop($this->parameter->get('text'));
         }
-
     }
 
     function validate_element($var)

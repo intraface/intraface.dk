@@ -57,6 +57,5 @@ class MainProcurement extends Intraface_Main
 
         // Dependent module vil automatisk blive inkluderet på siden. (Hvis man ikke har rettighed til det vil der komme en fejl)
         // $this->addDependentModule("pdf");
-
     }
 }

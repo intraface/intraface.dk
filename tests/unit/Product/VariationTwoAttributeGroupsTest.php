@@ -11,7 +11,6 @@ class VariationTwoAttributeGroupsTest extends PHPUnit_Framework_TestCase
         $db->query('TRUNCATE product_variation_x_attribute');
         $db->query('TRUNCATE product_attribute');
         $db->query('TRUNCATE product_attribute_group');
-        
     }
     
     function createGroups()
@@ -52,6 +51,5 @@ class VariationTwoAttributeGroupsTest extends PHPUnit_Framework_TestCase
         $object->save();
         $object->load();
         $this->assertEquals(1, $object->getId());
-            
     }
 }

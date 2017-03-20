@@ -60,6 +60,5 @@ class DicountVoucherTest extends PHPUnit_Framework_TestCase
 
     function testSaveCoupon()
     {
-
     }
 }

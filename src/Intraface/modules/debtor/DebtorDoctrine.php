@@ -222,7 +222,6 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
      */
     public function getItemsWithoutVat()
     {
-        
     }
     
     /**
@@ -231,7 +230,6 @@ class Intraface_modules_debtor_DebtorDoctrine extends Doctrine_Record
      */
     public function getVat()
     {
-        
     }
     
     /**

@@ -16,7 +16,6 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         if (file_exists(PATH_UPLOAD.'/1/1.jpeg')) {
             unlink(PATH_UPLOAD.'/1/1.jpeg');
         }
-
     }
 
     function createKernel()
@@ -73,7 +72,6 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
         $size = getimagesize($file);
         $this->assertEquals(100, $size[0]);
         $this->assertEquals(100, $size[1]);
-
     }
 
     function testQualityAfterRepeatedResize()
@@ -89,6 +87,5 @@ class ImageHandlerTest extends PHPUnit_Framework_TestCase
 
         // we accept 10% fall in quality! after several resize
         $this->assertEquals(filesize($file2), filesize($file1), '', filesize($file2)/100*10);
-
     }
 }

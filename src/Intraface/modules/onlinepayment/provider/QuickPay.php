@@ -62,7 +62,6 @@ class OnlinePaymentQuickPay extends OnlinePayment
 
         // hvordan bliver disse sat - og hvad er det n�jagtigt?
         $this->quickpay->set_posc($this->posc);
-
     }
 
     /**

@@ -49,7 +49,6 @@ class AppendFile
 
         $this->kernel = $kernel;
         $this->error = new Intraface_Error;
-
     }
 
     /**

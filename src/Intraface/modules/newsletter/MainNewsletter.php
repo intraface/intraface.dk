@@ -27,6 +27,5 @@ class MainNewsletter extends Intraface_Main
 
         $this->addSubAccessItem('sendnewsletter', 'send newsletter');
         $this->includeSettingFile('settings.php');
-
     }
 }

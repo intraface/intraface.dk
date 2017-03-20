@@ -41,7 +41,6 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
 
         $object = Doctrine::getTable('Intraface_modules_currency_Currency')->find(1);
         $this->assertEquals('Intraface_modules_currency_Currency_Type_Eur', get_class($object->getType()));
-
     }
 
     function testGetProductPriceExchangeRate()
@@ -131,8 +130,6 @@ class CurrencyTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals('745,23', $rate->getRate()->getAsLocal('da_dk'));
             }
         }
-
-
     }
 
     function testGetProductPriceExchangeRateWithId()

@@ -91,7 +91,6 @@ class CreditNote extends Debtor
         }
 
         return $return;
-
     }
 
     function state($year, $voucher_number, $voucher_date, $translation)
@@ -213,6 +212,5 @@ class CreditNote extends Debtor
         $this->setStated($voucher->get('id'), $this_date->get());
         $this->load();
         return true;
-
     }
 }

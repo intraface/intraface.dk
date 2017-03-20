@@ -41,7 +41,6 @@ class SectionTest extends PHPUnit_Framework_TestCase
         $this->kernel = new Stub_Kernel;
         $this->site = new FakeCMSSite($this->kernel);
         $this->page = new FakeCMSPage($this->site);
-
     }
 
     function saveTemplateSection()
