@@ -22,7 +22,6 @@ class FakeObjectToPutIntoParameter
                 return 1;
                 exit;
         }
-
     }
 }
 

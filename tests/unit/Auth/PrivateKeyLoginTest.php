@@ -37,6 +37,5 @@ class PrivateKeyLoginTest extends PHPUnit_Framework_TestCase
     function testAuthWithCorrectPrivateKey()
     {
         $this->assertTrue(is_object($this->adapter->auth()));
-
     }
 }

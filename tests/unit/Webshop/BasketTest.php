@@ -128,7 +128,6 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $items = $basket->getItems();
 
         $this->assertEquals($items[0]['quantity'], -1);
-
     }
 
     function testResetBasket()
@@ -148,7 +147,6 @@ class BasketTest extends PHPUnit_Framework_TestCase
         $items = $basket->getItems();
 
         $this->assertEquals(count($items), 0);
-
     }
 
     function testRemoveEvaluationProducts()

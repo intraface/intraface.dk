@@ -616,6 +616,5 @@ class RedirectTest extends PHPUnit_Framework_TestCase
             }
         }
         return $param;
-
     }
 }

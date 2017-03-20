@@ -76,6 +76,5 @@ class AuthTest extends PHPUnit_Framework_TestCase
         require_once 'Intraface/modules/intranetmaintenance/UserMaintenance.php';
         $u = new UserMaintenance();
         $this->assertEquals(1, $u->update(array('email' => 'start@intraface.dk', 'password' => 'startup', 'confirm_password' => 'startup')));
-
     }
 }

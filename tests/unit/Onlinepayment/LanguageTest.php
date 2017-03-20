@@ -11,7 +11,6 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 
     function tearDown()
     {
-        
     }
 
     function testLanguageSave()
@@ -41,6 +40,5 @@ class LanguageTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('english email 2', $settings->getConfirmationEmailBody($language));
         $this->assertEquals('english subject 2', $settings->getConfirmationEmailSubject($language));
-
     }
 }

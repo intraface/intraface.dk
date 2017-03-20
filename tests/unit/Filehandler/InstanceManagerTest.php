@@ -16,7 +16,6 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
     function createInstanceManager($id = 0)
     {
         return new InstanceManager(new Stub_Kernel, $id);
-
     }
 
     function testConstruction()
@@ -129,6 +128,5 @@ class InstanceManagerTest extends PHPUnit_Framework_TestCase
         $im->save($input);
 
         $this->assertEquals(7, count($im->getList()));
-
     }
 }

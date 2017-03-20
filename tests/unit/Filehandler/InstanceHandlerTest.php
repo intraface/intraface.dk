@@ -86,7 +86,6 @@ class InstanceHandlerTest extends PHPUnit_Framework_TestCase
         $result = $db->query('SELECT crop_parameter FROM file_handler_instance WHERE id = '.$filehandler->instance->get('id'));
         $row = $result->fetchRow(MDB2_FETCHMODE_ASSOC);
         $this->assertEquals($crop, unserialize($row['crop_parameter']));
-
     }
 
     function testCreateCustomInstanceCreaterThanImage()

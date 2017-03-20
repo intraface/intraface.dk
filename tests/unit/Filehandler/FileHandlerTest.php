@@ -71,7 +71,6 @@ class FileHandlerTest extends PHPUnit_Framework_TestCase
         $fh = $this->createFile();
         $fh->delete();
         $this->assertTrue($fh->undelete());
-
     }
 
     function testSave()

@@ -11,7 +11,6 @@ class FakeVatPeriodYear
     {
         $this->kernel = new Stub_Kernel;
                 $this->kernel->setting->set('intranet', 'vatpercent', 25);
-
     }
     function get()
     {
@@ -50,7 +49,6 @@ class FakeVatPeriodAccount extends Account
 
     function getSaldo($type, $date_from, $date_to)
     {
-
     }
 
     function getId()

@@ -83,8 +83,6 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
         $append->getDBQuery();
 
         $this->assertTrue(isset($append->dbquery));
-
-
     }
 
     function testGetList()
@@ -113,6 +111,5 @@ class AppendFileTest extends PHPUnit_Framework_TestCase
 
 
         $this->assertEquals($expected, $append->getList());
-
     }
 }

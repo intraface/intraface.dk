@@ -47,7 +47,6 @@ class ModuleHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($this->handler->useModule('intranetmaintenance')));
         $this->assertTrue(is_object($module = $this->handler->getModule('intranetmaintenance')));
         $this->assertEquals('intranetmaintenance', $module->getName());
-
     }
 
     function testGetModules()

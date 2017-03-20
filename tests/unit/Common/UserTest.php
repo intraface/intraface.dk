@@ -28,7 +28,6 @@ class UserTest extends PHPUnit_Framework_TestCase
         $result = $m->register();
 
         $this->user = new Intraface_User(1);
-
     }
 
     function tearDown()

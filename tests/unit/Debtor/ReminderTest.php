@@ -132,7 +132,6 @@ class ReminderTest extends PHPUnit_Framework_TestCase
          */
         // $reminder = new Reminder($this->createKernel(), 1);
         // $this->assertEquals(0, $reminder->get('id'));
-
     }
 
     function testSomethingToStateWithoutReminderFee()

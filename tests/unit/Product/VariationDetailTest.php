@@ -76,7 +76,6 @@ class VariationDetailTest extends PHPUnit_Framework_TestCase
         $object->save();
         $object->load();
         $this->assertEquals(1, $object->getId());
-
     }
 
     function testSaveDetailFromVariation()
@@ -91,7 +90,6 @@ class VariationDetailTest extends PHPUnit_Framework_TestCase
         $object->load();
         $this->assertEquals(1, $object->getId());
         $this->assertEquals(1, $object->detail->count());
-
     }
 
     function testGetDetailReturnsEmptyRecordOnNoDetails()
@@ -103,7 +101,6 @@ class VariationDetailTest extends PHPUnit_Framework_TestCase
         $detail->weight_difference = 0;
         $detail->save();
         $this->assertEquals(1, $detail->getId());
-
     }
 
     function testSaveDetailDoesNotSaveOnSameDetails()

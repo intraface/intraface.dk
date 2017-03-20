@@ -95,7 +95,6 @@ class AccountTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('380071.97', $saldo['debet'], '', $this->delta);
         $this->assertEquals($credit, $saldo['credit'], '', $this->delta);
-
     }
 
     function testUpdatePrimoSaldo()
@@ -151,7 +150,6 @@ class AccountTest extends PHPUnit_Framework_TestCase
     {
         $account = $this->createAccount();
         $this->assertTrue(is_array($account->getPosts()));
-
     }
 
     function testAnyAccountsReturnsZeroWhenNoAccountIsSaved()
@@ -232,6 +230,5 @@ class AccountTest extends PHPUnit_Framework_TestCase
         $res = $account->validForState();
         $this->assertEquals('operating', $account->getType());
         $this->assertTrue($res);
-
     }
 }

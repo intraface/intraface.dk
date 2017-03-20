@@ -67,6 +67,5 @@ class FakeContactModule
 {
     function getSetting()
     {
-
     }
 }

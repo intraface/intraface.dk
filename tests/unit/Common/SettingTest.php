@@ -110,7 +110,6 @@ class SettingTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             $this->assertTrue(true);
         }
-
     }
 
     function testThrowsExceptionIfTryingToSetASystemSetting()
@@ -125,7 +124,6 @@ class SettingTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             $this->assertTrue(true);
         }
-
     }
 
     function testGetSettingForUserWillReturnIntranetSettingIfUserSettingIsNotSet()
