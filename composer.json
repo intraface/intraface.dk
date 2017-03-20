@@ -220,7 +220,7 @@
         "intrafacepublic/cms": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*",
+        "phpunit/phpunit": "4.4.*",
         "phpunit/phpunit-selenium": "1.4.*",
         "squizlabs/php_codesniffer": "2.*",
         "satooshi/php-coveralls": "1.0.1",
